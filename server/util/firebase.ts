@@ -1,4 +1,4 @@
-import firebase from "firebase/app";
+import { initializeApp } from "firebase/app";
 import firestore from "firebase/firestore";
 import dotenv from 'dotenv';
 
@@ -14,7 +14,6 @@ const firebaseConfig = {
   measurementId: "G-VRBYYR371H"
 };
 
-
 // Initialize Firebase
-firebase.initializeApp(firebaseConfig);
+const firebase = initializeApp(firebaseConfig);
 export { firebase, firebaseConfig, firestore };

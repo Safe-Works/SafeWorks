@@ -1,15 +1,37 @@
 import express, { Express, Request, Response } from 'express';
+import cors from 'cors';
 import dotenv from 'dotenv';
+import usersRouter from './routes/UserRouter';
 
 dotenv.config();
 
 const app: Express = express();
 const port = process.env.PORT;
+const hostname = process.env.HOSTNAME || 'http://localhost';
 
+// JSON default body config
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }))
+
+// Root endpoint
 app.get('/', (req: Request, res: Response) => {
   res.send('SafeWorks server is running! 🛠️');
 });
 
+// CORS origin config
+app.use(cors({
+  origin: ['http://localhost:4200']
+}))
+
+// Routes
+app.use('/api', usersRouter);
+
+// Default response to another requisitions
+app.use((req, res) => {
+  res.status(404);
+})
+
+// Server init
 app.listen(port, () => {
-  console.log(`[server]: SafeWorks server is running at http://localhost:${port}`);
+  console.log(`[server]: SafeWorks server is running at ${hostname}:${port}`);
 });
