@@ -1,0 +1,4 @@
+{
+    "appService.defaultWebAppToDeploy": "/subscriptions/10e12470-e0a3-490f-81d0-d38db152b30e/resourceGroups/SWResourceGroup/providers/Microsoft.Web/sites/safeworksdev",
+    "appService.deploySubpath": "dist"
+}

@@ -1,0 +1,39 @@
+<div class="container-fluid d-flex justify-content-center align-items-center shadow-sm" style="min-height: 100vh;">
+    <div class="col-md-6 col-lg-4">
+        <div class="card">
+            <div class="card-body card-autentication">
+                <h3 class="card-title title-autentication">Acesse sua conta</h3>
+                <form [formGroup]="loginForm" #formDir="ngForm">
+                    <div class="mb-3 input-group">
+                        <div class="input-group-text">
+                            <span class="bi bi-envelope"></span>
+                        </div>
+                        <input [formControl]="email" type="email" class="form-control" placeholder="E-mail" id="inputEmail">
+                    </div>
+                    <div class="mb-3 input-group">
+                        <div class="input-group-text">
+                            <span class="bi bi-key"></span>
+                        </div>
+                        <input type="password" class="form-control inputPassword" id="password"
+                            [formControl]="password" placeholder="Senha" aria-label="Senha"
+                            aria-describedby="show-password-icon">
+                        <button type="button" class="btn btn-outline-secondary" (click)="togglePassword()">
+                            <span class="bi" [ngClass]="{'bi-eye-slash': !showPassword, 'bi-eye': showPassword}"></span>
+                        </button>
+                    </div>
+                    <div class="mt-3">
+                        <a routerLink="/esqueceu-senha" class="link-primary forgot-password" style="margin-top: 16px">Esqueceu sua
+                            senha?</a>
+                    </div>
+                    <div class="text-center mt-3">
+                        <button class="btn btn-primary"
+                            style="width: 100%; border-radius: 30.4px; margin-top: 32px" (click)="encryptPassword()">Entrar</button>
+                    </div>
+                    <div class="mt-3 create-account">
+                        Ainda não possui uma conta?<a routerLink="/register" class="btn btn-link">Cadastre-se</a>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>

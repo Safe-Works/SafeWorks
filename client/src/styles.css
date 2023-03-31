@@ -1,0 +1,47 @@
+@import url('https://fonts.googleapis.com/css?family=Open+Sans:400,700&display=swap');
+
+body {
+  font-family: 'Open Sans', sans-serif;
+  background-color: #f5f5f5;
+}
+
+a{
+  text-decoration: none;
+}
+
+.form-control {
+  padding: 12px;
+}
+
+.card-autentication {
+  padding: 35px;
+}
+
+.card {
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  padding: 45px;
+  padding-top: 60px;
+}
+
+@media (max-width: 767px) {
+  .card {
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    padding: 20px;
+    padding-top: 60px;
+  }
+  .card-autentication {
+    padding: 0;
+  }
+}
+
+.title-autentication {
+  font-weight: bold;
+  font-size: 26px;
+  line-height: 1.23px;
+  border: none;
+  margin: 15px 0 42px 0;
+}
+
+.validation-error {
+  color: #dc3545;
+}

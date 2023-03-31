@@ -1,0 +1,26 @@
+trigger:
+- main
+
+pool:
+  vmImage: 'ubuntu-latest'
+
+steps:
+- task: NodeTool@0
+  inputs:
+    versionSpec: '14.x'
+  displayName: 'Install Node.js'
+
+- script: |
+    npm install -g @angular/cli
+    npm install
+  displayName: 'Install Angular CLI and Dependencies'
+
+- script: |
+    ng build --configuration production
+  displayName: 'Build Angular App'
+
+- task: PublishBuildArtifacts@1
+  inputs:
+    artifactName: 'drop'
+    pathtoPublish: '$(System.DefaultWorkingDirectory)/dist'
+  displayName: 'Publish Artifact'
