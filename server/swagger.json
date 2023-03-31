@@ -1,0 +1,135 @@
+{
+    "openapi": "3.0.0",
+    "info": {
+        "title": "API de Login",
+        "version": "1.0.0",
+        "description": "Documentação da API de login em Node.js"
+    },
+    "servers": [{
+        "url": "http://localhost:3000",
+        "description": "Servidor Local"
+    }],
+    "tags": [{
+        "name": "Login",
+        "description": "Endpoints para autenticação de usuários"
+    }],
+    "paths": {
+        "/produtos": {
+            "post": {
+                "tags": [
+                    "Produtos"
+                ],
+                "summary": "Cadastra um novo produto",
+                "description": "Endpoint para cadastrar um novo produto",
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "type": "object",
+                                "properties": {
+                                    "nome": {
+                                        "type": "string"
+                                    },
+                                    "preco": {
+                                        "type": "number"
+                                    }
+                                },
+                                "required": [
+                                    "nome",
+                                    "preco"
+                                ]
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Produto cadastrado com sucesso",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "id": {
+                                            "type": "number"
+                                        },
+                                        "nome": {
+                                            "type": "string"
+                                        },
+                                        "preco": {
+                                            "type": "number"
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Dados inválidos"
+                    },
+                    "500": {
+                        "description": "Erro interno no servidor"
+                    }
+                }
+            }
+        }
+    },
+    "/login": {
+        "post": {
+            "tags": [
+                "Login"
+            ],
+            "summary": "Autentica um usuário",
+            "description": "Endpoint para autenticar um usuário a partir do email e senha",
+            "requestBody": {
+                "content": {
+                    "application/json": {
+                        "schema": {
+                            "type": "object",
+                            "properties": {
+                                "email": {
+                                    "type": "string"
+                                },
+                                "senha": {
+                                    "type": "string"
+                                }
+                            },
+                            "required": [
+                                "email",
+                                "senha"
+                            ]
+                        }
+                    }
+                }
+            },
+            "responses": {
+                "200": {
+                    "description": "Usuário autenticado com sucesso",
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "type": "object",
+                                "properties": {
+                                    "token": {
+                                        "type": "string"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
+                "400": {
+                    "description": "Dados inválidos"
+                },
+                "401": {
+                    "description": "Credenciais inválidas"
+                },
+                "500": {
+                    "description": "Erro interno no servidor"
+                }
+            }
+        }
+    }
+
+}
+}
