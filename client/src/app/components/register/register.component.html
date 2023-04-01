@@ -1,7 +1,10 @@
-<div class="container-fluid d-flex justify-content-center align-items-center shadow-sm" style="min-height: 100vh;">
+<div class="container-fluid d-flex justify-content-center align-items-center shadow-sm" style="max-height: 100vh;">
     <div class="col-md-6 col-lg-4">
         <div class="card">
             <div class="card-body card-autentication">
+                <div class="text-center mt-3">
+                    <img class="logo-autentication" src="../../assets/safeworks-logo.png" />
+                </div>
                 <h3 class="card-title title-autentication">Crie a sua conta</h3>
                 <form [formGroup]="registerForm" #formDir="ngForm" (ngSubmit)="formDir.valid && register()">
                     <div class="mb-3 input-group">
@@ -18,7 +21,8 @@
                         <div class="input-group-text">
                             <span class="bi bi-file-earmark-person"></span>
                         </div>
-                        <input [formControl]="cpf" mask="000.000.000-00" type="text" class="form-control" placeholder="CPF" id="inputCPF"
+                        <input [formControl]="cpf" mask="000.000.000-00" type="text" class="form-control"
+                            placeholder="CPF" id="inputCPF"
                             [ngClass]="{ 'is-invalid': cpf.invalid && formDir.submitted }">
                     </div>
                     <div class="row validation-error" *ngIf="cpf.invalid && formDir.submitted">
@@ -28,8 +32,9 @@
                         <div class="input-group-text">
                             <span class="bi bi-phone"></span>
                         </div>
-                        <input [formControl]="telephone_number" type="text" class="form-control" placeholder="Número de telefone"
-                            id="inputTelephone" prefix="+55 " mask="(00) 00000-0000" [ngClass]="{ 'is-invalid': telephone_number.invalid && formDir.submitted }">
+                        <input [formControl]="telephone_number" type="text" class="form-control"
+                            placeholder="Número de telefone" id="inputTelephone" prefix="+55 " mask="(00) 00000-0000"
+                            [ngClass]="{ 'is-invalid': telephone_number.invalid && formDir.submitted }">
                     </div>
                     <div class="row validation-error" *ngIf="telephone_number.invalid && formDir.submitted">
                         <p>O telefone é obrigatório*</p>
@@ -38,8 +43,8 @@
                         <div class="input-group-text">
                             <span class="bi bi-envelope"></span>
                         </div>
-                        <input [formControl]="email" [ngClass]="{ 'is-invalid': email.invalid && formDir.submitted }" type="email" class="form-control" placeholder="E-mail"
-                            id="inputEmail">
+                        <input [formControl]="email" [ngClass]="{ 'is-invalid': email.invalid && formDir.submitted }"
+                            type="email" class="form-control" placeholder="E-mail" id="inputEmail">
                     </div>
                     <div class="row validation-error" *ngIf="email.invalid && formDir.submitted">
                         <p>O Email é obrigatório*</p>
@@ -61,8 +66,9 @@
                         <input [formControl]="confirmPassword" type="password" class="form-control inputConfirmPassword"
                             id="confirmPassword" placeholder="Confirme a senha" aria-label="Confirme a Senha"
                             [ngClass]="{ 'is-invalid': confirmPassword.invalid && formDir.submitted }">
-                        <button type="button" class="btn btn-outline-secondary" (click)="toggleConfirmPassword()">
-                            <span class="bi"
+                        <button type="button" class="btn btn-outline-secondary eye-button"
+                            (click)="toggleConfirmPassword()">
+                            <span class="bi eye-icon"
                                 [ngClass]="{'bi-eye-slash': !showConfirmPassword, 'bi-eye': showConfirmPassword}"></span>
                         </button>
                     </div>
@@ -70,12 +76,13 @@
                         <p>A confirmação não bate com a senha*</p>
                     </div>
                     <div class="text-center mt-3">
-                        <button class="btn btn-primary" style="width: 100%; border-radius: 30.4px; margin-top: 32px">
-                            Criar
+                        <button class="btn btn-primary btn-autentication" style="width: 100%; border-radius: 30.4px; margin-top: 32px">
+                            Cadastrar
                         </button>
                     </div>
                     <div class="text-center mt-3">
-                        <a class="btn btn-secondary" routerLink="/login" style="width: 100%; border-radius: 30.4px;">
+                        <a class="btn btn-outline-secondary" routerLink="/login"
+                            style="width: 100%; border-radius: 30.4px;">
                             Voltar
                         </a>
                     </div>
