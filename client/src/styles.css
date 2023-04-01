@@ -85,15 +85,16 @@ a{
 }
 
 .eye-button {
-  position: absolute;
+  position: absolute !important;
   top: 50%;
   right: 10px;
-  transform: translateY(-50%);
-  z-index: 1;
-  border: none;
+  transform: translateY(-50%) !important;
+  z-index: 1 !important;
+  border: none !important;
 }
 
 .eye-button:hover {
-  background-color: transparent;
-  color: #030303;
+  background-color: transparent !important;
+  color: #030303 !important;
 }
+
