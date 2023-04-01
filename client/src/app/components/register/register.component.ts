@@ -1,9 +1,15 @@
 import { Component, OnInit } from '@angular/core';
-import { FormGroup, FormControl, Validators } from '@angular/forms';
+import { FormGroup, FormControl, Validators, ValidatorFn, AbstractControl } from '@angular/forms';
 import * as CryptoJS from 'crypto-js';
 import { HttpClient } from '@angular/common/http';
 import User from '../../models/user.model';
 import { UserService } from 'src/app/services/user.service';
+
+function passwordMatchValidator(control: FormControl): {[key: string]: boolean} | null {
+  const password = control.root.get('password');
+  return password && control.value !== password.value ? { 'passwordMatch': true } : null;
+}
+
 @Component({
   selector: 'app-register',
   templateUrl: './register.component.html',
@@ -18,7 +24,7 @@ export class RegisterComponent implements OnInit {
   telephone_number = new FormControl('', [Validators.required]);
   email = new FormControl('', [Validators.required, Validators.email]);
   password = new FormControl('', [Validators.required]);
-  confirmPassword = new FormControl('', [Validators.required]);
+  confirmPassword = new FormControl('', [Validators.required, passwordMatchValidator]);
 
   constructor(private http: HttpClient, private userService: UserService) { }
 
@@ -70,6 +76,4 @@ export class RegisterComponent implements OnInit {
       }
     );
   }
-  
-  
 }

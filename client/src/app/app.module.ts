@@ -8,7 +8,7 @@ import { LoginComponent } from './components/login/login.component';
 import { IndexComponent } from './components/index/index.component';
 import { ReactiveFormsModule } from '@angular/forms';
 import { RegisterComponent } from './components/register/register.component';
-import { TextMaskModule } from 'angular2-text-mask';
+import { NgxMaskModule} from 'ngx-mask';
 
 @NgModule({
   declarations: [
@@ -21,7 +21,7 @@ import { TextMaskModule } from 'angular2-text-mask';
     BrowserModule,
     AppRoutingModule,
     ReactiveFormsModule,
-    TextMaskModule,
+    NgxMaskModule.forRoot(),
     HttpClientModule
   ],
   providers: [UserService],

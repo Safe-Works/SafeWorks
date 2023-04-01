@@ -18,7 +18,7 @@
                         <div class="input-group-text">
                             <span class="bi bi-file-earmark-person"></span>
                         </div>
-                        <input [formControl]="cpf" type="text" class="form-control" placeholder="CPF" id="inputCPF"
+                        <input [formControl]="cpf" mask="000.000.000-00" type="text" class="form-control" placeholder="CPF" id="inputCPF"
                             [ngClass]="{ 'is-invalid': cpf.invalid && formDir.submitted }">
                     </div>
                     <div class="row validation-error" *ngIf="cpf.invalid && formDir.submitted">
@@ -28,8 +28,8 @@
                         <div class="input-group-text">
                             <span class="bi bi-phone"></span>
                         </div>
-                        <input [formControl]="telephone_number" type="text" class="form-control" placeholder="telephone_number"
-                            id="inputTelephone" [ngClass]="{ 'is-invalid': telephone_number.invalid && formDir.submitted }">
+                        <input [formControl]="telephone_number" type="text" class="form-control" placeholder="Número de telefone"
+                            id="inputTelephone" prefix="+55 " mask="(00) 00000-0000" [ngClass]="{ 'is-invalid': telephone_number.invalid && formDir.submitted }">
                     </div>
                     <div class="row validation-error" *ngIf="telephone_number.invalid && formDir.submitted">
                         <p>O telefone é obrigatório*</p>
@@ -67,7 +67,7 @@
                         </button>
                     </div>
                     <div class="row validation-error" *ngIf="confirmPassword.invalid && formDir.submitted">
-                        <p>Confirmação de senha é obrigatório*</p>
+                        <p>A confirmação não bate com a senha*</p>
                     </div>
                     <div class="text-center mt-3">
                         <button class="btn btn-primary" style="width: 100%; border-radius: 30.4px; margin-top: 32px">
