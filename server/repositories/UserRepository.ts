@@ -9,28 +9,30 @@ class UserRepository {
         initializeApp(firebaseConfig);
     }
 
-    async add(user: User, callback: (uid?: string) => void) {
-        await firebaseAdmin.auth()
-            .createUser({
-                email: user.email,
-                password: user.password,
-                displayName: user.name,
-            })
-            .then(async (userRecord) => {
-                console.log("Successfully created a new user.", userRecord.uid);
-                // Creating the user doc in firestore
-                await db.collection("Users").doc(userRecord.uid).set({
-                    name: user.name,
-                    cpf: user.cpf,
-                    telephone_number: user.telephone_number
-                })
-                callback(userRecord.uid);
-            })
-            .catch((error) => {
-                console.log("Error creating a new user. ", error);
-            })
-    }
-
+    async add(user: User, callback: (token?: string) => void) {
+        try {
+          const userRecord = await firebaseAdmin.auth().createUser({
+            email: user.email,
+            password: user.password,
+            displayName: user.name,
+          });
+      
+          console.log("Successfully created a new user.", userRecord.uid);
+      
+          await db.collection("Users").doc(userRecord.uid).set({
+            name: user.name,
+            cpf: user.cpf,
+            telephone_number: user.telephone_number,
+          });
+      
+          const customToken = await firebaseAdmin.auth().createCustomToken(userRecord.uid);
+      
+          callback(customToken);
+        } catch (error) {
+          console.log("Error creating a new user. ", error);
+        }
+      }
+      
 }
 
 export default UserRepository;
