@@ -11,26 +11,24 @@ a{
 
 .form-control {
   padding: 12px;
-}
-
-.card-autentication {
-  padding: 35px;
-}
+  border: 1px solid rgba(29, 60, 80, 0.6);
+  }
 
 .card {
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-  padding: 45px;
-  padding-top: 60px;
+  padding: 0 45px 0 45px;
 }
 
 @media (max-width: 767px) {
   .card {
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-    padding: 20px;
     padding-top: 60px;
   }
   .card-autentication {
     padding: 0;
+  }
+  .form-control {
+    width: 100%;
   }
 }
 
@@ -40,8 +38,62 @@ a{
   line-height: 1.23px;
   border: none;
   margin: 15px 0 42px 0;
+  color: #1d3c50;
+}
+
+.input-group-text {
+  background-color: #1d3c50;
+  color: #ffa600;
+  opacity: 0.9 !important;
 }
 
 .validation-error {
   color: #dc3545;
+  margin-top: -10px;
+}
+
+.btn-autentication {
+  background-color: #1d3c50;
+  color: #ffbf48;
+  border: #1d3c50;
+  opacity: 0.9;
+}
+
+.btn-autentication:hover {
+  background-color: #1d3c50;
+  color: #ffb326;
+  border: #1d3c50;
+  opacity: 1;
+}
+
+.link-safeworks {
+  color:#ffbf48 !important;
+}
+
+.link-safeworks:hover {
+  color: #ffbf48 !important;
+}
+
+.logo-autentication {
+  width: 115px; 
+  height: 115px;
+  margin-bottom: 25px;
+}
+
+.eye-icon {
+  color: #1d3c50 !important;
+}
+
+.eye-button {
+  position: absolute;
+  top: 50%;
+  right: 10px;
+  transform: translateY(-50%);
+  z-index: 1;
+  border: none;
+}
+
+.eye-button:hover {
+  background-color: transparent;
+  color: #030303;
 }

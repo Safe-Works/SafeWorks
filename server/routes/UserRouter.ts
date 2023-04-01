@@ -7,13 +7,14 @@ const userRepository = new UserRepository();
 
 usersRouter.post('/users', (req, res) => {
     const user: User = req.body;
-    userRepository.add(user, (id) => {
-        if (id) {
-            res.status(201).send();
-        } else {
-            res.status(400).send();
-        }
+    userRepository.add(user, (token) => {
+      if (token) {
+        res.status(201).json({ token });
+      } else {
+        res.status(400).send();
+      }
     });
-});
+  });
+  
 
 export default usersRouter;

@@ -1,17 +1,3 @@
-.btn-outline-secondary {
-    position: absolute;
-    top: 50%;
-    right: 10px;
-    transform: translateY(-50%);
-    z-index: 1;
-    border: none;
-}
-
-.btn-outline-secondary:hover {
-    background-color: transparent;
-    color: #030303;
-}
-
 .inputConfirmPassword {
     border-top-right-radius: .375rem !important;
     border-bottom-right-radius: .375rem !important;
