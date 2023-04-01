@@ -20,11 +20,13 @@
   },
   "homepage": "https://github.com/Safe-Works/SafeWorks-Server#readme",
   "dependencies": {
+    "celebrate": "^15.0.1",
     "cors": "^2.8.5",
     "dotenv": "^16.0.3",
     "express": "^4.18.2",
     "firebase": "^9.19.0",
-    "firebase-admin": "^11.5.0"
+    "firebase-admin": "^11.5.0",
+    "joi": "^17.9.1"
   },
   "devDependencies": {
     "@types/cors": "^2.8.13",
