@@ -26,11 +26,13 @@ a{
 @media (max-width: 767px) {
   .card {
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-    padding: 20px;
     padding-top: 60px;
   }
   .card-autentication {
     padding: 0;
+  }
+  .form-control {
+    width: 100%;
   }
 }
 
@@ -44,4 +46,5 @@ a{
 
 .validation-error {
   color: #dc3545;
+  margin-top: -10px;
 }

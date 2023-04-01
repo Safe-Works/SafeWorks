@@ -1,7 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-import { FormGroup, FormControl, Validators, ValidatorFn, AbstractControl } from '@angular/forms';
+import { FormGroup, FormControl, Validators } from '@angular/forms';
 import * as CryptoJS from 'crypto-js';
-import { HttpClient } from '@angular/common/http';
 import User from '../../models/user.model';
 import { UserService } from 'src/app/services/user.service';
 
@@ -26,7 +25,7 @@ export class RegisterComponent implements OnInit {
   password = new FormControl('', [Validators.required]);
   confirmPassword = new FormControl('', [Validators.required, passwordMatchValidator]);
 
-  constructor(private http: HttpClient, private userService: UserService) { }
+  constructor(private userService: UserService) { }
 
   ngOnInit(): void {
     this.registerForm = new FormGroup({

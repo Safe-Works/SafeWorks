@@ -59,7 +59,7 @@
                             <span class="bi bi-key"></span>
                         </div>
                         <input [formControl]="confirmPassword" type="password" class="form-control inputConfirmPassword"
-                            id="confirmPassword" placeholder="Confirme a Senha" aria-label="Confirme a Senha"
+                            id="confirmPassword" placeholder="Confirme a senha" aria-label="Confirme a Senha"
                             [ngClass]="{ 'is-invalid': confirmPassword.invalid && formDir.submitted }">
                         <button type="button" class="btn btn-outline-secondary" (click)="toggleConfirmPassword()">
                             <span class="bi"
@@ -73,6 +73,11 @@
                         <button class="btn btn-primary" style="width: 100%; border-radius: 30.4px; margin-top: 32px">
                             Criar
                         </button>
+                    </div>
+                    <div class="text-center mt-3">
+                        <a class="btn btn-secondary" routerLink="/login" style="width: 100%; border-radius: 30.4px;">
+                            Voltar
+                        </a>
                     </div>
                 </form>
             </div>
