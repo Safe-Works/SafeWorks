@@ -2,6 +2,7 @@ import express, { Express, Request, Response } from 'express';
 import cors from 'cors';
 import dotenv from 'dotenv';
 import usersRouter from './routes/UserRouter';
+import { errors } from 'celebrate';
 
 dotenv.config();
 
@@ -30,6 +31,9 @@ app.use('/api', usersRouter);
 app.use((req, res) => {
   res.status(404);
 })
+
+// Celebrate error handler middleware
+app.use(errors());
 
 // Server init
 app.listen(port, () => {
