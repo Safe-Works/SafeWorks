@@ -3,7 +3,7 @@
         <div class="card">
             <div class="card-body card-autentication">
                 <h3 class="card-title title-autentication">Crie a sua conta</h3>
-                <form [formGroup]="registerForm" #formDir="ngForm">
+                <form [formGroup]="registerForm" #formDir="ngForm" (ngSubmit)="formDir.valid && register()">
                     <div class="mb-3 input-group">
                         <div class="input-group-text">
                             <span class="bi bi-person"></span>
@@ -28,10 +28,10 @@
                         <div class="input-group-text">
                             <span class="bi bi-phone"></span>
                         </div>
-                        <input [formControl]="celular" type="text" class="form-control" placeholder="Celular"
-                            id="inputCelular" [ngClass]="{ 'is-invalid': celular.invalid && formDir.submitted }">
+                        <input [formControl]="telephone_number" type="text" class="form-control" placeholder="telephone_number"
+                            id="inputTelephone" [ngClass]="{ 'is-invalid': telephone_number.invalid && formDir.submitted }">
                     </div>
-                    <div class="row validation-error" *ngIf="celular.invalid && formDir.submitted">
+                    <div class="row validation-error" *ngIf="telephone_number.invalid && formDir.submitted">
                         <p>O telefone é obrigatório*</p>
                     </div>
                     <div class="mb-3 input-group">

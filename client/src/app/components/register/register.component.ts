@@ -1,7 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 import * as CryptoJS from 'crypto-js';
-
+import { HttpClient } from '@angular/common/http';
+import User from '../../models/user.model';
+import { UserService } from 'src/app/services/user.service';
 @Component({
   selector: 'app-register',
   templateUrl: './register.component.html',
@@ -13,23 +15,24 @@ export class RegisterComponent implements OnInit {
   registerForm!: FormGroup;
   fullName = new FormControl('', [Validators.required]);
   cpf = new FormControl('', [Validators.required]);
-  celular = new FormControl('', [Validators.required]);
+  telephone_number = new FormControl('', [Validators.required]);
   email = new FormControl('', [Validators.required, Validators.email]);
   password = new FormControl('', [Validators.required]);
   confirmPassword = new FormControl('', [Validators.required]);
 
-  constructor() { }
+  constructor(private http: HttpClient, private userService: UserService) { }
 
   ngOnInit(): void {
     this.registerForm = new FormGroup({
       fullName: this.fullName,
       cpf: this.cpf,
-      celular: this.celular,
+      telephone_number: this.telephone_number,
       email: this.email,
       password: this.password,
       confirmPassword: this.confirmPassword
     });
   }
+
   encryptPassword() {
     const passwordValue = this.registerForm.get('password')?.value;
     const hashedPassword = CryptoJS.SHA256(passwordValue).toString(CryptoJS.enc.Hex);
@@ -47,4 +50,26 @@ export class RegisterComponent implements OnInit {
       confirmPasswordField.type = this.showConfirmPassword ? 'text' : 'password';
     }
   }
+
+  register(): void {
+    const hashedPassword = this.encryptPassword();
+    const newUser = new User(
+      '',
+      this.registerForm.get('email')?.value,
+      hashedPassword,
+      this.registerForm.get('fullName')?.value,
+      this.registerForm.get('cpf')?.value,
+      this.registerForm.get('telephone_number')?.value
+    );
+    this.userService.RegisterUser(newUser).subscribe(
+      (response) => {
+        console.log(response);
+      },
+      (error) => {
+        console.log(error);
+      }
+    );
+  }
+  
+  
 }
