@@ -10,29 +10,34 @@ class UserRepository {
         initializeApp(firebaseConfig);
     }
 
-    async add(user: User, callback: (token?: string) => void) {
-        try {
-            const userRecord = await firebaseAdmin.auth().createUser({
-                email: user.email,
-                password: user.password,
-                displayName: user.name,
-            });
-        
-            await db.collection("Users").doc(userRecord.uid).set({
+    async add(user: User, callback: any) {
+        firebaseAdmin.auth().createUser({
+            email: user.email,
+            password: user.password,
+            displayName: user.name,
+        }).then((userRecord) => {
+            db.collection("Users").doc(userRecord.uid).set({
                 name: user.name,
                 cpf: user.cpf,
                 telephone_number: user.telephone_number,
+            }).then(() => {
+                firebaseAdmin.auth().createCustomToken(userRecord.uid).then((customToken) => {
+                    console.log("Successfully created a new user.", userRecord.uid);
+                    callback(null, customToken);
+                }).catch((error) => {
+                    console.log("Error creating a custom token. ", error);
+                    callback(error);
+                });
+            }).catch((error) => {
+                console.log("Error adding user to Firestore. ", error);
+                callback(error);
             });
-        
-            const customToken = await firebaseAdmin.auth().createCustomToken(userRecord.uid);
-            
-            console.log("Successfully created a new user.", userRecord.uid);
-            callback(customToken);
-        } catch (error) {
+        }).catch((error) => {
             console.log("Error creating a new user. ", error);
-        }
+            callback(error);
+        });
     }
-
+    
     async login(user: User, callback: (userAuth?: FirebaseUser) => void) {
         try {
             const auth = getAuth();
@@ -48,7 +53,6 @@ class UserRepository {
             console.log("Error on user login. ", error);
         }
     }
-      
 }
 
 export default UserRepository;

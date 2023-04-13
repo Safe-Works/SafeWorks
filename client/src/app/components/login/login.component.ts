@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 import * as CryptoJS from 'crypto-js';
+import { UserService } from 'src/app/services/user.service';
 
 @Component({
   selector: 'app-login',
@@ -14,12 +15,13 @@ export class LoginComponent implements OnInit {
   email = new FormControl('', [Validators.required, Validators.email]);
   password = new FormControl('', [Validators.required]);
 
-  constructor() { }
+  constructor(private userService: UserService) { }
   
   ngOnInit(): void {
     this.passwordField = document.querySelector('#inputPassword')!;
     this.loginForm = new FormGroup({
-      email: this.email
+      email: this.email,
+      password: this.password
     });
   }
 
@@ -34,5 +36,18 @@ export class LoginComponent implements OnInit {
     if (this.passwordField) {
       this.passwordField.type = this.showPassword ? 'text' : 'password';
     }
+  }
+
+  login(): void {
+    const hashedPassword = this.encryptPassword();
+    const email = this.loginForm.get('email')?.value;
+    this.userService.AuthenticateUser(email, hashedPassword).subscribe(
+      (response) => {
+        console.log(response);
+      },
+      (error) => {
+        console.log(error);
+      }
+    );
   }
 }

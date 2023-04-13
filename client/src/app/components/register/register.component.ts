@@ -59,7 +59,6 @@ export class RegisterComponent implements OnInit {
   register(): void {
     const hashedPassword = this.encryptPassword();
     const newUser = new User(
-      '',
       this.registerForm.get('email')?.value,
       hashedPassword,
       this.registerForm.get('fullName')?.value,
