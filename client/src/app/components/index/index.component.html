@@ -1,7 +1,9 @@
 <div class="container-fluid d-flex justify-content-center align-items-center" style="min-height: 100vh;">
-    <div class="col-md-6 col-lg-4 text-center">
-      <h1>Página inicial</h1>
-      <button class="btn btn-primary" [routerLink]="'/login'">Tela de login</button>
+  <div class="col-md-6 col-lg-4 text-center">
+    <h1>Página inicial</h1>
+    <div *ngIf="userAuth.currentUser">
+      <p>Olá, {{ userAuth.currentUser.displayName }}!</p>
     </div>
+    <button class="btn btn-primary" [routerLink]="'/login'">Tela de login</button>
   </div>
-  
+</div>
