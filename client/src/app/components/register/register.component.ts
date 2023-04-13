@@ -3,6 +3,7 @@ import { FormGroup, FormControl, Validators } from '@angular/forms';
 import * as CryptoJS from 'crypto-js';
 import User from '../../models/user.model';
 import { UserService } from 'src/app/services/user.service';
+import { Router } from '@angular/router';
 
 function passwordMatchValidator(control: FormControl): {[key: string]: boolean} | null {
   const password = control.root.get('password');
@@ -25,7 +26,7 @@ export class RegisterComponent implements OnInit {
   password = new FormControl('', [Validators.required]);
   confirmPassword = new FormControl('', [Validators.required, passwordMatchValidator]);
 
-  constructor(private userService: UserService) { }
+  constructor(private userService: UserService, private router: Router) { }
 
   ngOnInit(): void {
     this.registerForm = new FormGroup({
@@ -67,6 +68,7 @@ export class RegisterComponent implements OnInit {
     );
     this.userService.RegisterUser(newUser).subscribe(
       (response) => {
+        this.router.navigateByUrl('/login');
         console.log(response);
       },
       (error) => {
