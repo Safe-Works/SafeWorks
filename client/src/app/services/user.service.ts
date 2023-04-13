@@ -6,28 +6,31 @@ import { CookieService } from 'ngx-cookie-service';
 import { tap } from 'rxjs/operators';
 
 interface UserAuth {
-  uid: string;
-  email: string;
-  emailVerified: boolean;
-  displayName: string;
-  isAnonymous: boolean;
-  providerData: {
-    providerId: string;
+  userAuth: {
+    code: string;
     uid: string;
-    displayName: string;
     email: string;
-    phoneNumber: string | null;
-    photoURL: string | null;
-  }[];
-  stsTokenManager: {
-    refreshToken: string;
-    accessToken: string;
-    expirationTime: number;
-  };
-  createdAt: string;
-  lastLoginAt: string;
-  apiKey: string;
-  appName: string;
+    emailVerified: boolean;
+    displayName: string;
+    isAnonymous: boolean;
+    providerData: {
+      providerId: string;
+      uid: string;
+      displayName: string;
+      email: string;
+      phoneNumber: string | null;
+      photoURL: string | null;
+    }[];
+    stsTokenManager: {
+      refreshToken: string;
+      accessToken: string;
+      expirationTime: number;
+    };
+    createdAt: string;
+    lastLoginAt: string;
+    apiKey: string;
+    appName: string;
+  }
 }
 
 @Injectable({
@@ -56,6 +59,15 @@ export class UserService {
         'Content-Type': 'application/json'
       })
     };
-    return this.http.post<UserAuth>(this.api + "/login", body, httpOptions);
+    return this.http.post<UserAuth>(this.api + "/login", body, httpOptions).pipe(
+      tap((response: UserAuth) => {
+        if (response.userAuth?.stsTokenManager?.accessToken) {
+          return response.userAuth;
+        } else {
+          throw new Error("Credenciais inválidas");
+        }
+      })
+    );
   }
+
 }
