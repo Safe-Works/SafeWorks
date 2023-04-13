@@ -17,6 +17,8 @@ function passwordMatchValidator(control: FormControl): {[key: string]: boolean} 
 })
 export class RegisterComponent implements OnInit {
   cpfInvalidLabel = "O CPF é obrigatório*";
+  emailAlreadyExist = false;
+  emailInvalidLabel = "O e-mail é obrigatório*";
   showConfirmPassword = false;
   registerForm!: FormGroup;
   fullName = new FormControl('', [Validators.required]);
@@ -72,6 +74,10 @@ export class RegisterComponent implements OnInit {
         console.log(response);
       },
       (error) => {
+        if(error.status === 409) {
+          this.emailAlreadyExist = true;
+          this.emailInvalidLabel = "O e-mail já está em uso."
+        }
         console.log(error);
       }
     );

@@ -43,11 +43,11 @@
                         <div class="input-group-text">
                             <span class="bi bi-envelope"></span>
                         </div>
-                        <input [formControl]="email" [ngClass]="{ 'is-invalid': email.invalid && formDir.submitted }"
+                        <input [formControl]="email" [ngClass]="{ 'is-invalid': (email.invalid || emailAlreadyExist) && formDir.submitted }"
                             type="email" class="form-control" placeholder="E-mail" id="inputEmail">
                     </div>
-                    <div class="row validation-error" *ngIf="email.invalid && formDir.submitted">
-                        <p>O Email é obrigatório*</p>
+                    <div class="row validation-error" *ngIf="(email.invalid || emailAlreadyExist) && formDir.submitted">
+                        <p>{{ emailInvalidLabel }}</p>
                     </div>
                     <div class="mb-3 input-group">
                         <div class="input-group-text">
