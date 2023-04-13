@@ -1,6 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 import * as CryptoJS from 'crypto-js';
+import { UserService } from 'src/app/services/user.service';
+import { UserAuth } from '../../auth/User.Auth';
+import { Router } from '@angular/router';
+import { CookieService } from 'ngx-cookie-service';
 
 @Component({
   selector: 'app-login',
@@ -13,13 +17,14 @@ export class LoginComponent implements OnInit {
   loginForm!: FormGroup;
   email = new FormControl('', [Validators.required, Validators.email]);
   password = new FormControl('', [Validators.required]);
+  wrongCredentials = false;
+  constructor(private userService: UserService, private userAuth: UserAuth, private router: Router, private cookieService: CookieService) { }
 
-  constructor() { }
-  
   ngOnInit(): void {
     this.passwordField = document.querySelector('#inputPassword')!;
     this.loginForm = new FormGroup({
-      email: this.email
+      email: this.email,
+      password: this.password
     });
   }
 
@@ -35,4 +40,25 @@ export class LoginComponent implements OnInit {
       this.passwordField.type = this.showPassword ? 'text' : 'password';
     }
   }
+
+  login(): void {
+    const hashedPassword = this.encryptPassword();
+    const email = this.loginForm.get('email')?.value;
+    this.userService.AuthenticateUser(email, hashedPassword).subscribe(
+      (response) => {
+        if (response.userAuth?.stsTokenManager?.accessToken) {
+          this.userAuth.setUser(response.userAuth);
+          this.cookieService.set('token', response.userAuth.stsTokenManager.accessToken, undefined, '/', undefined, true, 'Strict');
+          this.router.navigateByUrl('/');
+        } else {
+          this.wrongCredentials = true;
+        }
+      },
+      (error) => {
+        this.wrongCredentials = true;
+        console.log(error);
+      }
+    );
+  }
+
 }

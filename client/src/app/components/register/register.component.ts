@@ -3,6 +3,7 @@ import { FormGroup, FormControl, Validators } from '@angular/forms';
 import * as CryptoJS from 'crypto-js';
 import User from '../../models/user.model';
 import { UserService } from 'src/app/services/user.service';
+import { Router } from '@angular/router';
 
 function passwordMatchValidator(control: FormControl): {[key: string]: boolean} | null {
   const password = control.root.get('password');
@@ -16,6 +17,8 @@ function passwordMatchValidator(control: FormControl): {[key: string]: boolean} 
 })
 export class RegisterComponent implements OnInit {
   cpfInvalidLabel = "O CPF é obrigatório*";
+  emailAlreadyExist = false;
+  emailInvalidLabel = "O e-mail é obrigatório*";
   showConfirmPassword = false;
   registerForm!: FormGroup;
   fullName = new FormControl('', [Validators.required]);
@@ -25,7 +28,7 @@ export class RegisterComponent implements OnInit {
   password = new FormControl('', [Validators.required]);
   confirmPassword = new FormControl('', [Validators.required, passwordMatchValidator]);
 
-  constructor(private userService: UserService) { }
+  constructor(private userService: UserService, private router: Router) { }
 
   ngOnInit(): void {
     this.registerForm = new FormGroup({
@@ -59,7 +62,6 @@ export class RegisterComponent implements OnInit {
   register(): void {
     const hashedPassword = this.encryptPassword();
     const newUser = new User(
-      '',
       this.registerForm.get('email')?.value,
       hashedPassword,
       this.registerForm.get('fullName')?.value,
@@ -68,9 +70,14 @@ export class RegisterComponent implements OnInit {
     );
     this.userService.RegisterUser(newUser).subscribe(
       (response) => {
+        this.router.navigateByUrl('/login');
         console.log(response);
       },
       (error) => {
+        if(error.status === 409) {
+          this.emailAlreadyExist = true;
+          this.emailInvalidLabel = "O e-mail já está em uso."
+        }
         console.log(error);
       }
     );
