@@ -25,32 +25,49 @@ class UserRepository {
                     console.log("Successfully created a new user.", userRecord.uid);
                     callback(null, customToken);
                 }).catch((error) => {
-                    console.log("Error creating a custom token. ", error);
+                    console.error("Error creating a custom token. ", error);
                     callback(error);
                 });
             }).catch((error) => {
-                console.log("Error adding user to Firestore. ", error);
+                console.error("Error adding user to Firestore. ", error);
                 callback(error);
             });
-        }).catch((error) => {
-            console.log("Error creating a new user. ", error);
-            callback(error);
-        });
+        })
     }
-    
-    async login(user: User, callback: (userAuth?: FirebaseUser) => void) {
-        try {
-            const auth = getAuth();
-            await signInWithEmailAndPassword(auth, user.email, user.password)
-                .then((userCredential) => {
-                    const userAuth = userCredential.user;
-                    callback(userAuth);
+
+    async login(user: User, acessToken: string, callback: (accessToken?: string) => void) {
+        const auth = getAuth();
+        if (acessToken.length > 0) {
+            // Authentication with provided JWT accessToken
+            await firebaseAdmin.auth()
+                .verifyIdToken(acessToken)
+                .then((decodedToken) => {
+                    callback(acessToken);
+                    console.log('Successfully user login using accessToken. ' + decodedToken);
                 })
                 .catch((error) => {
                     callback(error);
+                    console.error('Error on user accessToken login. ' + error);
                 });
-        } catch (error) {
-            console.log("Error on user login. ", error);
+        } else {
+            // Authentication with provided email and password
+            await signInWithEmailAndPassword(auth, user.email, user.password)
+                .then((userCredential) => {
+                    // Await the return of a JWT accessToken
+                    userCredential.user.getIdToken()
+                        .then((acessToken) => {
+                            console.log('Successfully user login. ' + userCredential.user.uid);
+                            callback(acessToken);
+                        })
+                        .catch((error) => {
+                            console.error('Error to create a accessToken on user login. ' + error);
+                            callback(error);
+                        })
+                })
+                .catch((error) => {
+                    console.error("Error on user login. ", error);
+                    callback(error);
+                });
         }
     }
 }
