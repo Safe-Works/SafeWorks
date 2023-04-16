@@ -9,6 +9,8 @@ import { IndexComponent } from './components/index/index.component';
 import { ReactiveFormsModule } from '@angular/forms';
 import { RegisterComponent } from './components/register/register.component';
 import { NgxMaskModule} from 'ngx-mask';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 
 @NgModule({
   declarations: [
@@ -22,7 +24,9 @@ import { NgxMaskModule} from 'ngx-mask';
     AppRoutingModule,
     ReactiveFormsModule,
     NgxMaskModule.forRoot(),
-    HttpClientModule
+    HttpClientModule,
+    BrowserAnimationsModule,
+    MatProgressSpinnerModule
   ],
   providers: [UserService],
   bootstrap: [AppComponent]

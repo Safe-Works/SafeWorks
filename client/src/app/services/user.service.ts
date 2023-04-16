@@ -27,6 +27,7 @@ interface UserAuth {
       expirationTime: number;
     };
     createdAt: string;
+
     lastLoginAt: string;
     apiKey: string;
     appName: string;
@@ -52,17 +53,17 @@ export class UserService {
     return this.http.post<string>(this.api, user, httpOptions);
   }
 
-  public AuthenticateUser(email: string, password: string): Observable<UserAuth> {
+  public AuthenticateUser(email: string, password: string): Observable<any> {
     const body = { email, password };
     const httpOptions = {
       headers: new HttpHeaders({
         'Content-Type': 'application/json'
       })
     };
-    return this.http.post<UserAuth>(this.api + "/login", body, httpOptions).pipe(
-      tap((response: UserAuth) => {
-        if (response.userAuth?.stsTokenManager?.accessToken) {
-          return response.userAuth;
+    return this.http.post<any>(this.api + "/login", body, httpOptions).pipe(
+      tap((response: any) => {
+        if (response.customTokenJwt) {
+          return response;
         } else {
           throw new Error("Credenciais inválidas");
         }

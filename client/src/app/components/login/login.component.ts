@@ -46,16 +46,19 @@ export class LoginComponent implements OnInit {
     const email = this.loginForm.get('email')?.value;
     this.userService.AuthenticateUser(email, hashedPassword).subscribe(
       (response) => {
-        if (response.userAuth?.stsTokenManager?.accessToken) {
+        if (response.customTokenJwt) {
           this.userAuth.setUser(response.userAuth);
-          this.cookieService.set('token', response.userAuth.stsTokenManager.accessToken, undefined, '/', undefined, true, 'Strict');
-          this.router.navigateByUrl('/');
+          this.cookieService.set('token', response.customTokenJwt, undefined, '/', undefined, true, 'Strict');
+          this.router.navigate(['/']);
+          this.wrongCredentials = false;
+          console.log(response);
         } else {
           this.wrongCredentials = true;
         }
       },
       (error) => {
         this.wrongCredentials = true;
+        this.userAuth.clearUser();
         console.log(error);
       }
     );

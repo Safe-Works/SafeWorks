@@ -41,9 +41,9 @@ usersRouter.post('/users/login',
     }),
     (req, res) => {
         const user: User = req.body;
-        userRepository.login(user, (userAuth) => {
-            if (userAuth) {
-                res.status(201).json({ userAuth });
+        userRepository.login(user, (customTokenJwt) => {
+            if (customTokenJwt) {
+                res.status(201).json({customTokenJwt: customTokenJwt });
             } else {
                 res.status(400).send();
             }

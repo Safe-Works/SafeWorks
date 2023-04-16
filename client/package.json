@@ -12,6 +12,7 @@
   "private": true,
   "dependencies": {
     "@angular/animations": "^15.2.0",
+    "@angular/cdk": "^15.2.6",
     "@angular/common": "^15.2.5",
     "@angular/compiler": "^15.2.0",
     "@angular/core": "^15.2.0",
@@ -23,6 +24,7 @@
     "angular2-text-mask": "^9.0.0",
     "bootstrap": "^5.2.3",
     "crypto-js": "^4.1.1",
+    "jwt-decode": "^3.1.2",
     "ngx-cookie-service": "^15.0.0",
     "ngx-mask": "^13.1.13",
     "rxjs": "~7.8.0",
