@@ -66,6 +66,24 @@ class UserRepository {
         }
 
     }
+
+    async uploadUserPhoto(filePath: string, fileName: string, callback: any) {
+        const storage = firebaseAdmin.storage().bucket();
+        
+        await storage.upload(filePath, {
+            destination: fileName,
+            metadata: {
+                contentType: 'image/png'
+            }
+        })
+        .then((uploadResponse) => {
+            const success = uploadResponse[0].cloudStorageURI.href;
+            callback(null, success);
+        })
+        .catch((error) => {
+            callback(error);
+        });
+    }
 }
 
 export default UserRepository;

@@ -2,9 +2,24 @@ import express from 'express';
 import User from '../models/User';
 import UserRepository from '../repositories/UserRepository';
 import { celebrate, Joi } from 'celebrate';
+import multer from 'multer';
+import path from 'path';
+import fs from 'fs';
 
 const usersRouter = express.Router();
 const userRepository = new UserRepository();
+
+const storage = multer.diskStorage({
+    destination: (req, file, cb) => {
+        const uploadPath = path.join(__dirname, "uploads");
+        fs.mkdirSync(uploadPath, { recursive: true });
+        cb(null, uploadPath);
+      },
+      filename: (req, file, cb) => {
+        cb(null, `${Date.now()}-${file.originalname}`);
+      },
+});
+const upload = multer({storage: storage})
 
 usersRouter.post('/users',
     celebrate({
@@ -49,6 +64,27 @@ usersRouter.post('/users/login',
                 res.status(400).send();
             }
         })
+    })
+
+usersRouter.post('/users/upload', upload.single('file'),
+    async (req, res) => {
+        const file = req.file;
+        const userUid: string = req.body.uid;
+        const fileName = userUid + '_profile_photo';
+        if (file) {
+            userRepository.uploadUserPhoto(file.path, fileName, (error: any, success: any) => {
+                if (success) {
+                    console.log('Success image upload ' + success)
+                    res.status(200).send(success);
+                } else {
+                    console.error('Error on image upload ' + error)
+                    res.status(400).send(error);
+                }
+            })
+        } else {
+            console.error('No file uploaded.')
+            res.status(400).send('No file uploaded.');
+        }
     })
 
 export default usersRouter;
