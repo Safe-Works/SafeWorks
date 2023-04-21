@@ -1,0 +1,7 @@
+<div class="container-fluid d-flex justify-content-center align-items-center shadow-sm" style="min-height: 100vh;">
+    <div class="col-md-6 col-lg-4">
+        <div *ngIf="userAuth.currentUser">
+            <p>Olá, {{ userAuth.currentUser.displayName }}!</p>
+          </div>
+    </div>
+</div>

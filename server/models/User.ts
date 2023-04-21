@@ -10,6 +10,7 @@ type User = {
     cpf: string,
     telephone_number: string,
     address?: string,
+    photo_url?: string,
     rating_mean?: Float32Array,
     total_ratings?: Int16Array,
     balance?: Float32Array, // payment balance
