@@ -62,7 +62,7 @@ export class UserService {
     };
     return this.http.post<any>(this.api + "/login", body, httpOptions).pipe(
       tap((response: any) => {
-        if (response.customTokenJwt) {
+        if (response.customTokenJwt && !response.customTokenJwt.code) {
           return response;
         } else {
           throw new Error("Credenciais inválidas");

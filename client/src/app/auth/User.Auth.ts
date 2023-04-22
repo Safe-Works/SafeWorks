@@ -33,6 +33,7 @@ export class UserAuth {
   }
 
   clearUser(): void {
+    this.cookieService.delete('token');
     this.currentUser = null;
   }
 

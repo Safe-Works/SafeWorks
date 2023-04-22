@@ -14,4 +14,8 @@ export class IndexComponent implements OnInit {
     this.userAuth.authUserFromToken();
   }
 
+  logout() {
+    this.userAuth.clearUser();
+  }
+
 }

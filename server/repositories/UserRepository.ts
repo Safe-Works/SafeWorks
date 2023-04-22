@@ -55,6 +55,7 @@ class UserRepository {
             await signInWithEmailAndPassword(auth, user.email, user.password)
                 .then(async (userCredential) => {
                     const userAuth = userCredential.user;
+                    console.log(userAuth);
                     const expiresInSecs = 259200; // 72 horas em segundos
                     const customClaims = {
                         userAuth: userAuth,
@@ -63,26 +64,29 @@ class UserRepository {
                     const customToken = await firebaseAdmin.auth().createCustomToken(userAuth.uid, customClaims);
                     callback(customToken);
                 })
+                .catch((error) => {
+                    console.error("Error on user login. ", error);
+                    callback(error);
+                });
         }
-
     }
 
     async uploadUserPhoto(filePath: string, fileName: string, callback: any) {
         const storage = firebaseAdmin.storage().bucket();
-        
+
         await storage.upload(filePath, {
             destination: fileName,
             metadata: {
                 contentType: 'image/png'
             }
         })
-        .then((uploadResponse) => {
-            const success = uploadResponse[0].cloudStorageURI.href;
-            callback(null, success);
-        })
-        .catch((error) => {
-            callback(error);
-        });
+            .then((uploadResponse) => {
+                const success = uploadResponse[0].cloudStorageURI.href;
+                callback(null, success);
+            })
+            .catch((error) => {
+                callback(error);
+            });
     }
 }
 
