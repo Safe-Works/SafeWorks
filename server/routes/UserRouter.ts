@@ -14,12 +14,12 @@ const storage = multer.diskStorage({
         const uploadPath = path.join(__dirname, "uploads");
         fs.mkdirSync(uploadPath, { recursive: true });
         cb(null, uploadPath);
-      },
-      filename: (req, file, cb) => {
+    },
+    filename: (req, file, cb) => {
         cb(null, `${Date.now()}-${file.originalname}`);
-      },
+    },
 });
-const upload = multer({storage: storage})
+const upload = multer({ storage: storage })
 
 usersRouter.post('/users',
     celebrate({
@@ -56,10 +56,10 @@ usersRouter.post('/users/login',
     }),
     (req, res) => {
         const user: User = req.body;
-        const acessToken:string = req.header('acessToken') || '';
+        const acessToken: string = req.header('acessToken') || '';
         userRepository.login(user, acessToken, (customTokenJwt) => {
             if (customTokenJwt) {
-                res.status(201).json({customTokenJwt: customTokenJwt });
+                res.status(201).json({ customTokenJwt: customTokenJwt });
             } else {
                 res.status(400).send();
             }
@@ -72,7 +72,7 @@ usersRouter.post('/users/upload', upload.single('file'),
         const userUid: string = req.body.uid;
         const fileName = userUid + '_profile_photo';
         if (file) {
-            userRepository.uploadUserPhoto(file.path, fileName, (error: any, success: any) => {
+            userRepository.uploadUserPhoto(file.path, fileName, file.mimetype, userUid, (error: any, success: any) => {
                 if (success) {
                     console.log('Success image upload ' + success)
                     res.status(200).send(success);
@@ -86,5 +86,18 @@ usersRouter.post('/users/upload', upload.single('file'),
             res.status(400).send('No file uploaded.');
         }
     })
+
+usersRouter.get('/users/:uid', (req, res) => {
+    const uid = req.params.uid;
+    userRepository.get(uid, (error: any, user: any) => {
+        if (error) {
+            console.error("Error getting user from repository. ", error);
+            res.status(500).send();
+        } else {
+            res.status(200).json(user);
+        }
+    });
+});
+
 
 export default usersRouter;

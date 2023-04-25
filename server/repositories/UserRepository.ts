@@ -35,6 +35,24 @@ class UserRepository {
         })
     }
 
+    get(uid: string, callback: any) {
+        db.collection("Users")
+          .doc(uid)
+          .get()
+          .then((userDoc) => {
+            if (!userDoc.exists) {
+              callback(`User with uid ${uid} does not exist`, null);
+            } else {
+              const userData = userDoc.data();
+              callback(null, userData);
+            }
+          })
+          .catch((error) => {
+            console.error("Error getting user from Firestore. ", error);
+            callback(error, null);
+          });
+      }
+    
     async login(user: User, acessToken: string, callback: (customToken?: string) => void) {
         const auth = getAuth();
         if (acessToken.length > 0) {
@@ -55,6 +73,7 @@ class UserRepository {
             await signInWithEmailAndPassword(auth, user.email, user.password)
                 .then(async (userCredential) => {
                     const userAuth = userCredential.user;
+                    console.log(userAuth);
                     const expiresInSecs = 259200; // 72 horas em segundos
                     const customClaims = {
                         userAuth: userAuth,
@@ -63,21 +82,26 @@ class UserRepository {
                     const customToken = await firebaseAdmin.auth().createCustomToken(userAuth.uid, customClaims);
                     callback(customToken);
                 })
+                .catch((error) => {
+                    console.error("Error on user login. ", error);
+                    callback(error);
+                });
         }
-
     }
 
-    async uploadUserPhoto(filePath: string, fileName: string, callback: any) {
+    async uploadUserPhoto(filePath: string, fileName: string, contentType: string, userUid: string, callback: any) {
         const storage = firebaseAdmin.storage().bucket();
-        
         await storage.upload(filePath, {
             destination: fileName,
             metadata: {
-                contentType: 'image/png'
+                contentType: contentType
             }
         })
         .then((uploadResponse) => {
             const success = uploadResponse[0].cloudStorageURI.href;
+            db.collection("Users").doc(userUid).update({
+                photo_url: success
+            });
             callback(null, success);
         })
         .catch((error) => {

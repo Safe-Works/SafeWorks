@@ -4,7 +4,13 @@
     <div *ngIf="userAuth.currentUser">
       <p>Olá, {{ userAuth.currentUser.displayName }}!</p>
       <p>{{userAuth.currentUser.uid}}</p>
+      <button class="btn btn-primary" [routerLink]="'profile/edit/' + userAuth.currentUser.uid">Editar perfil</button>
+      <br />
+      <br />
     </div>
     <button class="btn btn-primary" [routerLink]="'/login'">Tela de login</button>
+    <br />
+    <br />
+    <button class="btn btn-danger" (click)="logout()">Sair</button>
   </div>
 </div>

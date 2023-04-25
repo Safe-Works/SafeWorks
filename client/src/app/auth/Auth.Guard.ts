@@ -10,6 +10,9 @@ export class AuthGuard implements CanActivate {
   constructor(private userAuth: UserAuth, private router: Router) { }
 
   canActivate(): boolean {
+    // Autentica o usuário a partir do token
+    this.userAuth.authUserFromToken();
+
     if (this.userAuth.currentUser) {
       // Usuário autenticado, permitir acesso
       return true;
