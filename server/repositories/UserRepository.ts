@@ -67,17 +67,19 @@ class UserRepository {
 
     }
 
-    async uploadUserPhoto(filePath: string, fileName: string, callback: any) {
+    async uploadUserPhoto(filePath: string, fileName: string, contentType: string, userUid: string, callback: any) {
         const storage = firebaseAdmin.storage().bucket();
-        
         await storage.upload(filePath, {
             destination: fileName,
             metadata: {
-                contentType: 'image/png'
+                contentType: contentType
             }
         })
         .then((uploadResponse) => {
             const success = uploadResponse[0].cloudStorageURI.href;
+            db.collection("Users").doc(userUid).update({
+                photo_url: success
+            });
             callback(null, success);
         })
         .catch((error) => {

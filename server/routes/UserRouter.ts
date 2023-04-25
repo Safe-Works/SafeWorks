@@ -72,7 +72,7 @@ usersRouter.post('/users/upload', upload.single('file'),
         const userUid: string = req.body.uid;
         const fileName = userUid + '_profile_photo';
         if (file) {
-            userRepository.uploadUserPhoto(file.path, fileName, (error: any, success: any) => {
+            userRepository.uploadUserPhoto(file.path, fileName, file.mimetype, userUid, (error: any, success: any) => {
                 if (success) {
                     console.log('Success image upload ' + success)
                     res.status(200).send(success);
