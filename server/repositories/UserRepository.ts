@@ -35,6 +35,24 @@ class UserRepository {
         })
     }
 
+    get(uid: string, callback: any) {
+        db.collection("Users")
+          .doc(uid)
+          .get()
+          .then((userDoc) => {
+            if (!userDoc.exists) {
+              callback(`User with uid ${uid} does not exist`, null);
+            } else {
+              const userData = userDoc.data();
+              callback(null, userData);
+            }
+          })
+          .catch((error) => {
+            console.error("Error getting user from Firestore. ", error);
+            callback(error, null);
+          });
+      }
+    
     async login(user: User, acessToken: string, callback: (customToken?: string) => void) {
         const auth = getAuth();
         if (acessToken.length > 0) {

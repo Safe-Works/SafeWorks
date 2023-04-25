@@ -12,14 +12,18 @@ import { NgxMaskModule} from 'ngx-mask';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { ProfileComponent } from './components/profile/profile.component';
-
+import { ProfileEditComponent } from './components/profile/profile-edit/profile-edit.component';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { FormsModule } from '@angular/forms';
+import { NgSelectModule } from '@ng-select/ng-select';
 @NgModule({
   declarations: [
     AppComponent,
     LoginComponent,
     IndexComponent,
     RegisterComponent,
-    ProfileComponent
+    ProfileComponent,
+    ProfileEditComponent
   ],
   imports: [
     BrowserModule,
@@ -28,7 +32,10 @@ import { ProfileComponent } from './components/profile/profile.component';
     NgxMaskModule.forRoot(),
     HttpClientModule,
     BrowserAnimationsModule,
-    MatProgressSpinnerModule
+    MatProgressSpinnerModule,
+    MatFormFieldModule,
+    FormsModule,
+    NgSelectModule
   ],
   providers: [UserService],
   bootstrap: [AppComponent]
