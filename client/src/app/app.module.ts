@@ -15,7 +15,6 @@ import { ProfileComponent } from './components/profile/profile.component';
 import { ProfileEditComponent } from './components/profile/profile-edit/profile-edit.component';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { FormsModule } from '@angular/forms';
-import { NgSelectModule } from '@ng-select/ng-select';
 @NgModule({
   declarations: [
     AppComponent,
@@ -34,8 +33,7 @@ import { NgSelectModule } from '@ng-select/ng-select';
     BrowserAnimationsModule,
     MatProgressSpinnerModule,
     MatFormFieldModule,
-    FormsModule,
-    NgSelectModule
+    FormsModule
   ],
   providers: [UserService],
   bootstrap: [AppComponent]
