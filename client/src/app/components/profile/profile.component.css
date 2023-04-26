@@ -16,4 +16,10 @@
 .edit-button {
     background-color: var(--safeworks-blue);
     color: var(--safeworks-yellow);
+    opacity: 0.9;
+}
+
+.edit-button:hover {
+    background-color: var(--safeworks-blue);
+    opacity: 1;
 }

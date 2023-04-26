@@ -11,18 +11,20 @@
   --black-background: #121212;
   --gray-dark-background: #3E3E42;
   --light-blue: #00D8FF;
-  --interaction-blue: #1a73e8;
-  --material-blue: #3f51b5;
-  --safeworks-blue: #2c3e50;
-  --safeworks-yellow: #ffa500;
+  --interaction-blue: #1A73E8;
+  --material-blue: #3F51B5;
+  --safeworks-blue: #2C3E50;
+  --safeworks-yellow: #FFA500;
+  --safeworks-yellow-hover: #FF7A00;
   --red-fire: #FF0000;
+  --red-error: #DC3545;
 }
 
 body {
   font-family: Roboto, "Helvetica Neue", sans-serif !important;
   margin: 0;
   height: 100%;
-  background-color: #f5f5f5;
+  background-color: var(--white-background);
 }
 
 html {
@@ -36,7 +38,7 @@ a{
 .form-control {
   padding: 12px;
   border: 1px solid rgba(29, 60, 80, 0.6);
-  }
+}
 
 .card {
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
@@ -62,41 +64,42 @@ a{
   line-height: 1.23px !important;
   border: none !important;
   margin: 15px 0 42px 0 !important;
-  color: #1d3c50 !important;
+  color: var(--safeworks-blue) !important;
 }
 
 .input-group-text {
   background-color: var(--safeworks-blue);
-  color: #ffa600;
+  color: var(--safeworks-yellow);
   opacity: 0.9 !important;
   border: 1px solid rgba(29, 60, 80, 0.6);
 }
 
 .validation-error {
-  color: #dc3545;
+  color: var(--red-error);
   margin-top: -10px;
 }
 
 .btn-autentication {
   background-color: var(--safeworks-blue);
-  color: #ffbf48;
+  color: var(--safeworks-yellow);
   border: var(--safeworks-blue);
   opacity: 0.9;
 }
 
 .btn-autentication:hover {
   background-color: var(--safeworks-blue);
-  color: #ffb326;
+  color: var(--safeworks-yellow);
   border: var(--safeworks-blue);
   opacity: 1;
 }
 
 .link-safeworks {
-  color:#ffbf48 !important;
+  color:var(--safeworks-yellow) !important;
 }
 
 .link-safeworks:hover {
-  color: #ffbf48 !important;
+  color: var(--safeworks-yellow-hover) !important;
+  font-weight: 500;
 }
 
 .logo-autentication {
@@ -120,7 +123,7 @@ a{
 
 .eye-button:hover {
   background-color: transparent !important;
-  color: #030303 !important;
+  color: var(--black) !important;
 }
 
 .row {
