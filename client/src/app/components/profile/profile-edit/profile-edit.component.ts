@@ -3,6 +3,8 @@ import { UserService } from 'src/app/services/user.service';
 import { UserAuth } from '../../../auth/User.Auth';
 import User from '../../../models/user.model';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
+import {MatSnackBar, MatSnackBarRef} from '@angular/material/snack-bar';
+
 @Component({
   selector: 'app-profile-edit',
   templateUrl: './profile-edit.component.html',
@@ -86,7 +88,7 @@ export class ProfileEditComponent {
   address = new FormControl('');
   updateForm!: FormGroup;
 
-  constructor(private userService: UserService, private user: UserAuth) {
+  constructor(private userService: UserService, private user: UserAuth, private _snackBar: MatSnackBar) {
     this.selectedDistrict = 'Selecione';
     this.updateForm = new FormGroup({
       fullName: this.fullName,
@@ -94,6 +96,12 @@ export class ProfileEditComponent {
       telephone: this.telephone,
       username: this.username,
       address: this.address
+    });
+  }
+  openSnackBar(message: string, action: string, className: string) {
+    this._snackBar.open(message, action, {
+      duration: 20000,
+      panelClass: [className],
     });
   }
   ngOnInit() {
@@ -125,7 +133,8 @@ export class ProfileEditComponent {
     updatedUser.address = this.updateForm.get('address')?.value;
     this.userService.UpdateUser(this.user.currentUser?.uid ?? "", updatedUser).subscribe(
       (response) => {
-        console.log(response);
+        this.openSnackBar("Perfil atualizado com sucesso!", "OK", "snackbar-success");
+        this.loadUserInfo();
       },
       (error) => {
         console.log(error);
