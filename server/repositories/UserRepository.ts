@@ -111,8 +111,7 @@ class UserRepository {
 
     async update(user: User, callback: any) {
         const { uid, email, password, name, cpf, telephone_number, username, address } = user;
-
-        // Use Object.fromEntries to create an object without undefined values
+        // Usando Object.fromEntries para criar um objeto sem campos vazios
         const updatedData = Object.fromEntries(
             Object.entries({
                 email,
@@ -125,25 +124,45 @@ class UserRepository {
             }).filter(([key, value]) => value !== undefined)
         );
         if (Object.keys(updatedData).length === 0) {
-            // No fields to update, return early
+            // Sem campo para atualizar, retorna null
             return callback(null);
         }
         try {
-            // Update Firebase Authentication user record
             if (password) {
                 await firebaseAdmin.auth().updateUser(uid ?? "", { password });
             }
             if (name) {
                 await firebaseAdmin.auth().updateUser(uid ?? "", { displayName: name });
             }
-            // Update Firestore user document
+
+            const userRecord = await firebaseAdmin.auth().getUser(uid ?? "");
+
             await db.collection("Users").doc(uid ?? "").update(updatedData);
-            callback(null);
+
+            const userDoc = await db.collection("Users").doc(uid ?? "").get();
+            if (!userDoc.exists) {
+                callback(`User with uid ${uid} does not exist`, null);
+            } else {
+                const userData = userDoc.exists ? userDoc.data() : null;
+                if (!userData) {
+                    callback(`User with uid ${uid} does not exist or has no data`, null);
+                } else {
+                    const customClaims = {
+                        displayName: userData.name,
+                        cpf: userData.cpf,
+                        telephone_number: userData.telephone_number,
+                        userAuth: userRecord
+                    };
+                    const customToken = await firebaseAdmin.auth().createCustomToken(uid ?? "", customClaims);
+                    callback(null, customToken);
+                }
+            }
         } catch (error) {
             console.error("Error updating user in repository. ", error);
             callback(error);
         }
     }
+
 }
 
 export default UserRepository;

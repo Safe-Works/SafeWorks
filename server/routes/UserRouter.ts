@@ -115,13 +115,18 @@ usersRouter.put('/users/:uid',
         const uid = req.params.uid;
         const user: User = req.body;
         user.uid = uid;
-        userRepository.update(user, (error: any) => {
+        userRepository.update(user, (error: any, customTokenJwt: any) => {
             if (error) {
                 console.error("Error updating user in repository. ", error);
                 res.status(500).send();
-            } else {
-                res.status(200).json(user);
-            }
+              } else {
+                const response = {
+                  status: 200,
+                  token_name: "custom_token",
+                  token: customTokenJwt
+                };
+                res.status(200).json(response);
+              }
         });
     });
 

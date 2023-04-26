@@ -4,6 +4,8 @@ import { UserAuth } from '../../../auth/User.Auth';
 import User from '../../../models/user.model';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 import {MatSnackBar, MatSnackBarRef} from '@angular/material/snack-bar';
+import { CookieService } from 'ngx-cookie-service';
+
 
 @Component({
   selector: 'app-profile-edit',
@@ -88,7 +90,7 @@ export class ProfileEditComponent {
   address = new FormControl('');
   updateForm!: FormGroup;
 
-  constructor(private userService: UserService, private user: UserAuth, private _snackBar: MatSnackBar) {
+  constructor(private userService: UserService, private userAuth: UserAuth, private _snackBar: MatSnackBar, private cookieService: CookieService) {
     this.selectedDistrict = 'Selecione';
     this.updateForm = new FormGroup({
       fullName: this.fullName,
@@ -109,7 +111,7 @@ export class ProfileEditComponent {
   }
 
   loadUserInfo() {
-    this.userService.GetUserInfo(this.user.currentUser?.uid ?? "").subscribe(
+    this.userService.GetUserInfo(this.userAuth.currentUser?.uid ?? "").subscribe(
       (response) => {
         this.userInfo = response;
         this.fullName.setValue(this.userInfo.name);
@@ -131,10 +133,14 @@ export class ProfileEditComponent {
     updatedUser.telephone_number = this.updateForm.get('telephone')?.value;
     updatedUser.username = this.updateForm.get('username')?.value;
     updatedUser.address = this.updateForm.get('address')?.value;
-    this.userService.UpdateUser(this.user.currentUser?.uid ?? "", updatedUser).subscribe(
+    this.userService.UpdateUser(this.userAuth.currentUser?.uid ?? "", updatedUser).subscribe(
       (response) => {
-        this.openSnackBar("Perfil atualizado com sucesso!", "OK", "snackbar-success");
-        this.loadUserInfo();
+        if (response.status === 200) {
+          this.cookieService.set('token', response.token, undefined, '/', undefined, true, 'Strict');
+          this.userAuth.authUserFromToken();
+          this.openSnackBar("Perfil atualizado com sucesso!", "OK", "snackbar-success");
+          this.loadUserInfo();
+        }
       },
       (error) => {
         console.log(error);
