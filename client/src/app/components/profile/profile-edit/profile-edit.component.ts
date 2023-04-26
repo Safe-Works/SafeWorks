@@ -1,11 +1,15 @@
 import { Component } from '@angular/core';
-
+import { UserService } from 'src/app/services/user.service';
+import { UserAuth } from '../../../auth/User.Auth';
+import User from '../../../models/user.model';
+import { FormGroup, FormControl, Validators } from '@angular/forms';
 @Component({
   selector: 'app-profile-edit',
   templateUrl: './profile-edit.component.html',
   styleUrls: ['./profile-edit.component.css']
 })
 export class ProfileEditComponent {
+  cpfInvalidLabel = "O CPF é obrigatório*";
   selectedState: string = "PR";
   selectedCity: string = "CWB";
   selectedDistrict: string;
@@ -74,12 +78,58 @@ export class ProfileEditComponent {
     { id: '62', name: 'Vila Izabel' },
     { id: '63', name: 'Vista Alegre' }
   ]
+  userInfo: any = null;
+  fullName = new FormControl('', [Validators.required]);
+  cpf = new FormControl('', [Validators.required]);
+  telephone = new FormControl('', [Validators.required]);
+  username = new FormControl('');
+  address = new FormControl('');
+  updateForm!: FormGroup;
 
-  constructor() {
+  constructor(private userService: UserService, private user: UserAuth) {
     this.selectedDistrict = 'Selecione';
+    this.updateForm = new FormGroup({
+      fullName: this.fullName,
+      cpf: this.cpf,
+      telephone: this.telephone,
+      username: this.username,
+      address: this.address
+    });
+  }
+  ngOnInit() {
+    this.loadUserInfo();
   }
 
-  ngOnInit() {
+  loadUserInfo() {
+    this.userService.GetUserInfo(this.user.currentUser?.uid ?? "").subscribe(
+      (response) => {
+        this.userInfo = response;
+        this.fullName.setValue(this.userInfo.name);
+        this.cpf.setValue(this.userInfo.cpf);
+        this.telephone.setValue(this.userInfo.telephone_number);
+        this.username.setValue(this.userInfo.username);
+        this.address.setValue(this.userInfo.address);
+      },
+      (error) => {
+        console.log(error);
+      }
+    );
+  }
 
+  updateUser(): void {
+    const updatedUser = new User();
+    updatedUser.name = this.updateForm.get('fullName')?.value;
+    updatedUser.cpf = this.updateForm.get('cpf')?.value;
+    updatedUser.telephone_number = this.updateForm.get('telephone')?.value;
+    updatedUser.username = this.updateForm.get('username')?.value;
+    updatedUser.address = this.updateForm.get('address')?.value;
+    this.userService.UpdateUser(this.user.currentUser?.uid ?? "", updatedUser).subscribe(
+      (response) => {
+        console.log(response);
+      },
+      (error) => {
+        console.log(error);
+      }
+    );
   }
 }

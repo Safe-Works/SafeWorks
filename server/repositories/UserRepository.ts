@@ -37,22 +37,22 @@ class UserRepository {
 
     get(uid: string, callback: any) {
         db.collection("Users")
-          .doc(uid)
-          .get()
-          .then((userDoc) => {
-            if (!userDoc.exists) {
-              callback(`User with uid ${uid} does not exist`, null);
-            } else {
-              const userData = userDoc.data();
-              callback(null, userData);
-            }
-          })
-          .catch((error) => {
-            console.error("Error getting user from Firestore. ", error);
-            callback(error, null);
-          });
-      }
-    
+            .doc(uid)
+            .get()
+            .then((userDoc) => {
+                if (!userDoc.exists) {
+                    callback(`User with uid ${uid} does not exist`, null);
+                } else {
+                    const userData = userDoc.data();
+                    callback(null, userData);
+                }
+            })
+            .catch((error) => {
+                console.error("Error getting user from Firestore. ", error);
+                callback(error, null);
+            });
+    }
+
     async login(user: User, acessToken: string, callback: (customToken?: string) => void) {
         const auth = getAuth();
         if (acessToken.length > 0) {
@@ -97,16 +97,52 @@ class UserRepository {
                 contentType: contentType
             }
         })
-        .then((uploadResponse) => {
-            const success = uploadResponse[0].cloudStorageURI.href;
-            db.collection("Users").doc(userUid).update({
-                photo_url: success
+            .then((uploadResponse) => {
+                const success = uploadResponse[0].cloudStorageURI.href;
+                db.collection("Users").doc(userUid).update({
+                    photo_url: success
+                });
+                callback(null, success);
+            })
+            .catch((error) => {
+                callback(error);
             });
-            callback(null, success);
-        })
-        .catch((error) => {
+    }
+
+    async update(user: User, callback: any) {
+        const { uid, email, password, name, cpf, telephone_number, username, address } = user;
+
+        // Use Object.fromEntries to create an object without undefined values
+        const updatedData = Object.fromEntries(
+            Object.entries({
+                email,
+                password,
+                name,
+                cpf,
+                telephone_number,
+                username,
+                address
+            }).filter(([key, value]) => value !== undefined)
+        );
+        if (Object.keys(updatedData).length === 0) {
+            // No fields to update, return early
+            return callback(null);
+        }
+        try {
+            // Update Firebase Authentication user record
+            if (password) {
+                await firebaseAdmin.auth().updateUser(uid ?? "", { password });
+            }
+            if (name) {
+                await firebaseAdmin.auth().updateUser(uid ?? "", { displayName: name });
+            }
+            // Update Firestore user document
+            await db.collection("Users").doc(uid ?? "").update(updatedData);
+            callback(null);
+        } catch (error) {
+            console.error("Error updating user in repository. ", error);
             callback(error);
-        });
+        }
     }
 }
 
