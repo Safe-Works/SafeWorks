@@ -99,5 +99,35 @@ usersRouter.get('/users/:uid', (req, res) => {
     });
 });
 
+usersRouter.put('/users/:uid',
+    celebrate({
+        body: Joi.object({
+            email: Joi.string().email(),
+            password: Joi.string().min(8),
+            name: Joi.string().max(50),
+            cpf: Joi.string().min(11),
+            telephone_number: Joi.string().min(11),
+            username: Joi.string().max(50),
+            address: Joi.string().max(255)
+        }).min(1) // Pelo menos um campo deve estar presente
+    }),
+    (req, res) => {
+        const uid = req.params.uid;
+        const user: User = req.body;
+        user.uid = uid;
+        userRepository.update(user, (error: any, customTokenJwt: any) => {
+            if (error) {
+                console.error("Error updating user in repository. ", error);
+                res.status(500).send();
+              } else {
+                const response = {
+                  status: 200,
+                  token_name: "custom_token",
+                  token: customTokenJwt
+                };
+                res.status(200).json(response);
+              }
+        });
+    });
 
 export default usersRouter;

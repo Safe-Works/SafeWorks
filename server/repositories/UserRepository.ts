@@ -37,22 +37,22 @@ class UserRepository {
 
     get(uid: string, callback: any) {
         db.collection("Users")
-          .doc(uid)
-          .get()
-          .then((userDoc) => {
-            if (!userDoc.exists) {
-              callback(`User with uid ${uid} does not exist`, null);
-            } else {
-              const userData = userDoc.data();
-              callback(null, userData);
-            }
-          })
-          .catch((error) => {
-            console.error("Error getting user from Firestore. ", error);
-            callback(error, null);
-          });
-      }
-    
+            .doc(uid)
+            .get()
+            .then((userDoc) => {
+                if (!userDoc.exists) {
+                    callback(`User with uid ${uid} does not exist`, null);
+                } else {
+                    const userData = userDoc.data();
+                    callback(null, userData);
+                }
+            })
+            .catch((error) => {
+                console.error("Error getting user from Firestore. ", error);
+                callback(error, null);
+            });
+    }
+
     async login(user: User, acessToken: string, callback: (customToken?: string) => void) {
         const auth = getAuth();
         if (acessToken.length > 0) {
@@ -97,17 +97,72 @@ class UserRepository {
                 contentType: contentType
             }
         })
-        .then((uploadResponse) => {
-            const success = uploadResponse[0].cloudStorageURI.href;
-            db.collection("Users").doc(userUid).update({
-                photo_url: success
+            .then((uploadResponse) => {
+                const success = uploadResponse[0].cloudStorageURI.href;
+                db.collection("Users").doc(userUid).update({
+                    photo_url: success
+                });
+                callback(null, success);
+            })
+            .catch((error) => {
+                callback(error);
             });
-            callback(null, success);
-        })
-        .catch((error) => {
-            callback(error);
-        });
     }
+
+    async update(user: User, callback: any) {
+        const { uid, email, password, name, cpf, telephone_number, username, address } = user;
+        // Usando Object.fromEntries para criar um objeto sem campos vazios
+        const updatedData = Object.fromEntries(
+            Object.entries({
+                email,
+                password,
+                name,
+                cpf,
+                telephone_number,
+                username,
+                address
+            }).filter(([key, value]) => value !== undefined)
+        );
+        if (Object.keys(updatedData).length === 0) {
+            // Sem campo para atualizar, retorna null
+            return callback(null);
+        }
+        try {
+            if (password) {
+                await firebaseAdmin.auth().updateUser(uid ?? "", { password });
+            }
+            if (name) {
+                await firebaseAdmin.auth().updateUser(uid ?? "", { displayName: name });
+            }
+
+            const userRecord = await firebaseAdmin.auth().getUser(uid ?? "");
+
+            await db.collection("Users").doc(uid ?? "").update(updatedData);
+
+            const userDoc = await db.collection("Users").doc(uid ?? "").get();
+            if (!userDoc.exists) {
+                callback(`User with uid ${uid} does not exist`, null);
+            } else {
+                const userData = userDoc.exists ? userDoc.data() : null;
+                if (!userData) {
+                    callback(`User with uid ${uid} does not exist or has no data`, null);
+                } else {
+                    const customClaims = {
+                        displayName: userData.name,
+                        cpf: userData.cpf,
+                        telephone_number: userData.telephone_number,
+                        userAuth: userRecord
+                    };
+                    const customToken = await firebaseAdmin.auth().createCustomToken(uid ?? "", customClaims);
+                    callback(null, customToken);
+                }
+            }
+        } catch (error) {
+            console.error("Error updating user in repository. ", error);
+            callback(error);
+        }
+    }
+
 }
 
 export default UserRepository;
