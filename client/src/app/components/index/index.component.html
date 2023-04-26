@@ -2,9 +2,10 @@
   <div class="col-md-6 col-lg-4 text-center">
     <h1>Página inicial</h1>
     <div *ngIf="userAuth.currentUser">
-      <p>Olá, {{ userAuth.currentUser.displayName }}!</p>
-      <p>{{userAuth.currentUser.uid}}</p>
-      <button class="btn btn-primary" [routerLink]="'profile/edit/' + userAuth.currentUser.uid">Editar perfil</button>
+      <div style="position: flex;">
+        <h1>Olá, </h1>
+        <h1 [routerLink]="'/profile'" style="text-decoration: underline; cursor: pointer;"> {{ userAuth.currentUser.displayName }}!</h1>
+      </div>
       <br />
       <br />
     </div>
