@@ -97,12 +97,16 @@ class UserRepository {
                 contentType: contentType
             }
         })
-            .then((uploadResponse) => {
-                const success = uploadResponse[0].cloudStorageURI.href;
-                db.collection("Users").doc(userUid).update({
-                    photo_url: success
+            .then(async (uploadResponse) => {
+                const file = uploadResponse[0];
+                const donwloadUrl = await file.getSignedUrl({
+                    action: 'read',
+                    expires: '12-31-2025'
                 });
-                callback(null, success);
+                db.collection("Users").doc(userUid).update({
+                    photo_url: donwloadUrl
+                });
+                callback(null, donwloadUrl);
             })
             .catch((error) => {
                 callback(error);
