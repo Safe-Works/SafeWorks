@@ -15,8 +15,9 @@ import { ProfileComponent } from './components/profile/profile.component';
 import { ProfileEditComponent } from './components/profile/profile-edit/profile-edit.component';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { FormsModule } from '@angular/forms';
-import { NgSelectModule } from '@ng-select/ng-select';
 import { NavbarComponent } from './navbar/navbar.component';
+import {MatSnackBarModule} from '@angular/material/snack-bar';
+
 @NgModule({
   declarations: [
     AppComponent,
@@ -37,7 +38,7 @@ import { NavbarComponent } from './navbar/navbar.component';
     MatProgressSpinnerModule,
     MatFormFieldModule,
     FormsModule,
-    NgSelectModule
+    MatSnackBarModule
   ],
   providers: [UserService],
   bootstrap: [AppComponent]
