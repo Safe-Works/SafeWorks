@@ -113,11 +113,25 @@ export class ProfileEditComponent {
   }
   
   onFileSelected(event: any) {
-    const file= event.target.files[0];
+    const file = event.target.files[0];
     if (file) {
+      const allowedTypes = ['image/jpeg', 'image/png', 'image/gif'];
+      if (!allowedTypes.includes(file.type)) {
+        this.openSnackBar("Selecione um arquivo de imagem válido (JPG, PNG ou GIF).", "OK", "snackbar-error");
+        return;
+      }
       this.imageControl.setValue(file);
+      const reader = new FileReader();
+      reader.onload = (event) => {
+        const imageContainer = document.getElementById('logo-container');
+        if (imageContainer && event.target?.result) {
+          imageContainer.style.backgroundImage = `url(${event.target.result})`;
+        }
+      };
+      reader.readAsDataURL(file);
     }
   }
+  
 
   loadUserInfo() {
     this.userService.GetUserInfo(this.userAuth.currentUser?.uid ?? "").subscribe(
