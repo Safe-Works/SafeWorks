@@ -3,7 +3,7 @@ import { Observable } from "rxjs";
 import User from "../models/user.model";
 import { Injectable } from "@angular/core";
 import { CookieService } from 'ngx-cookie-service';
-import { tap } from 'rxjs/operators';
+import { catchError, tap } from 'rxjs/operators';
 
 interface UserAuth {
   userAuth: {
@@ -71,4 +71,38 @@ export class UserService {
     );
   }
 
+  public GetUserInfo(uid: string): Observable<any> {
+    return this.http.get<any>(this.api + "/" + uid).pipe(
+      tap((response: any) => {
+        return response;
+      }),
+      catchError((error) => {
+        console.log(error);
+        return error;
+      })
+    );
+  }
+
+  public UpdateUser(uid: string, user: User, photo: any): Observable<any> {
+    const formData = new FormData();
+    formData.append('name', user.name ?? "");
+    formData.append('cpf', user.cpf ?? "");
+    formData.append('telephone_number', user.telephone_number ?? "");
+    formData.append('username', user.username ?? "");
+    formData.append('address', user.address ?? "");
+    if (photo) {
+      formData.append('photo', photo, photo.name);
+    }
+    const headers = new HttpHeaders().set('enctype', 'multipart/form-data');
+    return this.http.put<any>(`${this.api}/${uid}`, formData, { headers }).pipe(
+      tap((response: any) => {
+        return response;
+      }),
+      catchError((error) => {
+        console.log(error);
+        return error;
+      })
+    );
+  }
+  
 }
