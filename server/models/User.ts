@@ -6,7 +6,7 @@ type User = {
     email: string,
     password: string,
     name: string,
-    username: string,
+    username?: string,
     cpf: string,
     telephone_number: string,
     address?: string,

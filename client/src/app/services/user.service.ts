@@ -88,8 +88,8 @@ export class UserService {
     formData.append('name', user.name ?? "");
     formData.append('cpf', user.cpf ?? "");
     formData.append('telephone_number', user.telephone_number ?? "");
-    formData.append('username', user.username ?? "");
-    formData.append('address', user.address ?? "");
+    if (user.username) formData.append('username', user.username ?? "");
+    if (user.address) formData.append('address', user.address ?? "");
     if (photo) {
       formData.append('photo', photo, photo.name);
     }
