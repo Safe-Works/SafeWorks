@@ -17,7 +17,7 @@
                             <a class="nav-link" [routerLink]="'/profile/edit/' + userAuth.currentUser.uid">Editar perfil</a>
                         </li>
                         <li class="nav-item"  *ngIf="userAuth.currentUser">
-                            <a class="nav-link" (click)="logout.emit()">Sair</a>
+                            <a class="nav-link logout" (click)="logout()">Sair</a>
                         </li>
                     </ul>
                 </div>
