@@ -17,6 +17,7 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { FormsModule } from '@angular/forms';
 import { NavbarComponent } from './navbar/navbar.component';
 import {MatSnackBarModule} from '@angular/material/snack-bar';
+import { FooterComponent} from "./footer/footer.component";
 
 @NgModule({
   declarations: [
@@ -26,7 +27,8 @@ import {MatSnackBarModule} from '@angular/material/snack-bar';
     RegisterComponent,
     ProfileComponent,
     ProfileEditComponent,
-    NavbarComponent
+    NavbarComponent,
+    FooterComponent
   ],
   imports: [
     BrowserModule,
