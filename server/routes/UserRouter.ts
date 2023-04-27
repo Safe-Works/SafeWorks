@@ -99,7 +99,7 @@ usersRouter.get('/users/:uid', (req, res) => {
     });
 });
 
-usersRouter.put('/users/:uid',
+usersRouter.put('/users/:uid', upload.single('photo'),
     celebrate({
         body: Joi.object({
             email: Joi.string().email(),
@@ -114,19 +114,20 @@ usersRouter.put('/users/:uid',
     (req, res) => {
         const uid = req.params.uid;
         const user: User = req.body;
+        const photo = req.file;
         user.uid = uid;
-        userRepository.update(user, (error: any, customTokenJwt: any) => {
+        userRepository.update(user, photo, (error: any, customTokenJwt: any) => {
             if (error) {
                 console.error("Error updating user in repository. ", error);
                 res.status(500).send();
-              } else {
+            } else {
                 const response = {
-                  status: 200,
-                  token_name: "custom_token",
-                  token: customTokenJwt
+                    status: 200,
+                    token_name: "custom_token",
+                    token: customTokenJwt
                 };
                 res.status(200).json(response);
-              }
+            }
         });
     });
 

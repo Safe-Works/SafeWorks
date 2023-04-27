@@ -86,10 +86,11 @@ export class ProfileEditComponent {
   fullName = new FormControl('', [Validators.required]);
   cpf = new FormControl('', [Validators.required]);
   telephone = new FormControl('', [Validators.required]);
+  imageControl = new FormControl(null);
   username = new FormControl('');
   address = new FormControl('');
   updateForm!: FormGroup;
-
+  urlProfileImage : string = "";
   constructor(private userService: UserService, private userAuth: UserAuth, private _snackBar: MatSnackBar, private cookieService: CookieService) {
     this.selectedDistrict = 'Selecione';
     this.updateForm = new FormGroup({
@@ -97,7 +98,8 @@ export class ProfileEditComponent {
       cpf: this.cpf,
       telephone: this.telephone,
       username: this.username,
-      address: this.address
+      address: this.address,
+      imageControl: this.imageControl
     });
   }
   openSnackBar(message: string, action: string, className: string) {
@@ -109,6 +111,13 @@ export class ProfileEditComponent {
   ngOnInit() {
     this.loadUserInfo();
   }
+  
+  onFileSelected(event: any) {
+    const file= event.target.files[0];
+    if (file) {
+      this.imageControl.setValue(file);
+    }
+  }
 
   loadUserInfo() {
     this.userService.GetUserInfo(this.userAuth.currentUser?.uid ?? "").subscribe(
@@ -119,6 +128,7 @@ export class ProfileEditComponent {
         this.telephone.setValue(this.userInfo.telephone_number);
         this.username.setValue(this.userInfo.username);
         this.address.setValue(this.userInfo.address);
+        this.urlProfileImage = this.userInfo.photo_url ? this.userInfo.photo_url : "https://www.pngitem.com/pimgs/m/551-5510463_default-user-image-png-transparent-png.png";
       },
       (error) => {
         console.log(error);
@@ -133,7 +143,9 @@ export class ProfileEditComponent {
     updatedUser.telephone_number = this.updateForm.get('telephone')?.value;
     updatedUser.username = this.updateForm.get('username')?.value;
     updatedUser.address = this.updateForm.get('address')?.value;
-    this.userService.UpdateUser(this.userAuth.currentUser?.uid ?? "", updatedUser).subscribe(
+    const photo = this.updateForm.get('imageControl')?.value
+  
+    this.userService.UpdateUser(this.userAuth.currentUser?.uid ?? "", updatedUser, photo).subscribe(
       (response) => {
         if (response.status === 200) {
           this.cookieService.set('token', response.token, undefined, '/', undefined, true, 'Strict');
@@ -147,4 +159,5 @@ export class ProfileEditComponent {
       }
     );
   }
+  
 }

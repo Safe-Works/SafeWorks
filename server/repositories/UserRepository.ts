@@ -73,7 +73,6 @@ class UserRepository {
             await signInWithEmailAndPassword(auth, user.email, user.password)
                 .then(async (userCredential) => {
                     const userAuth = userCredential.user;
-                    console.log(userAuth);
                     const expiresInSecs = 259200; // 72 horas em segundos
                     const customClaims = {
                         userAuth: userAuth,
@@ -113,7 +112,19 @@ class UserRepository {
             });
     }
 
-    async update(user: User, callback: any) {
+    async update(user: User, photo: any, callback: any) {
+        if (photo) {
+            const filePath = photo.path;
+            const fileName = photo.filename;
+            const contentType = photo.mimetype;
+            this.uploadUserPhoto(filePath ?? "", fileName ?? "", contentType ?? "", user.uid ?? "", (error: any, success: any) => {
+                if (success) {
+                    console.log('Success image upload ' + success)
+                } else {
+                    return callback(error);
+                }
+            })
+        }
         const { uid, email, password, name, cpf, telephone_number, username, address } = user;
         // Usando Object.fromEntries para criar um objeto sem campos vazios
         const updatedData = Object.fromEntries(
@@ -155,7 +166,8 @@ class UserRepository {
                         displayName: userData.name,
                         cpf: userData.cpf,
                         telephone_number: userData.telephone_number,
-                        userAuth: userRecord
+                        userAuth: userRecord,
+                        photo_url: userData.photo_url
                     };
                     const customToken = await firebaseAdmin.auth().createCustomToken(uid ?? "", customClaims);
                     callback(null, customToken);

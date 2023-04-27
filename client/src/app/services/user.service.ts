@@ -83,8 +83,18 @@ export class UserService {
     );
   }
 
-  public UpdateUser(uid: string, user: User): Observable<any> {
-    return this.http.put<any>(this.api + "/" + uid, user).pipe(
+  public UpdateUser(uid: string, user: User, photo: any): Observable<any> {
+    const formData = new FormData();
+    formData.append('name', user.name ?? "");
+    formData.append('cpf', user.cpf ?? "");
+    formData.append('telephone_number', user.telephone_number ?? "");
+    formData.append('username', user.username ?? "");
+    formData.append('address', user.address ?? "");
+    if (photo) {
+      formData.append('photo', photo, photo.name);
+    }
+    const headers = new HttpHeaders().set('enctype', 'multipart/form-data');
+    return this.http.put<any>(`${this.api}/${uid}`, formData, { headers }).pipe(
       tap((response: any) => {
         return response;
       }),
@@ -93,6 +103,6 @@ export class UserService {
         return error;
       })
     );
-  
   }
+  
 }

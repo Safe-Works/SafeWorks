@@ -8,7 +8,8 @@
                 <div class="input-field-edit">
                     <label for="fullName">Nome</label>
                     <input type="text" class="form-control " id="fullName" aria-describedby="fullName"
-                        [formControl]="fullName" placeholder="Nome completo" [ngClass]="{ 'is-invalid': fullName.invalid && formDir.submitted }">
+                        [formControl]="fullName" placeholder="Nome completo"
+                        [ngClass]="{ 'is-invalid': fullName.invalid && formDir.submitted }">
                 </div>
                 <div class="row validation-error" *ngIf="fullName.invalid && formDir.submitted">
                     <p>O nome é obrigatório*</p>
@@ -18,7 +19,8 @@
                 <div class="input-field-edit">
                     <label for="cpf">CPF</label>
                     <input type="text" class="form-control" id="cpf" aria-describedby="cpf" placeholder="CPF"
-                        [formControl]="cpf" mask="000.000.000-00" [ngClass]="{ 'is-invalid': cpf.invalid && formDir.submitted }">
+                        [formControl]="cpf" mask="000.000.000-00"
+                        [ngClass]="{ 'is-invalid': cpf.invalid && formDir.submitted }">
                 </div>
                 <div class="row validation-error" *ngIf="cpf.invalid && formDir.submitted">
                     <p>{{ cpfInvalidLabel }}</p>
@@ -40,7 +42,7 @@
             <div class="row">
                 <div class="input-field-edit">
                     <label for="fullName">Nome de usuário</label>
-                    <input type="text" class="form-control " id="username" aria-describedby="username" 
+                    <input type="text" class="form-control " id="username" aria-describedby="username"
                         placeholder="username" [formControl]="username">
                 </div>
             </div>
@@ -70,20 +72,21 @@
         <div class="col-md-4">
             <div class="row">
                 <div style="position: relative;">
-                    <div class="logo-container" style="background-image: url('https://www.pngitem.com/pimgs/m/551-5510463_default-user-image-png-transparent-png.png'); 
-                  background-size: cover;
-                  background-position: center;
-                  width: 200px;
-                  height: 200px;
-                  object-fit: contain;
-                  margin: 0 auto;" (click)="logoInput.click()">
-                        <input type="file" class="form-control-file" #logoInput id="logo" name="logo"
-                            style="display: none;">
+                    <div class="logo-container" style="
+                      background-image: url('{{ urlProfileImage }}'); 
+                      background-size: cover;
+                      background-position: center;
+                      width: 200px;
+                      height: 200px;
+                      object-fit: contain;
+                      margin: 0 auto;" (click)="logoInput.click()">
+                      <input type="file" class="form-control-file" #logoInput id="logo" name="logo"
+                        style="display: none;" (change)="onFileSelected($event)">
                     </div>
                     <label for="logo"
-                        style="position: absolute; bottom: 10px; left: 50%; transform: translateX(-50%); font-weight: bold; color: #ffffff; background-color: #1d3c50; padding-left: 5px; padding-right: 5px;">Alterar
-                        foto</label>
-                </div>
+                      style="position: absolute; bottom: 10px; left: 50%; transform: translateX(-50%); font-weight: bold; color: #ffffff; background-color: #1d3c50; padding-left: 5px; padding-right: 5px;">Alterar
+                      foto</label>
+                  </div>
             </div>
         </div>
     </div>
