@@ -3,14 +3,22 @@
         <nav class="navbar navbar-expand-lg bg-body-tertiary">
             <div class="container-fluid">
                 <div class="collapse navbar-collapse justify-content-center" id="navbarNav">
-                    <ul class="navbar-nav">
+                    <ul class="navbar-nav ml-auto">
                         <li class="nav-item">
-                            <a class="nav-link" href="#">Features</a>
+                            <a class="nav-link" routerLink="/" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}">Página Inicial</a>
                         </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="#">Features</a>
+                        <li class="nav-item" *ngIf="userAuth.currentUser">
+                            <a class="nav-link" routerLink="/profile" routerLinkActive="active">Perfil</a>
                         </li>
-                        <button class="btn btn-primary" >Tela de login</button>
+                        <li class="nav-item" *ngIf="!userAuth.currentUser">
+                            <a class="nav-link" [routerLink]="'/login'" routerLinkActive="active">Login</a>
+                        </li>
+                        <li class="nav-item" *ngIf="userAuth.currentUser">
+                            <a class="nav-link" [routerLink]="'/profile/edit/' + userAuth.currentUser.uid">Editar perfil</a>
+                        </li>
+                        <li class="nav-item"  *ngIf="userAuth.currentUser">
+                            <a class="nav-link" (click)="logout.emit()">Sair</a>
+                        </li>
                     </ul>
                 </div>
             </div>
