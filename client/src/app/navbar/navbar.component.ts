@@ -7,12 +7,14 @@ import { UserAuth } from '../auth/User.Auth';
   styleUrls: ['./navbar.component.css']
 })
 export class NavbarComponent implements OnInit{
-  @Output() logout = new EventEmitter<void>();
-
   constructor(public userAuth: UserAuth) {}
 
   ngOnInit(): void {
     this.userAuth.authUserFromToken();
+  }
+
+  logout() {
+    this.userAuth.clearUser();
   }
 
 }
