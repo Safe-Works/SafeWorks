@@ -1,5 +1,6 @@
-import {Component, EventEmitter, OnInit, Output} from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { UserAuth } from '../auth/User.Auth';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-navbar',
@@ -7,7 +8,7 @@ import { UserAuth } from '../auth/User.Auth';
   styleUrls: ['./navbar.component.css']
 })
 export class NavbarComponent implements OnInit{
-  constructor(public userAuth: UserAuth) {}
+  constructor(public userAuth: UserAuth, private router: Router) {}
 
   ngOnInit(): void {
     this.userAuth.authUserFromToken();
@@ -15,6 +16,7 @@ export class NavbarComponent implements OnInit{
 
   logout() {
     this.userAuth.clearUser();
+    this.router.navigateByUrl('/login');
   }
 
 }
