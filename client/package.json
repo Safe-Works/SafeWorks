@@ -21,7 +21,6 @@
     "@angular/platform-browser": "^15.2.0",
     "@angular/platform-browser-dynamic": "^15.2.0",
     "@angular/router": "^15.2.0",
-    "@ng-select/ng-select": "^10.0.4",
     "angular2-text-mask": "^9.0.0",
     "bootstrap": "^5.2.3",
     "crypto-js": "^4.1.1",

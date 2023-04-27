@@ -2,104 +2,86 @@
 <div class="row col-md-12" style="padding: 40px 5.6%;">
     <h1 style="font-size: 40px; font-weight: bold; color: #2d2d2d;">Editar perfil</h1>
 </div>
-<form [formGroup]="updateForm" #formDir="ngForm" (ngSubmit)="formDir.valid && updateUser()">
-    <div class="row col-md-12" style="padding: 40px 5.6%; background-color: white; border-top: 1px solid #ced0d4;">
-        <div class="col-md-4">
-            <div class="row">
-                <div class="input-field-edit">
-                    <label for="fullName">Nome</label>
-                    <input type="text" class="form-control " id="fullName" aria-describedby="fullName"
-                        [formControl]="fullName" placeholder="Nome completo"
-                        [ngClass]="{ 'is-invalid': fullName.invalid && formDir.submitted }">
-                </div>
-                <div class="row validation-error" *ngIf="fullName.invalid && formDir.submitted">
-                    <p>O nome é obrigatório*</p>
-                </div>
-            </div>
-            <div class="row">
-                <div class="input-field-edit">
-                    <label for="cpf">CPF</label>
-                    <input type="text" class="form-control" id="cpf" aria-describedby="cpf" placeholder="CPF"
-                        [formControl]="cpf" mask="000.000.000-00"
-                        [ngClass]="{ 'is-invalid': cpf.invalid && formDir.submitted }">
-                </div>
-                <div class="row validation-error" *ngIf="cpf.invalid && formDir.submitted">
-                    <p>{{ cpfInvalidLabel }}</p>
-                </div>
-            </div>
-            <div class="row">
-                <div class="input-field-edit">
-                    <label for="telephone_number">Telefone</label>
-                    <input type="text" class="form-control" id="telephone_number" aria-describedby="telephone"
-                        [formControl]="telephone" placeholder="Número de telefone" prefix="+55 " mask="(00) 00000-0000"
-                        [ngClass]="{ 'is-invalid': telephone.invalid && formDir.submitted }">
-                </div>
-                <div class="row validation-error" *ngIf="telephone.invalid && formDir.submitted">
-                    <p>O telefone é obrigatório*</p>
-                </div>
+<div class="row col-md-12" style="padding: 40px 5.6%; background-color: white; border-top: 1px solid #ced0d4;">
+    <div class="col-md-4">
+        <div class="row">
+            <div class="input-field-edit">
+                <label for="fullName">Nome</label>
+                <input type="text" class="form-control " id="fullName" aria-describedby="fullName"
+                    placeholder="Nome completo">
             </div>
         </div>
-        <div class="col-md-4">
-            <div class="row">
-                <div class="input-field-edit">
-                    <label for="fullName">Nome de usuário</label>
-                    <input type="text" class="form-control " id="username" aria-describedby="username"
-                        placeholder="username" [formControl]="username">
-                </div>
-            </div>
-            <div class="row">
-                <div class="input-field-edit col-md-4">
-                    <label for="state">Estado</label>
-                    <select class="form-control" id="state" aria-describedby="state">
-                        <option value="PR" selected>Paraná</option>
-                    </select>
-                </div>
-                <div class="input-field-edit col-md-4">
-                    <label for="city">Cidade</label>
-                    <select class="form-control" id="city" aria-describedby="city">
-                        <option value="CTBA" selected>Curitiba</option>
-                    </select>
-                </div>
-                <div class="input-field-edit col-md-4">
-                    <label for="district">Bairro</label>
-                    <select class="form-control" id="district" placeholder="Bairro" aria-describedby="district"
-                        [(ngModel)]="selectedDistrict" [formControl]="address">
-                        <option value="" disabled selected>Selecione um bairro</option>
-                        <option *ngFor="let district of districts" [value]="district.id">{{ district.name }}</option>
-                    </select>
-                </div>
+        <div class="row">
+            <div class="input-field-edit">
+                <label for="cpf">CPF</label>
+                <input type="text" class="form-control" id="cpf" aria-describedby="cpf" placeholder="CPF">
             </div>
         </div>
-        <div class="col-md-4">
-            <div class="row">
-                <div style="position: relative;">
-                    <div class="logo-container" style="
-                      background-image: url('{{ urlProfileImage }}'); 
-                      background-size: cover;
-                      background-position: center;
-                      width: 200px;
-                      height: 200px;
-                      object-fit: contain;
-                      margin: 0 auto;" (click)="logoInput.click()">
-                      <input type="file" class="form-control-file" #logoInput id="logo" name="logo"
-                        style="display: none;" (change)="onFileSelected($event)">
-                    </div>
-                    <label for="logo"
-                      style="position: absolute; bottom: 10px; left: 50%; transform: translateX(-50%); font-weight: bold; color: #ffffff; background-color: #1d3c50; padding-left: 5px; padding-right: 5px;">Alterar
-                      foto</label>
-                  </div>
+        <div class="row">
+            <div class="input-field-edit">
+                <label for="telephone_number">Telefone</label>
+                <input type="text" class="form-control" id="telephone_number" aria-describedby="telephone"
+                    placeholder="Número de telefone">
             </div>
         </div>
     </div>
-
-    <div class="row col-md-12 justify-content-end"
-        style="padding: 40px 5.6%; background-color: white; border-top: 1px solid #ced0d4;">
-        <button class="btn btn-primary btn-autentication"
-            style="width: 100%; border-radius: 30.4px; margin-top: 32px; margin-bottom: 5px;">
-            Atualizar perfil
-        </button>
-        <a class="btn btn-outline-secondary" routerLink="/profile" style="width: 100%; border-radius: 30.4px;">
-            Cancelar
-        </a>
+    <div class="col-md-4">
+        <div class="row">
+            <div class="input-field-edit">
+                <label for="fullName">Nome de usuário</label>
+                <input type="text" class="form-control " id="nickName" aria-describedby="nickName"
+                    placeholder="Nickname">
+            </div>
+        </div>
+        <div class="row">
+            <div class="input-field-edit col-md-4">
+                <label for="state">Estado</label>
+                <select class="form-control" id="state" aria-describedby="state">
+                    <option value="PR" selected>Paraná</option>
+                </select>
+            </div>
+            <div class="input-field-edit col-md-4">
+                <label for="city">Cidade</label>
+                <select class="form-control" id="city" aria-describedby="city" >
+                    <option value="CTBA" selected>Curitiba</option>
+                </select>
+            </div>
+            <div class="input-field-edit col-md-4">
+                <label for="district">Bairro</label>
+                <select class="form-control" id="district" placeholder="Bairro" aria-describedby="district" [(ngModel)]="selectedDistrict">
+                    <option value="" disabled selected>Selecione um bairro</option>
+                    <option *ngFor="let district of districts" [value]="district.id">{{ district.name }}</option>
+                </select>
+            </div>
+        </div>
     </div>
-</form>
+    <div class="col-md-4">
+        <div class="row">
+            <div style="position: relative;">
+                <div class="logo-container" style="background-image: url('https://www.pngitem.com/pimgs/m/551-5510463_default-user-image-png-transparent-png.png'); 
+                  background-size: cover;
+                  background-position: center;
+                  width: 200px;
+                  height: 200px;
+                  object-fit: contain;
+                  margin: 0 auto;" (click)="logoInput.click()">
+                    <input type="file" class="form-control-file" #logoInput id="logo" name="logo"
+                        style="display: none;">
+                </div>
+                <label for="logo"
+                    style="position: absolute; bottom: 10px; left: 50%; transform: translateX(-50%); font-weight: bold; color: #ffffff; background-color: #1d3c50; padding-left: 5px; padding-right: 5px;">Alterar
+                    foto</label>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="row col-md-12 justify-content-end"
+    style="padding: 40px 5.6%; background-color: white; border-top: 1px solid #ced0d4;">
+    <button class="btn btn-primary btn-autentication"
+        style="width: 100%; border-radius: 30.4px; margin-top: 32px; margin-bottom: 5px;">
+        Atualizar perfil
+    </button>
+    <button class="btn btn-outline-secondary" routerLink="/profile" style="width: 100%; border-radius: 30.4px;">
+        Cancelar
+    </button>
+</div>
