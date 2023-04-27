@@ -5,7 +5,7 @@ import User from '../../../models/user.model';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 import {MatSnackBar, MatSnackBarRef} from '@angular/material/snack-bar';
 import { CookieService } from 'ngx-cookie-service';
-
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-profile-edit',
@@ -91,7 +91,7 @@ export class ProfileEditComponent {
   address = new FormControl('');
   updateForm!: FormGroup;
   urlProfileImage : string = "";
-  constructor(private userService: UserService, private userAuth: UserAuth, private _snackBar: MatSnackBar, private cookieService: CookieService) {
+  constructor(private userService: UserService, private userAuth: UserAuth, private _snackBar: MatSnackBar, private cookieService: CookieService, private router: Router) {
     this.selectedDistrict = 'Selecione';
     this.updateForm = new FormGroup({
       fullName: this.fullName,
@@ -151,6 +151,7 @@ export class ProfileEditComponent {
           this.cookieService.set('token', response.token, undefined, '/', undefined, true, 'Strict');
           this.userAuth.authUserFromToken();
           this.openSnackBar("Perfil atualizado com sucesso!", "OK", "snackbar-success");
+          this.router.navigateByUrl('/profile');
           this.loadUserInfo();
         }
       },
