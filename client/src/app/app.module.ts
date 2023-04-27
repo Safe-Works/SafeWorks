@@ -16,7 +16,7 @@ import { ProfileEditComponent } from './components/profile/profile-edit/profile-
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { FormsModule } from '@angular/forms';
 import { NgSelectModule } from '@ng-select/ng-select';
-import {SharedModule} from "./shared/shared.module";
+import { NavbarComponent } from './navbar/navbar.component';
 @NgModule({
   declarations: [
     AppComponent,
@@ -24,7 +24,8 @@ import {SharedModule} from "./shared/shared.module";
     IndexComponent,
     RegisterComponent,
     ProfileComponent,
-    ProfileEditComponent
+    ProfileEditComponent,
+    NavbarComponent
   ],
   imports: [
     BrowserModule,
@@ -36,8 +37,7 @@ import {SharedModule} from "./shared/shared.module";
     MatProgressSpinnerModule,
     MatFormFieldModule,
     FormsModule,
-    NgSelectModule,
-    SharedModule
+    NgSelectModule
   ],
   providers: [UserService],
   bootstrap: [AppComponent]
