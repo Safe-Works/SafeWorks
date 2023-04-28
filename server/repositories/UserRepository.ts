@@ -33,6 +33,10 @@ class UserRepository {
                 callback(error);
             });
         })
+        .catch((error) => {
+            console.error("Error creating a new user. ", error);
+            callback(error);
+        })
     }
 
     get(uid: string, callback: any) {

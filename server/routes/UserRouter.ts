@@ -38,7 +38,6 @@ usersRouter.post('/users',
                 if (error.code === "auth/email-already-exists") {
                     res.status(409).json({ message: "E-mail already exists" });
                 } else {
-                    console.log("Error creating a new user. ", error);
                     res.status(500).send();
                 }
             } else {
