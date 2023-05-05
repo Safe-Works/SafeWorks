@@ -22,7 +22,7 @@
                         [formControl]="cpf" mask="000.000.000-00"
                         [ngClass]="{ 'is-invalid': cpf.invalid && formDir.submitted }">
                 </div>
-                <div class="row validation-error" *ngIf="cpf.invalid && formDir.submitted">
+                <div class="row validation-error" *ngIf="(cpf.invalid || cpf.hasError('cpfInvalido')) && formDir.submitted">
                     <p>{{ cpfInvalidLabel }}</p>
                 </div>
             </div>

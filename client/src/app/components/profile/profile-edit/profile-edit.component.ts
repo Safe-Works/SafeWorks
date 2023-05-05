@@ -6,14 +6,23 @@ import { FormGroup, FormControl, Validators } from '@angular/forms';
 import {MatSnackBar, MatSnackBarRef} from '@angular/material/snack-bar';
 import { CookieService } from 'ngx-cookie-service';
 import { Router } from '@angular/router';
-
+import { validateCPF } from '../../../utils/validate-cpf';
+ 
 @Component({
   selector: 'app-profile-edit',
   templateUrl: './profile-edit.component.html',
   styleUrls: ['./profile-edit.component.css']
 })
 export class ProfileEditComponent {
-  cpfInvalidLabel = "O CPF é obrigatório*";
+  validarCpf = (control: FormControl): { [s: string]: boolean } | null => {
+    const cpf = control;
+    if (validateCPF(cpf)) {
+      this.cpfInvalidLabel = "O CPF é inválido.";
+      return { cpfInvalido: true };
+    }
+    return null;
+  }
+  cpfInvalidLabel: string = "O CPF é obrigatório*";
   selectedState: string = "PR";
   selectedCity: string = "CWB";
   selectedDistrict: string;
@@ -84,7 +93,7 @@ export class ProfileEditComponent {
   ]
   userInfo: any = null;
   fullName = new FormControl('', [Validators.required]);
-  cpf = new FormControl('', [Validators.required]);
+  cpf = new FormControl('', [Validators.required, this.validarCpf]);
   telephone = new FormControl('', [Validators.required]);
   imageControl = new FormControl(null);
   username = new FormControl('');
@@ -111,7 +120,6 @@ export class ProfileEditComponent {
   ngOnInit() {
     this.loadUserInfo();
   }
-  
   onFileSelected(event: any) {
     const file = event.target.files[0];
     if (file) {
