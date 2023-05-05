@@ -8,7 +8,7 @@ class User {
       public uid?: string,
       public is_admin?: boolean,
       public username?: string,
-      public address?: string,
+      public district?: string,
       public token?: string,
     ) {}
   }

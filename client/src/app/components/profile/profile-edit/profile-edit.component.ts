@@ -97,7 +97,7 @@ export class ProfileEditComponent {
   telephone = new FormControl('', [Validators.required]);
   imageControl = new FormControl(null);
   username = new FormControl('');
-  address = new FormControl('');
+  district = new FormControl('');
   updateForm!: FormGroup;
   urlProfileImage : string = "";
   constructor(private userService: UserService, private userAuth: UserAuth, private _snackBar: MatSnackBar, private cookieService: CookieService, private router: Router) {
@@ -107,7 +107,7 @@ export class ProfileEditComponent {
       cpf: this.cpf,
       telephone: this.telephone,
       username: this.username,
-      address: this.address,
+      district: this.district,
       imageControl: this.imageControl
     });
   }
@@ -149,7 +149,7 @@ export class ProfileEditComponent {
         this.cpf.setValue(this.userInfo.cpf);
         this.telephone.setValue(this.userInfo.telephone_number);
         this.username.setValue(this.userInfo.username);
-        this.address.setValue(this.userInfo.address);
+        this.district.setValue(this.userInfo.district);
         this.urlProfileImage = this.userInfo.photo_url ? this.userInfo.photo_url : "https://www.pngitem.com/pimgs/m/551-5510463_default-user-image-png-transparent-png.png";
       },
       (error) => {
@@ -164,7 +164,7 @@ export class ProfileEditComponent {
     updatedUser.cpf = this.updateForm.get('cpf')?.value;
     updatedUser.telephone_number = this.updateForm.get('telephone')?.value;
     updatedUser.username = this.updateForm.get('username')?.value;
-    updatedUser.address = this.updateForm.get('address')?.value;
+    updatedUser.district = this.updateForm.get('district')?.value;
     const photo = this.updateForm.get('imageControl')?.value
   
     this.userService.UpdateUser(this.userAuth.currentUser?.uid ?? "", updatedUser, photo).subscribe(

@@ -129,7 +129,7 @@ class UserRepository {
                 }
             })
         }
-        const { uid, email, password, name, cpf, telephone_number, username, address } = user;
+        const { uid, email, password, name, cpf, telephone_number, username, district } = user;
         // Usando Object.fromEntries para criar um objeto sem campos vazios
         const updatedData = Object.fromEntries(
             Object.entries({
@@ -139,7 +139,7 @@ class UserRepository {
                 cpf,
                 telephone_number,
                 username,
-                address
+                district
             }).filter(([key, value]) => value !== undefined)
         );
         if (Object.keys(updatedData).length === 0) {

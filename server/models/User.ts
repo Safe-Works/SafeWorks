@@ -9,7 +9,7 @@ type User = {
     username?: string,
     cpf: string,
     telephone_number: string,
-    address?: string,
+    district?: string,
     photo_url?: string,
     rating_mean?: Float32Array,
     total_ratings?: Int16Array,

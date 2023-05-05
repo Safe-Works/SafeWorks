@@ -89,7 +89,7 @@ export class UserService {
     formData.append('cpf', user.cpf ?? "");
     formData.append('telephone_number', user.telephone_number ?? "");
     if (user.username) formData.append('username', user.username ?? "");
-    if (user.address) formData.append('address', user.address ?? "");
+    if (user.district) formData.append('district', user.district ?? "");
     if (photo) {
       formData.append('photo', photo, photo.name);
     }

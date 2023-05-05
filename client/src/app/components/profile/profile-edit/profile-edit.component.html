@@ -62,7 +62,7 @@
                 <div class="input-field-edit col-md-4">
                     <label for="district">Bairro</label>
                     <select class="form-control" id="district" placeholder="Bairro" aria-describedby="district"
-                        [(ngModel)]="selectedDistrict" [formControl]="address">
+                        [(ngModel)]="selectedDistrict" [formControl]="district">
                         <option value="" disabled selected>Selecione um bairro</option>
                         <option *ngFor="let district of districts" [value]="district.id">{{ district.name }}</option>
                     </select>

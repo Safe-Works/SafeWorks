@@ -107,7 +107,7 @@ usersRouter.put('/users/:uid', upload.single('photo'),
             cpf: Joi.string().min(11),
             telephone_number: Joi.string().min(11),
             username: Joi.string().max(50),
-            address: Joi.string().max(255)
+            district: Joi.string().max(255)
         }).min(1) // Pelo menos um campo deve estar presente
     }),
     (req, res) => {
