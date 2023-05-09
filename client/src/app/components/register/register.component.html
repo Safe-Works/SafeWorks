@@ -56,8 +56,8 @@
                         <input [formControl]="password" type="password" class="form-control inputPassword" id="password"
                             placeholder="Senha" [ngClass]="{ 'is-invalid': password.invalid && formDir.submitted }">
                     </div>
-                    <div class="row validation-error" *ngIf="password.invalid && formDir.submitted">
-                        <p>A senha é obrigatória*</p>
+                    <div class="row validation-error" *ngIf="(password.invalid || password.hasError('senhaFraca')) && formDir.submitted">
+                        <p>{{ passwordInvalidLabel }}</p>
                     </div>
                     <div class="mb-3 input-group">
                         <div class="input-group-text">
@@ -65,14 +65,14 @@
                         </div>
                         <input [formControl]="confirmPassword" type="password" class="form-control inputConfirmPassword"
                             id="confirmPassword" placeholder="Confirme a senha" aria-label="Confirme a Senha"
-                            [ngClass]="{ 'is-invalid': confirmPassword.invalid && formDir.submitted }">
+                            [ngClass]="{ 'is-invalid': confirmPassword.invalid && !password.invalid && confirmPassword.value && formDir.submitted }">
                         <button type="button" class="btn btn-outline-secondary eye-button"
                             (click)="toggleConfirmPassword()">
                             <span class="bi eye-icon"
                                 [ngClass]="{'bi-eye-slash': !showConfirmPassword, 'bi-eye': showConfirmPassword}"></span>
                         </button>
                     </div>
-                    <div class="row validation-error" *ngIf="confirmPassword.invalid && formDir.submitted">
+                    <div class="row validation-error" *ngIf="confirmPassword.invalid && !password.invalid && confirmPassword.value && formDir.submitted">
                         <p>A confirmação não bate com a senha*</p>
                     </div>
                     <div class="text-center mt-3">

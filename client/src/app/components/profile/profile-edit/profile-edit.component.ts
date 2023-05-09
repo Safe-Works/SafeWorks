@@ -22,6 +22,7 @@ export class ProfileEditComponent {
     }
     return null;
   }
+  
   cpfInvalidLabel: string = "O CPF é obrigatório*";
   selectedState: string = "PR";
   selectedCity: string = "CWB";

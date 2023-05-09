@@ -1,11 +1,12 @@
 import { Component, OnInit } from '@angular/core';
-import { FormGroup, FormControl, Validators } from '@angular/forms';
+import { FormGroup, FormControl, Validators, AbstractControl } from '@angular/forms';
 import * as CryptoJS from 'crypto-js';
 import User from '../../models/user.model';
 import { UserService } from 'src/app/services/user.service';
 import { Router } from '@angular/router';
+import { validateCPF } from '../../utils/validate-cpf';
 
-function passwordMatchValidator(control: FormControl): {[key: string]: boolean} | null {
+function passwordMatchValidator(control: FormControl): { [key: string]: boolean } | null {
   const password = control.root.get('password');
   return password && control.value !== password.value ? { 'passwordMatch': true } : null;
 }
@@ -16,16 +17,36 @@ function passwordMatchValidator(control: FormControl): {[key: string]: boolean} 
   styleUrls: ['./register.component.css']
 })
 export class RegisterComponent implements OnInit {
+  validarCpf = (control: FormControl): { [s: string]: boolean } | null => {
+    const cpf = control;
+    if (validateCPF(cpf)) {
+      this.cpfInvalidLabel = "O CPF é inválido.";
+      return { cpfInvalido: true };
+    }
+    return null;
+  }
+  validarSenhaForte = (control: AbstractControl): { [key: string]: boolean } | null => {
+    const senha = control.value;
+    const regex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
+    if (!regex.test(senha)) {
+      if (senha.length > 0)
+        this.passwordInvalidLabel = "A senha deve conter pelo menos 8 caracteres, incluindo letras maiúsculas e minúsculas, números e caracteres especiais.";
+      else
+        this.passwordInvalidLabel = "A senha é obrigatória.";
+    }
+    return regex.test(senha) ? null : { senhaFraca: true };
+  };
   cpfInvalidLabel = "O CPF é obrigatório*";
+  passwordInvalidLabel = "A senha é obrigatória*"
   emailAlreadyExist = false;
   emailInvalidLabel = "O e-mail é obrigatório*";
   showConfirmPassword = false;
   registerForm!: FormGroup;
   fullName = new FormControl('', [Validators.required]);
-  cpf = new FormControl('', [Validators.required]);
+  cpf = new FormControl('', [Validators.required, this.validarCpf]);
   telephone_number = new FormControl('', [Validators.required]);
   email = new FormControl('', [Validators.required, Validators.email]);
-  password = new FormControl('', [Validators.required]);
+  password = new FormControl('', [Validators.required, this.validarSenhaForte]);
   confirmPassword = new FormControl('', [Validators.required, passwordMatchValidator]);
 
   constructor(private userService: UserService, private router: Router) { }
@@ -74,7 +95,7 @@ export class RegisterComponent implements OnInit {
         console.log(response);
       },
       (error) => {
-        if(error.status === 409) {
+        if (error.status === 409) {
           this.emailAlreadyExist = true;
           this.emailInvalidLabel = "O e-mail já está em uso."
         }
