@@ -15,10 +15,29 @@ class UserRepository {
             password: user.password,
             displayName: user.name,
         }).then((userRecord) => {
+            const datetime = new Date();
+            const created = datetime.toLocaleDateString('pt-BR', {
+                day: '2-digit',
+                month: '2-digit',
+                year: 'numeric',
+                hour: '2-digit',
+                minute: '2-digit',
+                second: '2-digit'
+            });
             db.collection("Users").doc(userRecord.uid).set({
+                email: user.email,
                 name: user.name,
+                username: null,
                 cpf: user.cpf,
                 telephone_number: user.telephone_number,
+                district: null,
+                photo_url: null,
+                balance: 0,
+                contracted_services: [],
+                worker: null,
+                created: created,
+                modified: null,
+                deleted: null
             }).then(() => {
                 const customClaims = { displayName: user.name, cpf: user.cpf, telephone_number: user.telephone_number };
                 firebaseAdmin.auth().createCustomToken(userRecord.uid, customClaims).then((customToken) => {
@@ -92,8 +111,18 @@ class UserRepository {
         }
     }
 
-    async uploadUserPhoto(filePath: string, fileName: string, contentType: string, userUid: string, callback: any) {
+    async uploadUserPhoto(filePath: string, contentType: string, userUid: string, callback: any) {
         const storage = firebaseAdmin.storage().bucket();
+        const fileName = userUid + '_profile_photo';
+        const datetime = new Date();
+        const modified = datetime.toLocaleDateString('pt-BR', {
+            day: '2-digit',
+            month: '2-digit',
+            year: 'numeric',
+            hour: '2-digit',
+            minute: '2-digit',
+            second: '2-digit'
+        });
         await storage.upload(filePath, {
             destination: fileName,
             metadata: {
@@ -106,8 +135,9 @@ class UserRepository {
                     action: 'read',
                     expires: '12-31-2025'
                 });
-                db.collection("Users").doc(userUid).update({
-                    photo_url: donwloadUrl
+                await db.collection("Users").doc(userUid).update({
+                    photo_url: donwloadUrl[0],
+                    modified: modified
                 });
                 callback(null, donwloadUrl);
             })
@@ -117,11 +147,19 @@ class UserRepository {
     }
 
     async update(user: User, photo: any, callback: any) {
+        const datetime = new Date();
+        const modified = datetime.toLocaleDateString('pt-BR', {
+            day: '2-digit',
+            month: '2-digit',
+            year: 'numeric',
+            hour: '2-digit',
+            minute: '2-digit',
+            second: '2-digit'
+        });
         if (photo) {
             const filePath = photo.path;
-            const fileName = photo.filename;
             const contentType = photo.mimetype;
-            this.uploadUserPhoto(filePath ?? "", fileName ?? "", contentType ?? "", user.uid ?? "", (error: any, success: any) => {
+            await this.uploadUserPhoto(filePath ?? "", contentType ?? "", user.uid ?? "", (error: any, success: any) => {
                 if (success) {
                     console.log('Success image upload ' + success)
                 } else {
@@ -139,7 +177,8 @@ class UserRepository {
                 cpf,
                 telephone_number,
                 username,
-                district
+                district,
+                modified: modified
             }).filter(([key, value]) => value !== undefined)
         );
         if (Object.keys(updatedData).length === 0) {
