@@ -2,7 +2,6 @@ import Worker from "./Worker";
 
 type User = {
     uid?: string,
-    accessToken?: string,
     email: string,
     password: string,
     name: string,
@@ -11,11 +10,13 @@ type User = {
     telephone_number: string,
     district?: string,
     photo_url?: string,
-    rating_mean?: Float32Array,
-    total_ratings?: Int16Array,
-    balance?: Float32Array, // payment balance
-    contracted_services?: Array<string>, // client total contracted services
-    worker?: Worker
+    balance?: Float32Array, // saldo de pagamento
+    contracted_services?: Array<string>, // uids dos serviços contratados pelo cliente
+    worker?: Worker,
+    created: Date,
+    modified?: Date,
+    deleted?: Date,
+    accessToken?: string, // token jwt
 };
 
 export default User;
