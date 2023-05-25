@@ -1,0 +1,101 @@
+<div class="container">
+
+    <div class="row col-md-12" style="padding: 40px 5.6%;">
+        <h1 style="font-size: 40px; font-weight: bold; color: #2d2d2d;">Anunciar serviço</h1>
+    </div>
+    <form [formGroup]="postFormControl" #formDir="ngForm" (ngSubmit)="formDir.valid && createPost()">
+        <div class="row col-md-12" style="padding: 40px 5.6%; background-color: white; border: 1px solid #ced0d4;">
+            <mat-form-field class="col-md-6">
+                <mat-label>Título</mat-label>
+                <input matInput [formControl]="titleFormControl" placeholder="Ex. Aula de natação" maxlength="50">
+                <mat-error *ngIf="titleFormControl.invalid">
+                    <strong>Obrigatório</strong>
+                </mat-error>
+            </mat-form-field>
+            <mat-form-field class="col-md-2">
+                <mat-label>Categoria</mat-label>
+                <mat-select [formControl]="categoryFormControl">
+                    <mat-option *ngFor="let category of categories" [value]="category.id">
+                        {{ category.name }}
+                    </mat-option>
+                </mat-select>
+                <mat-error *ngIf="categoryFormControl.invalid">
+                    <strong>Obrigatório</strong>
+                </mat-error>
+            </mat-form-field>
+            <div class="col-md-3">
+                <mat-form-field class="col-md-9">
+                    <mat-label>Bairro</mat-label>
+                    <mat-select [formControl]="districtsFormControl">
+                        <mat-option *ngFor="let district of districts" [value]="district.id">
+                            {{ district.name }}
+                        </mat-option>
+                    </mat-select>
+                    <mat-error *ngIf="categoryFormControl.invalid">
+                        <strong>Obrigatório</strong>
+                    </mat-error>
+                </mat-form-field>
+            </div>
+            <mat-form-field class="col-md-2">
+                <mat-label>Preço</mat-label>
+                <input matInput [formControl]="priceFormControl" placeholder="Valor do serviço" mask="separator.2"
+                    thousandSeparator="." decimalSeparator="," prefix="R$ ">
+                <mat-error *ngIf="priceFormControl.invalid">
+                    <strong>Obrigatório</strong>
+                </mat-error>
+            </mat-form-field>
+            <mat-form-field class="col-md-2">
+                <mat-label>Preço por:</mat-label>
+                <mat-select [formControl]="priceTypesFormControl">
+                    <mat-option *ngFor="let priceType of priceTypes" [value]="priceType.id">
+                        {{ priceType.name }}
+                    </mat-option>
+                </mat-select>
+                <mat-error *ngIf="priceTypesFormControl.invalid">
+                    <strong>Obrigatório</strong>
+                </mat-error>
+            </mat-form-field>
+            <mat-form-field class="col-md-2" *ngIf="priceTypesFormControl.value?.toString() === '5'">
+                <mat-label>Prazo de entrega</mat-label>
+                <input matInput [formControl]="titleFormControl" type="number" placeholder="Estimativa em dias"
+                    maxlength="10">
+                <mat-error *ngIf="titleFormControl.invalid">
+                    <strong>Obrigatório</strong>
+                </mat-error>
+            </mat-form-field>
+            <mat-form-field class="col-md-12">
+                <mat-label>Descrição</mat-label>
+                <textarea matInput [formControl]="deliveryTimeFormControl"
+                    placeholder="Descreva o seu serviço..."></textarea>
+                <mat-error *ngIf="deliveryTimeFormControl.invalid">
+                    <strong>Obrigatório</strong>
+                </mat-error>
+            </mat-form-field>
+            <mat-slide-toggle class="col-md-12" [formControl]="isDisplacementFormControl" style="padding-bottom: 20px;">
+                <div class="slide-toggle-content">
+                    <span class="slide-toggle-text">Você cobra pelo deslocamento até o local do serviço?</span>
+                    <mat-icon title="Consideraremos este valor para todos os bairros de Curitiba."
+                        class="slide-toggle-icon">info</mat-icon>
+                </div>
+            </mat-slide-toggle>
+            <mat-form-field class="col-md-2" *ngIf="isDisplacementFormControl.value?.toString() === 'true'">
+                <mat-label>Deslocamento por dia</mat-label>
+                <input matInput [formControl]="displacementFeeFormControl" placeholder="Valor por dia"
+                    mask="separator.2" thousandSeparator="." decimalSeparator="," prefix="R$ ">
+                <mat-error *ngIf="displacementFeeFormControl.invalid">
+                    <strong>Obrigatório</strong>
+                </mat-error>
+            </mat-form-field>
+        </div>
+        <div class="row col-md-12 justify-content-end"
+            style="padding: 40px 5.6%; background-color: white; border: 1px solid #ced0d4; border-top: 0">
+            <button class="btn btn-primary btn-autentication"
+                style="width: 100%; border-radius: 30.4px; margin-top: 32px; margin-bottom: 5px;">
+                Publicar anúncio
+            </button>
+            <a class="btn btn-outline-secondary" routerLink="/profile" style="width: 100%; border-radius: 30.4px;">
+                Cancelar
+            </a>
+        </div>
+    </form>
+</div>

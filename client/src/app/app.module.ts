@@ -18,6 +18,12 @@ import { FormsModule } from '@angular/forms';
 import { NavbarComponent } from './navbar/navbar.component';
 import {MatSnackBarModule} from '@angular/material/snack-bar';
 import { FooterComponent} from "./footer/footer.component";
+import { CreatePostComponent } from './components/posts/create-post/create-post.component';
+import { MatAutocompleteModule } from '@angular/material/autocomplete';
+import { MatSelectModule } from '@angular/material/select';
+import { MatInputModule } from '@angular/material/input';
+import { MatSlideToggleModule } from '@angular/material/slide-toggle';
+import { MatIconModule } from '@angular/material/icon';
 
 @NgModule({
   declarations: [
@@ -28,7 +34,8 @@ import { FooterComponent} from "./footer/footer.component";
     ProfileComponent,
     ProfileEditComponent,
     NavbarComponent,
-    FooterComponent
+    FooterComponent,
+    CreatePostComponent
   ],
   imports: [
     BrowserModule,
@@ -40,7 +47,12 @@ import { FooterComponent} from "./footer/footer.component";
     MatProgressSpinnerModule,
     MatFormFieldModule,
     FormsModule,
-    MatSnackBarModule
+    MatSnackBarModule,
+    MatAutocompleteModule,
+    MatSelectModule,
+    MatInputModule,
+    MatSlideToggleModule,
+    MatIconModule
   ],
   providers: [UserService],
   bootstrap: [AppComponent]

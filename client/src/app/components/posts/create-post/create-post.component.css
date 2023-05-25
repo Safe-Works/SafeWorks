@@ -1,0 +1,22 @@
+.input-field-edit {
+    margin-top: 7px;
+    margin-bottom: 7px;
+}
+
+.logo-container {
+    cursor: pointer;
+}
+
+.validation-error {
+    margin-top: .2px;
+}
+
+.slide-toggle-content {
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+}
+
+.slide-toggle-text {
+    margin-right: 8px;
+}
