@@ -51,7 +51,6 @@ export class LoginComponent implements OnInit {
           this.cookieService.set('token', response.customTokenJwt, undefined, '/', undefined, true, 'Strict');
           this.router.navigate(['/']);
           this.wrongCredentials = false;
-          console.log(response);
         } else {
           this.wrongCredentials = true;
         }
@@ -59,7 +58,6 @@ export class LoginComponent implements OnInit {
       (error) => {
         this.wrongCredentials = true;
         this.userAuth.clearUser();
-        console.log(error);
       }
     );
   }

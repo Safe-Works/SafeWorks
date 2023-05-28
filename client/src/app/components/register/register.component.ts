@@ -92,7 +92,6 @@ export class RegisterComponent implements OnInit {
     this.userService.RegisterUser(newUser).subscribe(
       (response) => {
         this.router.navigateByUrl('/login');
-        console.log(response);
       },
       (error) => {
         if (error.status === 409) {

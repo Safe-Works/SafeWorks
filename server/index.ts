@@ -2,6 +2,8 @@ import express, { Express, Request, Response } from 'express';
 import cors from 'cors';
 import dotenv from 'dotenv';
 import usersRouter from './routes/UserRouter';
+import jobAdRouter from './routes/JobAdRouter';
+
 import { errors } from 'celebrate';
 
 dotenv.config();
@@ -25,7 +27,7 @@ app.use(cors({
 }))
 
 // Routes
-app.use('/api', usersRouter);
+app.use('/api', usersRouter, jobAdRouter);
 
 // Default response to another requisitions
 app.use((req, res) => {

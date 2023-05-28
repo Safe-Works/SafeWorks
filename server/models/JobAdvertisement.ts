@@ -16,3 +16,4 @@ type JobAdvertisement = {
     modified?: Date,
     deleted?: Date,
 }
+export default JobAdvertisement;
