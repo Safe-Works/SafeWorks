@@ -1,5 +1,4 @@
 import express from 'express';
-import User from '../models/User';
 import JobAdRepository from '../repositories/JobAdRepository';
 import { celebrate, Joi, Segments } from 'celebrate';
 import multer from 'multer';
