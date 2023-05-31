@@ -1,6 +1,6 @@
 class JobAdvertisement {
   constructor(
-    public user: string[],
+    public user: any,
     public title: string,
     public description: string,
     public category: string,

@@ -3,6 +3,8 @@ import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { categories } from 'enums/categories.enum';
 import { priceTypes } from 'enums/price-types.enum';
 import { districts } from 'enums/districts.enum';
+import JobAdvertisement from 'src/app/models/job-advertisement.model';
+import { ProgressSpinnerMode } from '@angular/material/progress-spinner';
 
 @Component({
   selector: 'app-create-post',
@@ -39,5 +41,22 @@ export class CreatePostComponent {
   }
 
   createPost(): void {
+    const user = { name: 'Teste', id: '' }
+    const price = parseFloat(this.priceFormControl.value ?? '');
+    const displacement_fee = parseFloat(this.displacementFeeFormControl.value ?? '');
+
+    const jobAd = new JobAdvertisement(
+      user,
+      this.titleFormControl.value ?? '',
+      this.descriptionFormControl.value ?? '',
+      this.categoryFormControl.value ?? '',
+      this.districtsFormControl.value ?? '',
+      price,
+      this.priceTypesFormControl.value ?? '',
+      displacement_fee ?? 0,
+      '',
+      this.deliveryTimeFormControl.value ?? '',
+    );
+
   }
 }
