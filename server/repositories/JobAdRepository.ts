@@ -5,9 +5,11 @@ import { db } from "../util/admin";
 import { format } from "date-fns";
 
 class JobAdRepository {
+
     constructor() {
         initializeApp(firebaseConfig);
     }
+
     async add(job: JobAdvertisement, callback: any) {
         try {
             const created = format(new Date(), "dd/MM/yyyy HH:mm:ss");
@@ -24,6 +26,30 @@ class JobAdRepository {
         } catch (error) {
             console.error("Error adding job advertisement to Firestore: ", error);
             callback(error); 
+        }
+    }
+
+    async findByTerm(term: string): Promise<any[]> {
+        try {
+            const jobAdRef = db.collection("JobAdvertisement");
+            const snapshot = await jobAdRef
+                .where('title', '>=', term)
+                .where('title', '<=', term + '\uf8ff')
+                .get();
+
+            const results: any[] = [];
+            snapshot.forEach(doc => {
+                results.push(doc.data());
+            });
+
+            if (results.length === 0) {
+                console.log('No matching JobAdvertisement documents.');
+            }
+
+            return results;
+        } catch (error) {
+            console.error('Error finding JobAdvertisement documents:', error);
+            throw error;
         }
     }
 
