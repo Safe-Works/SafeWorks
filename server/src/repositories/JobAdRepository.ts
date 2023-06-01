@@ -1,7 +1,7 @@
 import JobAdvertisement from "../models/JobAdvertisement";
 import { initializeApp } from "firebase/app";
-import { firebaseConfig } from "../util/firebase";
-import { db } from "../util/admin";
+import { firebaseConfig } from "../../util/firebase";
+import { db } from "../../util/admin";
 import { format } from "date-fns";
 
 class JobAdRepository {
@@ -31,15 +31,32 @@ class JobAdRepository {
 
     async findByTerm(term: string): Promise<any[]> {
         try {
+            const results: any[] = [];
             const jobAdRef = db.collection("JobAdvertisement");
-            const snapshot = await jobAdRef
+            const snapshotTitle = await jobAdRef
                 .where('title', '>=', term)
                 .where('title', '<=', term + '\uf8ff')
                 .get();
-
-            const results: any[] = [];
-            snapshot.forEach(doc => {
+            
+            const snapshotCategory = await jobAdRef
+                .where('category', '>=', term)
+                .where('category', '<=', term + '\uf8ff')
+                .get();
+            
+            snapshotTitle.forEach(doc => {
                 results.push(doc.data());
+            });
+
+            snapshotCategory.forEach(doc => {
+                if (results.length != 0) {
+                    results.forEach(docResults => {
+                        if (doc.data().uid != docResults) {
+                            results.push(doc.data());
+                        }
+                    })
+                } else {
+                    results.push(doc.data());
+                }
             });
 
             if (results.length === 0) {
