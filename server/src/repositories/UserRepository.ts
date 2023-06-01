@@ -1,7 +1,7 @@
 import User from "../models/User";
 import { initializeApp } from "firebase/app";
-import { firebaseConfig } from "../util/firebase";
-import { db, firebaseAdmin } from "../util/admin";
+import { firebaseConfig } from "../../util/firebase";
+import { db, firebaseAdmin } from "../../util/admin";
 import { getAuth, signInWithEmailAndPassword, User as FirebaseUser } from "firebase/auth";
 class UserRepository {
 
