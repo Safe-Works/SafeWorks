@@ -1,11 +1,21 @@
-import express, { Express, Request, Response } from 'express';
-import cors from 'cors';
+import http from 'http';
+import App from './src/App';
 import dotenv from 'dotenv';
-import usersRouter from './routes/UserRouter';
-import jobAdRouter from './routes/JobAdRouter';
 
-import { errors } from 'celebrate';
+dotenv.config();
 
+const port = process.env.PORT ?? 3001;
+const hostname = process.env.HOSTNAME ?? 'http://localhost';
+
+App.set("port", port);
+const server = http.createServer(App);
+server.listen(port, () => {
+  console.log(`[server]: SafeWorks server is running at ${hostname}:${port}`);
+});
+
+module.exports = App;
+
+/*
 dotenv.config();
 
 const app: Express = express();
@@ -37,7 +47,15 @@ app.use((req, res) => {
 // Celebrate error handler middleware
 app.use(errors());
 
+// Swagger setup
+const swaggerFile: any = (process.cwd() + '/swagger.json');
+const swaggerData: any = fs.readFileSync(swaggerFile, 'utf8');
+const swaggerDocument = JSON.parse(swaggerData);
+
+app.use('/api/docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
+
 // Server init
 app.listen(port, () => {
   console.log(`[server]: SafeWorks server is running at ${hostname}:${port}`);
 });
+*/

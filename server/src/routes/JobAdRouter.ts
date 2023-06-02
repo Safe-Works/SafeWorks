@@ -1,4 +1,4 @@
-import express from 'express';
+import express, { RequestHandler } from 'express';
 import JobAdRepository from '../repositories/JobAdRepository';
 import { celebrate, Joi, Segments } from 'celebrate';
 import multer from 'multer';
@@ -58,5 +58,15 @@ jobAdRouter.post('/job',
         }
     }
 );
+
+jobAdRouter.get("/job/find/:term", (async (req, res) => {
+    const term = req.params.term;
+    try {
+      const jobs = await jobAdRepository.findByTerm(term);
+      res.status(201).json({ jobs });
+    } catch (error) {
+      res.status(500).json({ error: 'Failed to find job advertisement' });
+    }
+}) as RequestHandler);
 
 export default jobAdRouter;
