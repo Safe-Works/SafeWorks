@@ -56,17 +56,17 @@
             </mat-form-field>
             <mat-form-field class="col-md-2" *ngIf="priceTypesFormControl.value?.toString() === '5'">
                 <mat-label>Prazo de entrega</mat-label>
-                <input matInput [formControl]="titleFormControl" type="number" placeholder="Estimativa em dias"
+                <input matInput [formControl]="deliveryTimeFormControl" type="number" placeholder="Estimativa em dias"
                     maxlength="10">
-                <mat-error *ngIf="titleFormControl.invalid">
+                <mat-error *ngIf="deliveryTimeFormControl.invalid">
                     <strong>Obrigatório</strong>
                 </mat-error>
             </mat-form-field>
             <mat-form-field class="col-md-12">
                 <mat-label>Descrição</mat-label>
-                <textarea matInput [formControl]="deliveryTimeFormControl"
+                <textarea matInput [formControl]="descriptionFormControl"
                     placeholder="Descreva o seu serviço..."></textarea>
-                <mat-error *ngIf="deliveryTimeFormControl.invalid">
+                <mat-error *ngIf="descriptionFormControl.invalid">
                     <strong>Obrigatório</strong>
                 </mat-error>
             </mat-form-field>

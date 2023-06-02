@@ -4,9 +4,12 @@ import Job from "../models/job-advertisement.model";
 import { Injectable } from "@angular/core";
 import { catchError, tap } from 'rxjs/operators';
 
-@Injectable()
+@Injectable({
+    providedIn: 'root'
+  })
+  
 export class JobService {
-    private api: string = 'http://localhost:3001/api/users';
+    private api: string = 'http://localhost:3001/api/job';
 
     constructor(private http: HttpClient) { }
 

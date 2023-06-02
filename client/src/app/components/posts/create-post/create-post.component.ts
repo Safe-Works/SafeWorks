@@ -5,6 +5,9 @@ import { priceTypes } from 'enums/price-types.enum';
 import { districts } from 'enums/districts.enum';
 import JobAdvertisement from 'src/app/models/job-advertisement.model';
 import { ProgressSpinnerMode } from '@angular/material/progress-spinner';
+import { UserAuth } from '../../../auth/User.Auth';
+import { NgForm } from '@angular/forms';
+import { JobService } from 'src/app/services/job.service';
 
 @Component({
   selector: 'app-create-post',
@@ -16,7 +19,6 @@ export class CreatePostComponent {
   categories = categories;
   priceTypes = priceTypes;
   districts = districts;
-  selectedCategory: string;
   categoryFormControl = new FormControl('', [Validators.required]);
   priceTypesFormControl = new FormControl('', [Validators.required]);
   titleFormControl = new FormControl('', [Validators.required]);
@@ -26,37 +28,53 @@ export class CreatePostComponent {
   deliveryTimeFormControl = new FormControl('', [Validators.required]);
   isDisplacementFormControl = new FormControl('');
   displacementFeeFormControl = new FormControl('', [Validators.required]);
-  constructor() {
-    this.selectedCategory = 'Selecione';
+  constructor(private userAuth: UserAuth, private jobService: JobService) {
     this.postFormControl = new FormGroup({
-      categoryFormControl: this.categoryFormControl,
       titleFormControl: this.titleFormControl,
+      categoryFormControl: this.categoryFormControl,
+      districtsFormControl: this.districtsFormControl,
       priceFormControl: this.priceFormControl,
       priceTypesFormControl: this.priceTypesFormControl,
       descriptionFormControl: this.descriptionFormControl,
-      districtsFormControl: this.districtsFormControl,
-      deliveryTimeFormControl: this.deliveryTimeFormControl,
-      displacementFeeFormControl:  this.displacementFeeFormControl,
     });
   }
 
   createPost(): void {
-    const user = { name: 'Teste', id: '' }
+    const user = { name: this.userAuth.currentUser?.displayName, id: this.userAuth.currentUser?.uid };
     const price = parseFloat(this.priceFormControl.value ?? '');
     const displacement_fee = parseFloat(this.displacementFeeFormControl.value ?? '');
-
+    const categoryId = this.categoryFormControl.value ?? '';
+    const category = categories.find(cat => cat.id.toString() === categoryId.toString());
+    const priceType = priceTypes.find(p => p.id.toString() === this.priceTypesFormControl.value?.toString());
+    const district = districts.find(d => d.id.toString() === this.districtsFormControl.value?.toString());
     const jobAd = new JobAdvertisement(
       user,
       this.titleFormControl.value ?? '',
       this.descriptionFormControl.value ?? '',
-      this.categoryFormControl.value ?? '',
-      this.districtsFormControl.value ?? '',
+      category,
+      district,
       price,
-      this.priceTypesFormControl.value ?? '',
+      priceType,
       displacement_fee ?? 0,
       '',
       this.deliveryTimeFormControl.value ?? '',
     );
 
+    const filteredJobAd = JSON.parse(JSON.stringify(jobAd));
+
+    for (const key in filteredJobAd) {
+      if (filteredJobAd[key] === '' || filteredJobAd[key] === null || filteredJobAd[key] === undefined) {
+        delete filteredJobAd[key];
+      }
+    }
+    
+    this.jobService.CreateJobAd(filteredJobAd).subscribe(
+      (response) => {
+        console.log(response);
+      },
+      (error) => {
+        console.log(error);
+      }
+    );
   }
 }
