@@ -23,22 +23,32 @@ const upload = multer({ storage: storage })
 jobAdRouter.post('/job',
     celebrate({
         [Segments.BODY]: Joi.object({
-            worker: Joi.array()
-                .items(
-                    Joi.object({
-                        name: Joi.string().required(),
-                        id: Joi.string().required(),
-                    })
-                )
-                .required(),
+            worker:
+                Joi.object({
+                    name: Joi.string().required(),
+                    id: Joi.string().required(),
+                }).required(),
             title: Joi.string().required(),
             description: Joi.string().required(),
-            category: Joi.string().required(),
-            address: Joi.string().required(),
+            category:
+                Joi.object({
+                    name: Joi.string().required(),
+                    id: Joi.number().required(),
+                }).required(),
+            district:
+                Joi.object({
+                    name: Joi.string().required(),
+                    id: Joi.number().required(),
+                }).required(),
             price: Joi.number().required(),
-            price_type: Joi.string().required(),
-            displacement_fee: Joi.number().required(),
-            delivery_type: Joi.string().required(),
+            price_type:
+                Joi.object({
+                    name: Joi.string().required(),
+                    id: Joi.number().required(),
+                }).required(),
+            uid: Joi.any(),
+            displacement_fee: Joi.any(),
+            delivery_time: Joi.any(),
         }),
     }),
     async (req, res) => {
@@ -62,10 +72,10 @@ jobAdRouter.post('/job',
 jobAdRouter.get("/job/find/:term", (async (req, res) => {
     const term = req.params.term;
     try {
-      const jobs = await jobAdRepository.findByTerm(term);
-      res.status(201).json({ jobs });
+        const jobs = await jobAdRepository.findByTerm(term);
+        res.status(201).json({ jobs });
     } catch (error) {
-      res.status(500).json({ error: 'Failed to find job advertisement' });
+        res.status(500).json({ error: 'Failed to find job advertisement' });
     }
 }) as RequestHandler);
 
