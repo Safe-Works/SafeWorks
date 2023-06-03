@@ -56,15 +56,15 @@ jobAdRouter.post('/job',
             const job = req.body;
             await jobAdRepository.add(job, (error: any, uid: any) => {
                 if (!error) {
-                    res.status(201).json({ uid: uid });
+                    res.status(201).json({ statusCode: 201, uid: uid });
                 } else {
                     console.error("Error adding job advertisement: ", error);
-                    return res.status(500).json({ error: "Failed to add job advertisement" });
+                    return res.status(500).json({ statusCode: 500, error: "Failed to add job advertisement" });
                 }
             });
         } catch (error) {
             console.error("Error adding job advertisement: ", error);
-            return res.status(500).json({ error: "Failed to add job advertisement" });
+            return res.status(500).json({ statusCode: 500, error: "Failed to add job advertisement" });
         }
     }
 );
