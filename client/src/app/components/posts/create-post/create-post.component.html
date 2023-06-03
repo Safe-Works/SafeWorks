@@ -1,8 +1,11 @@
+<div class="loading-spinner" *ngIf="isLoading">
+    <mat-spinner [diameter]="85"></mat-spinner>
+</div>
 <div class="container container-body">
     <div class="row col-md-12" style="padding: 40px 5.6%;">
         <h1 style="font-size: 40px; font-weight: bold; color: #2d2d2d;">Anunciar serviço</h1>
     </div>
-    <form [formGroup]="postFormControl" #formDir="ngForm" (ngSubmit)="formDir.valid && createPost()">
+    <form [formGroup]="postFormControl" #formDir="ngForm" (ngSubmit)="createPost()">
         <div class="row col-md-12" style="padding: 40px 5.6%; background-color: white; border: 1px solid #ced0d4;">
             <mat-form-field class="col-md-6">
                 <mat-label>Título</mat-label>

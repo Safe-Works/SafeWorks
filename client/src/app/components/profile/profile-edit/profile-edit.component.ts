@@ -3,7 +3,7 @@ import { UserService } from 'src/app/services/user.service';
 import { UserAuth } from '../../../auth/User.Auth';
 import User from '../../../models/user.model';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
-import {MatSnackBar, MatSnackBarRef} from '@angular/material/snack-bar';
+import { MatSnackBar } from '@angular/material/snack-bar';
 import { CookieService } from 'ngx-cookie-service';
 import { Router } from '@angular/router';
 import { validateCPF } from '../../../utils/validate-cpf';
@@ -23,6 +23,7 @@ export class ProfileEditComponent {
     }
     return null;
   }
+  isLoading = false;
   districts = districts;  
   cpfInvalidLabel: string = "O CPF é obrigatório*";
   selectedState: string = "PR";
@@ -79,6 +80,7 @@ export class ProfileEditComponent {
   
 
   loadUserInfo() {
+    this.isLoading = true;
     this.userService.GetUserInfo(this.userAuth.currentUser?.uid ?? "").subscribe(
       (response) => {
         this.userInfo = response;
@@ -88,14 +90,17 @@ export class ProfileEditComponent {
         this.username.setValue(this.userInfo.username);
         this.district.setValue(this.userInfo.district);
         this.urlProfileImage = this.userInfo.photo_url ? this.userInfo.photo_url : "https://www.pngitem.com/pimgs/m/551-5510463_default-user-image-png-transparent-png.png";
+        this.isLoading = false;
       },
       (error) => {
         console.log(error);
+        this.isLoading = false;
       }
     );
   }
 
   updateUser(): void {
+    this.isLoading = true;
     const updatedUser = new User();
     updatedUser.name = this.updateForm.get('fullName')?.value;
     updatedUser.cpf = this.updateForm.get('cpf')?.value;
@@ -112,10 +117,13 @@ export class ProfileEditComponent {
           this.openSnackBar("Perfil atualizado com sucesso!", "OK", "snackbar-success");
           this.router.navigateByUrl('/profile');
           this.loadUserInfo();
+          this.isLoading = false;
         }
       },
       (error) => {
         console.log(error);
+        this.openSnackBar("Ocorreu um erro ao atualizar o perfil!", "OK", "snackbar-error");
+        this.isLoading = false;
       }
     );
   }
