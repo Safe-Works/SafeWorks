@@ -1,0 +1,42 @@
+<header>
+    <div class="navbar d-flex">
+
+        <img src="../../../assets/safeworks-logo.png" class="header-logo">
+
+        <div class="header-center d-flex align-items-center justify-content-center">
+            <div class="search-bar ml-auto d-flex align-items-center" (click)="openModal()" data-bs-toggle="modal" data-bs-target="#exampleModal">
+                <i class="bi bi-search"></i>
+                <p class="text-search">Buscar por serviços, categorias...</p>
+            </div>
+        </div>
+
+        <div class="header-left">
+            <div class="col-md-6 col-lg-4">
+                <nav class="navbar-expand bg-body-tertiary d-flex">
+                    <ul class="navbar-nav ml-auto d-flex align-items-center">
+                        <li class="nav-item">
+                            <a routerLink="/" routerLinkActive="active" title="Página Inicial">
+                                <i [class]="'header-icon bi bi-house' + (activeRoute === 'home' ? '-fill' : '')" (click)="changeRoute('home')"></i>
+                            </a>
+                        </li>
+                        <li class="nav-item" *ngIf="userAuth.currentUser">
+                            <a routerLink="/profile" routerLinkActive="active">
+                                <i [class]="'header-icon bi bi-person' + (activeRoute === 'profile' ? '-fill' : '')" (click)="changeRoute('profile')"></i>
+                            </a>
+                        </li>
+                        <li class="nav-item" *ngIf="!userAuth.currentUser">
+                            <a class="btn btn-outline header-btn" [routerLink]="'/login'" routerLinkActive="active" title="Entrar" (click)="changeRoute('login')">
+                                <i class="bi bi-box-arrow-in-left" fill="currentColor"></i> Login
+                            </a>
+                        </li>
+                        <li class="nav-item" *ngIf="userAuth.currentUser">
+                            <a (click)="logout()" title="Logout">
+                                <i class="header-icon bi bi-box-arrow-right"></i>
+                            </a> 
+                        </li>
+                    </ul>
+                </nav>
+            </div>
+        </div>
+    </div>
+</header>

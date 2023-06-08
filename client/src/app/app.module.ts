@@ -6,7 +6,7 @@ import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { LoginComponent } from './components/login/login.component';
 import { IndexComponent } from './components/index/index.component';
-import { ReactiveFormsModule } from '@angular/forms';
+import { ReactiveFormsModule, FormsModule } from '@angular/forms';
 import { RegisterComponent } from './components/register/register.component';
 import { NgxMaskModule } from 'ngx-mask';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
@@ -14,8 +14,7 @@ import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { ProfileComponent } from './components/profile/profile.component';
 import { ProfileEditComponent } from './components/profile/profile-edit/profile-edit.component';
 import { MatFormFieldModule } from '@angular/material/form-field';
-import { FormsModule } from '@angular/forms';
-import { NavbarComponent } from './navbar/navbar.component';
+import { HeaderComponent } from './components/header/header.component';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { FooterComponent } from "./footer/footer.component";
 import { CreatePostComponent } from './components/posts/create-post/create-post.component';
@@ -24,6 +23,7 @@ import { MatSelectModule } from '@angular/material/select';
 import { MatInputModule } from '@angular/material/input';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { MatIconModule } from '@angular/material/icon';
+import { SearchModalComponent } from './components/search-modal/search-modal.component';
 
 @NgModule({
   declarations: [
@@ -33,9 +33,10 @@ import { MatIconModule } from '@angular/material/icon';
     RegisterComponent,
     ProfileComponent,
     ProfileEditComponent,
-    NavbarComponent,
+    HeaderComponent,
     FooterComponent,
-    CreatePostComponent
+    CreatePostComponent,
+    SearchModalComponent
   ],
   imports: [
     BrowserModule,

@@ -1,0 +1,69 @@
+.nav-link.logout {
+    cursor: pointer;
+}
+
+.navbar {
+    background-color: var(--safeworks-blue);
+}
+
+.navbar-nav .nav-link {
+    color: var(--safeworks-yellow);
+}
+
+.header-logo {
+    width: 2.5rem;
+    height: 2.5rem;
+    float: left;
+    margin-left: 1.5rem;
+}
+
+.header-icon {
+    font-size: 1.5rem;
+    color: var(--safeworks-yellow);
+    margin-right: 1rem;
+}
+
+.header-icon:hover {
+    cursor: pointer;
+    font-size: 1.6rem;
+}
+
+.btn {
+    display: flex;
+    align-items: center;
+    height: 2rem;
+    margin-right: 1rem;
+    font-size: 0.9rem;
+}
+
+.btn-outline {
+    border-color: var(--safeworks-yellow);
+    color: var(--safeworks-yellow);
+}
+
+.btn-outline:hover {
+    background-color: var(--safeworks-yellow);
+    color: var(--safeworks-blue);
+    font-weight: 500;
+}
+
+.search-bar {
+    background-color: var(--white-background);
+    height: 2.3rem;
+    width: 20rem;
+    border-radius: 20px;
+    font-size: 1rem;
+    float: left;
+    cursor: pointer;
+}
+
+.bi-search {
+    margin-left: 0.5rem;
+}
+
+.text-search {
+    margin-top: 0.75rem;
+    margin-left: 0.5rem;
+    color: var(--gray-dark-text);
+}
+ 
