@@ -17,10 +17,10 @@
             </form>
           </div>
           
-          <div class="modal-results">
+          <div class="modal-results" *ngFor="let job of jobs">
             <div class="job-result">
-              <h1 class="job-title">Título do serviço</h1>
-              <p class="job-description">Descrição</p>
+              <h1 class="job-title">{{ job.title }}</h1>
+              <p class="job-description">{{ job.description }}</p>
             </div>
           </div>
             
