@@ -1,7 +1,7 @@
 import Portfolio from "./Portfolio";
 
 type Worker = {
-    area: string,
+    area: Array<string>,
     services_done?: Array<string>, // total de serviços realizados
     portfolio?: Portfolio
 };
