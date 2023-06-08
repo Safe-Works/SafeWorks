@@ -27,14 +27,24 @@ export class JobService {
         formData.append('price_type[id]', job.price_type.id.toString());
 
         if (photos) {
-          for (let i = 0; i < photos.length; i++) {
-            formData.append('photos', photos[i].file, photos[i].file.name);
-          }
+            for (let i = 0; i < photos.length; i++) {
+                formData.append('photos', photos[i].file, photos[i].file.name);
+            }
         }
-      
+
         return this.http.post<string>(this.api, formData);
-      }
-      
-      
+    }
+
+    public FindJobAd(term: string): Observable<any> {
+        return this.http.get<string>(this.api + '/find/' + term).pipe(
+            tap((response: any) => {
+                return response;
+            }),
+            catchError((error) => {
+                console.error(error);
+                return error;
+            })
+        )
+    }
 
 }
