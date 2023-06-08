@@ -14,11 +14,14 @@ export class SearchModalComponent {
 
   searchForm!: FormGroup;
   searchTerm = new FormControl('', [Validators.required]);
+  jobs: any[] = [];
 
   ngOnInit() {
+    
     this.modalService.openModalObservable.subscribe(() => {
       this.openModal();
     });
+    
     this.searchForm = new FormGroup({
       searchTerm: this.searchTerm,
     });
@@ -28,23 +31,39 @@ export class SearchModalComponent {
     const modalElement = this.elementRef.nativeElement.querySelector('#searchModal');
     this.renderer.addClass(modalElement, 'show');
     this.renderer.setStyle(modalElement, 'display', 'block');
+
+    const body = this.elementRef.nativeElement.ownerDocument.body;
+    this.renderer.addClass(body, 'modal-open');
+    this.renderer.setStyle(body, 'overflow', 'hidden');
+    const divElement = this.renderer.createElement('div');
+    this.renderer.setAttribute(divElement, 'id', 'divFade');
+    this.renderer.addClass(divElement, 'modal-backdrop');
+    this.renderer.addClass(divElement, 'fade');
+    this.renderer.addClass(divElement, 'show');
+    this.renderer.appendChild(body, divElement);
   }
 
   closeModal() {
     const modalElement = this.elementRef.nativeElement.querySelector('#searchModal');
     this.renderer.removeClass(modalElement, 'show');
     this.renderer.removeStyle(modalElement, 'display');
-    this.renderer.removeStyle(modalElement, 'block');
+    const body = this.elementRef.nativeElement.ownerDocument.body;
+    const divElement = body.querySelector('#divFade');
+    if (divElement) {
+      this.renderer.removeChild(body, divElement);
+    }
   }
 
   findJobAd() {
     const term = this.searchForm.get('searchTerm')?.value;
-    const jobs = this.jobService.FindJobAd(term).forEach(
+    this.jobService.FindJobAd(term).subscribe(
       (response) => {
-        alert(response);
+        this.jobs = response.jobs;
+        if (this.jobs.length === 0) {
+          alert("Não foi encontrado nenhum serviço.")
+        }
         console.log(response);
       }
     );
-    
   }
 }
