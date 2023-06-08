@@ -1,33 +1,119 @@
 import JobAdvertisement from "../models/JobAdvertisement";
+import Worker from "../models/Worker";
 import { initializeApp } from "firebase/app";
 import { firebaseConfig } from "../../util/firebase";
-import { db } from "../../util/admin";
+import { db, firebaseAdmin } from "../../util/admin";
 import { format } from "date-fns";
-
+import * as uuid from 'uuid';
+import * as admin from 'firebase-admin';
+const FieldValue = admin.firestore.FieldValue;
 class JobAdRepository {
 
     constructor() {
         initializeApp(firebaseConfig);
     }
 
-    async add(job: JobAdvertisement, callback: any) {
+    async add(job: JobAdvertisement, photos: any): Promise<string> {
         try {
             const created = format(new Date(), "dd/MM/yyyy HH:mm:ss");
-
+            const userId = job.worker.id;
             const newJob = {
                 ...job,
                 created: created,
-                expired: false
+                expired: false,
             };
 
             const docRef = await db.collection("JobAdvertisement").add(newJob);
             const uid = docRef.id;
-            callback(null, uid);
+
+            // Atualiza usuário com os dados do Worker
+            const userDoc = await db.collection("Users").doc(userId ?? "").get();
+            const user = userDoc.data();
+
+            if (!user?.worker) {
+                // Se o usuário não tiver um Worker, cria um novo
+                const worker: Worker = {
+                    area: [job.category.name],
+                };
+                await db.collection("Users").doc(userId ?? "").update({ worker });
+            } else {
+                // Se o usuário já tiver um Worker, adiciona a nova área se não existir
+                const currentAreas = user.worker.area ?? [];
+                if (!currentAreas.includes(job.category.name)) {
+                    const updatedWorker: Worker = {
+                        ...user.worker,
+                        area: [...currentAreas, job.category.name],
+                    };
+                    await db.collection("Users").doc(userId ?? "").update({
+                        worker: updatedWorker,
+                        modified: created
+                    });
+                }
+            }
+            if (!photos || photos.length === 0) {
+                return uid;
+            }
+            const photoUrls = [];
+            for (let i = 0; i < photos.length; i++) {
+                const photo = photos[i];
+                const filePath = photo.path;
+                const contentType = photo.mimetype;
+
+                try {
+                    const downloadUrl = await this.uploadJobPhoto(filePath ?? "", contentType ?? "", uid ?? "");
+                    photoUrls.push(downloadUrl);
+                } catch (error) {
+                    console.error('Error uploading image: ', error);
+                    throw error;
+                }
+            }
+
+            await db.collection("JobAdvertisement").doc(uid).update({
+                media: photoUrls,
+            });
+
+            return uid;
         } catch (error) {
             console.error("Error adding job advertisement to Firestore: ", error);
-            callback(error); 
+            throw error; // Lança o erro para ser capturado no bloco catch externo
         }
     }
+
+
+
+    async uploadJobPhoto(filePath: string, contentType: string, jobUid: string): Promise<string> {
+        const storage = firebaseAdmin.storage().bucket();
+        const uniqueId = uuid.v4(); // Gerar um identificador único
+        const fileName = `${jobUid}_${uniqueId}_JobAd_photo`;
+        const modified = format(new Date(), "dd/MM/yyyy HH:mm:ss");
+
+        try {
+            const [file] = await storage.upload(filePath, {
+                destination: fileName,
+                metadata: {
+                    contentType: contentType
+                }
+            });
+
+            const downloadUrls = await file.getSignedUrl({
+                action: 'read',
+                expires: '12-31-2025'
+            });
+
+            const downloadUrl = downloadUrls[0];
+
+            await db.collection("JobAdvertisement").doc(jobUid).update({
+                media: FieldValue.arrayUnion(downloadUrl),
+                modified: modified
+            });
+
+            return downloadUrl;
+        } catch (error) {
+            console.error("Error uploading image: ", error);
+            throw error;
+        }
+    }
+
 
     async findByTerm(term: string): Promise<any[]> {
         try {
@@ -37,12 +123,12 @@ class JobAdRepository {
                 .where('title', '>=', term)
                 .where('title', '<=', term + '\uf8ff')
                 .get();
-            
+
             const snapshotCategory = await jobAdRef
                 .where('category', '>=', term)
                 .where('category', '<=', term + '\uf8ff')
                 .get();
-            
+
             snapshotTitle.forEach(doc => {
                 results.push(doc.data());
             });

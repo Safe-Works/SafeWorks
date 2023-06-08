@@ -8,17 +8,24 @@ import { UserAuth } from '../../../auth/User.Auth';
 import { JobService } from 'src/app/services/job.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
 
+interface Photo {
+  url: string;
+  file: File;
+}
+
 @Component({
   selector: 'app-create-post',
   templateUrl: './create-post.component.html',
   styleUrls: ['./create-post.component.css']
 })
+
 export class CreatePostComponent {
   isLoading = false;
   postFormControl!: FormGroup;
   categories = categories;
   priceTypes = priceTypes;
   districts = districts;
+  imageControl: FormControl = new FormControl();
   categoryFormControl = new FormControl('', [Validators.required]);
   priceTypesFormControl = new FormControl('', [Validators.required]);
   titleFormControl = new FormControl('', [Validators.required]);
@@ -37,6 +44,48 @@ export class CreatePostComponent {
       priceTypesFormControl: this.priceTypesFormControl,
       descriptionFormControl: this.descriptionFormControl,
     });
+  }
+
+  selectedPhotos: Photo[] = [];
+
+  onFileSelected(event: any) {
+    const files: FileList = event.target.files;
+    if (files) {
+      const allowedTypes = ['image/jpeg', 'image/png', 'image/gif'];
+      for (let i = 0; i < files.length; i++) {
+        const file: File | null = files.item(i);
+        const reader = new FileReader();
+        if (file) {
+          if (!allowedTypes.includes(file.type)) {
+            this.openSnackBar("Selecione um arquivo de imagem válido (JPG, PNG ou GIF).", "OK", "snackbar-error");
+            return;
+          }
+          this.imageControl.setValue(file);
+          reader.onload = () => {
+            const photo: Photo = {
+              url: reader.result as string,
+              file: file
+            };
+            if (this.selectedPhotos.length < 4) {
+              this.selectedPhotos.push(photo);
+            } else {
+              this.openSnackBar("São permitidas apenas 4 fotos por anúncio!", "OK", "snackbar-error");
+            }
+          };
+          reader.readAsDataURL(file);
+        }
+      }
+      this.imageControl.setValue(this.selectedPhotos);
+    }
+  }
+
+  removePhoto(photo: Photo) {
+    const index = this.selectedPhotos.indexOf(photo);
+    if (index !== -1) {
+      this.selectedPhotos.splice(index, 1);
+      this.imageControl.setValue(this.selectedPhotos);
+      console.log(this.imageControl.value);
+    }
   }
 
   openSnackBar(message: string, action: string, className: string) {
@@ -75,6 +124,8 @@ export class CreatePostComponent {
     const category = categories.find(cat => cat.id.toString() === categoryId.toString());
     const priceType = priceTypes.find(p => p.id.toString() === this.priceTypesFormControl.value?.toString());
     const district = districts.find(d => d.id.toString() === this.districtsFormControl.value?.toString());
+    const photos = this.imageControl.value;
+
     const jobAd = new JobAdvertisement(
       user,
       this.titleFormControl.value ?? '',
@@ -96,11 +147,11 @@ export class CreatePostComponent {
       }
     }
 
-    this.jobService.CreateJobAd(filteredJobAd).subscribe(
+    this.jobService.CreateJobAd(filteredJobAd, photos).subscribe(
       (response) => {
         this.isLoading = false;
         console.log(response);
-        this.openSnackBar("Anáncio criado com sucesso!", "OK", "snackbar-success");
+        this.openSnackBar("Anúncio criado com sucesso!", "OK", "snackbar-success");
       },
       (error) => {
         this.isLoading = false;
