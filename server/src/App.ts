@@ -49,6 +49,8 @@ class App {
         this.app.use('*', (req, res) => {
             res.status(404).send("Make sure url is correct!");
         });
+        // Celebrate error handler middleware
+        this.app.use(errors());
     }
 
 }

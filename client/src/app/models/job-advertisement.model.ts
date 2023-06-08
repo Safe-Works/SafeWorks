@@ -1,12 +1,12 @@
 class JobAdvertisement {
   constructor(
-    public user: any,
+    public worker: any,
     public title: string,
     public description: string,
-    public category: string,
-    public location: string,
+    public category: any,
+    public district: any,
     public price: number,
-    public price_type: string, // Tipo de valor (Hora, metro, dias, quantidade)
+    public price_type: any, // Tipo de valor (Hora, metro, dias, quantidade)
     public displacement_fee?: number, // Custo de deslocamento
     public uid?: string,
     public delivery_time?: string, // Tempo de entrega, se aplicável

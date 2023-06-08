@@ -1,8 +1,11 @@
+<div class="loading-spinner" *ngIf="isLoading">
+    <mat-spinner [diameter]="85"></mat-spinner>
+</div>
 <div class="container container-body">
     <div class="row col-md-12" style="padding: 40px 5.6%;">
         <h1 style="font-size: 40px; font-weight: bold; color: #2d2d2d;">Anunciar serviço</h1>
     </div>
-    <form [formGroup]="postFormControl" #formDir="ngForm" (ngSubmit)="formDir.valid && createPost()">
+    <form [formGroup]="postFormControl" #formDir="ngForm" (ngSubmit)="createPost()">
         <div class="row col-md-12" style="padding: 40px 5.6%; background-color: white; border: 1px solid #ced0d4;">
             <mat-form-field class="col-md-6">
                 <mat-label>Título</mat-label>
@@ -56,17 +59,17 @@
             </mat-form-field>
             <mat-form-field class="col-md-2" *ngIf="priceTypesFormControl.value?.toString() === '5'">
                 <mat-label>Prazo de entrega</mat-label>
-                <input matInput [formControl]="titleFormControl" type="number" placeholder="Estimativa em dias"
+                <input matInput [formControl]="deliveryTimeFormControl" type="number" placeholder="Estimativa em dias"
                     maxlength="10">
-                <mat-error *ngIf="titleFormControl.invalid">
+                <mat-error *ngIf="deliveryTimeFormControl.invalid">
                     <strong>Obrigatório</strong>
                 </mat-error>
             </mat-form-field>
             <mat-form-field class="col-md-12">
                 <mat-label>Descrição</mat-label>
-                <textarea matInput [formControl]="deliveryTimeFormControl"
+                <textarea matInput [formControl]="descriptionFormControl"
                     placeholder="Descreva o seu serviço..."></textarea>
-                <mat-error *ngIf="deliveryTimeFormControl.invalid">
+                <mat-error *ngIf="descriptionFormControl.invalid">
                     <strong>Obrigatório</strong>
                 </mat-error>
             </mat-form-field>
