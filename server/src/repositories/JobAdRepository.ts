@@ -12,46 +12,47 @@ class JobAdRepository {
         initializeApp(firebaseConfig);
     }
 
-    async add(job: JobAdvertisement, photos: any, callback: any) {
+    async add(job: JobAdvertisement, photos: any): Promise<string> {
         try {
-            const created = format(new Date(), "dd/MM/yyyy HH:mm:ss");
-            const newJob = {
-                ...job,
-                created: created,
-                expired: false
-            };
-
-            const docRef = await db.collection("JobAdvertisement").add(newJob);
-            const uid = docRef.id;
-
-            if (photos) {
-                const photoUrls = [];
-
-                for (let i = 0; i < photos.length; i++) {
-                    const photo = photos[i];
-                    const filePath = photo.path;
-                    const contentType = photo.mimetype;
-
-                    try {
-                        const downloadUrl = await this.uploadJobPhoto(filePath ?? "", contentType ?? "", uid ?? "");
-                        photoUrls.push(downloadUrl);
-                    } catch (error) {
-                        console.error('Error uploading image: ', error);
-                        return callback(error);
-                    }
-                }
-
-                await db.collection("JobAdvertisement").doc(uid).update({
-                    media: photoUrls
-                });
+          const created = format(new Date(), "dd/MM/yyyy HH:mm:ss");
+          const newJob = {
+            ...job,
+            created: created,
+            expired: false,
+          };
+      
+          const docRef = await db.collection("JobAdvertisement").add(newJob);
+          const uid = docRef.id;
+      
+          if (photos) {
+            const photoUrls = [];
+      
+            for (let i = 0; i < photos.length; i++) {
+              const photo = photos[i];
+              const filePath = photo.path;
+              const contentType = photo.mimetype;
+      
+              try {
+                const downloadUrl = await this.uploadJobPhoto(filePath ?? "", contentType ?? "", uid ?? "");
+                photoUrls.push(downloadUrl);
+              } catch (error) {
+                console.error('Error uploading image: ', error);
+                throw error;
+              }
             }
-
-            callback(null, uid);
+      
+            await db.collection("JobAdvertisement").doc(uid).update({
+              media: photoUrls,
+            });
+          }
+      
+          return uid;
         } catch (error) {
-            console.error("Error adding job advertisement to Firestore: ", error);
-            callback(error);
+          console.error("Error adding job advertisement to Firestore: ", error);
+          throw error; // Lança o erro para ser capturado no bloco catch externo
         }
-    }
+      }
+      
 
 
     async uploadJobPhoto(filePath: string, contentType: string, jobUid: string): Promise<string> {

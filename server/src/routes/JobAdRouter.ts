@@ -56,18 +56,13 @@ jobAdRouter.post('/job', upload.array('photos'),
         try {
             const job: JobAdvertisement = req.body;
             const photos = req.files; // Array de arquivos enviados
-            await jobAdRepository.add(job, photos, (error: any, uid: any) => {
-                if (!error) {
-                    res.status(201).json({ statusCode: 201, uid: uid });
-                } else {
-                    console.error("Error adding job advertisement: ", error);
-                    return res.status(500).json({ statusCode: 500, error: "Failed to add job advertisement" });
-                }
-            });
-        } catch (error) {
+        
+            const uid = await jobAdRepository.add(job, photos);
+            res.status(201).json({ statusCode: 201, uid: uid });
+          } catch (error) {
             console.error("Error adding job advertisement: ", error);
             return res.status(500).json({ statusCode: 500, error: "Failed to add job advertisement" });
-        }
+          }
     });
 
 
