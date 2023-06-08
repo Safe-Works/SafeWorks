@@ -25,9 +25,11 @@ export class JobService {
         formData.append('price', job.price.toString());
         formData.append('price_type[name]', job.price_type.name);
         formData.append('price_type[id]', job.price_type.id.toString());
-      
-        for (let i = 0; i < photos.length; i++) {
-          formData.append('photos', photos[i].file, photos[i].file.name);
+
+        if (photos) {
+          for (let i = 0; i < photos.length; i++) {
+            formData.append('photos', photos[i].file, photos[i].file.name);
+          }
         }
       
         return this.http.post<string>(this.api, formData);

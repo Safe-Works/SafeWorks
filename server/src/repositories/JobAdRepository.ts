@@ -50,28 +50,27 @@ class JobAdRepository {
                     });
                 }
             }
-
-            if (photos) {
-                const photoUrls = [];
-
-                for (let i = 0; i < photos.length; i++) {
-                    const photo = photos[i];
-                    const filePath = photo.path;
-                    const contentType = photo.mimetype;
-
-                    try {
-                        const downloadUrl = await this.uploadJobPhoto(filePath ?? "", contentType ?? "", uid ?? "");
-                        photoUrls.push(downloadUrl);
-                    } catch (error) {
-                        console.error('Error uploading image: ', error);
-                        throw error;
-                    }
-                }
-
-                await db.collection("JobAdvertisement").doc(uid).update({
-                    media: photoUrls,
-                });
+            if (!photos || photos.length === 0) {
+                return uid;
             }
+            const photoUrls = [];
+            for (let i = 0; i < photos.length; i++) {
+                const photo = photos[i];
+                const filePath = photo.path;
+                const contentType = photo.mimetype;
+
+                try {
+                    const downloadUrl = await this.uploadJobPhoto(filePath ?? "", contentType ?? "", uid ?? "");
+                    photoUrls.push(downloadUrl);
+                } catch (error) {
+                    console.error('Error uploading image: ', error);
+                    throw error;
+                }
+            }
+
+            await db.collection("JobAdvertisement").doc(uid).update({
+                media: photoUrls,
+            });
 
             return uid;
         } catch (error) {

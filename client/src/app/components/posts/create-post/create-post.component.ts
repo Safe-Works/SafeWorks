@@ -124,7 +124,7 @@ export class CreatePostComponent {
     const category = categories.find(cat => cat.id.toString() === categoryId.toString());
     const priceType = priceTypes.find(p => p.id.toString() === this.priceTypesFormControl.value?.toString());
     const district = districts.find(d => d.id.toString() === this.districtsFormControl.value?.toString());
-    const photo = this.imageControl.value;
+    const photos = this.imageControl.value;
 
     const jobAd = new JobAdvertisement(
       user,
@@ -147,7 +147,7 @@ export class CreatePostComponent {
       }
     }
 
-    this.jobService.CreateJobAd(filteredJobAd, photo).subscribe(
+    this.jobService.CreateJobAd(filteredJobAd, photos).subscribe(
       (response) => {
         this.isLoading = false;
         console.log(response);
