@@ -1,0 +1,30 @@
+<div class="modal fade" id="searchModal" tabindex="-1" role="dialog" aria-labelledby="searchModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h1 class="modal-title fs-5" id="exampleModalLabel">Busca por serviços</h1>
+          <button type="button" class="btn-close" aria-label="Close" (click)="closeModal()"></button>
+        </div>
+        <div>
+
+          <div class="modal-body">
+            <form [formGroup]="searchForm" #formDir="ngForm" (ngSubmit)="findJobAd()">
+              <input [formControl]="searchTerm" type="text" id="searchInput" class="search-input" placeholder="Buscar por serviços, categorias...">
+              <button class="btn btn-outline-primary" style="margin-left: 0.5rem; font-size: 0.7rem;">
+                <i class="bi bi-search"></i>
+                Buscar
+              </button>
+            </form>
+          </div>
+          
+          <div class="modal-results">
+            <div class="job-result">
+              <h1 class="job-title">Título do serviço</h1>
+              <p class="job-description">Descrição</p>
+            </div>
+          </div>
+            
+        </div>
+      </div>
+    </div>
+</div>
