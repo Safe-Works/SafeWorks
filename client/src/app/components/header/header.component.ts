@@ -1,4 +1,4 @@
-import { Component, OnInit, EventEmitter, Output } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { UserAuth } from '../../auth/User.Auth';
 import { Router, NavigationEnd  } from '@angular/router';
 import { filter } from 'rxjs/operators';
