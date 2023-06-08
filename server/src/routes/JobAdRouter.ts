@@ -27,7 +27,7 @@ jobAdRouter.post('/job', upload.array('photos'),
             worker:
                 Joi.object({
                     name: Joi.string().max(50).required(),
-                    id: Joi.string().max(21).required(),
+                    id: Joi.string().max(28).required(),
                 }).required(),
             title: Joi.string().max(50).required(),
             description: Joi.string().max(400).required(),
@@ -56,7 +56,7 @@ jobAdRouter.post('/job', upload.array('photos'),
         try {
             const job: JobAdvertisement = req.body;
             const photos = req.files; // Array de arquivos enviados
-            await jobAdRepository.add(job, (error: any, uid: any) => {
+            await jobAdRepository.add(job, photos, (error: any, uid: any) => {
                 if (!error) {
                     res.status(201).json({ statusCode: 201, uid: uid });
                 } else {

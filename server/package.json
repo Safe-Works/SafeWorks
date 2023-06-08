@@ -20,6 +20,7 @@
   },
   "homepage": "https://github.com/Safe-Works/SafeWorks-Server#readme",
   "dependencies": {
+    "@types/uuid": "^9.0.1",
     "celebrate": "^15.0.1",
     "cors": "^2.8.5",
     "date-fns": "^2.30.0",
@@ -30,7 +31,8 @@
     "joi": "^17.9.1",
     "multer": "^1.4.5-lts.1",
     "swagger-jsdoc": "^6.2.8",
-    "swagger-ui-express": "^4.6.3"
+    "swagger-ui-express": "^4.6.3",
+    "uuid": "^9.0.0"
   },
   "devDependencies": {
     "@types/cors": "^2.8.13",
