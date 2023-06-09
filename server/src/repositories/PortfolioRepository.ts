@@ -16,7 +16,7 @@ class PortfolioRepository {
 
             const newPortfolio = {
                 created: created,
-                portfolio: portfolio.description
+                description: portfolio.description
             };
 
             const docRef = await db.collection("Portfolios").add(newPortfolio);

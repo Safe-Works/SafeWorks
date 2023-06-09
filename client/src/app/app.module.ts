@@ -26,6 +26,7 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
 import { MatIconModule } from '@angular/material/icon';
 import { SearchModalComponent } from './components/search-modal/search-modal.component';
+import { PortfolioComponent } from './components/portfolio/portfolio.component';
 
 @NgModule({
   declarations: [
@@ -38,7 +39,8 @@ import { SearchModalComponent } from './components/search-modal/search-modal.com
     HeaderComponent,
     FooterComponent,
     CreatePostComponent,
-    SearchModalComponent
+    SearchModalComponent,
+    PortfolioComponent
   ],
   imports: [
     BrowserModule,

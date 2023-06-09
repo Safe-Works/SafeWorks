@@ -9,7 +9,7 @@ const portfolioRepository = new PortfolioRepository();
 portfolioRouter.post('/portfolio',
     celebrate({
         body: Joi.object({
-            description: Joi.string().required().min(200),
+            description: Joi.string().required().max(200),
         })
     }),
     (req, res) => {
