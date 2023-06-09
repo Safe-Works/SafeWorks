@@ -27,6 +27,7 @@ import { MatCardModule } from '@angular/material/card';
 import { MatIconModule } from '@angular/material/icon';
 import { SearchModalComponent } from './components/search-modal/search-modal.component';
 import { PortfolioComponent } from './components/portfolio/portfolio.component';
+import { EditPortfolioComponent } from './components/portfolio/edit-portfolio/edit-portfolio.component';
 
 @NgModule({
   declarations: [
@@ -40,7 +41,8 @@ import { PortfolioComponent } from './components/portfolio/portfolio.component';
     FooterComponent,
     CreatePostComponent,
     SearchModalComponent,
-    PortfolioComponent
+    PortfolioComponent,
+    EditPortfolioComponent
   ],
   imports: [
     BrowserModule,

@@ -45,5 +45,37 @@ class PortfolioRepository {
             });
     }
 
+    getAll(callback: any) {
+        db.collection("Portfolios")
+            .get()
+            .then((snapshot) => {
+                const portfolios: any[] = [];
+                snapshot.forEach((doc) => {
+                    const portfolioData = doc.data();
+                    portfolios.push(portfolioData);
+                });
+                callback(null, portfolios);
+            })
+            .catch((error) => {
+                console.error("Error getting portfolios from Firestore. ", error);
+                callback(error, null);
+            });
+    }
+
+    delete(uid: string, callback: any) {
+        db.collection("Portfolios")
+            .doc(uid)
+            .delete()
+            .then(() => {
+                callback(null);
+            })
+            .catch((error) => {
+                console.error("Error deleting portfolio from Firestore. ", error);
+                callback(error);
+            });
+    }
+
+
+
 }
 export default PortfolioRepository;

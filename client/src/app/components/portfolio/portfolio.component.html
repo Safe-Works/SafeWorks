@@ -4,3 +4,19 @@
     <textarea [(ngModel)]="description" placeholder="Digite a descrição do portfólio"></textarea>
     <button class="confirm-button" (click)="adicionarPortfolio()">Confirmar</button>
 </div>
+
+<h2>List of Portfolios</h2>
+<button class="confirm-button" (click)="ListarPortfolio()">Listar Portfolios</button>
+
+<ul>
+    <li *ngFor="let portfolio of portfolios">
+        <h3>Criado em {{ portfolio.created }}</h3>
+        <p>Descrição {{ portfolio.description }}</p>
+        <button (click)="editarPortfolio(portfolio)">Editar</button>
+    </li>
+</ul>
+
+
+
+
+

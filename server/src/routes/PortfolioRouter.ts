@@ -40,4 +40,28 @@ portfolioRouter.get('/portfolio/:uid', (req, res) => {
     });
 });
 
+portfolioRouter.get('/portfolio', (req, res) => {
+    portfolioRepository.getAll((error: any, portfolios: any) => {
+        if (error) {
+            console.error("Error getting portfolios from repository. ", error);
+            res.status(500).send();
+        } else {
+            res.status(200).json(portfolios);
+        }
+    });
+});
+
+portfolioRouter.delete('/portfolio/:uid', (req, res) => {
+    const uid = req.params.uid;
+    portfolioRepository.delete(uid, (error: any) => {
+        if (error) {
+            console.error("Error deleting portfolio from repository. ", error);
+            res.status(500).send();
+        } else {
+            res.status(200).json({ message: "Portfolio deleted successfully" });
+        }
+    });
+});
+
+
 export default portfolioRouter;
