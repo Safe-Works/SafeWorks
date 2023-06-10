@@ -4,7 +4,8 @@
         <img src="../../../assets/safeworks-logo.png" class="header-logo">
 
         <div class="header-center d-flex align-items-center justify-content-center">
-            <div class="search-bar ml-auto d-flex align-items-center" (click)="openModal()" data-bs-toggle="modal" data-bs-target="#exampleModal">
+            <div class="search-bar ml-auto d-flex align-items-center" (click)="openModal()" data-bs-toggle="modal"
+                data-bs-target="#exampleModal">
                 <i class="bi bi-search"></i>
                 <p class="text-search">Buscar por serviços, categorias...</p>
             </div>
@@ -16,23 +17,32 @@
                     <ul class="navbar-nav ml-auto d-flex align-items-center">
                         <li class="nav-item">
                             <a routerLink="/" routerLinkActive="active" title="Página Inicial">
-                                <i [class]="'header-icon bi bi-house' + (activeRoute === 'home' ? '-fill' : '')" (click)="changeRoute('home')"></i>
+                                <i [class]="'header-icon bi bi-house' + (activeRoute === 'home' ? '-fill' : '')"
+                                    (click)="changeRoute('home')"></i>
                             </a>
                         </li>
                         <li class="nav-item" *ngIf="userAuth.currentUser">
-                            <a routerLink="/profile" routerLinkActive="active">
-                                <i [class]="'header-icon bi bi-person' + (activeRoute === 'profile' ? '-fill' : '')" (click)="changeRoute('profile')"></i>
+                            <a routerLink="/profile" routerLinkActive="active" title="Perfil">
+                                <i [class]="'header-icon bi bi-person' + (activeRoute === 'profile' ? '-fill' : '')"
+                                    (click)="changeRoute('profile')"></i>
+                            </a>
+                        </li>
+                        <li class="nav-item" *ngIf="userAuth.currentUser">
+                            <a routerLink="/jobs" routerLinkActive="active" title="Serviços">
+                                <i [class]="'header-icon bi bi-grid-3x2-gap' + (activeRoute === 'jobs' ? '-fill' : '')"
+                                    (click)="changeRoute('jobs')"></i>
                             </a>
                         </li>
                         <li class="nav-item" *ngIf="!userAuth.currentUser">
-                            <a class="btn btn-outline header-btn" [routerLink]="'/login'" routerLinkActive="active" title="Entrar" (click)="changeRoute('login')">
+                            <a class="btn btn-outline header-btn" [routerLink]="'/login'" routerLinkActive="active"
+                                title="Entrar" (click)="changeRoute('login')">
                                 <i class="bi bi-box-arrow-in-left" fill="currentColor"></i> Login
                             </a>
                         </li>
                         <li class="nav-item" *ngIf="userAuth.currentUser">
                             <a (click)="logout()" title="Logout">
-                                <i class="header-icon bi bi-box-arrow-right"></i>
-                            </a> 
+                                <i class="header-icon bi bi-box-arrow-right" style="color: rgb(255, 59, 59)"></i>
+                            </a>
                         </li>
                     </ul>
                 </nav>
