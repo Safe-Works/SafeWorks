@@ -7,12 +7,18 @@
 .job-card {
     width: 300px;
     cursor: pointer;
+    border: 1px solid #ced0d4;
 }
 
 .job-card:hover {
     border: 1px solid #FFA500;
 }
-
+.no-jobs-message {
+    text-align: center;
+    font-size: 20px;
+    color: #888;
+    margin-top: 20px;
+  }
 @media (min-width: 768px) {
     .job-card {
         width: calc(33.33% - 20px);

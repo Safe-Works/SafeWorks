@@ -27,7 +27,8 @@ import { MatCardModule } from '@angular/material/card';
 import { MatIconModule } from '@angular/material/icon';
 import { SearchModalComponent } from './components/search-modal/search-modal.component';
 import { ViewPostComponent } from './components/posts/view-post/view-post.component';
-import { MatPaginatorModule } from '@angular/material/paginator';
+import { MatPaginatorIntl, MatPaginatorModule } from '@angular/material/paginator';
+import { MatPaginatorIntlPtBr } from './utils/paginator-ptbr-i8n';
 
 @NgModule({
   declarations: [
@@ -63,7 +64,10 @@ import { MatPaginatorModule } from '@angular/material/paginator';
     MatCardModule,
     MatPaginatorModule
   ],
-  providers: [UserService],
+  providers: [
+    UserService,
+     { provide: MatPaginatorIntl, useClass: MatPaginatorIntlPtBr }
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
