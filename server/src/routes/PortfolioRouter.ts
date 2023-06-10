@@ -10,6 +10,7 @@ portfolioRouter.post('/portfolio',
     celebrate({
         body: Joi.object({
             description: Joi.string().required().max(200),
+            uid: Joi.string()
         })
     }),
     (req, res) => {

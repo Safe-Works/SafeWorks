@@ -12,6 +12,7 @@
     <li *ngFor="let portfolio of portfolios">
         <h3>Criado em {{ portfolio.created }}</h3>
         <p>Descrição {{ portfolio.description }}</p>
+        <p>uid {{ portfolio.uid }}</p>
         <button (click)="editarPortfolio(portfolio)">Editar</button>
     </li>
 </ul>

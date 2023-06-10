@@ -2,6 +2,7 @@ import {HttpClient} from '@angular/common/http';
 import {Component, OnInit} from '@angular/core';
 import {Router} from '@angular/router';
 import Portfolio from '../../../../../server/src/models/Portfolio';
+import {UserAuth} from "../../auth/User.Auth";
 
 
 @Component({
@@ -15,7 +16,8 @@ export class PortfolioComponent implements OnInit {
 
     constructor(
         private http: HttpClient,
-        private router: Router) {
+        private router: Router,
+        private userAuth: UserAuth) {
     }
 
     ngOnInit(): void {
@@ -25,7 +27,8 @@ export class PortfolioComponent implements OnInit {
         const description = this.description;
 
         const body = {
-            description: description
+            description: description,
+            uid: this.userAuth.currentUser?.uid ?? ""
         };
 
         this.http.post<any>('http://localhost:3001/portfolio', body).subscribe(
