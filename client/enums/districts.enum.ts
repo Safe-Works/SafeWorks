@@ -2,7 +2,7 @@ export const districts = [
     { id: 1, name: 'Água Verde' },
     { id: 2, name: 'Alto Boqueirão' },
     { id: 3, name: 'Alto da Glória' },
-    { id: 4, name: 'Alto da Rua XV' },
+    { id: 4, name: 'Alto da XV' },
     { id: 5, name: 'Atuba' },
     { id: 6, name: 'Augusta' },
     { id: 7, name: 'Bacacheri' },

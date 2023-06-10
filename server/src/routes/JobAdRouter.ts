@@ -81,8 +81,8 @@ jobAdRouter.get("/job/find/:term", (async (req, res) => {
 }) as RequestHandler);
 
 jobAdRouter.get('/job/get/all', async (req, res) => {
-    const page = parseInt(req.body.page as string) || 1;
-    const ITEMS_PER_PAGE = parseInt(req.body.limit as string) || 10;
+    const page = parseInt(req.query.page as string) || 1;
+    const ITEMS_PER_PAGE = parseInt(req.query.limit as string) || 10;
 
     try {
         let lastDocument: admin.firestore.QueryDocumentSnapshot | undefined = undefined;
@@ -95,7 +95,7 @@ jobAdRouter.get('/job/get/all', async (req, res) => {
                 lastDocument = previousDocuments[totalDocuments - 1];
             }
         }
-
+        const totalJobsSnapshot = await jobAdRepository.getTotalJobs();
         // Obtem a página atual
         const currentPageSnapshot = await jobAdRepository.getNextPage(ITEMS_PER_PAGE, lastDocument);
 
@@ -103,7 +103,7 @@ jobAdRouter.get('/job/get/all', async (req, res) => {
             const data = doc.data();
             return { ...data, uid: doc.id };
         });
-        const total = currentPageSnapshot.size;
+        const total = totalJobsSnapshot;
 
         const response: PaginatedResponse = {
             jobs,
@@ -118,8 +118,8 @@ jobAdRouter.get('/job/get/all', async (req, res) => {
     }
 });
 
-jobAdRouter.get('/job/get/:id', async (req, res) => {
-    const jobId = req.params.id;
+jobAdRouter.get('/job/get', async (req, res) => {
+    const jobId = req.query.id as string;
 
     try {
         const job = await jobAdRepository.getJobById(jobId);
@@ -135,8 +135,8 @@ jobAdRouter.get('/job/get/:id', async (req, res) => {
     }
 });
 
-jobAdRouter.delete('/job/delete/:id', async (req, res) => {
-    const jobId = req.params.id;
+jobAdRouter.delete('/job/delete', async (req, res) => {
+    const jobId = req.query.id as string;
 
     try {
         // Verifica se o job existe antes de removê-lo
