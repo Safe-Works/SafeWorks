@@ -84,7 +84,6 @@ export class CreatePostComponent {
     if (index !== -1) {
       this.selectedPhotos.splice(index, 1);
       this.imageControl.setValue(this.selectedPhotos);
-      console.log(this.imageControl.value);
     }
   }
 
@@ -150,7 +149,6 @@ export class CreatePostComponent {
     this.jobService.CreateJobAd(filteredJobAd, photos).subscribe(
       (response) => {
         this.isLoading = false;
-        console.log(response);
         this.openSnackBar("Anúncio criado com sucesso!", "OK", "snackbar-success");
       },
       (error) => {

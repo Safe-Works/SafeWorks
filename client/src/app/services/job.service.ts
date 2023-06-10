@@ -47,4 +47,16 @@ export class JobService {
         )
     }
 
+    public GetJobs(page: number, limit: number): Observable<any> {
+        return this.http.get<string>(this.api + '/get/all?page=' + page + '&limit=' + limit).pipe(
+            tap((response: any) => {
+                return response;
+            }),
+            catchError((error) => {
+                console.error(error);
+                return error;
+            })
+        )
+    };
+
 }

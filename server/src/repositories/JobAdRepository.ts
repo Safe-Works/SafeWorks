@@ -156,5 +156,54 @@ class JobAdRepository {
         }
     }
 
+    async getTotalJobs(): Promise<number> {
+        try {
+          const querySnapshot = await db.collection('JobAdvertisement').get();
+          return querySnapshot.size;
+        } catch (error) {
+          console.error('Error retrieving total jobs:', error);
+          throw new Error('Failed to retrieve total jobs');
+        }
+      }
+
+    // Função para obter a próxima página de documentos
+    async getNextPage(ITEMS_PER_PAGE: number, lastDocument?: admin.firestore.QueryDocumentSnapshot): Promise<admin.firestore.QuerySnapshot> {
+        let query = db.collection('JobAdvertisement').orderBy('created').limit(ITEMS_PER_PAGE);
+        if (lastDocument) {
+            query = query.startAfter(lastDocument);
+        }
+        const snapshot = await query.get();
+        return snapshot;
+    }
+
+    async getJobById(jobId: string): Promise<any> {
+        try {
+            const docRef = db.collection('JobAdvertisement').doc(jobId);
+            const docSnapshot = await docRef.get();
+
+            if (docSnapshot.exists) {
+                const jobData = docSnapshot.data();
+                // Adiciona o campo uid ao objeto jobData
+                const jobWithUid = { ...jobData, uid: docSnapshot.id };
+                return jobWithUid;
+            } else {
+                return null;
+            }
+        } catch (error) {
+            console.error('Error retrieving job by ID:', error);
+            throw error;
+        }
+    }
+
+
+    async deleteJobById(jobId: string): Promise<void> {
+        try {
+            const jobRef = db.collection('JobAdvertisement').doc(jobId);
+            await jobRef.delete();
+        } catch (error) {
+            console.error('Error deleting job:', error);
+            throw error;
+        }
+    }
 }
 export default JobAdRepository;

@@ -26,6 +26,8 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
 import { MatIconModule } from '@angular/material/icon';
 import { SearchModalComponent } from './components/search-modal/search-modal.component';
+import { ViewPostComponent } from './components/posts/view-post/view-post.component';
+import { MatPaginatorModule } from '@angular/material/paginator';
 
 @NgModule({
   declarations: [
@@ -38,7 +40,8 @@ import { SearchModalComponent } from './components/search-modal/search-modal.com
     HeaderComponent,
     FooterComponent,
     CreatePostComponent,
-    SearchModalComponent
+    SearchModalComponent,
+    ViewPostComponent
   ],
   imports: [
     BrowserModule,
@@ -57,7 +60,8 @@ import { SearchModalComponent } from './components/search-modal/search-modal.com
     MatSlideToggleModule,
     MatIconModule,
     MatButtonModule,
-    MatCardModule
+    MatCardModule,
+    MatPaginatorModule
   ],
   providers: [UserService],
   bootstrap: [AppComponent]
