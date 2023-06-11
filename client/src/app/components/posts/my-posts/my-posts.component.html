@@ -13,7 +13,8 @@
                     <mat-spinner [diameter]="85"></mat-spinner>
                 </div>
                 <mat-card *ngFor="let job of jobs" class="job-card" [id]="job.uid" [hidden]="isLoading">
-                    <button class="card-icon" mat-icon-button [matMenuTriggerFor]="menu" aria-label="Options" title="Ações">
+                    <button class="card-icon" mat-icon-button [matMenuTriggerFor]="menu" aria-label="Options"
+                        title="Ações">
                         <mat-icon>more_vert</mat-icon>
                     </button>
                     <mat-menu #menu="matMenu">
@@ -31,11 +32,12 @@
                     </div>
                     <mat-card-content>
                         <mat-card-title>{{ job.title }}</mat-card-title>
-                        <p class="card-price" style="color: rgb(32, 238, 32)">R${{ job.price }} / {{ job.price_type.name
-                            }}</p>
+                        <p class="card-price" style="color: rgb(32, 238, 32)">{{ job.price |
+                            currency:'BRL' }} / {{ job.price_type.name }}</p>
                         <p class="card-category">{{ job.category.name }}</p>
                         <p class="card-district">{{ job.district.name }}</p>
                     </mat-card-content>
+
                 </mat-card>
                 <div *ngIf="!isLoading && jobs.length === 0" class="no-jobs-message">
                     Nenhum serviço encontrado.

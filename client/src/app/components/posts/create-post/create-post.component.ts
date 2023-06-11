@@ -148,8 +148,10 @@ export class CreatePostComponent {
 
     this.jobService.CreateJobAd(filteredJobAd, photos).subscribe(
       (response) => {
-        this.isLoading = false;
-        this.openSnackBar("Anúncio criado com sucesso!", "OK", "snackbar-success");
+        if (response?.statusCode === 201) {
+          this.isLoading = false;
+          this.openSnackBar("Anúncio criado com sucesso!", "OK", "snackbar-success");
+        }
       },
       (error) => {
         this.isLoading = false;

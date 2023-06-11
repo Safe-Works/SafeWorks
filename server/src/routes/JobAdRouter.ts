@@ -125,13 +125,13 @@ jobAdRouter.get('/job/get', async (req, res) => {
         const job = await jobAdRepository.getJobById(jobId);
 
         if (job) {
-            res.status(200).json(job);
+            res.status(200).json({ statusCode: 200, job: job });
         } else {
-            res.status(404).json({ error: 'Job not found' });
+            res.status(404).json({ statusCode: 404, error: 'Job not found' });
         }
     } catch (error) {
         console.error('Error retrieving job:', error);
-        res.status(500).json({ error: 'Failed to retrieve job' });
+        res.status(500).json({ statusCode: 500, error: 'Failed to retrieve job' });
     }
 });
 

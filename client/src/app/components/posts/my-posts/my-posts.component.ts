@@ -4,6 +4,7 @@ import JobAdvertisement from 'src/app/models/job-advertisement.model';
 import { UserAuth } from '../../../auth/User.Auth';
 import { JobService } from 'src/app/services/job.service';
 import Swal from 'sweetalert2/dist/sweetalert2.js';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-my-posts',
@@ -19,7 +20,7 @@ export class MyPostsComponent implements OnInit {
   pageSize: number = 10;
   isLoading: boolean = false;
 
-  constructor(private jobService: JobService, private userAuth: UserAuth) { }
+  constructor(private jobService: JobService, private userAuth: UserAuth, private router: Router) { }
 
   ngOnInit() {
     this.getJobs();
@@ -39,10 +40,12 @@ export class MyPostsComponent implements OnInit {
     this.pageSize = event.pageSize;
     this.getJobs();
   }
-  editJob(job: JobAdvertisement) {
-    // Lógica para editar o job
-  }
   
+  editJob(job: JobAdvertisement) {
+    const jobId = job.uid;
+    this.router.navigate(['/jobs', 'edit', jobId]);
+  }
+
   deleteJob(job: JobAdvertisement) {
     Swal.fire({
       title: 'Você tem certeza?',

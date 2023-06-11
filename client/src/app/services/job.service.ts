@@ -12,7 +12,7 @@ export class JobService {
     private api: string = 'http://localhost:3001/api/job';
 
     constructor(private http: HttpClient) { }
-    public CreateJobAd(job: Job, photos: any): Observable<string> {
+    public CreateJobAd(job: Job, photos: any): Observable<any> {
         const formData = new FormData();
         formData.append('worker[name]', job.worker.name);
         formData.append('worker[id]', job.worker.id);
@@ -32,7 +32,7 @@ export class JobService {
             }
         }
 
-        return this.http.post<string>(this.api, formData);
+        return this.http.post<any>(this.api, formData);
     }
 
     public FindJobAd(term: string): Observable<any> {
@@ -73,6 +73,18 @@ export class JobService {
 
     public DeleteById(id: string): Observable<any> {
         return this.http.delete<string>(this.api + '/delete?id=' + id).pipe(
+            tap((response: any) => {
+                return response;
+            }),
+            catchError((error) => {
+                console.error(error);
+                return error;
+            })
+        )
+    };
+
+    public GetById(id: string): Observable<any> {
+        return this.http.get<string>(this.api + '/get?id=' + id).pipe(
             tap((response: any) => {
                 return response;
             }),

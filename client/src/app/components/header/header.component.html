@@ -30,9 +30,7 @@
                         <li class="nav-item dropdown" (mouseover)="openDropdown()" (mouseout)="closeDropdown()" *ngIf="userAuth.currentUser">
                             <a routerLink="/jobs" routerLinkActive="active" title="Anúncios" data-bs-toggle="dropdown"
                                 aria-haspopup="true">
-                                <i [class]="'header-icon'" [ngClass]="activeRoute === 'jobs' ||
-                                    activeRoute === 'jobs/myjobs' ||
-                                    activeRoute === 'jobs/create' ?
+                                <i [class]="'header-icon'" [ngClass]="activeRoute.includes('jobs') ?
                                     'bi bi-grid-3x2-gap-fill' :
                                     'bi bi-grid-3x2-gap'">
                                 </i>
