@@ -158,13 +158,13 @@ class JobAdRepository {
 
     async getTotalJobs(): Promise<number> {
         try {
-          const querySnapshot = await db.collection('JobAdvertisement').get();
-          return querySnapshot.size;
+            const querySnapshot = await db.collection('JobAdvertisement').get();
+            return querySnapshot.size;
         } catch (error) {
-          console.error('Error retrieving total jobs:', error);
-          throw new Error('Failed to retrieve total jobs');
+            console.error('Error retrieving total jobs:', error);
+            throw new Error('Failed to retrieve total jobs');
         }
-      }
+    }
 
     // Função para obter a próxima página de documentos
     async getNextPage(ITEMS_PER_PAGE: number, lastDocument?: admin.firestore.QueryDocumentSnapshot): Promise<admin.firestore.QuerySnapshot> {
@@ -175,6 +175,38 @@ class JobAdRepository {
         const snapshot = await query.get();
         return snapshot;
     }
+
+    // Função para obter o total de serviços por trabalhador
+    async getTotalJobsByWorker(workerId: string): Promise<number> {
+        try {
+            const querySnapshot = await db
+                .collection('JobAdvertisement')
+                .where('worker.id', '==', workerId)
+                .get();
+
+            return querySnapshot.size;
+        } catch (error) {
+            console.error('Error retrieving total jobs by worker:', error);
+            throw new Error('Failed to retrieve total jobs by worker');
+        }
+    }
+
+    // Função para obter a próxima página de documentos por trabalhador
+    async getNextPageByWorker(workerId: string, ITEMS_PER_PAGE: number, lastDocument?: admin.firestore.QueryDocumentSnapshot): Promise<admin.firestore.QuerySnapshot> {
+        let query = db
+            .collection('JobAdvertisement')
+            .where('worker.id', '==', workerId)
+            .orderBy('created')
+            .limit(ITEMS_PER_PAGE);
+
+        if (lastDocument) {
+            query = query.startAfter(lastDocument);
+        }
+
+        const snapshot = await query.get();
+        return snapshot;
+    }
+
 
     async getJobById(jobId: string): Promise<any> {
         try {

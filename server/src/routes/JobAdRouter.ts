@@ -135,6 +135,57 @@ jobAdRouter.get('/job/get', async (req, res) => {
     }
 });
 
+
+jobAdRouter.get('/job/getByWorkerId', async (req, res) => {
+    const page = parseInt(req.query.page as string) || 1;
+    const ITEMS_PER_PAGE = parseInt(req.query.limit as string) || 10;
+    const workerId = req.query.workerId?.toString() || "";
+
+    try {
+        let lastDocument = undefined;
+
+        if (page > 1) {
+            const previousPageSnapshot = await jobAdRepository.getNextPageByWorker(
+                workerId,
+                ITEMS_PER_PAGE,
+                lastDocument
+            );
+            const previousDocuments = previousPageSnapshot.docs;
+            const totalDocuments = previousDocuments.length;
+
+            if (totalDocuments >= ITEMS_PER_PAGE) {
+                lastDocument = previousDocuments[totalDocuments - 1];
+            }
+        }
+
+        const totalJobsSnapshot = await jobAdRepository.getTotalJobsByWorker(workerId);
+        const currentPageSnapshot = await jobAdRepository.getNextPageByWorker(
+            workerId,
+            ITEMS_PER_PAGE,
+            lastDocument
+        );
+
+        const jobs = currentPageSnapshot.docs.map((doc) => {
+            const data = doc.data();
+            return { ...data, uid: doc.id };
+        });
+
+        const total = totalJobsSnapshot;
+
+        const response = {
+            jobs,
+            total,
+            currentPage: page,
+        };
+
+        res.status(200).json(response);
+    } catch (error) {
+        console.error('Error retrieving job advertisements:', error);
+        res.status(500).json({ error: 'Failed to retrieve job advertisements' });
+    }
+});
+
+
 jobAdRouter.delete('/job/delete', async (req, res) => {
     const jobId = req.query.id as string;
 

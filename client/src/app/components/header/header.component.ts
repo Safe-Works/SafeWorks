@@ -24,8 +24,13 @@ export class HeaderComponent implements OnInit {
             .subscribe((event: NavigationEnd) => {
                 const tree = this.router.parseUrl(event.url);
                 const urlSegments = tree.root.children['primary'].segments;
-                if (urlSegments[0].path.length > 0) {
-                    this.changeRoute(urlSegments[0].path);
+                let route = '';
+                for (const segment of urlSegments) {
+                    route += segment.path + '/';
+                }
+                if (route.length > 0) {
+                    route = route.slice(0, -1);
+                    this.changeRoute(route);
                 } else {
                     this.changeRoute('home');
                 }
@@ -43,7 +48,7 @@ export class HeaderComponent implements OnInit {
     }
     dropdownStyle = {
         'right.px': -10
-      };
+    };
     async logout() {
         this.userAuth.clearUser();
         await this.router.navigateByUrl('/login');
