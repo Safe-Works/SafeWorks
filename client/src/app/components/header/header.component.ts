@@ -1,20 +1,20 @@
 import { Component, OnInit } from '@angular/core';
 import { UserAuth } from '../../auth/User.Auth';
-import { Router, NavigationEnd  } from '@angular/router';
+import { Router, NavigationEnd } from '@angular/router';
 import { filter } from 'rxjs/operators';
 import { ModalService } from '../search-modal/search-modal.service';
 
 @Component({
-  selector: 'app-header',
-  templateUrl: './header.component.html',
-  styleUrls: ['./header.component.css']
+    selector: 'app-header',
+    templateUrl: './header.component.html',
+    styleUrls: ['./header.component.css']
 })
 
 export class HeaderComponent implements OnInit {
 
     activeRoute: string = 'home';
-
-    constructor(public userAuth: UserAuth, private router: Router, private modalService: ModalService) {}
+    isDropdownOpen: boolean = false;
+    constructor(public userAuth: UserAuth, private router: Router, private modalService: ModalService) { }
 
     ngOnInit(): void {
         this.userAuth.authUserFromToken();
@@ -31,11 +31,19 @@ export class HeaderComponent implements OnInit {
                 }
             });
     }
+    openDropdown() {
+        this.isDropdownOpen = true;
+    }
 
+    closeDropdown() {
+        this.isDropdownOpen = false;
+    }
     changeRoute(routeName: string): void {
         this.activeRoute = routeName;
     }
-
+    dropdownStyle = {
+        'right.px': -10
+      };
     async logout() {
         this.userAuth.clearUser();
         await this.router.navigateByUrl('/login');

@@ -29,6 +29,7 @@ import { SearchModalComponent } from './components/search-modal/search-modal.com
 import { ViewPostComponent } from './components/posts/view-post/view-post.component';
 import { MatPaginatorIntl, MatPaginatorModule } from '@angular/material/paginator';
 import { MatPaginatorIntlPtBr } from './utils/paginator-ptbr-i8n';
+import { BsDropdownModule } from 'ngx-bootstrap/dropdown';
 
 @NgModule({
   declarations: [
@@ -62,7 +63,8 @@ import { MatPaginatorIntlPtBr } from './utils/paginator-ptbr-i8n';
     MatIconModule,
     MatButtonModule,
     MatCardModule,
-    MatPaginatorModule
+    MatPaginatorModule,
+    BsDropdownModule
   ],
   providers: [
     UserService,
