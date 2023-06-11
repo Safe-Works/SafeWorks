@@ -7,7 +7,7 @@ import { AuthGuard } from './auth/Auth.Guard';
 import { ProfileComponent } from './components/profile/profile.component';
 import { ProfileEditComponent } from './components/profile/profile-edit/profile-edit.component';
 import { CreatePostComponent } from './components/posts/create-post/create-post.component';
-import { ViewPostComponent } from './components/posts/view-post/view-post.component';
+import { ViewPostsComponent } from './components/posts/view-posts/view-posts.component';
 
 const routes: Routes = [
   { path: '', component: IndexComponent },
@@ -16,7 +16,7 @@ const routes: Routes = [
   { path: 'profile', component: ProfileComponent, canActivate: [AuthGuard] },
   { path: 'profile/edit/:id', component: ProfileEditComponent, canActivate: [AuthGuard] },
   { path: 'jobs/create', component: CreatePostComponent, canActivate: [AuthGuard] },
-  { path: 'jobs', component: ViewPostComponent, canActivate: [AuthGuard] }
+  { path: 'jobs', component: ViewPostsComponent, canActivate: [AuthGuard] }
 ];
 
 @NgModule({

@@ -26,7 +26,7 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
 import { MatIconModule } from '@angular/material/icon';
 import { SearchModalComponent } from './components/search-modal/search-modal.component';
-import { ViewPostComponent } from './components/posts/view-post/view-post.component';
+import { ViewPostsComponent } from './components/posts/view-posts/view-posts.component';
 import { MatPaginatorIntl, MatPaginatorModule } from '@angular/material/paginator';
 import { MatPaginatorIntlPtBr } from './utils/paginator-ptbr-i8n';
 import { BsDropdownModule } from 'ngx-bootstrap/dropdown';
@@ -43,7 +43,7 @@ import { BsDropdownModule } from 'ngx-bootstrap/dropdown';
     FooterComponent,
     CreatePostComponent,
     SearchModalComponent,
-    ViewPostComponent
+    ViewPostsComponent
   ],
   imports: [
     BrowserModule,
