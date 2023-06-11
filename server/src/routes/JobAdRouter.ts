@@ -193,15 +193,15 @@ jobAdRouter.delete('/job/delete', async (req, res) => {
         // Verifica se o job existe antes de removê-lo
         const job = await jobAdRepository.getJobById(jobId);
         if (!job) {
-            return res.status(404).json({ error: 'Job not found' });
+            return res.status(404).json({ statusCode: 404, error: 'Job not found' });
         }
 
         await jobAdRepository.deleteJobById(jobId);
 
-        res.status(200).json({ message: 'Job deleted successfully' });
+        res.status(200).json({ statusCode: 200, message: 'Job deleted successfully' });
     } catch (error) {
         console.error('Error deleting job:', error);
-        res.status(500).json({ error: 'Failed to delete job' });
+        res.status(500).json({ statusCode: 500, error: 'Failed to delete job' });
     }
 });
 

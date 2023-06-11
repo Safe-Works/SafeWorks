@@ -15,7 +15,7 @@ export class AllPostsComponent implements OnInit {
   totalJobs: number = 0;
   currentPage: number = 1;
   pageSize: number = 10;
-  isLoading: boolean = false; // Inicia como true para exibir o loading inicialmente
+  isLoading: boolean = false;
 
   constructor(private jobService: JobService) { }
 
