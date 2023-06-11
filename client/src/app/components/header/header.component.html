@@ -27,11 +27,20 @@
                                     (click)="changeRoute('profile')"></i>
                             </a>
                         </li>
-                        <li class="nav-item" *ngIf="userAuth.currentUser">
-                            <a routerLink="/jobs" routerLinkActive="active" title="Serviços">
-                                <i [class]="'header-icon bi bi-grid-3x2-gap' + (activeRoute === 'jobs' ? '-fill' : '')"
-                                    (click)="changeRoute('jobs')"></i>
+                        <li class="nav-item dropdown" (mouseover)="openDropdown()" (mouseout)="closeDropdown()">
+                            <a routerLink="/jobs" routerLinkActive="active" title="Anúncios" data-bs-toggle="dropdown"
+                                aria-haspopup="true">
+                                <i
+                                    [class]="'header-icon bi bi-grid-3x2-gap' + (activeRoute === 'jobs' || 'myjobs' ? '-fill' : '')"></i>
                             </a>
+                            <div class="dropdown-menu" [class.show]="isDropdownOpen">
+                                <a class="dropdown-item" [class.active-sub]="activeRoute === 'jobs'"
+                                    routerLink="/jobs" (click)="changeRoute('jobs')">Anúncios
+                                    disponíveis</a>
+                                <a class="dropdown-item" [class.active-sub]="activeRoute === 'myjobs'"
+                                    routerLink="/myjobs" (click)="changeRoute('myjobs')">Meus
+                                    anúncios</a>
+                            </div>
                         </li>
                         <li class="nav-item" *ngIf="!userAuth.currentUser">
                             <a class="btn btn-outline header-btn" [routerLink]="'/login'" routerLinkActive="active"
