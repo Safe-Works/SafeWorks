@@ -34,11 +34,13 @@
                                     [class]="'header-icon bi bi-grid-3x2-gap' + (activeRoute === 'jobs' || 'myjobs' ? '-fill' : '')"></i>
                             </a>
                             <div class="dropdown-menu" [class.show]="isDropdownOpen">
-                                <a class="dropdown-item" [class.active-sub]="activeRoute === 'jobs'"
-                                    routerLink="/jobs" (click)="changeRoute('jobs')">Anúncios
+                                <a class="dropdown-item" [ngClass]="activeRoute === 'jobs' ? 'active-sub' : ''" routerLink="/jobs"
+                                    (click)="changeRoute('jobs')">Anúncios
                                     disponíveis</a>
-                                <a class="dropdown-item" [class.active-sub]="activeRoute === 'myjobs'"
-                                    routerLink="/myjobs" (click)="changeRoute('myjobs')">Meus
+                                <a class="dropdown-item" [ngClass]="activeRoute === 'jobs/create' ? 'active-sub' : ''" routerLink="/jobs/create"
+                                    (click)="changeRoute('jobs/create')">Publicar anúncio</a>
+                                <a class="dropdown-item" [ngClass]="activeRoute === 'jobs/myjobs' ? 'active-sub' : ''"
+                                    routerLink="jobs/myjobs" (click)="changeRoute('jobs/myjobs')">Meus
                                     anúncios</a>
                             </div>
                         </li>
