@@ -30,15 +30,19 @@
                         <li class="nav-item dropdown" (mouseover)="openDropdown()" (mouseout)="closeDropdown()">
                             <a routerLink="/jobs" routerLinkActive="active" title="Anúncios" data-bs-toggle="dropdown"
                                 aria-haspopup="true">
-                                <i
-                                    [class]="'header-icon bi bi-grid-3x2-gap' + (activeRoute === 'jobs' || 'myjobs' ? '-fill' : '')"></i>
+                                <i [class]="'header-icon'" [ngClass]="activeRoute === 'jobs' ||
+                                    activeRoute === 'jobs/myjobs' ||
+                                    activeRoute === 'jobs/create' ?
+                                    'bi bi-grid-3x2-gap-fill' :
+                                    'bi bi-grid-3x2-gap'">
+                                </i>
                             </a>
                             <div class="dropdown-menu" [class.show]="isDropdownOpen">
-                                <a class="dropdown-item" [ngClass]="activeRoute === 'jobs' ? 'active-sub' : ''" routerLink="/jobs"
-                                    (click)="changeRoute('jobs')">Anúncios
+                                <a class="dropdown-item" [ngClass]="activeRoute === 'jobs' ? 'active-sub' : ''"
+                                    routerLink="/jobs" (click)="changeRoute('jobs')">Anúncios
                                     disponíveis</a>
-                                <a class="dropdown-item" [ngClass]="activeRoute === 'jobs/create' ? 'active-sub' : ''" routerLink="/jobs/create"
-                                    (click)="changeRoute('jobs/create')">Publicar anúncio</a>
+                                <a class="dropdown-item" [ngClass]="activeRoute === 'jobs/create' ? 'active-sub' : ''"
+                                    routerLink="/jobs/create" (click)="changeRoute('jobs/create')">Publicar anúncio</a>
                                 <a class="dropdown-item" [ngClass]="activeRoute === 'jobs/myjobs' ? 'active-sub' : ''"
                                     routerLink="jobs/myjobs" (click)="changeRoute('jobs/myjobs')">Meus
                                     anúncios</a>

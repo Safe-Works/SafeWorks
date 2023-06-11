@@ -23,17 +23,19 @@ export class HeaderComponent implements OnInit {
             .pipe(filter((event): event is NavigationEnd => event instanceof NavigationEnd))
             .subscribe((event: NavigationEnd) => {
                 const tree = this.router.parseUrl(event.url);
-                const urlSegments = tree.root.children['primary'].segments;
+                const urlSegments = tree.root.children['primary']?.segments;
                 let route = '';
+                if (!urlSegments) {
+                    return this.changeRoute('home');
+                }
                 for (const segment of urlSegments) {
                     route += segment.path + '/';
                 }
                 if (route.length > 0) {
                     route = route.slice(0, -1);
                     this.changeRoute(route);
-                } else {
-                    this.changeRoute('home');
                 }
+                
             });
     }
     openDropdown() {
