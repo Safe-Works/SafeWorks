@@ -195,7 +195,7 @@ class JobAdRepository {
             const querySnapshot = await db
                 .collection('JobAdvertisement')
                 .where('worker.id', '==', workerId)
-                .where('deleted', 'in', [false, undefined])
+                .where('deleted', '==', false)
                 .get();
 
             return querySnapshot.size;
@@ -212,6 +212,9 @@ class JobAdRepository {
             .where('worker.id', '==', workerId)
             .orderBy('created')
             .limit(ITEMS_PER_PAGE);
+
+        query = query.where('deleted', '==', false);
+
 
         if (lastDocument) {
             query = query.startAfter(lastDocument);
