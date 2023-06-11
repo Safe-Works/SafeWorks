@@ -4,11 +4,11 @@ import JobAdvertisement from 'src/app/models/job-advertisement.model';
 import { JobService } from 'src/app/services/job.service';
 
 @Component({
-  selector: 'app-view-posts',
-  templateUrl: './view-posts.component.html',
-  styleUrls: ['./view-posts.component.css']
+  selector: 'app-all-posts',
+  templateUrl: './all-posts.component.html',
+  styleUrls: ['./all-posts.component.css']
 })
-export class ViewPostsComponent implements OnInit {
+export class AllPostsComponent implements OnInit {
   @ViewChild(MatPaginator) paginator!: MatPaginator;
 
   jobs: JobAdvertisement[] = [];
