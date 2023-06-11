@@ -33,6 +33,8 @@ import { BsDropdownModule } from 'ngx-bootstrap/dropdown';
 import { MyPostsComponent } from './components/posts/my-posts/my-posts.component';
 import { EditPostComponent } from './components/posts/edit-post/edit-post.component';
 import { ViewPostComponent } from './components/posts/view-post/view-post.component';
+import { MatMenuModule } from '@angular/material/menu';
+import { SweetAlert2Module } from '@sweetalert2/ngx-sweetalert2';
 
 @NgModule({
   declarations: [
@@ -70,7 +72,9 @@ import { ViewPostComponent } from './components/posts/view-post/view-post.compon
     MatButtonModule,
     MatCardModule,
     MatPaginatorModule,
-    BsDropdownModule
+    BsDropdownModule,
+    MatMenuModule,
+    SweetAlert2Module.forRoot()
   ],
   providers: [
     UserService,

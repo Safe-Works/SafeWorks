@@ -7,12 +7,15 @@ import { format } from "date-fns";
 import * as uuid from 'uuid';
 import * as admin from 'firebase-admin';
 const FieldValue = admin.firestore.FieldValue;
-class JobAdRepository {
+const firestoreSettings = {
+    ignoreUndefinedProperties: true
+};
 
+class JobAdRepository {
     constructor() {
         initializeApp(firebaseConfig);
+        db.settings(firestoreSettings);
     }
-
     async add(job: JobAdvertisement, photos: any): Promise<string> {
         try {
             const created = format(new Date(), "dd/MM/yyyy HH:mm:ss");
@@ -21,6 +24,7 @@ class JobAdRepository {
                 ...job,
                 created: created,
                 expired: false,
+                deleted: false
             };
 
             const docRef = await db.collection("JobAdvertisement").add(newJob);
@@ -83,7 +87,7 @@ class JobAdRepository {
 
     async uploadJobPhoto(filePath: string, contentType: string, jobUid: string): Promise<string> {
         const storage = firebaseAdmin.storage().bucket();
-        const uniqueId = uuid.v4(); // Gerar um identificador único
+        const uniqueId = uuid.v4();
         const fileName = `${jobUid}_${uniqueId}_JobAd_photo`;
         const modified = format(new Date(), "dd/MM/yyyy HH:mm:ss");
 
@@ -158,7 +162,10 @@ class JobAdRepository {
 
     async getTotalJobs(): Promise<number> {
         try {
-            const querySnapshot = await db.collection('JobAdvertisement').get();
+            const querySnapshot = await db.collection('JobAdvertisement')
+                .where('deleted', '==', false)
+                .get();
+
             return querySnapshot.size;
         } catch (error) {
             console.error('Error retrieving total jobs:', error);
@@ -169,12 +176,18 @@ class JobAdRepository {
     // Função para obter a próxima página de documentos
     async getNextPage(ITEMS_PER_PAGE: number, lastDocument?: admin.firestore.QueryDocumentSnapshot): Promise<admin.firestore.QuerySnapshot> {
         let query = db.collection('JobAdvertisement').orderBy('created').limit(ITEMS_PER_PAGE);
+
+        query = query.where('deleted', '==', false);
+
         if (lastDocument) {
             query = query.startAfter(lastDocument);
         }
+
         const snapshot = await query.get();
         return snapshot;
     }
+
+
 
     // Função para obter o total de serviços por trabalhador
     async getTotalJobsByWorker(workerId: string): Promise<number> {
@@ -182,6 +195,7 @@ class JobAdRepository {
             const querySnapshot = await db
                 .collection('JobAdvertisement')
                 .where('worker.id', '==', workerId)
+                .where('deleted', 'in', [false, undefined])
                 .get();
 
             return querySnapshot.size;
@@ -207,7 +221,6 @@ class JobAdRepository {
         return snapshot;
     }
 
-
     async getJobById(jobId: string): Promise<any> {
         try {
             const docRef = db.collection('JobAdvertisement').doc(jobId);
@@ -215,9 +228,13 @@ class JobAdRepository {
 
             if (docSnapshot.exists) {
                 const jobData = docSnapshot.data();
-                // Adiciona o campo uid ao objeto jobData
-                const jobWithUid = { ...jobData, uid: docSnapshot.id };
-                return jobWithUid;
+                if (jobData?.deleted) {
+                    return null;
+                } else {
+                    // Adiciona o campo uid ao objeto jobData
+                    const jobWithUid = { ...jobData, uid: docSnapshot.id };
+                    return jobWithUid;
+                }
             } else {
                 return null;
             }
@@ -227,11 +244,15 @@ class JobAdRepository {
         }
     }
 
-
     async deleteJobById(jobId: string): Promise<void> {
         try {
             const jobRef = db.collection('JobAdvertisement').doc(jobId);
-            await jobRef.delete();
+            const modified = format(new Date(), "dd/MM/yyyy HH:mm:ss");
+
+            await jobRef.update({
+                deleted: true,
+                deletedAt: modified
+            });
         } catch (error) {
             console.error('Error deleting job:', error);
             throw error;

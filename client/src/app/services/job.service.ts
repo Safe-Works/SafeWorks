@@ -59,4 +59,28 @@ export class JobService {
         )
     };
 
+    public GetJobsByWorkerId(page: number, limit: number, worker_id: string): Observable<any> {
+        return this.http.get<string>(this.api + '/getByWorkerId?page=' + page + '&limit=' + limit + '&workerId=' + worker_id).pipe(
+            tap((response: any) => {
+                return response;
+            }),
+            catchError((error) => {
+                console.error(error);
+                return error;
+            })
+        )
+    };
+
+    public DeleteById(id: string): Observable<any> {
+        return this.http.delete<string>(this.api + '/delete?id=' + id).pipe(
+            tap((response: any) => {
+                return response;
+            }),
+            catchError((error) => {
+                console.error(error);
+                return error;
+            })
+        )
+    };
+
 }
