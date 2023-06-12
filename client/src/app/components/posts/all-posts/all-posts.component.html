@@ -19,8 +19,8 @@
                     </div>
                     <mat-card-content>
                         <mat-card-title>{{ job.title }}</mat-card-title>
-                        <p class="card-price" style="color: rgb(32, 238, 32)">R${{ job.price }} / {{ job.price_type.name
-                            }}</p>
+                        <p class="card-price" style="color: rgb(32, 238, 32)">{{ job.price |
+                            currency:'BRL' }} / {{ job.price_type.name }}</p>
                         <p class="card-category">{{ job.category.name }}</p>
                         <p class="card-district">{{ job.district.name }}</p>
                     </mat-card-content>

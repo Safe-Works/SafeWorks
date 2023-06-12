@@ -83,7 +83,47 @@ class JobAdRepository {
         }
     }
 
-
+    async update(job: JobAdvertisement, photos: any): Promise<string> {
+        try {
+          const modified = format(new Date(), "dd/MM/yyyy HH:mm:ss");
+          const { uid } = job;
+      
+          const updatedJob = {
+            ...job,
+            modified: modified,
+          };
+          const mediaUrls = job.media?.split(',').map((url: any) => url.trim());
+          updatedJob.media = mediaUrls;
+         
+          await db.collection("JobAdvertisement").doc(uid).update(updatedJob);
+      
+          if (!photos || photos.length === 0) {
+            return uid;
+          }
+      
+          for (let i = 0; i < photos.length; i++) {
+            const photo = photos[i];
+            const filePath = photo.path;
+            const contentType = photo.mimetype;
+      
+            try {
+              const downloadUrl = await this.uploadJobPhoto(filePath ?? "", contentType ?? "", uid ?? "");
+              updatedJob.media?.push(downloadUrl);
+            } catch (error) {
+              console.error('Error uploading image: ', error);
+              throw error;
+            }
+          }
+      
+          await db.collection("JobAdvertisement").doc(uid).update({ media: updatedJob.media });
+      
+          return uid;
+        } catch (error) {
+          console.error("Error updating job advertisement in Firestore: ", error);
+          throw error;
+        }
+      }
+      
 
     async uploadJobPhoto(filePath: string, contentType: string, jobUid: string): Promise<string> {
         const storage = firebaseAdmin.storage().bucket();

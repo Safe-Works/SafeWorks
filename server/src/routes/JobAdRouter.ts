@@ -125,13 +125,13 @@ jobAdRouter.get('/job/get', async (req, res) => {
         const job = await jobAdRepository.getJobById(jobId);
 
         if (job) {
-            res.status(200).json(job);
+            res.status(200).json({ statusCode: 200, job: job });
         } else {
-            res.status(404).json({ error: 'Job not found' });
+            res.status(404).json({ statusCode: 404, error: 'Job not found' });
         }
     } catch (error) {
         console.error('Error retrieving job:', error);
-        res.status(500).json({ error: 'Failed to retrieve job' });
+        res.status(500).json({ statusCode: 500, error: 'Failed to retrieve job' });
     }
 });
 
@@ -205,5 +205,49 @@ jobAdRouter.delete('/job/delete', async (req, res) => {
     }
 });
 
+jobAdRouter.put('/job', upload.array('photos'),
+    celebrate({
+        [Segments.BODY]: Joi.object({
+            worker:
+                Joi.object({
+                    name: Joi.string().max(50).required(),
+                    id: Joi.string().max(28).required(),
+                }).required(),
+            title: Joi.string().max(50).required(),
+            description: Joi.string().max(400).required(),
+            category:
+                Joi.object({
+                    name: Joi.string().max(30).required(),
+                    id: Joi.number().required(),
+                }).required(),
+            district:
+                Joi.object({
+                    name: Joi.string().max(30).required(),
+                    id: Joi.number().required(),
+                }).required(),
+            price: Joi.number().required(),
+            price_type:
+                Joi.object({
+                    name: Joi.string().max(30).required(),
+                    id: Joi.number().required(),
+                }).required(),
+            uid: Joi.any(),
+            media: Joi.any(),
+            displacement_fee: Joi.any(),
+            delivery_time: Joi.any()
+        }),
+    }),
+    async (req, res) => {
+        try {
+            const job: JobAdvertisement = req.body;
+            const photos = req.files;
+
+            const uid = await jobAdRepository.update(job, photos);
+            res.status(200).json({ statusCode: 200, uid: uid });
+        } catch (error) {
+            console.error("Error updating job advertisement: ", error);
+            return res.status(500).json({ statusCode: 500, error: "Failed to update job advertisement" });
+        }
+    });
 
 export default jobAdRouter;
