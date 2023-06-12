@@ -24,13 +24,14 @@ class PortfolioRepository {
                 years_experience: portfolio.years_experience,
             };
 
-            await db.collection("Users")
+            const portfolioDocRef = db.collection("Users")
                 .doc(UserUid)
                 .collection("Worker")
-                .doc("Portfolio")
-                .set(newPortfolio);
+                .doc("Portfolios");
 
-            callback(null, UserUid);
+            await portfolioDocRef.update({
+                portfolios: firestore.FieldValue.arrayUnion(newPortfolio)
+            });
         } catch (error) {
             console.error("Error adding Portfolio to Firestore: ", error);
             callback(error);
@@ -86,6 +87,9 @@ class PortfolioRepository {
                 console.error("Error deleting portfolio from Firestore. ", error);
                 callback(error);
             });
+        // testar portfolios: firestore.FieldValue.delete()
+
+
     }
 
 

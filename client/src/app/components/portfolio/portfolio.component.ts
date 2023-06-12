@@ -1,18 +1,25 @@
 import {HttpClient} from '@angular/common/http';
 import {Component, OnInit} from '@angular/core';
 import {Router} from '@angular/router';
-import Portfolio from '../../../../../server/src/models/Portfolio';
 import {UserAuth} from "../../auth/User.Auth";
-
 
 @Component({
     selector: 'app-portfolio',
     templateUrl: './portfolio.component.html',
     styleUrls: ['./portfolio.component.css']
 })
-export class PortfolioComponent implements OnInit {
+export class PortfolioComponent {
+
     description: string = '';
+    certificationDescription: string = '';
+    certificationTitle: string = '';
+    issueOrganization: string = '';
+    issueDate: string = '';
+    certificationUrl: string = '';
+    yearsExperience: number = 0;
     portfolios: any[] = [];
+    userUid: string = '';
+
 
     constructor(
         private http: HttpClient,
@@ -20,15 +27,18 @@ export class PortfolioComponent implements OnInit {
         private userAuth: UserAuth) {
     }
 
-    ngOnInit(): void {
-    }
-
     adicionarPortfolio() {
-        const description = this.description;
-
         const body = {
-            description: description,
-            userUid: this.userAuth.currentUser?.uid ?? ""
+            userUid: this.userAuth.currentUser?.uid ?? '',
+            description: this.description,
+            certifications: [{
+                title: this.certificationTitle,
+                description: this.certificationDescription,
+                issue_organization: this.issueOrganization,
+                issue_date: this.issueDate,
+                certification_url: this.certificationUrl
+            }],
+            years_experience: this.yearsExperience
         };
 
         this.http.post<any>('http://localhost:3001/portfolio', body).subscribe(
@@ -42,14 +52,13 @@ export class PortfolioComponent implements OnInit {
     }
 
     ListarPortfolio(): void {
-        const body = {
-            uid: this.userAuth.currentUser?.uid ?? ""
-        };
+        const userUid = this.userAuth.currentUser?.uid ?? '';
 
-        this.http.get<any[]>('http://localhost:3001/portfolio/{uid}').subscribe(
+
+        this.http.get<any[]>('http://localhost:3001/portfolio/' + userUid).subscribe(
             portfolios => {
                 this.portfolios = portfolios.map(portfolio => {
-                    return { ...portfolio};
+                    return {...portfolio};
                 });
             },
             error => {
@@ -57,16 +66,4 @@ export class PortfolioComponent implements OnInit {
             }
         );
     }
-
-
-    editarPortfolio(portfolio: Portfolio) {
-        if (portfolio && portfolio.uid) {
-            this.router.navigate(['/portfolio/edit', portfolio.uid]);
-        } else {
-            console.error('Portfolio UID is undefined or empty.');
-        }
-    }
-
-
-
 }

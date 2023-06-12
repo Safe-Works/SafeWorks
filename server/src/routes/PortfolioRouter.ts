@@ -48,7 +48,7 @@ portfolioRouter.get('/portfolio/:userUid', (req, res) => {
             console.error("Error getting portfolio from repository. ", error);
             res.status(500).send();
         } else {
-            res.status(200).json(portfolio);
+            res.status(200).json([portfolio]);
         }
     });
 });

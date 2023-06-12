@@ -1,23 +1,82 @@
-<p>portfolio works!</p>
+<div class="container">
+    <div class="container">
+        <div class="text-center">
+            <h2>Adicionar Portfolio</h2>
 
-<div class="form-container">
-    <textarea [(ngModel)]="description" placeholder="Digite a descrição do portfólio"></textarea>
-    <button class="confirm-button" (click)="adicionarPortfolio()">Confirmar</button>
+            <div class="row justify-content-center">
+                <div class="col-lg-6">
+                    <form>
+                        <div class="mb-3">
+                            <label for="description" class="form-label">Descrição:</label>
+                            <textarea id="description" class="form-control" [(ngModel)]="description"></textarea>
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="certificationTitle" class="form-label">Título da Certificação:</label>
+                            <input type="text" id="certificationTitle" class="form-control" [(ngModel)]="certificationTitle">
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="certificationDescription" class="form-label">Descrição da Certificação:</label>
+                            <textarea id="certificationDescription" class="form-control" [(ngModel)]="certificationDescription"></textarea>
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="issueOrganization" class="form-label">Organização Emissora:</label>
+                            <input type="text" id="issueOrganization" class="form-control" [(ngModel)]="issueOrganization">
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="issueDate" class="form-label">Data de Emissão:</label>
+                            <input type="date" id="issueDate" class="form-control" [(ngModel)]="issueDate">
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="certificationURL" class="form-label">URL da Certificação:</label>
+                            <input type="text" id="certificationURL" class="form-control" [(ngModel)]="certificationUrl">
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="yearsExperience" class="form-label">Anos de experiência:</label>
+                            <input type="number" id="yearsExperience" class="form-control" [(ngModel)]="yearsExperience">
+                        </div>
+
+                        <button class="btn btn-primary" (click)="adicionarPortfolio()">Adicionar</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <!-- Restante do código HTML para listar os portfolios -->
+    </div>
+
+
+    <h2 class="text-center">List of Portfolios</h2>
+    <button class="btn btn-primary" (click)="ListarPortfolio()">Listar Portfolios</button>
+
+    <div class="row justify-content-center">
+        <div class="col-lg-4 col-md-6 col-sm-12 mb-4" *ngFor="let portfolio of portfolios">
+            <div class="card">
+                <div class="card-header">
+                    <h3 class="text-center">Criado em {{ portfolio.created }}</h3>
+                </div>
+                <div class="card-body">
+                    <p>Descrição: {{ portfolio.description }}</p>
+                    <ul>
+                        <li *ngFor="let certification of portfolio.certifications">
+                            <h4>{{ certification.title }}</h4>
+                            <p>{{ certification.description }}</p>
+                            <p>Organização emissora: {{ certification.issue_organization }}</p>
+                            <p>Data de emissão: {{ certification.issue_date }}</p>
+                            <p>URL da certificação: {{ certification.certification_url }}</p>
+                        </li>
+                    </ul>
+                    <p>Anos de experiência: {{ portfolio.years_experience }}</p>
+                </div>
+                <div class="card-footer">
+                    <button class="btn btn-primary" >Editar</button>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
-
-<h2>List of Portfolios</h2>
-<button class="confirm-button" (click)="ListarPortfolio()">Listar Portfolios</button>
-
-<ul>
-    <li *ngFor="let portfolio of portfolios">
-        <h3>Criado em {{ portfolio.created }}</h3>
-        <p>Descrição {{ portfolio.description }}</p>
-        <p>uid {{ portfolio.uid }}</p>
-        <button (click)="editarPortfolio(portfolio)">Editar</button>
-    </li>
-</ul>
-
-
-
-
-
