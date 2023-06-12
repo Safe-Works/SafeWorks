@@ -45,12 +45,15 @@ export class HeaderComponent implements OnInit {
     closeDropdown() {
         this.isDropdownOpen = false;
     }
+
     changeRoute(routeName: string): void {
         this.activeRoute = routeName;
     }
+
     dropdownStyle = {
         'right.px': -10
     };
+    
     async logout() {
         this.userAuth.clearUser();
         await this.router.navigateByUrl('/login');
