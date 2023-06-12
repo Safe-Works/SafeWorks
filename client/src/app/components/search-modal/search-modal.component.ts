@@ -56,14 +56,18 @@ export class SearchModalComponent {
 
   findJobAd() {
     const term = this.searchForm.get('searchTerm')?.value;
-    this.jobService.FindJobAd(term).subscribe(
-      (response) => {
-        this.jobs = response.jobs;
-        if (this.jobs.length === 0) {
-          alert("Não foi encontrado nenhum serviço.")
+    if (term.length >= 1) {
+      this.jobService.FindJobAd(term).subscribe(
+        (response) => {
+          this.jobs = response.jobs;
+          if (this.jobs.length === 0) {
+            alert("Não foi encontrado nenhum serviço.")
+          }
+          console.log(response);
         }
-        console.log(response);
-      }
-    );
+      );
+    } else {
+      alert("Para realizar uma pesquisa é necessário escrever um termo.")
+    }
   }
 }
