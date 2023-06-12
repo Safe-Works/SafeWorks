@@ -190,7 +190,7 @@ export class EditPostComponent {
       price,
       priceType,
       displacement_fee ?? 0,
-      '',
+      this.jobId,
       this.deliveryTimeFormControl.value ?? '',
       this.getLoadedPhotos()
     );
@@ -203,17 +203,18 @@ export class EditPostComponent {
       }
     }
 
-    this.jobService.CreateJobAd(filteredJobAd, photos).subscribe(
+    this.jobService.UpdateJobAd(filteredJobAd, photos).subscribe(
       (response) => {
-        if (response?.statusCode === 201) {
+        if (response?.statusCode === 200) {
           this.isLoading = false;
-          this.openSnackBar("Anúncio criado com sucesso!", "OK", "snackbar-success");
+          this.loadJobInfo();
+          this.openSnackBar("Anúncio editado com sucesso!", "OK", "snackbar-success");
         }
       },
       (error) => {
         this.isLoading = false;
         console.log(error);
-        this.openSnackBar("Ocorreu um erro ao anunciar o serviço!", "OK", "snackbar-error");
+        this.openSnackBar("Ocorreu um erro ao editar o serviço!", "OK", "snackbar-error");
       }
     );
   }
