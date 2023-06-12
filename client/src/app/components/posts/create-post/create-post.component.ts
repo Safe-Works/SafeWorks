@@ -33,7 +33,7 @@ export class CreatePostComponent {
   descriptionFormControl = new FormControl('', [Validators.required]);
   districtsFormControl = new FormControl('', [Validators.required]);
   deliveryTimeFormControl = new FormControl('', [Validators.required]);
-  isDisplacementFormControl = new FormControl('');
+  isDisplacementFormControl = new FormControl(false);
   displacementFeeFormControl = new FormControl('', [Validators.required]);
   constructor(private userAuth: UserAuth, private jobService: JobService, private _snackBar: MatSnackBar) {
     this.postFormControl = new FormGroup({
@@ -104,7 +104,7 @@ export class CreatePostComponent {
     ) {
       if (this.priceTypesFormControl.value?.toString() === '5')
         if (!this.deliveryTimeFormControl.valid) return false;
-      if (this.isDisplacementFormControl.value?.toString() === 'true')
+      if (this.isDisplacementFormControl.value === true)
         if (!this.displacementFeeFormControl.valid) return false;
       return true;
     }

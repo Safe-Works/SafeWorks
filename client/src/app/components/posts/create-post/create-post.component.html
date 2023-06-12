@@ -83,7 +83,7 @@
                             class="slide-toggle-icon">info</mat-icon>
                     </div>
                 </mat-slide-toggle>
-                <mat-form-field class="col-md-2" *ngIf="isDisplacementFormControl.value?.toString() === 'true'">
+                <mat-form-field class="col-md-2" *ngIf="isDisplacementFormControl.value === true">
                     <mat-label>Deslocamento por dia</mat-label>
                     <input matInput [formControl]="displacementFeeFormControl" placeholder="Valor por dia"
                         mask="separator.2" thousandSeparator="." decimalSeparator="," prefix="R$ ">
