@@ -28,7 +28,7 @@ export class PortfolioComponent implements OnInit {
 
         const body = {
             description: description,
-            uid: this.userAuth.currentUser?.uid ?? ""
+            userUid: this.userAuth.currentUser?.uid ?? ""
         };
 
         this.http.post<any>('http://localhost:3001/portfolio', body).subscribe(
@@ -42,11 +42,14 @@ export class PortfolioComponent implements OnInit {
     }
 
     ListarPortfolio(): void {
-        this.http.get<any[]>('http://localhost:3001/portfolio').subscribe(
+        const body = {
+            uid: this.userAuth.currentUser?.uid ?? ""
+        };
+
+        this.http.get<any[]>('http://localhost:3001/portfolio/{uid}').subscribe(
             portfolios => {
                 this.portfolios = portfolios.map(portfolio => {
-                    // Adicione a propriedade 'uid' ao objeto do portfólio
-                    return { ...portfolio, uid: portfolio._id };
+                    return { ...portfolio};
                 });
             },
             error => {
