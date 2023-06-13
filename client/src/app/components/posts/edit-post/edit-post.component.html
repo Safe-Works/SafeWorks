@@ -6,8 +6,8 @@
     <div class="row col-md-12" style="padding: 40px 5.6%;">
         <h1 style="font-size: 40px; font-weight: bold; color: #2d2d2d;">Editar anúncio</h1>
     </div>
-    <form [formGroup]="postFormControl" #formDir="ngForm" (ngSubmit)="createPost()">
-        <div class="card-body" style="margin-bottom: 40px">
+    <form [formGroup]="postFormControl" #formDir="ngForm" (ngSubmit)="editPost()">
+        <div class="card-body" style="margin-bottom: 40px" *ngIf="!isLoading && isOwnJobAd">
             <div class="row col-md-12" style="padding: 40px 5.6%; background-color: white; border: 1px solid #ced0d4;">
                 <mat-form-field class="col-md-6">
                     <mat-label>Título</mat-label>
@@ -69,8 +69,8 @@
                 </mat-form-field>
                 <mat-form-field class="col-md-12">
                     <mat-label>Descrição</mat-label>
-                    <textarea matInput [formControl]="descriptionFormControl"
-                        placeholder="Descreva o seu serviço..." maxlength="400"></textarea>
+                    <textarea matInput [formControl]="descriptionFormControl" placeholder="Descreva o seu serviço..."
+                        maxlength="400"></textarea>
                     <mat-error *ngIf="descriptionFormControl.invalid">
                         <strong>Obrigatório</strong>
                     </mat-error>
@@ -94,8 +94,8 @@
                 <div>
                     <h3>Selecione as melhores fotos do seu serviço!</h3>
                     <label class="custom-file-upload">
-                      <input type="file" (change)="onFileSelected($event)" multiple>
-                      <mat-icon>photo</mat-icon>
+                        <input type="file" (change)="onFileSelected($event)" multiple>
+                        <mat-icon>photo</mat-icon>
                     </label>
                     <div class="image-gallery">
                         <mat-card *ngFor="let photo of selectedPhotos">
@@ -107,7 +107,7 @@
                             </mat-card-actions>
                         </mat-card>
                     </div>
-                  </div>
+                </div>
             </div>
             <div class="row col-md-12 justify-content-end"
                 style="padding: 40px 5.6%; background-color: white; border: 1px solid #ced0d4; border-top: 0">
@@ -119,6 +119,10 @@
                     Cancelar
                 </a>
             </div>
+        </div>
+        <div class="permission-denied" style="margin-bottom: 40px; opacity: 0.5;" *ngIf="!isLoading && !isOwnJobAd">
+            <img src="../../../../assets/padlock.png" alt="Ícone de permissão negada">
+            <h1>Você não tem permissão para acessar esta página!</h1>
         </div>
     </form>
 </div>

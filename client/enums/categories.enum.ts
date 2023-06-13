@@ -9,5 +9,7 @@ export const categories = [
     { id: 8, name: 'Cozinheiro' },
     { id: 9, name: 'Fotógrafo' },
     { id: 10, name: 'Designer Gráfico' },
+    { id: 11, name: 'Professor' },
+    { id: 12, name: 'Programador' }
   ];
   

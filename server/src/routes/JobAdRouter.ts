@@ -233,15 +233,15 @@ jobAdRouter.put('/job', upload.array('photos'),
                 }).required(),
             uid: Joi.any(),
             media: Joi.any(),
-            displacement_fee: Joi.any(),
-            delivery_time: Joi.any()
+            displacement_fee: Joi.number(),
+            delivery_time: Joi.number()
         }),
     }),
     async (req, res) => {
         try {
             const job: JobAdvertisement = req.body;
             const photos = req.files;
-
+            console.log(job);
             const uid = await jobAdRepository.update(job, photos);
             res.status(200).json({ statusCode: 200, uid: uid });
         } catch (error) {
