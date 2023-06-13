@@ -25,7 +25,10 @@ export class JobService {
         formData.append('price', job.price.toString());
         formData.append('price_type[name]', job.price_type.name);
         formData.append('price_type[id]', job.price_type.id.toString());
-
+        if (job.displacement_fee)
+            formData.append('displacement_fee', job.displacement_fee.toString());
+        if (job.delivery_time)
+            formData.append('delivery_time', job.delivery_time.toString());
         if (photos) {
             photos = photos.filter((photo: any) => photo.file);
             for (let i = 0; i < photos.length; i++) {
@@ -53,6 +56,10 @@ export class JobService {
             formData.append('uid', job.uid);
         if (job.media)
             formData.append('media', job.media);
+        if (job.displacement_fee)
+            formData.append('displacement_fee', job.displacement_fee.toString());
+        if (job.delivery_time)
+            formData.append('delivery_time', job.delivery_time.toString());
         if (photos) {
             const photosFilter = photos.filter((photo: any) => photo.file);
             if (photosFilter.length > 0) {

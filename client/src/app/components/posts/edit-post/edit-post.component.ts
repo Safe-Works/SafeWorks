@@ -8,6 +8,7 @@ import { UserAuth } from '../../../auth/User.Auth';
 import { JobService } from 'src/app/services/job.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { ActivatedRoute } from '@angular/router';
+import { Router } from '@angular/router';
 
 interface Photo {
   url: string;
@@ -22,6 +23,7 @@ interface Photo {
 export class EditPostComponent {
   jobId = "";
   isLoading = false;
+  isOwnJobAd = false;
   postFormControl!: FormGroup;
   categories = categories;
   priceTypes = priceTypes;
@@ -36,7 +38,7 @@ export class EditPostComponent {
   deliveryTimeFormControl = new FormControl('', [Validators.required]);
   isDisplacementFormControl = new FormControl(false);
   displacementFeeFormControl = new FormControl('', [Validators.required]);
-  constructor(private userAuth: UserAuth, private jobService: JobService, private _snackBar: MatSnackBar, private route: ActivatedRoute) {
+  constructor(private userAuth: UserAuth, private router: Router, private jobService: JobService, private _snackBar: MatSnackBar, private route: ActivatedRoute) {
     this.postFormControl = new FormGroup({
       titleFormControl: this.titleFormControl,
       categoryFormControl: this.categoryFormControl,
@@ -52,11 +54,21 @@ export class EditPostComponent {
     this.jobId = this.route.snapshot.params['id'];
     this.loadJobInfo();
   }
+  verifyIsOwnJobAd(workerId: string) {
+    if (this.userAuth.currentUser?.uid == workerId) {
+      this.isOwnJobAd = true;
+      return true;
+    }
+    return false;
+  }
   loadJobInfo() {
     this.isLoading = true;
     this.jobService.GetById(this.jobId).subscribe(
       (response) => {
-        this.isLoading = false;
+        if (!this.verifyIsOwnJobAd(response.job.worker.id)){
+          this.isLoading = false;
+          return;
+        } 
         if (this.titleFormControl) {
           this.titleFormControl.setValue(response.job.title);
         }
@@ -154,7 +166,7 @@ export class EditPostComponent {
     ) {
       if (this.priceTypesFormControl.value?.toString() === '5')
         if (!this.deliveryTimeFormControl.valid) return false;
-      if (this.isDisplacementFormControl.value?.toString() === 'true')
+      if (this.isDisplacementFormControl.value === true)
         if (!this.displacementFeeFormControl.valid) return false;
       return true;
     }
@@ -166,7 +178,7 @@ export class EditPostComponent {
       .map((x: any) => x.url);
     return loadedUrls;
   }
-  createPost(): void {
+  editPost(): void {
     if (!this.isValidForm()) {
       this.openSnackBar("Preencha todos os campos corretamente!", "OK", "snackbar-error");
       return;
@@ -209,6 +221,7 @@ export class EditPostComponent {
           this.isLoading = false;
           this.loadJobInfo();
           this.openSnackBar("Anúncio editado com sucesso!", "OK", "snackbar-success");
+          this.router.navigate(['/jobs/myjobs']);
         }
       },
       (error) => {
