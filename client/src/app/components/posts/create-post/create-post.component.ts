@@ -22,7 +22,7 @@ interface Photo {
 export class CreatePostComponent {
   isLoading = false;
   postFormControl!: FormGroup;
-  categories = categories;
+  categories = categories.sort((a, b) => a.name.localeCompare(b.name));
   priceTypes = priceTypes;
   districts = districts;
   imageControl: FormControl = new FormControl();
