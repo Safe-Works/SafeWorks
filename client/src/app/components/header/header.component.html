@@ -1,7 +1,8 @@
 <header>
     <div class="navbar d-flex">
-
-        <img src="../../../assets/safeworks-logo.png" class="header-logo">
+        <a style="cursor: pointer" (click)="redirectToHomePage()">
+            <img src="../../../assets/safeworks-logo.png" class="header-logo">
+        </a>
 
         <div class="header-center d-flex align-items-center justify-content-center">
             <div class="search-bar ml-auto d-flex align-items-center" (click)="openModal()" data-bs-toggle="modal"

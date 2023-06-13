@@ -35,7 +35,7 @@ export class HeaderComponent implements OnInit {
                     route = route.slice(0, -1);
                     this.changeRoute(route);
                 }
-                
+
             });
     }
     openDropdown() {
@@ -50,10 +50,14 @@ export class HeaderComponent implements OnInit {
         this.activeRoute = routeName;
     }
 
+    redirectToHomePage() {
+        this.router.navigateByUrl('/');
+    }
+
     dropdownStyle = {
         'right.px': -10
     };
-    
+
     async logout() {
         this.userAuth.clearUser();
         await this.router.navigateByUrl('/login');

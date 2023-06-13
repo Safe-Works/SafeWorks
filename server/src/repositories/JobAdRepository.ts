@@ -3,6 +3,7 @@ import Worker from "../models/Worker";
 import { initializeApp } from "firebase/app";
 import { firebaseConfig } from "../../util/firebase";
 import { db, firebaseAdmin } from "../../util/admin";
+import { deleteField } from "firebase/firestore";
 import { format } from "date-fns";
 import * as uuid from 'uuid';
 import * as admin from 'firebase-admin';
@@ -85,45 +86,66 @@ class JobAdRepository {
 
     async update(job: JobAdvertisement, photos: any): Promise<string> {
         try {
-          const modified = format(new Date(), "dd/MM/yyyy HH:mm:ss");
-          const { uid } = job;
+            const { displacement_fee, delivery_time, uid } = job;
+
+            const existingJob = await db.collection("JobAdvertisement").doc(uid).get();
+            const existingJobData = existingJob.data();
       
-          const updatedJob = {
-            ...job,
-            modified: modified,
-          };
-          const mediaUrls = job.media?.split(',').map((url: any) => url.trim());
-          updatedJob.media = mediaUrls;
-         
-          await db.collection("JobAdvertisement").doc(uid).update(updatedJob);
-      
-          if (!photos || photos.length === 0) {
-            return uid;
-          }
-      
-          for (let i = 0; i < photos.length; i++) {
-            const photo = photos[i];
-            const filePath = photo.path;
-            const contentType = photo.mimetype;
-      
-            try {
-              const downloadUrl = await this.uploadJobPhoto(filePath ?? "", contentType ?? "", uid ?? "");
-              updatedJob.media?.push(downloadUrl);
-            } catch (error) {
-              console.error('Error uploading image: ', error);
-              throw error;
+            const modified = format(new Date(), "dd/MM/yyyy HH:mm:ss");
+
+            let updatedJob = {
+                ...job,
+                modified: modified,
+            };
+          
+            const mediaUrls = job.media?.split(',').map((url: any) => url.trim());
+            updatedJob.media = mediaUrls;
+
+          
+            await db.collection("JobAdvertisement").doc(uid).update(updatedJob);
+
+            if (existingJobData) {
+                if (!displacement_fee && 'displacement_fee' in existingJobData) {
+                    await db.collection("JobAdvertisement").doc(uid).update({
+                        displacement_fee: FieldValue.delete()
+                    });
+                }
+                if (!delivery_time && 'delivery_time' in existingJobData) {
+                    console.log('entrou');
+                    await db.collection("JobAdvertisement").doc(uid).update({
+                        delivery_time: FieldValue.delete()
+                    });
+                }
             }
-          }
-      
-          await db.collection("JobAdvertisement").doc(uid).update({ media: updatedJob.media });
-      
-          return uid;
+            
+            if (!photos || photos.length === 0) {
+                return uid;
+            }
+
+            for (let i = 0; i < photos.length; i++) {
+                const photo = photos[i];
+                const filePath = photo.path;
+                const contentType = photo.mimetype;
+
+                try {
+                    const downloadUrl = await this.uploadJobPhoto(filePath ?? "", contentType ?? "", uid ?? "");
+                    updatedJob.media?.push(downloadUrl);
+                } catch (error) {
+                    console.error('Error uploading image: ', error);
+                    throw error;
+                }
+            }
+
+            await db.collection("JobAdvertisement").doc(uid).update({ media: updatedJob.media });
+
+            return uid;
         } catch (error) {
-          console.error("Error updating job advertisement in Firestore: ", error);
-          throw error;
+            console.error("Error updating job advertisement in Firestore: ", error);
+            throw error;
         }
-      }
-      
+    }
+
+
 
     async uploadJobPhoto(filePath: string, contentType: string, jobUid: string): Promise<string> {
         const storage = firebaseAdmin.storage().bucket();

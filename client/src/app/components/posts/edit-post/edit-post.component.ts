@@ -184,15 +184,16 @@ export class EditPostComponent {
       return;
     }
     this.isLoading = true;
+    const isDisplacementFee = this.isDisplacementFormControl.value;
     const user = { name: this.userAuth.currentUser?.displayName, id: this.userAuth.currentUser?.uid };
     const price = parseFloat(this.priceFormControl.value ?? '');
-    const displacement_fee = parseFloat(this.displacementFeeFormControl.value ?? '');
+    const displacement_fee = isDisplacementFee ? parseFloat(this.displacementFeeFormControl.value ?? '') : null;
     const categoryId = this.categoryFormControl.value ?? '';
     const category = categories.find(cat => cat.id.toString() === categoryId.toString());
     const priceType = priceTypes.find(p => p.id.toString() === this.priceTypesFormControl.value?.toString());
+    const deliveryTime = priceType?.id === 5 ? this.deliveryTimeFormControl.value : null;
     const district = districts.find(d => d.id.toString() === this.districtsFormControl.value?.toString());
     const photos = this.imageControl.value;
-
     const jobAd = new JobAdvertisement(
       user,
       this.titleFormControl.value ?? '',
@@ -203,7 +204,7 @@ export class EditPostComponent {
       priceType,
       displacement_fee ?? 0,
       this.jobId,
-      this.deliveryTimeFormControl.value ?? '',
+      deliveryTime ?? '',
       this.getLoadedPhotos()
     );
 

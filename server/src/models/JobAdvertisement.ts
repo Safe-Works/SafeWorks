@@ -8,7 +8,7 @@ type JobAdvertisement = {
     price: number, // preço base de orçamento do serviço
     price_type: any, // medida de preço do serviço (m2, horas, etc)
     displacement_fee: number, // taxa de deslocamento
-    delivery_type: any, // tipo de entrega do serviço
+    delivery_time: any, // tempo de entrega, quando aplicável
     media?: any, // lista com url das midias do anuncio
     contracts?: Array<string>, // lista com os uids de contratos de um anuncio
     expired?: boolean,
