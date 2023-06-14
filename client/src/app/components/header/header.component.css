@@ -10,6 +10,24 @@
     color: var(--safeworks-yellow);
 }
 
+.navbar .nav-item {
+    position: relative;
+}
+
+.navbar .nav-item .dropdown-menu {
+    position: absolute;
+    right: 0;
+    transform: translateX(20%);
+}
+@media (max-width: 607px) {
+    .navbar .nav-item .dropdown-menu {
+        transform: translateX(60%);
+    }
+  }
+.active-sub {
+    color: var(--safeworks-yellow);
+}
+
 .header-logo {
     width: 2.5rem;
     height: 2.5rem;
@@ -67,4 +85,3 @@
     margin-left: 0.5rem;
     color: var(--gray-dark-text);
 }
- 

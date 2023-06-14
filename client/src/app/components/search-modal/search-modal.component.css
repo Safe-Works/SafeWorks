@@ -28,15 +28,46 @@
     margin-right: 1rem;
 }
 
+.job-header {
+    display: flex;
+}
+
+.job-media {
+    width: 5rem;
+    height: 5rem;
+    border-radius: 100%;
+    margin-left: 0.5rem;
+    margin-right: 0.5rem;
+    margin-top: 0.5rem;
+    margin-bottom: 0.5rem;
+}
+
 .job-title {
     font-weight: 500;
     font-size: 1.2rem;
     padding-top: 0.3rem;
     padding-left: 0.5rem;
     padding-right: 0.5rem;
+    padding-bottom: 0;
+    margin-bottom: 0;
+}
+
+.job-title:hover {
+    text-decoration: underline;
+    font-size: 1.25rem;
+    cursor: pointer;
 }
 
 .job-description {
+    padding-left: 0.5rem;
+    padding-top: 0;
+    padding-bottom: 0;
+    margin-top: 0;
+    margin-bottom: 0;
+}
+
+.job-price {
+    color: var(--green-price);
     padding-left: 0.5rem;
 }
 

@@ -26,6 +26,15 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
 import { MatIconModule } from '@angular/material/icon';
 import { SearchModalComponent } from './components/search-modal/search-modal.component';
+import { AllPostsComponent } from './components/posts/all-posts/all-posts.component';
+import { MatPaginatorIntl, MatPaginatorModule } from '@angular/material/paginator';
+import { MatPaginatorIntlPtBr } from './utils/paginator-ptbr-i8n';
+import { BsDropdownModule } from 'ngx-bootstrap/dropdown';
+import { MyPostsComponent } from './components/posts/my-posts/my-posts.component';
+import { EditPostComponent } from './components/posts/edit-post/edit-post.component';
+import { ViewPostComponent } from './components/posts/view-post/view-post.component';
+import { MatMenuModule } from '@angular/material/menu';
+import { SweetAlert2Module } from '@sweetalert2/ngx-sweetalert2';
 import { PortfolioComponent } from './components/portfolio/portfolio.component';
 import { EditPortfolioComponent } from './components/portfolio/edit-portfolio/edit-portfolio.component';
 
@@ -40,6 +49,11 @@ import { EditPortfolioComponent } from './components/portfolio/edit-portfolio/ed
     HeaderComponent,
     FooterComponent,
     CreatePostComponent,
+    SearchModalComponent,
+    AllPostsComponent,
+    MyPostsComponent,
+    EditPostComponent,
+    ViewPostComponent,
     SearchModalComponent,
     PortfolioComponent,
     EditPortfolioComponent
@@ -61,9 +75,16 @@ import { EditPortfolioComponent } from './components/portfolio/edit-portfolio/ed
     MatSlideToggleModule,
     MatIconModule,
     MatButtonModule,
-    MatCardModule
+    MatCardModule,
+    MatPaginatorModule,
+    BsDropdownModule,
+    MatMenuModule,
+    SweetAlert2Module.forRoot()
   ],
-  providers: [UserService],
+  providers: [
+    UserService,
+     { provide: MatPaginatorIntl, useClass: MatPaginatorIntlPtBr }
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
