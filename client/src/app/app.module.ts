@@ -26,6 +26,15 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
 import { MatIconModule } from '@angular/material/icon';
 import { SearchModalComponent } from './components/search-modal/search-modal.component';
+import { AllPostsComponent } from './components/posts/all-posts/all-posts.component';
+import { MatPaginatorIntl, MatPaginatorModule } from '@angular/material/paginator';
+import { MatPaginatorIntlPtBr } from './utils/paginator-ptbr-i8n';
+import { BsDropdownModule } from 'ngx-bootstrap/dropdown';
+import { MyPostsComponent } from './components/posts/my-posts/my-posts.component';
+import { EditPostComponent } from './components/posts/edit-post/edit-post.component';
+import { ViewPostComponent } from './components/posts/view-post/view-post.component';
+import { MatMenuModule } from '@angular/material/menu';
+import { SweetAlert2Module } from '@sweetalert2/ngx-sweetalert2';
 
 @NgModule({
   declarations: [
@@ -38,7 +47,11 @@ import { SearchModalComponent } from './components/search-modal/search-modal.com
     HeaderComponent,
     FooterComponent,
     CreatePostComponent,
-    SearchModalComponent
+    SearchModalComponent,
+    AllPostsComponent,
+    MyPostsComponent,
+    EditPostComponent,
+    ViewPostComponent
   ],
   imports: [
     BrowserModule,
@@ -57,9 +70,16 @@ import { SearchModalComponent } from './components/search-modal/search-modal.com
     MatSlideToggleModule,
     MatIconModule,
     MatButtonModule,
-    MatCardModule
+    MatCardModule,
+    MatPaginatorModule,
+    BsDropdownModule,
+    MatMenuModule,
+    SweetAlert2Module.forRoot()
   ],
-  providers: [UserService],
+  providers: [
+    UserService,
+     { provide: MatPaginatorIntl, useClass: MatPaginatorIntlPtBr }
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

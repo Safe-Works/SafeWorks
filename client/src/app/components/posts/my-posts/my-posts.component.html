@@ -1,0 +1,52 @@
+<div class="container container-body">
+    <div class="row col-md-12" style="padding: 40px 5.6%;">
+        <h1 style="font-size: 40px; font-weight: bold; color: #2d2d2d;">Meus anúncios</h1>
+    </div>
+    <div class="card-body" style="margin-bottom: 40px">
+        <div class="row col-md-12" style="padding: 40px 5.6%; background-color: white; border: 1px solid #ced0d4;">
+            <mat-paginator id="mat-paginator-top" [length]="totalJobs" [pageSize]="pageSize"
+                [pageSizeOptions]="[5, 10, 25, 50]" [pageIndex]="currentPage - 1" (page)="onPageChange($event)"
+                aria-label="Select page">
+            </mat-paginator>
+            <div class="card-list" fxLayout="row" fxLayout.xs="column" fxLayoutAlign="start start" fxLayoutGap="20px">
+                <div class="loading-spinner" style="position: relative;" *ngIf="isLoading">
+                    <mat-spinner [diameter]="85"></mat-spinner>
+                </div>
+                <mat-card *ngFor="let job of jobs" class="job-card" [id]="job.uid" [hidden]="isLoading">
+                    <button class="card-icon" mat-icon-button [matMenuTriggerFor]="menu" aria-label="Options"
+                        title="Ações">
+                        <mat-icon>more_vert</mat-icon>
+                    </button>
+                    <mat-menu #menu="matMenu">
+                        <button mat-menu-item (click)="editJob(job)">
+                            <mat-icon>edit</mat-icon>
+                            <span>Editar</span>
+                        </button>
+                        <button mat-menu-item (click)="deleteJob(job)">
+                            <mat-icon>delete</mat-icon>
+                            <span>Deletar</span>
+                        </button>
+                    </mat-menu>
+                    <div class="card-image"
+                        [ngStyle]="{'background-image': job.media && job.media.length > 0 ? 'url(' + job.media[0] + ')' : 'url(https://thenounproject.com/api/private/icons/3104878/edit/?backgroundShape=SQUARE&backgroundShapeColor=%23000000&backgroundShapeOpacity=0&exportSize=752&flipX=false&flipY=false&foregroundColor=%23000000&foregroundOpacity=1&imageFormat=png&rotation=0)'}">
+                    </div>
+                    <mat-card-content>
+                        <mat-card-title>{{ job.title }}</mat-card-title>
+                        <p class="card-price" style="color: rgb(32, 238, 32)">{{ job.price |
+                            currency:'BRL' }} / {{ job.price_type.name }}</p>
+                        <p class="card-category">{{ job.category.name }}</p>
+                        <p class="card-district">{{ job.district.name }}</p>
+                    </mat-card-content>
+
+                </mat-card>
+                <div *ngIf="!isLoading && jobs.length === 0" class="no-jobs-message">
+                    Nenhum serviço encontrado.
+                </div>
+            </div>
+            <mat-paginator id="mat-paginator-bottom" [length]="totalJobs" [pageSize]="pageSize"
+                [pageSizeOptions]="[5, 10, 25, 50]" [pageIndex]="currentPage - 1" (page)="onPageChange($event)"
+                aria-label="Select page">
+            </mat-paginator>
+        </div>
+    </div>
+</div>
