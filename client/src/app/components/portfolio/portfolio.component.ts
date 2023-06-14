@@ -110,10 +110,10 @@ export class PortfolioComponent implements OnInit, OnDestroy {
         );
     }
 
-    deleteCertification(title: string) {
+    deleteCertification(certification_url: string) {
         const userUid = this.userAuth.currentUser?.uid ?? '';
 
-        this.http.delete<any>('http://localhost:3001/portfolio/' + userUid + '/' + title).subscribe(
+        this.http.delete<any>('http://localhost:3001/portfolio/' + userUid + '/' + certification_url).subscribe(
             response => {
                 console.log(response);
                 this.getPortfolio(); // Atualiza os dados após a exclusão

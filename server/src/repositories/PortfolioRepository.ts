@@ -103,7 +103,7 @@ class PortfolioRepository {
             });
     }
 
-    delete(userUid: string, title: string, callback: any) {
+    delete(userUid: string, certification_url: string, callback: any) {
         const userRef = db.collection("Users").doc(userUid);
 
         userRef
@@ -122,7 +122,7 @@ class PortfolioRepository {
 
                 // Encontra o índice da certificação com base no título
                 const certificationIndex = certifications.findIndex(
-                    (certification: any) => certification.title === title
+                    (certification: any) => certification.certification_url === certification_url
                 );
 
                 if (certificationIndex === -1) {
