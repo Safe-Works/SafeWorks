@@ -87,10 +87,10 @@ export class PortfolioComponent {
         );
     }
 
-    deletePortfolio() {
+    deleteCertification(title : string) {
         const userUid = this.userAuth.currentUser?.uid ?? '';
 
-        this.http.delete<any>('http://localhost:3001/portfolio/' + userUid).subscribe(
+        this.http.delete<any>('http://localhost:3001/portfolio/' + userUid + "/" + title).subscribe(
             response => {
                 console.log(response);
             },

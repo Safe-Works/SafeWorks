@@ -32,6 +32,7 @@
                         <p>Issue Organization: {{ certification.issue_organization }}</p>
                         <p>Issue Date: {{ certification.issue_date }}</p>
                         <p>Certification URL: {{ certification.certification_url }}</p>
+                        <button class="btn btn-danger" (click)="deleteCertification(certification.title)">Delete</button>
                     </li>
                 </ul>
             </div>
@@ -74,10 +75,7 @@
                 <button type="submit" class="btn btn-primary">Update</button>
             </form>
 
-            <h2>Delete Portfolio</h2>
-            <form (submit)="deletePortfolio()">
-                <button type="submit" class="btn btn-danger">Delete</button>
-            </form>
+
         </div>
     </div>
 </div>

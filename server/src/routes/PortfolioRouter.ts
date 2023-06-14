@@ -44,10 +44,11 @@ portfolioRouter.get('/portfolio/:userUid', (req, res) => {
     });
 });
 
-portfolioRouter.delete('/portfolio/:userUid', (req, res) => {
+portfolioRouter.delete('/portfolio/:userUid/:title', (req, res) => {
     const userUid = req.params.userUid;
+    const title = req.params.title;
 
-    portfolioRepository.delete(userUid, (error: any) => {
+    portfolioRepository.delete(userUid, title, (error: any) => {
         if (error) {
             console.error("Error deleting portfolio from repository. ", error);
             res.status(500).send();
