@@ -1,81 +1,83 @@
 <div class="container">
-    <div class="row justify-content-center">
+    <div class="row">
         <div class="col-lg-6">
             <h1>Portfolio</h1>
 
-            <h2>Create Portfolio</h2>
-            <form (submit)="createPortfolio()">
-                <div class="form-group">
-                    <label for="description">Description:</label>
-                    <input type="text" class="form-control" id="description" name="description" [(ngModel)]="description" required>
-                </div>
+            <div>
+                <h2>Create Portfolio</h2>
+                <form (submit)="createPortfolio()">
+                    <div class="form-group">
+                        <label for="description">Description:</label>
+                        <input type="text" class="form-control" id="description" name="description" [(ngModel)]="description" required>
+                    </div>
 
-                <div class="form-group">
-                    <label for="years_experience">years experience:</label>
-                    <input type="text" class="form-control" id="years_experience" name="years_experience" [(ngModel)]="years_experience" required>
-                </div>
+                    <div class="form-group">
+                        <label for="years_experience">Years of Experience:</label>
+                        <input type="number" class="form-control" id="years_experience" name="years_experience" [(ngModel)]="years_experience" required>
+                    </div>
 
-                <button type="submit" class="btn btn-primary">Create</button>
-            </form>
+                    <button type="submit" class="btn btn-primary">Create</button>
+                </form>
+            </div>
 
+            <div>
+                <h2>Update Portfolio</h2>
+                <form (submit)="updatePortfolio()">
+                    <div class="form-group">
+                        <label for="title">Title:</label>
+                        <input type="text" class="form-control" name="title" id="title" [(ngModel)]="title" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="descriptionCertification">Description:</label>
+                        <input type="text" class="form-control" name="descriptionCertification" id="descriptionCertification" [(ngModel)]="descriptionCertification" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="issue_organization">Issue Organization:</label>
+                        <input type="text" class="form-control" name="issue_organization" id="issue_organization" [(ngModel)]="issue_organization" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="issue_date">Issue Date:</label>
+                        <input type="date" class="form-control" name="issue_date" id="issue_date" [(ngModel)]="issue_date" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="certification_url">Certification URL:</label>
+                        <input type="text" class="form-control" name="certification_url" id="certification_url" [(ngModel)]="certification_url" required>
+                    </div>
+
+                    <button type="submit" class="btn btn-primary">Update</button>
+                </form>
+            </div>
+        </div>
+        <div class="col-lg-6">
             <h2>Get Portfolio</h2>
-            <form (submit)="getPortfolio()">
-                <button type="submit" class="btn btn-primary">Get</button>
-            </form>
-
-            <div *ngIf="certifications">
-                <h3>Certifications:</h3>
-                <ul>
-                    <li *ngFor="let certification of certifications">
-                        <p>Title: {{ certification.title }}</p>
-                        <p>Description: {{ certification.description }}</p>
-                        <p>Issue Organization: {{ certification.issue_organization }}</p>
-                        <p>Issue Date: {{ certification.issue_date }}</p>
-                        <p>Certification URL: {{ certification.certification_url }}</p>
-                        <button class="btn btn-danger" (click)="deleteCertification(certification.title)">Delete</button>
-                    </li>
-                </ul>
-            </div>
-            <div *ngIf="portfolioData">
+            <button type="button" class="btn btn-primary" (click)="getPortfolio()">Get</button>
+            <div *ngIf="portfolio">
                 <h3>Portfolio Data:</h3>
-                <ul>
-                    <li *ngFor="let portfolioDatas of portfolioData">
-                        <p>Created: {{ portfolioDatas.created }}</p>
-                        <p>Description: {{ portfolioDatas.description }}</p>
-                        <p>Years of Experience: {{ portfolioDatas.years_experience }}</p>
-                    </li>
-                </ul>
+                <div *ngIf="portfolio && portfolio.length > 0">
+                    <ul>
+                        <li *ngFor="let portfolio of portfolio">
+                            <p> created: {{ portfolio.created }}</p>
+                            <p> description: {{ portfolio.description }}</p>
+                            <p> years_experience: {{ portfolio.years_experience }}</p>
+                        </li>
+                    </ul>
+                </div>
             </div>
-
-            <!-- Exibir as certificações -->
-
-            <h2>Update Portfolio</h2>
-            <form (submit)="updatePortfolio()">
-                <div class="form-group">
-                    <label for="title">title:</label>
-                    <input type="text" class="form-control" name= "title" id="title" [(ngModel)]="title" required>
+            <div *ngIf="certifications && certifications.length > 0">
+                <h2>Certifications:</h2>
+                <div class="card-deck">
+                    <div class="card" *ngFor="let certification of certifications">
+                        <div class="card-body">
+                            <h5 class="card-title">{{ certification.title }}</h5>
+                            <p class="card-text">{{ certification.description }}</p>
+                            <p class="card-text">{{ certification.issue_organization }}</p>
+                            <p class="card-text">{{ certification.issue_date }}</p>
+                            <p class="card-text">{{ certification.certification_url }}</p>
+                            <button class="btn btn-danger" (click)="deleteCertification(certification.title)">Delete</button>
+                        </div>
+                    </div>
                 </div>
-                <div class="form-group">
-                    <label for="descriptionCertification">descriptionCertification:</label>
-                    <input type="text" class="form-control" name= "descriptionCertification" id="descriptionCertification" [(ngModel)]="descriptionCertification" required>
-                </div>
-                <div class="form-group">
-                    <label for="issue_organization">issue_organization:</label>
-                    <input type="text" class="form-control" name= "issue_organization" id="issue_organization" [(ngModel)]="issue_organization" required>
-                </div>
-                <div class="form-group">
-                    <label for="issue_date">issue_date:</label>
-                    <input type="date" class="form-control" name= "issue_date" id="issue_date" [(ngModel)]="issue_date" required>
-                </div>
-                <div class="form-group">
-                    <label for="certification_url">certification_url:</label>
-                    <input type="text" class="form-control" name= "certification_url" id="certification_url" [(ngModel)]="certification_url" required>
-                </div>
-
-                <button type="submit" class="btn btn-primary">Update</button>
-            </form>
-
-
+            </div>
         </div>
     </div>
 </div>

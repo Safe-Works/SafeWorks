@@ -1,7 +1,7 @@
-import {HttpClient} from '@angular/common/http';
-import {Component, OnInit} from '@angular/core';
-import {Router} from '@angular/router';
-import {UserAuth} from "../../auth/User.Auth";
+import { HttpClient } from '@angular/common/http';
+import { Component } from '@angular/core';
+import { Router } from '@angular/router';
+import { UserAuth } from "../../auth/User.Auth";
 
 @Component({
     selector: 'app-portfolio',
@@ -12,25 +12,20 @@ export class PortfolioComponent {
 
     userUid: string = '';
     description: string = '';
-    certificationTitle: string = '';
-    issueOrganization: string = '';
-    issueDate: string = '';
-    updateDescription: string = '';
     years_experience: number = 0;
     title: string = '';
     descriptionCertification: string = '';
     issue_organization: string = '';
     issue_date: string = '';
     certification_url: string = '';
-    portfolioData: any = null;
+    portfolio: any = null;
     certifications: any[] = [];
-
 
     constructor(
         private http: HttpClient,
         private router: Router,
-        private userAuth: UserAuth) {
-    }
+        private userAuth: UserAuth
+    ) { }
 
     createPortfolio() {
         const userUid = this.userAuth.currentUser?.uid ?? '';
@@ -57,8 +52,8 @@ export class PortfolioComponent {
                 if (response && response.length > 0) {
                     const portfolio = response[0];
 
-                    this.portfolioData = portfolio.portfolioData;
-                    this.certifications = portfolio.certifications.certification;
+                    this.portfolio = [portfolio];
+                    this.certifications = portfolio.certifications;
                 }
             },
             error => {
@@ -66,6 +61,8 @@ export class PortfolioComponent {
             }
         );
     }
+
+
 
     updatePortfolio() {
         const userUid = this.userAuth.currentUser?.uid ?? '';
@@ -77,7 +74,7 @@ export class PortfolioComponent {
             certification_url: this.certification_url
         };
 
-        this.http.put<any>('http://localhost:3001/portfolio/' + userUid, body).subscribe(
+        this.http.put<any>('http://localhost:3001/portfolio/' + userUid + '/', body).subscribe(
             response => {
                 console.log(response);
             },
@@ -87,10 +84,10 @@ export class PortfolioComponent {
         );
     }
 
-    deleteCertification(title : string) {
+    deleteCertification(title: string) {
         const userUid = this.userAuth.currentUser?.uid ?? '';
 
-        this.http.delete<any>('http://localhost:3001/portfolio/' + userUid + "/" + title).subscribe(
+        this.http.delete<any>('http://localhost:3001/portfolio/' + userUid + '/' + title).subscribe(
             response => {
                 console.log(response);
             },
