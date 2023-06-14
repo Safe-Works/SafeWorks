@@ -145,8 +145,6 @@ class JobAdRepository {
         }
     }
 
-
-
     async uploadJobPhoto(filePath: string, contentType: string, jobUid: string): Promise<string> {
         const storage = firebaseAdmin.storage().bucket();
         const uniqueId = uuid.v4();
@@ -180,7 +178,6 @@ class JobAdRepository {
         }
     }
 
-
     async findByTerm(term: string): Promise<any[]> {
         try {
             const results: any[] = [];
@@ -196,18 +193,23 @@ class JobAdRepository {
                 .get();
 
             snapshotTitle.forEach(doc => {
-                results.push(doc.data());
+                console.log(doc.data().deleted)
+                if (doc.data().deleted == false) {
+                    results.push(doc.data());
+                }
             });
 
             snapshotCategory.forEach(doc => {
                 if (results.length != 0) {
                     results.forEach(docResults => {
-                        if (doc.data().uid != docResults) {
+                        if (doc.data().uid != docResults && doc.data().deleted == false) {
                             results.push(doc.data());
                         }
                     })
                 } else {
-                    results.push(doc.data());
+                    if (doc.data().deleted == false) {
+                        results.push(doc.data());
+                    }
                 }
             });
 
