@@ -10,15 +10,20 @@ import {UserAuth} from "../../auth/User.Auth";
 })
 export class PortfolioComponent {
 
+    userUid: string = '';
     description: string = '';
-    certificationDescription: string = '';
     certificationTitle: string = '';
     issueOrganization: string = '';
     issueDate: string = '';
-    certificationUrl: string = '';
-    yearsExperience: number = 0;
-    portfolios: any[] = [];
-    userUid: string = '';
+    updateDescription: string = '';
+    years_experience: number = 0;
+    title: string = '';
+    descriptionCertification: string = '';
+    issue_organization: string = '';
+    issue_date: string = '';
+    certification_url: string = '';
+    portfolioData: any = null;
+    certifications: any[] = [];
 
 
     constructor(
@@ -27,21 +32,14 @@ export class PortfolioComponent {
         private userAuth: UserAuth) {
     }
 
-    adicionarPortfolio() {
+    createPortfolio() {
+        const userUid = this.userAuth.currentUser?.uid ?? '';
         const body = {
-            userUid: this.userAuth.currentUser?.uid ?? '',
             description: this.description,
-            certifications: [{
-                title: this.certificationTitle,
-                description: this.certificationDescription,
-                issue_organization: this.issueOrganization,
-                issue_date: this.issueDate,
-                certification_url: this.certificationUrl
-            }],
-            years_experience: this.yearsExperience
+            years_experience: this.years_experience
         };
 
-        this.http.post<any>('http://localhost:3001/portfolio', body).subscribe(
+        this.http.post<any>('http://localhost:3001/portfolio/' + userUid, body).subscribe(
             response => {
                 console.log(response);
             },
@@ -51,15 +49,50 @@ export class PortfolioComponent {
         );
     }
 
-    ListarPortfolio(): void {
+    getPortfolio() {
         const userUid = this.userAuth.currentUser?.uid ?? '';
 
-
         this.http.get<any[]>('http://localhost:3001/portfolio/' + userUid).subscribe(
-            portfolios => {
-                this.portfolios = portfolios.map(portfolio => {
-                    return {...portfolio};
-                });
+            response => {
+                if (response && response.length > 0) {
+                    const portfolio = response[0];
+
+                    this.portfolioData = portfolio.portfolioData;
+                    this.certifications = portfolio.certifications.certification;
+                }
+            },
+            error => {
+                console.error(error);
+            }
+        );
+    }
+
+    updatePortfolio() {
+        const userUid = this.userAuth.currentUser?.uid ?? '';
+        const body = {
+            title: this.title,
+            description: this.descriptionCertification,
+            issue_organization: this.issue_organization,
+            issue_date: this.issue_date,
+            certification_url: this.certification_url
+        };
+
+        this.http.put<any>('http://localhost:3001/portfolio/' + userUid, body).subscribe(
+            response => {
+                console.log(response);
+            },
+            error => {
+                console.error(error);
+            }
+        );
+    }
+
+    deletePortfolio() {
+        const userUid = this.userAuth.currentUser?.uid ?? '';
+
+        this.http.delete<any>('http://localhost:3001/portfolio/' + userUid).subscribe(
+            response => {
+                console.log(response);
             },
             error => {
                 console.error(error);

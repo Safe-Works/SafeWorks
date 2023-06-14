@@ -1,82 +1,83 @@
 <div class="container">
-    <div class="container">
-        <div class="text-center">
-            <h2>Adicionar Portfolio</h2>
-
-            <div class="row justify-content-center">
-                <div class="col-lg-6">
-                    <form>
-                        <div class="mb-3">
-                            <label for="description" class="form-label">Descrição:</label>
-                            <textarea id="description" class="form-control" [(ngModel)]="description"></textarea>
-                        </div>
-
-                        <div class="mb-3">
-                            <label for="certificationTitle" class="form-label">Título da Certificação:</label>
-                            <input type="text" id="certificationTitle" class="form-control" [(ngModel)]="certificationTitle">
-                        </div>
-
-                        <div class="mb-3">
-                            <label for="certificationDescription" class="form-label">Descrição da Certificação:</label>
-                            <textarea id="certificationDescription" class="form-control" [(ngModel)]="certificationDescription"></textarea>
-                        </div>
-
-                        <div class="mb-3">
-                            <label for="issueOrganization" class="form-label">Organização Emissora:</label>
-                            <input type="text" id="issueOrganization" class="form-control" [(ngModel)]="issueOrganization">
-                        </div>
-
-                        <div class="mb-3">
-                            <label for="issueDate" class="form-label">Data de Emissão:</label>
-                            <input type="date" id="issueDate" class="form-control" [(ngModel)]="issueDate">
-                        </div>
-
-                        <div class="mb-3">
-                            <label for="certificationURL" class="form-label">URL da Certificação:</label>
-                            <input type="text" id="certificationURL" class="form-control" [(ngModel)]="certificationUrl">
-                        </div>
-
-                        <div class="mb-3">
-                            <label for="yearsExperience" class="form-label">Anos de experiência:</label>
-                            <input type="number" id="yearsExperience" class="form-control" [(ngModel)]="yearsExperience">
-                        </div>
-
-                        <button class="btn btn-primary" (click)="adicionarPortfolio()">Adicionar</button>
-                    </form>
-                </div>
-            </div>
-        </div>
-
-        <!-- Restante do código HTML para listar os portfolios -->
-    </div>
-
-
-    <h2 class="text-center">List of Portfolios</h2>
-    <button class="btn btn-primary" (click)="ListarPortfolio()">Listar Portfolios</button>
-
     <div class="row justify-content-center">
-        <div class="col-lg-4 col-md-6 col-sm-12 mb-4" *ngFor="let portfolio of portfolios">
-            <div class="card">
-                <div class="card-header">
-                    <h3 class="text-center">Criado em {{ portfolio.created }}</h3>
+        <div class="col-lg-6">
+            <h1>Portfolio</h1>
+
+            <h2>Create Portfolio</h2>
+            <form (submit)="createPortfolio()">
+                <div class="form-group">
+                    <label for="description">Description:</label>
+                    <input type="text" class="form-control" id="description" name="description" [(ngModel)]="description" required>
                 </div>
-                <div class="card-body">
-                    <p>Descrição: {{ portfolio.description }}</p>
-                    <ul>
-                        <li *ngFor="let certification of portfolio.certifications">
-                            <h4>{{ certification.title }}</h4>
-                            <p>{{ certification.description }}</p>
-                            <p>Organização emissora: {{ certification.issue_organization }}</p>
-                            <p>Data de emissão: {{ certification.issue_date }}</p>
-                            <p>URL da certificação: {{ certification.certification_url }}</p>
-                        </li>
-                    </ul>
-                    <p>Anos de experiência: {{ portfolio.years_experience }}</p>
+
+                <div class="form-group">
+                    <label for="years_experience">years experience:</label>
+                    <input type="text" class="form-control" id="years_experience" name="years_experience" [(ngModel)]="years_experience" required>
                 </div>
-                <div class="card-footer">
-                    <button class="btn btn-primary" >Editar</button>
-                </div>
+
+                <button type="submit" class="btn btn-primary">Create</button>
+            </form>
+
+            <h2>Get Portfolio</h2>
+            <form (submit)="getPortfolio()">
+                <button type="submit" class="btn btn-primary">Get</button>
+            </form>
+
+            <div *ngIf="certifications">
+                <h3>Certifications:</h3>
+                <ul>
+                    <li *ngFor="let certification of certifications">
+                        <p>Title: {{ certification.title }}</p>
+                        <p>Description: {{ certification.description }}</p>
+                        <p>Issue Organization: {{ certification.issue_organization }}</p>
+                        <p>Issue Date: {{ certification.issue_date }}</p>
+                        <p>Certification URL: {{ certification.certification_url }}</p>
+                    </li>
+                </ul>
             </div>
+            <div *ngIf="portfolioData">
+                <h3>Portfolio Data:</h3>
+                <ul>
+                    <li *ngFor="let portfolioDatas of portfolioData">
+                        <p>Created: {{ portfolioDatas.created }}</p>
+                        <p>Description: {{ portfolioDatas.description }}</p>
+                        <p>Years of Experience: {{ portfolioDatas.years_experience }}</p>
+                    </li>
+                </ul>
+            </div>
+
+            <!-- Exibir as certificações -->
+
+            <h2>Update Portfolio</h2>
+            <form (submit)="updatePortfolio()">
+                <div class="form-group">
+                    <label for="title">title:</label>
+                    <input type="text" class="form-control" name= "title" id="title" [(ngModel)]="title" required>
+                </div>
+                <div class="form-group">
+                    <label for="descriptionCertification">descriptionCertification:</label>
+                    <input type="text" class="form-control" name= "descriptionCertification" id="descriptionCertification" [(ngModel)]="descriptionCertification" required>
+                </div>
+                <div class="form-group">
+                    <label for="issue_organization">issue_organization:</label>
+                    <input type="text" class="form-control" name= "issue_organization" id="issue_organization" [(ngModel)]="issue_organization" required>
+                </div>
+                <div class="form-group">
+                    <label for="issue_date">issue_date:</label>
+                    <input type="date" class="form-control" name= "issue_date" id="issue_date" [(ngModel)]="issue_date" required>
+                </div>
+                <div class="form-group">
+                    <label for="certification_url">certification_url:</label>
+                    <input type="text" class="form-control" name= "certification_url" id="certification_url" [(ngModel)]="certification_url" required>
+                </div>
+
+                <button type="submit" class="btn btn-primary">Update</button>
+            </form>
+
+            <h2>Delete Portfolio</h2>
+            <form (submit)="deletePortfolio()">
+                <button type="submit" class="btn btn-danger">Delete</button>
+            </form>
         </div>
     </div>
 </div>
