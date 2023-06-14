@@ -4,6 +4,7 @@ import { firebaseConfig } from "../../util/firebase";
 import { db } from "../../util/admin";
 import { format } from "date-fns";
 import { firestore } from 'firebase-admin';
+import Certification from "../models/Certification";
 
 
 class PortfolioRepository {
@@ -12,25 +13,24 @@ class PortfolioRepository {
         initializeApp(firebaseConfig);
     }
 
-    async add(portfolio: Portfolio, userUid: string,  callback: any) {
+    async add(portfolioData: Portfolio, userUid: string,  callback: any) {
         try {
-            //const created = format(new Date(), "dd/MM/yyyy HH:mm:ss");
+            const created = format(new Date(), "dd/MM/yyyy HH:mm:ss");
             const UserUid = userUid;
 
             const newPortfolio = {
-                created: format(new Date(), "dd/MM/yyyy HH:mm:ss"),
-                description: portfolio.description,
-                certifications: portfolio.certifications,
-                years_experience: portfolio.years_experience,
+                created: created,
+                description: portfolioData.description,
+                years_experience: portfolioData.years_experience,
             };
 
             const portfolioDocRef = db.collection("Users")
                 .doc(UserUid)
                 .collection("Worker")
-                .doc("Portfolios");
+                .doc("PortfolioData");
 
-            await portfolioDocRef.update({
-                portfolios: firestore.FieldValue.arrayUnion(newPortfolio)
+            await portfolioDocRef.set({
+                portfolioData: firestore.FieldValue.arrayUnion(newPortfolio)
             });
         } catch (error) {
             console.error("Error adding Portfolio to Firestore: ", error);
@@ -38,47 +38,43 @@ class PortfolioRepository {
         }
     }
 
-
-    getAll(callback: any) {
-        db.collection("Portfolios")
-            .get()
-            .then((snapshot) => {
-                const portfolios: any[] = [];
-                snapshot.forEach((doc) => {
-                    const portfolioData = doc.data();
-                    portfolios.push(portfolioData);
-                });
-                callback(null, portfolios);
-            })
-            .catch((error) => {
-                console.error("Error getting portfolios from Firestore. ", error);
-                callback(error, null);
-            });
-    }
-
     get(userUid: string, callback: any) {
-        db.collection("Users")
-            .doc(userUid).collection("Worker")
-            .doc("Portfolio")
-            .get()
-            .then((PortfolioDoc) => {
-                if (!PortfolioDoc.exists) {
-                    callback(`Portfolio with uid ${userUid} does not exist`, null);
-                } else {
-                    const PortfolioData = PortfolioDoc.data();
-                    callback(null, PortfolioData);
+        const dataDocRef = db.collection("Users")
+            .doc(userUid)
+            .collection("Worker")
+            .doc("PortfolioData");
+
+        const certificationsDocRef = db.collection("Users")
+            .doc(userUid)
+            .collection("Worker")
+            .doc("Certifications");
+
+        Promise.all([dataDocRef.get(), certificationsDocRef.get()])
+            .then(([dataDoc, certificationsDoc]) => {
+                if (!dataDoc.exists) {
+                    callback(`Data document with uid ${userUid} does not exist`, null);
+                    return;
                 }
+
+                const data = dataDoc.data();
+                const certifications = certificationsDoc.exists ? certificationsDoc.data() : {};
+
+                // Combinar as informações dos dois documentos em um único objeto
+                const combinedData = { ...data, certifications };
+
+                callback(null, combinedData);
             })
             .catch((error) => {
-                console.error("Error getting Portfolio from Firestore. ", error);
+                console.error("Error getting Data and Certifications from Firestore: ", error);
                 callback(error, null);
             });
     }
+
 
     delete(userUid: string, callback: any) {
         db.collection("Users")
             .doc(userUid).collection("Worker")
-            .doc("Portfolio")
+            .doc("Certifications")
             .delete()
             .then(() => {
                 callback(null);
@@ -89,29 +85,57 @@ class PortfolioRepository {
             });
         // testar portfolios: firestore.FieldValue.delete()
 
-
     }
 
+    // delete(userUid: string, callback: any) {
+    //     const dataDocRef = db.collection("Users")
+    //         .doc(userUid)
+    //         .collection("Worker")
+    //         .doc("Data");
+    //
+    //     const certificationsDocRef = db.collection("Users")
+    //         .doc(userUid)
+    //         .collection("Worker")
+    //         .doc("Certifications");
+    //
+    //     Promise.all([dataDocRef.delete(), certificationsDocRef.delete()])
+    //         .then(() => {
+    //             callback(null);
+    //         })
+    //         .catch((error) => {
+    //             console.error("Error deleting portfolio from Firestore. ", error);
+    //             callback(error);
+    //
+    //         });
+    // }
 
-    async update(portfolio: Portfolio, userUid: string,  callback: any) {
+
+    async update(certification: Certification, userUid: string,  callback: any) {
         try {
             const UserUid = userUid;
 
-            const updatePortfolio = {
-                description: portfolio.description,
-                certifications: portfolio.certifications,
-                years_experience: portfolio.years_experience,
+            const newCertification = {
+                title: certification.title,
+                description: certification.description,
+                issue_organization: certification.issue_organization,
+                issue_date: certification.issue_date,
+                certification_url: certification.certification_url
             };
 
-            await db.collection("Users")
+
+            const portfolioDocRef = await db.collection("Users")
                 .doc(UserUid)
                 .collection("Worker")
-                .doc("Portfolio")
-                .update(updatePortfolio);
+                .doc("Certifications")
+
+            await portfolioDocRef.set({
+                certification: firestore.FieldValue.arrayUnion(newCertification)
+            }, { merge: true });
+
 
             callback(null, UserUid);
         } catch (error) {
-            console.error("Error updating Portfolio to Firestore: ", error);
+            console.error("Error updating Certifications to Firestore: ", error);
             callback(error);
         }
     }
