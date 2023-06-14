@@ -49,10 +49,8 @@
             </div>
         </div>
         <div class="col-lg-6">
-            <h2>Get Portfolio</h2>
-            <button type="button" class="btn btn-primary" (click)="getPortfolio()">Get</button>
             <div *ngIf="portfolio">
-                <h3>Portfolio Data:</h3>
+                <h2>Portfolio Data:</h2>
                 <div *ngIf="portfolio && portfolio.length > 0">
                     <ul>
                         <li *ngFor="let portfolio of portfolio">

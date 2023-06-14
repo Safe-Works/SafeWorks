@@ -1,14 +1,15 @@
 import { HttpClient } from '@angular/common/http';
-import { Component } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { UserAuth } from "../../auth/User.Auth";
+import { Subscription } from 'rxjs';
 
 @Component({
     selector: 'app-portfolio',
     templateUrl: './portfolio.component.html',
     styleUrls: ['./portfolio.component.css']
 })
-export class PortfolioComponent {
+export class PortfolioComponent implements OnInit, OnDestroy {
 
     userUid: string = '';
     description: string = '';
@@ -20,12 +21,27 @@ export class PortfolioComponent {
     certification_url: string = '';
     portfolio: any = null;
     certifications: any[] = [];
+    portfolioSubscription: Subscription | undefined;
+    certificationsSubscription: Subscription | undefined;
 
     constructor(
         private http: HttpClient,
         private router: Router,
         private userAuth: UserAuth
     ) { }
+
+    ngOnInit() {
+        this.getPortfolio();
+    }
+
+    ngOnDestroy() {
+        if (this.portfolioSubscription) {
+            this.portfolioSubscription.unsubscribe();
+        }
+        if (this.certificationsSubscription) {
+            this.certificationsSubscription.unsubscribe();
+        }
+    }
 
     createPortfolio() {
         const userUid = this.userAuth.currentUser?.uid ?? '';
@@ -37,8 +53,12 @@ export class PortfolioComponent {
         this.http.post<any>('http://localhost:3001/portfolio/' + userUid, body).subscribe(
             response => {
                 console.log(response);
+                this.getPortfolio(); // Atualiza os dados após a criação
             },
             error => {
+                if (error.status === 400) {
+                    alert('Dados inválidos. Verifique os campos preenchidos.');
+                }
                 console.error(error);
             }
         );
@@ -47,7 +67,11 @@ export class PortfolioComponent {
     getPortfolio() {
         const userUid = this.userAuth.currentUser?.uid ?? '';
 
-        this.http.get<any[]>('http://localhost:3001/portfolio/' + userUid).subscribe(
+        if (this.portfolioSubscription) {
+            this.portfolioSubscription.unsubscribe();
+        }
+
+        this.portfolioSubscription = this.http.get<any[]>('http://localhost:3001/portfolio/' + userUid).subscribe(
             response => {
                 if (response && response.length > 0) {
                     const portfolio = response[0];
@@ -62,8 +86,6 @@ export class PortfolioComponent {
         );
     }
 
-
-
     updatePortfolio() {
         const userUid = this.userAuth.currentUser?.uid ?? '';
         const body = {
@@ -77,8 +99,12 @@ export class PortfolioComponent {
         this.http.put<any>('http://localhost:3001/portfolio/' + userUid + '/', body).subscribe(
             response => {
                 console.log(response);
+                this.getPortfolio(); // Atualiza os dados após a atualização
             },
             error => {
+                if (error.status === 400) {
+                    alert('Dados inválidos. Verifique os campos preenchidos.');
+                }
                 console.error(error);
             }
         );
@@ -90,6 +116,7 @@ export class PortfolioComponent {
         this.http.delete<any>('http://localhost:3001/portfolio/' + userUid + '/' + title).subscribe(
             response => {
                 console.log(response);
+                this.getPortfolio(); // Atualiza os dados após a exclusão
             },
             error => {
                 console.error(error);
