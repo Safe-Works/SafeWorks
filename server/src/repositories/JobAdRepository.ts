@@ -191,13 +191,13 @@ class JobAdRepository {
                 .get();
 
             const snapshotCategory = await jobAdRef
-                .where('category', '>=', term)
-                .where('category', '<=', term + '\uf8ff')
+                .where('category.name', '>=', term)
+                .where('category.name', '<=', term + '\uf8ff')
                 .get();
 
             snapshotTitle.forEach(doc => {
                 console.log(doc.data().deleted)
-                if (doc.data().deleted == false) {
+                if (!doc.data().deleted) {
                     results.push(doc.data());
                 }
             });
@@ -205,12 +205,12 @@ class JobAdRepository {
             snapshotCategory.forEach(doc => {
                 if (results.length != 0) {
                     results.forEach(docResults => {
-                        if (doc.data().uid != docResults && doc.data().deleted == false) {
+                        if (doc.data().uid != docResults && !doc.data().deleted) {
                             results.push(doc.data());
                         }
                     })
                 } else {
-                    if (doc.data().deleted == false) {
+                    if (!doc.data().deleted) {
                         results.push(doc.data());
                     }
                 }
