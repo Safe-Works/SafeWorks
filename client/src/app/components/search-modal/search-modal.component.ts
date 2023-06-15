@@ -2,6 +2,8 @@ import { Component, ElementRef, Renderer2 } from '@angular/core';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { ModalService } from './search-modal.service';
 import { JobService } from 'src/app/services/job.service';
+import JobAdvertisement from 'src/app/models/job-advertisement.model';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-search-modal',
@@ -10,7 +12,7 @@ import { JobService } from 'src/app/services/job.service';
 })
 export class SearchModalComponent {
   
-  constructor(private jobService: JobService, private elementRef: ElementRef, private renderer: Renderer2, private modalService: ModalService) {}
+  constructor(private jobService: JobService, private elementRef: ElementRef, private renderer: Renderer2, private modalService: ModalService, private router: Router) {}
 
   searchForm!: FormGroup;
   searchTerm = new FormControl('', [Validators.required]);
@@ -69,5 +71,12 @@ export class SearchModalComponent {
     } else {
       alert("Para realizar uma pesquisa é necessário escrever um termo.")
     }
+  }
+
+  async viewJob(job: JobAdvertisement) {
+    const jobId = job.uid;
+    this.closeModal();
+    await this.router.navigate(['/jobs', 'view', jobId]);
+    location.reload();
   }
 }

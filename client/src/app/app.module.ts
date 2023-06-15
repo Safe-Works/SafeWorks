@@ -79,7 +79,7 @@ import { EditPortfolioComponent } from './components/portfolio/edit-portfolio/ed
     MatPaginatorModule,
     BsDropdownModule,
     MatMenuModule,
-    SweetAlert2Module.forRoot()
+    SweetAlert2Module.forRoot(),
   ],
   providers: [
     UserService,

@@ -2,6 +2,7 @@ import { Component, OnInit, ViewChild } from '@angular/core';
 import { MatPaginator, PageEvent } from '@angular/material/paginator';
 import JobAdvertisement from 'src/app/models/job-advertisement.model';
 import { JobService } from 'src/app/services/job.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-all-posts',
@@ -17,7 +18,7 @@ export class AllPostsComponent implements OnInit {
   pageSize: number = 10;
   isLoading: boolean = false;
 
-  constructor(private jobService: JobService) { }
+  constructor(private jobService: JobService, private router: Router) { }
 
   ngOnInit() {
     this.getJobs();
@@ -30,6 +31,11 @@ export class AllPostsComponent implements OnInit {
       this.totalJobs = data.total;
       this.isLoading = false;
     });
+  }
+
+  viewJob(job: JobAdvertisement) {
+    const jobId = job.uid;
+    this.router.navigate(['/jobs', 'view', jobId]);
   }
 
   onPageChange(event: PageEvent) {

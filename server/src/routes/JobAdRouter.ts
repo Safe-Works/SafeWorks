@@ -241,7 +241,6 @@ jobAdRouter.put('/job', upload.array('photos'),
         try {
             const job: JobAdvertisement = req.body;
             const photos = req.files;
-            console.log(job);
             const uid = await jobAdRepository.update(job, photos);
             res.status(200).json({ statusCode: 200, uid: uid });
         } catch (error) {

@@ -1,7 +1,7 @@
 @import url('https://fonts.googleapis.com/css?family=Open+Sans:400,700&display=swap');
 
 :root {
-  --white:#FFFFFF;
+  --white: #FFFFFF;
   --white-background: #F8F8F8;
   --gray-border: #CDCDCD;
   --gray-tag: #C4C4C4;
@@ -32,7 +32,7 @@ html {
   height: 100%;
 }
 
-a{
+a {
   text-decoration: none;
 }
 
@@ -55,9 +55,11 @@ a{
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
     padding-top: 60px;
   }
+
   .card-autentication {
     padding: 0;
   }
+
   .form-control {
     width: 100%;
   }
@@ -99,7 +101,7 @@ a{
 }
 
 .link-safeworks {
-  color:var(--safeworks-yellow) !important;
+  color: var(--safeworks-yellow) !important;
 }
 
 .link-safeworks:hover {
@@ -108,7 +110,7 @@ a{
 }
 
 .logo-autentication {
-  width: 115px; 
+  width: 115px;
   height: 115px;
   margin-bottom: 25px;
 }
@@ -135,16 +137,18 @@ a{
   margin-left: 0px !important;
 }
 
-.row > * {
+.row>* {
   padding-left: 0 !important;
 }
 
 .blue-snackbar {
   background: #2196F3;
 }
+
 .snackbar-success {
   background: #1DE9B6 !important;
 }
+
 .snackbar-error {
   background: #B00020;
 }
@@ -155,8 +159,10 @@ a{
   left: 0;
   width: 100%;
   height: 100%;
-  background-color: rgba(0, 0, 0, 0.5); /* Cor de fundo semi-transparente */
-  z-index: 9998; /* Z-index menor que o do spinner para que fique por baixo */
+  background-color: rgba(0, 0, 0, 0.5);
+  /* Cor de fundo semi-transparente */
+  z-index: 9998;
+  /* Z-index menor que o do spinner para que fique por baixo */
 }
 
 .loading-spinner {
@@ -169,7 +175,7 @@ a{
 
 .mat-spinner {
   ::ng-deep circle {
-      stroke: #33dd82;
+    stroke: #33dd82;
   }
 }
 
@@ -182,16 +188,18 @@ a{
 .job-card:hover {
   border: 1px solid #FFA500;
 }
+
 .no-jobs-message {
   text-align: center;
   font-size: 20px;
   color: #888;
   margin-top: 20px;
 }
+
 @media (min-width: 768px) {
   .job-card {
-      width: calc(33.33% - 20px);
-      margin-bottom: 20px;
+    width: calc(33.33% - 20px);
+    margin-bottom: 20px;
   }
 }
 
@@ -237,4 +245,23 @@ a{
 .mat-card-actions {
   display: flex;
   justify-content: flex-end;
+}
+
+.fa {
+  color: var(--safeworks-yellow) !important;
+}
+
+.tag-category {
+  background-color: var(--safeworks-yellow);
+  border-radius: 100%;
+  padding: 5px 20px;
+  color: #fff;
+  font-weight: 401;
+  margin-bottom: 115px !important;
+}
+.error-text {
+  text-align: center;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }

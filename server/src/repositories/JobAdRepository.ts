@@ -90,18 +90,18 @@ class JobAdRepository {
 
             const existingJob = await db.collection("JobAdvertisement").doc(uid).get();
             const existingJobData = existingJob.data();
-      
+
             const modified = format(new Date(), "dd/MM/yyyy HH:mm:ss");
 
             let updatedJob = {
                 ...job,
                 modified: modified,
             };
-          
-            const mediaUrls = job.media?.split(',').map((url: any) => url.trim());
+
+            let mediaUrls: any[] = [];
+            if (job.media) mediaUrls = job.media?.split(',').map((url: any) => url.trim());
             updatedJob.media = mediaUrls;
 
-          
             await db.collection("JobAdvertisement").doc(uid).update(updatedJob);
 
             if (existingJobData) {
@@ -111,16 +111,20 @@ class JobAdRepository {
                     });
                 }
                 if (!delivery_time && 'delivery_time' in existingJobData) {
-                    console.log('entrou');
                     await db.collection("JobAdvertisement").doc(uid).update({
                         delivery_time: FieldValue.delete()
                     });
                 }
             }
-            
+
             if (!photos || photos.length === 0) {
                 return uid;
             }
+            mediaUrls.forEach((url: string) => {
+                if (!updatedJob.media.includes(url)) {
+                    mediaUrls.splice(mediaUrls.indexOf(url), 1);
+                }
+            });
 
             for (let i = 0; i < photos.length; i++) {
                 const photo = photos[i];
@@ -135,7 +139,6 @@ class JobAdRepository {
                     throw error;
                 }
             }
-
             await db.collection("JobAdvertisement").doc(uid).update({ media: updatedJob.media });
 
             return uid;
@@ -144,8 +147,6 @@ class JobAdRepository {
             throw error;
         }
     }
-
-
 
     async uploadJobPhoto(filePath: string, contentType: string, jobUid: string): Promise<string> {
         const storage = firebaseAdmin.storage().bucket();
@@ -180,7 +181,6 @@ class JobAdRepository {
         }
     }
 
-
     async findByTerm(term: string): Promise<any[]> {
         try {
             const results: any[] = [];
@@ -191,23 +191,28 @@ class JobAdRepository {
                 .get();
 
             const snapshotCategory = await jobAdRef
-                .where('category', '>=', term)
-                .where('category', '<=', term + '\uf8ff')
+                .where('category.name', '>=', term)
+                .where('category.name', '<=', term + '\uf8ff')
                 .get();
 
             snapshotTitle.forEach(doc => {
-                results.push(doc.data());
+                console.log(doc.data().deleted)
+                if (!doc.data().deleted) {
+                    results.push(doc.data());
+                }
             });
 
             snapshotCategory.forEach(doc => {
                 if (results.length != 0) {
                     results.forEach(docResults => {
-                        if (doc.data().uid != docResults) {
+                        if (doc.data().uid != docResults && !doc.data().deleted) {
                             results.push(doc.data());
                         }
                     })
                 } else {
-                    results.push(doc.data());
+                    if (!doc.data().deleted) {
+                        results.push(doc.data());
+                    }
                 }
             });
 

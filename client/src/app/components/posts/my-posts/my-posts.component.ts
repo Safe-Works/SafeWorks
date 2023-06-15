@@ -25,6 +25,11 @@ export class MyPostsComponent implements OnInit {
   ngOnInit() {
     this.getJobs();
   }
+  
+  viewJob(job: JobAdvertisement) {
+    const jobId = job.uid;
+    this.router.navigate(['/jobs', 'view', jobId]);
+  }
 
   getJobs() {
     this.isLoading = true;

@@ -211,7 +211,7 @@ export class EditPostComponent {
     const filteredJobAd = JSON.parse(JSON.stringify(jobAd));
 
     for (const key in filteredJobAd) {
-      if (filteredJobAd[key] === '' || filteredJobAd[key] === null || filteredJobAd[key] === undefined) {
+      if (filteredJobAd[key] === '' || filteredJobAd[key] === null || filteredJobAd[key] === undefined || filteredJobAd[key].length === 0) {
         delete filteredJobAd[key];
       }
     }
