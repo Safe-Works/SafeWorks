@@ -3,6 +3,7 @@ import cors from 'cors';
 import swaggerUi from 'swagger-ui-express';
 import usersRouter from './routes/UserRouter';
 import jobAdRouter from './routes/JobAdRouter';
+import portfolioRouter from "./routes/PortfolioRouter";
 import { errors } from 'celebrate';
 import fs from 'fs';
 
@@ -38,6 +39,7 @@ class App {
             res.send('SafeWorks server is running! 🛠️');
         });
         this.app.use('/api', usersRouter, jobAdRouter);
+        this.app.use(portfolioRouter);
 
         // Swagger Route setup
         const swaggerFile: any = (process.cwd() + '/swagger.json');

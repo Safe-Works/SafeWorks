@@ -1,0 +1,93 @@
+<div class="container container-body">
+    <div class="row col-md-12" style="padding: 40px 5.6%;">
+        <h1 style="font-size: 40px; font-weight: bold; color: #2d2d2d;">Editar Portfólio</h1>
+    </div>
+    <div class="row col-md-12" style="padding: 40px 5.6%; background-color: white; border: 1px solid #ced0d4;">
+        <div class="col-lg-6">
+            <div>
+                <form (submit)="createPortfolio()">
+                    <h2 style="text-align: center">Adicionar informações</h2>
+
+                    <div class="form-group">
+                        <label for="description">Descrição</label>
+                        <textarea style="width: 100%" class="form-control" id="description" name="description" [(ngModel)]="description" required></textarea>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="years_experience">Anos de Experiência</label>
+                        <input type="number" class="form-control" id="years_experience" name="years_experience" [(ngModel)]="years_experience" required>
+                    </div>
+
+                    <button type="submit" class="btn btn-primary btn-autentication button">
+                        Atualizar portfólio
+                    </button>
+                </form>
+            </div>
+
+            <div>
+                <h2 style="text-align: center">Adicionar certificação</h2>
+                <form (submit)="updatePortfolio()">
+                    <div class="form-group">
+                        <label for="title">Título</label>
+                        <input placeholder="Título da Certificação" type="text" class="form-control" name="title" id="title" [(ngModel)]="title" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="descriptionCertification">Descrição</label>
+                        <textarea placeholder="Descrição da Certificação" style="width: 100%" type="text" class="form-control" name="descriptionCertification" id="descriptionCertification" [(ngModel)]="descriptionCertification" required></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label for="issue_organization">Instituição</label>
+                        <input placeholder="Instituição responsável por emitir a Certificação" type="text" class="form-control" name="issue_organization" id="issue_organization" [(ngModel)]="issue_organization" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="issue_date">Data de emissão</label>
+                        <input type="date" class="form-control" name="issue_date" id="issue_date" [(ngModel)]="issue_date" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="certification_url">URL</label>
+                        <input placeholder="URL da Certificação" type="text" class="form-control" name="certification_url" id="certification_url" [(ngModel)]="certification_url" required>
+                    </div>
+                    <button type="submit" class="btn btn-primary btn-autentication button">
+                        Salvar Certificação
+                    </button>
+                </form>
+            </div>
+        </div>
+        <div class="col-lg-6">
+            <h2 style="text-align: center">Certificações</h2>
+
+            <div class="empty-certifications" *ngIf="certifications && certifications.length == 0">
+                <p>Você não possui certificações no momento.</p>
+            </div>
+
+            <div *ngIf="certifications && certifications.length > 0">
+                <div class="card-deck">
+                    <div class="card" *ngFor="let certification of certifications">
+                        <div class="card-body">
+                            <h2 class="card-title">{{ certification.title }}</h2>
+                            <hr>
+                            <div class="certification-field">
+                                <label>Descrição:</label>
+                                <p>{{ certification.description }}</p>
+                            </div>
+                            <div class="certification-field">
+                                <label>Organização Emissora:</label>
+                                <p>{{ certification.issue_organization }}</p>
+                            </div>
+                            <div class="certification-field">
+                                <label>Data de Emissão:</label>
+                                <p>{{ formatIssueDate(certification.issue_date) }}</p>
+                            </div>
+                            <div class="certification-field">
+                                <label>URL da Certificação:</label>
+                                <p>{{ certification.certification_url }}</p>
+                            </div>
+                            <button class="btn btn-primary btn-autentication button" (click)="deleteCertification(certification.certification_url)">Excluir Certificação</button>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>

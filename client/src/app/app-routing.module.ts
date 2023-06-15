@@ -11,6 +11,7 @@ import { AllPostsComponent } from './components/posts/all-posts/all-posts.compon
 import { MyPostsComponent} from './components/posts/my-posts/my-posts.component';
 import { EditPostComponent } from './components/posts/edit-post/edit-post.component';
 import { ViewPostComponent } from './components/posts/view-post/view-post.component';
+import { PortfolioComponent } from './components/portfolio/portfolio.component';
 
 const routes: Routes = [
   { path: '', component: IndexComponent },
@@ -23,6 +24,7 @@ const routes: Routes = [
   { path: 'jobs/myjobs', component: MyPostsComponent, canActivate: [AuthGuard] },
   { path: 'jobs/edit/:id', component: EditPostComponent, canActivate: [AuthGuard] },
   { path: 'jobs/view/:id', component: ViewPostComponent, canActivate: [AuthGuard] },
+  { path: 'portfolio', component: PortfolioComponent }
 ];
 
 @NgModule({
