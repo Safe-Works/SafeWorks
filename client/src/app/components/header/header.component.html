@@ -24,7 +24,7 @@
                         </li>
                         <li class="nav-item" *ngIf="userAuth.currentUser">
                             <a routerLink="/profile" routerLinkActive="active" title="Perfil">
-                                <i [class]="'header-icon bi bi-person' + (activeRoute === 'profile' ? '-fill' : '')"
+                                <i [class]="'header-icon bi bi-person' + (activeRoute.includes('profile') ? '-fill' : '')"
                                     (click)="changeRoute('profile')"></i>
                             </a>
                         </li>

@@ -74,7 +74,7 @@ import { SweetAlert2Module } from '@sweetalert2/ngx-sweetalert2';
     MatPaginatorModule,
     BsDropdownModule,
     MatMenuModule,
-    SweetAlert2Module.forRoot()
+    SweetAlert2Module.forRoot(),
   ],
   providers: [
     UserService,

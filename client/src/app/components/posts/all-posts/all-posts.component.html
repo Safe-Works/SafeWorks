@@ -13,11 +13,12 @@
                 <div class="loading-spinner" style="position: relative;" *ngIf="isLoading">
                     <mat-spinner [diameter]="85"></mat-spinner>
                 </div>
-                <mat-card *ngFor="let job of jobs" class="job-card" [id]="job.uid" [hidden]="isLoading">
-                    <div class="card-image"
-                        [ngStyle]="{'background-image': job.media && job.media.length > 0 ? 'url(' + job.media[0] + ')' : 'url(https://thenounproject.com/api/private/icons/3104878/edit/?backgroundShape=SQUARE&backgroundShapeColor=%23000000&backgroundShapeOpacity=0&exportSize=752&flipX=false&flipY=false&foregroundColor=%23000000&foregroundOpacity=1&imageFormat=png&rotation=0)'}">
-                    </div>
+                <mat-card (click)="viewJob(job)" *ngFor="let job of jobs" class="job-card" [id]="job.uid"
+                    [hidden]="isLoading">
                     <mat-card-content>
+                        <div class="card-image"
+                            [ngStyle]="{'background-image': job.media && job.media.length > 0 ? 'url(' + job.media[0] + ')' : 'url(../../assets/default-pic.png)'}">
+                        </div>
                         <mat-card-title>{{ job.title }}</mat-card-title>
                         <p class="card-price">{{ job.price |
                             currency:'BRL' }} / {{ job.price_type.name }}</p>
