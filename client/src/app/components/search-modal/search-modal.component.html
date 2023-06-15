@@ -22,7 +22,7 @@
               <div class="job-header">
                 <img *ngIf="job.media" src={{job.media[0]}} class="job-media">
                 <div class="job-content">
-                  <h1 class="job-title">{{ job.title }}</h1>
+                  <h1 class="job-title" (click)="viewJob(job)" [id]="job.uid">{{ job.title }}</h1>
                   <p class="job-description">{{ job.description }}</p>
                   <p class="job-description">{{ job.category.name }}</p>
                   <p class="job-price"> {{ job.price | currency:'BRL' }} / {{ job.price_type.name }}</p>
