@@ -78,6 +78,9 @@ export class PortfolioComponent implements OnInit, OnDestroy {
 
                     this.portfolio = [portfolio];
                     this.certifications = portfolio.certifications;
+
+                    this.description = portfolio.description;
+                    this.years_experience = portfolio.years_experience;
                 }
             },
             error => {
