@@ -50,6 +50,11 @@ export class PortfolioComponent implements OnInit, OnDestroy {
             years_experience: this.years_experience
         };
 
+        if (this.years_experience < 0) {
+            alert('Dados inválidos. Verifique os campos preenchidos.');
+            return;
+        }
+
         this.http.post<any>('http://localhost:3001/portfolio/' + userUid, body).subscribe(
             response => {
                 console.log(response);
@@ -115,8 +120,10 @@ export class PortfolioComponent implements OnInit, OnDestroy {
 
     deleteCertification(certification_url: string) {
         const userUid = this.userAuth.currentUser?.uid ?? '';
+        const encodedURL = encodeURIComponent(certification_url);
 
-        this.http.delete<any>('http://localhost:3001/portfolio/' + userUid + '/' + certification_url).subscribe(
+
+        this.http.delete<any>('http://localhost:3001/portfolio/' + userUid + '/' + encodedURL).subscribe(
             response => {
                 console.log(response);
                 this.getPortfolio(); // Atualiza os dados após a exclusão
@@ -126,4 +133,15 @@ export class PortfolioComponent implements OnInit, OnDestroy {
             }
         );
     }
+
+    formatIssueDate(issueDate: any): string {
+        const seconds = issueDate._seconds;
+        const date = new Date(seconds * 1000); // Multiplica por 1000 para obter milissegundos
+        const timeZoneOffset = date.getTimezoneOffset() * 60000; // Converte o offset para milissegundos
+        const adjustedDate = new Date(date.getTime() + timeZoneOffset); // Ajusta a data adicionando o offset
+
+        return adjustedDate.toLocaleDateString();
+    }
+
+
 }
