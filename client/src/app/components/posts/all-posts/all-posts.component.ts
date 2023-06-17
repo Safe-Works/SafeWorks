@@ -43,4 +43,11 @@ export class AllPostsComponent implements OnInit {
     this.pageSize = event.pageSize;
     this.getJobs();
   }
+  truncateTitle(title: string, maxLength: number): string {
+    if (title.length > maxLength) {
+      return title.substring(0, maxLength) + '...';
+    }
+    return title;
+  }
+  
 }
