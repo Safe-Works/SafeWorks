@@ -63,6 +63,9 @@ a {
   .form-control {
     width: 100%;
   }
+  .header-left {
+    padding: 24px;
+  }
 }
 
 .title-autentication {
@@ -265,3 +268,5 @@ a {
   justify-content: center;
   align-items: center;
 }
+
+
