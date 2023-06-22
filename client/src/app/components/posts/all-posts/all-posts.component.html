@@ -19,7 +19,10 @@
                         <div class="card-image"
                             [ngStyle]="{'background-image': job.media && job.media.length > 0 ? 'url(' + job.media[0] + ')' : 'url(../../assets/default-pic.png)'}">
                         </div>
-                        <mat-card-title>{{ job.title }}</mat-card-title>
+                        <div class="card-title-container">
+                            <mat-card-title class="card-title" [title]="job.title">{{ truncateTitle(job.title, 30)
+                                }}</mat-card-title>
+                        </div>
                         <p class="card-price">{{ job.price |
                             currency:'BRL' }} / {{ job.price_type.name }}</p>
                         <p class="card-category">{{ job.category.name }}</p>

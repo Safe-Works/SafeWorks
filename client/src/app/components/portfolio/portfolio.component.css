@@ -1,0 +1,27 @@
+.button {
+    width: 100%;
+    border-radius: 30.4px;
+    margin-top: 32px;
+    margin-bottom: 32px;
+}
+
+.empty-certifications {
+    text-align: center;
+    font-size: 18px;
+    color: #7e7e7e;
+    margin-top: 20px;
+    padding: 10px;
+    background-color: #f7f7f7;
+    border: 1px solid #ddd;
+}
+.certification-field {
+    margin-bottom: 10px;
+}
+
+.certification-field label {
+    font-weight: bold;
+}
+
+.certification-field p {
+    margin-top: 5px;
+}

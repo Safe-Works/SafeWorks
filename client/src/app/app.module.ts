@@ -35,6 +35,8 @@ import { EditPostComponent } from './components/posts/edit-post/edit-post.compon
 import { ViewPostComponent } from './components/posts/view-post/view-post.component';
 import { MatMenuModule } from '@angular/material/menu';
 import { SweetAlert2Module } from '@sweetalert2/ngx-sweetalert2';
+import { PortfolioComponent } from './components/portfolio/portfolio.component';
+import { EditPortfolioComponent } from './components/portfolio/edit-portfolio/edit-portfolio.component';
 
 @NgModule({
   declarations: [
@@ -51,7 +53,10 @@ import { SweetAlert2Module } from '@sweetalert2/ngx-sweetalert2';
     AllPostsComponent,
     MyPostsComponent,
     EditPostComponent,
-    ViewPostComponent
+    ViewPostComponent,
+    SearchModalComponent,
+    PortfolioComponent,
+    EditPortfolioComponent
   ],
   imports: [
     BrowserModule,
