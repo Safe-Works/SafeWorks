@@ -31,7 +31,7 @@ class App {
     private routes(): void {
         // CORS origin config
         this.app.use(cors({
-            origin: ['http://localhost:4200']
+            origin: ['http://localhost:4200', 'https://safe-works.azurewebsites.net'],
         }));
 
         // Routes
