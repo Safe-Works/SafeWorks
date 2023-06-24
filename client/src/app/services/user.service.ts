@@ -3,13 +3,14 @@ import { Observable } from "rxjs";
 import User from "../models/user.model";
 import { Injectable } from "@angular/core";
 import { catchError, tap } from 'rxjs/operators';
+import { environment } from "../environments/environment";
 
 @Injectable({
   providedIn: 'root'
 })
 
 export class UserService {
-  private api: string = 'http://localhost:3001/api/users';
+  private api: string = environment.apiEndpoint + '/api/users';
 
   constructor(private http: HttpClient) { }
 
