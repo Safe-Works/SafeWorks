@@ -1,172 +1,83 @@
 import User from "../models/User";
-import { initializeApp } from "firebase/app";
-import { firebaseConfig } from "../../util/firebase";
 import { db, firebaseAdmin } from "../../util/admin";
-import { getAuth, signInWithEmailAndPassword, User as FirebaseUser } from "firebase/auth";
-class UserRepository {
+import { getAuth, signInWithEmailAndPassword } from "firebase/auth";
+import AppRepository from "./AppRepository";
+class UserRepository extends AppRepository {
 
-    constructor() {
-        initializeApp(firebaseConfig);
-    }
-
-    async add(user: User, callback: any) {
-        firebaseAdmin.auth().createUser({
-            email: user.email,
-            password: user.password,
-            displayName: user.name,
-        }).then((userRecord) => {
-            const datetime = new Date();
-            const created = datetime.toLocaleDateString('pt-BR', {
-                day: '2-digit',
-                month: '2-digit',
-                year: 'numeric',
-                hour: '2-digit',
-                minute: '2-digit',
-                second: '2-digit'
-            });
-            db.collection("Users").doc(userRecord.uid).set({
+    async add (user: User): Promise<any> {
+        try {
+            let result;
+            await firebaseAdmin.auth().createUser({
                 email: user.email,
-                name: user.name,
-                username: null,
-                cpf: user.cpf,
-                telephone_number: user.telephone_number,
-                district: null,
-                photo_url: null,
-                balance: 0,
-                contracted_services: [],
-                worker: null,
-                created: created,
-                modified: null,
-                deleted: null
-            }).then(() => {
-                const customClaims = { displayName: user.name, cpf: user.cpf, telephone_number: user.telephone_number };
-                firebaseAdmin.auth().createCustomToken(userRecord.uid, customClaims).then((customToken) => {
-                    console.log("Successfully created a new user.", userRecord.uid);
-                    callback(null, customToken);
+                password: user.password,
+                displayName: user.name,
+            }).then(async (userRecord) => {
+                const created = this.getDateTime();
+                await db.collection("Users").doc(userRecord.uid).set({
+                    email: user.email,
+                    name: user.name,
+                    username: null,
+                    cpf: user.cpf,
+                    telephone_number: user.telephone_number,
+                    district: null,
+                    photo_url: null,
+                    balance: 0,
+                    contracted_services: [],
+                    worker: null,
+                    created: created,
+                    modified: null,
+                    deleted: null
+                }).then(async () => {
+                    const customClaims = { displayName: user.name, cpf: user.cpf, telephone_number: user.telephone_number };
+                    await firebaseAdmin.auth().createCustomToken(userRecord.uid, customClaims)
+                        .then((customToken) => {
+                            console.log("Successfully created a new user.", userRecord.uid);
+                            result = customToken;
+                        }).catch((error) => {
+                            console.error("Error creating a custom token. ", error);
+                            throw error;
+                        });
                 }).catch((error) => {
-                    console.error("Error creating a custom token. ", error);
-                    callback(error);
+                    console.error("Error adding user to Firestore. ", error);
+                    throw error;
                 });
             }).catch((error) => {
-                console.error("Error adding user to Firestore. ", error);
-                callback(error);
+                console.error("Error adding user to Authentication. ", error);
+                throw error;
             });
-        })
-        .catch((error) => {
-            console.error("Error creating a new user. ", error);
-            callback(error);
-        })
-    }
 
-    get(uid: string, callback: any) {
-        db.collection("Users")
-            .doc(uid)
-            .get()
-            .then((userDoc) => {
-                if (!userDoc.exists) {
-                    callback(`User with uid ${uid} does not exist`, null);
-                } else {
-                    const userData = userDoc.data();
-                    callback(null, userData);
-                }
-            })
-            .catch((error) => {
-                console.error("Error getting user from Firestore. ", error);
-                callback(error, null);
-            });
-    }
-
-    async login(user: User, acessToken: string, callback: (customToken?: string) => void) {
-        const auth = getAuth();
-        if (acessToken.length > 0) {
-            // Authentication with provided JWT accessToken
-            await firebaseAdmin.auth()
-                .verifyIdToken(acessToken)
-                .then((decodedToken) => {
-                    callback(acessToken);
-                    console.log('Successfully user login using accessToken. ' + decodedToken);
-                })
-                .catch((error) => {
-                    console.error("Error on user login. ", error);
-                    callback(error);
-                    console.error('Error on user accessToken login. ' + error);
-                });
-        } else {
-            // Authentication with provided email and password
-            await signInWithEmailAndPassword(auth, user.email, user.password)
-                .then(async (userCredential) => {
-                    const userAuth = userCredential.user;
-                    const expiresInSecs = 259200; // 72 horas em segundos
-                    const customClaims = {
-                        userAuth: userAuth,
-                        expiresIn: expiresInSecs // define o tempo de expiração em segundos
-                    };
-                    const customToken = await firebaseAdmin.auth().createCustomToken(userAuth.uid, customClaims);
-                    callback(customToken);
-                })
-                .catch((error) => {
-                    console.error("Error on user login. ", error);
-                    callback(error);
-                });
+            return result;
+        } catch(error) {
+            console.error("Error adding user to Authentication: ", error);
+            throw error;
         }
     }
 
-    async uploadUserPhoto(filePath: string, contentType: string, userUid: string, callback: any) {
-        const storage = firebaseAdmin.storage().bucket();
-        const fileName = userUid + '_profile_photo';
-        const datetime = new Date();
-        const modified = datetime.toLocaleDateString('pt-BR', {
-            day: '2-digit',
-            month: '2-digit',
-            year: 'numeric',
-            hour: '2-digit',
-            minute: '2-digit',
-            second: '2-digit'
-        });
-        await storage.upload(filePath, {
-            destination: fileName,
-            metadata: {
-                contentType: contentType
-            }
-        })
-            .then(async (uploadResponse) => {
-                const file = uploadResponse[0];
-                const donwloadUrl = await file.getSignedUrl({
-                    action: 'read',
-                    expires: '12-31-2025'
+    async getById (uid: string): Promise<any> {
+        try {
+            db.collection("Users")
+                .doc(uid)
+                .get()
+                .then((userDoc) => {
+                    if (!userDoc.exists) {
+                        return null;
+                    } else {
+                        return userDoc.data();
+                    }
+                })
+                .catch((error) => {
+                    console.error("Error getting user from Firestore. ", error);
+                    throw error;
                 });
-                await db.collection("Users").doc(userUid).update({
-                    photo_url: donwloadUrl[0],
-                    modified: modified
-                });
-                callback(null, donwloadUrl);
-            })
-            .catch((error) => {
-                callback(error);
-            });
+            
+        } catch (error) {
+            console.error("Error getting user by id: ", error);
+            throw error;
+        }
     }
 
-    async update(user: User, photo: any, callback: any) {
-        const datetime = new Date();
-        const modified = datetime.toLocaleDateString('pt-BR', {
-            day: '2-digit',
-            month: '2-digit',
-            year: 'numeric',
-            hour: '2-digit',
-            minute: '2-digit',
-            second: '2-digit'
-        });
-        if (photo) {
-            const filePath = photo.path;
-            const contentType = photo.mimetype;
-            await this.uploadUserPhoto(filePath ?? "", contentType ?? "", user.uid ?? "", (error: any, success: any) => {
-                if (success) {
-                    console.log('Success image upload ' + success)
-                } else {
-                    return callback(error);
-                }
-            })
-        }
+    async update(user: User, photo: any): Promise<any> {
+        const modified = this.getDateTime();
         const { uid, email, password, name, cpf, telephone_number, username, district } = user;
         // Usando Object.fromEntries para criar um objeto sem campos vazios
         const updatedData = Object.fromEntries(
@@ -181,10 +92,17 @@ class UserRepository {
                 modified: modified
             }).filter(([key, value]) => value !== undefined)
         );
+
+        if (photo) {
+            const filePath = photo.path;
+            const contentType = photo.mimetype;
+            await this.uploadUserPhoto(filePath ?? "", contentType ?? "", user.uid ?? "")
+        }
         if (Object.keys(updatedData).length === 0) {
             // Sem campo para atualizar, retorna null
-            return callback(null);
+            return null;
         }
+
         try {
             if (password) {
                 await firebaseAdmin.auth().updateUser(uid ?? "", { password });
@@ -199,11 +117,11 @@ class UserRepository {
 
             const userDoc = await db.collection("Users").doc(uid ?? "").get();
             if (!userDoc.exists) {
-                callback(`User with uid ${uid} does not exist`, null);
+                return `User with uid ${uid} does not exist`;
             } else {
                 const userData = userDoc.exists ? userDoc.data() : null;
                 if (!userData) {
-                    callback(`User with uid ${uid} does not exist or has no data`, null);
+                    return `User with uid ${uid} does not exist or has no data`;
                 } else {
                     const customClaims = {
                         displayName: userData.name,
@@ -213,12 +131,90 @@ class UserRepository {
                         photo_url: userData.photo_url
                     };
                     const customToken = await firebaseAdmin.auth().createCustomToken(uid ?? "", customClaims);
-                    callback(null, customToken);
+                    return customToken;
                 }
             }
         } catch (error) {
             console.error("Error updating user in repository. ", error);
-            callback(error);
+            throw error;
+        }
+    }
+
+    async login (user: User, accessToken: string): Promise<any> {
+        try {
+            const auth = getAuth();
+            let result;
+            if (accessToken.length > 0) {
+                // Authentication with provided JWT accessToken
+                await firebaseAdmin.auth()
+                    .verifyIdToken(accessToken)
+                    .then((decodedToken) => {
+                        console.log('Successfully user login using accessToken. ' + decodedToken.uid);
+                        result = decodedToken;
+                    })
+                    .catch((error) => {
+                        console.error('Error on user accessToken login: ' + error);
+                        throw error;
+                    });
+            } else {
+                // Authentication with provided email and password
+                await signInWithEmailAndPassword(auth, user.email, user.password)
+                    .then(async (userCredential) => {
+                        const userAuth = userCredential.user;
+                        const expiresInSecs = 259200; // 72 horas em segundos
+                        const customClaims = {
+                            userAuth: userAuth,
+                            expiresIn: expiresInSecs // define o tempo de expiração em segundos
+                        };
+                        result = await firebaseAdmin.auth().createCustomToken(userAuth.uid, customClaims);
+                    })
+                    .catch((error) => {
+                        console.error("Error logging user: ", error);
+                        throw error;
+                    });
+            }
+
+            return result;
+        } catch (error) {
+            console.error("Error logging user: ", error);
+            throw error;
+        }
+    }
+
+    async uploadUserPhoto(filePath: string, contentType: string, userUid: string): Promise<any> {
+        try {
+            const storage = firebaseAdmin.storage().bucket();
+            const fileName = userUid + '_profile_photo';
+            const modified = this.getDateTime();
+            let result;
+
+            await storage.upload(filePath, {
+                destination: fileName,
+                metadata: {
+                    contentType: contentType
+                }
+            })
+                .then(async (uploadResponse) => {
+                    const file = uploadResponse[0];
+                    const donwloadUrl = await file.getSignedUrl({
+                        action: 'read',
+                        expires: '12-31-2025'
+                    });
+                    await db.collection("Users").doc(userUid).update({
+                        photo_url: donwloadUrl[0],
+                        modified: modified
+                    });
+                    result = donwloadUrl;
+                })
+                .catch((error) => {
+                    console.error('Error uploading user photo: ' + error);
+                    throw error;
+                });
+
+            return result;
+        } catch (error) {
+            console.error('Error uploading user photo: ' + error);
+            throw error;
         }
     }
 
