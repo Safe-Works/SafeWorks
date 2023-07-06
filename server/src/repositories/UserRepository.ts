@@ -2,6 +2,7 @@ import User from "../models/User";
 import { db, firebaseAdmin } from "../../util/admin";
 import { getAuth, signInWithEmailAndPassword } from "firebase/auth";
 import AppRepository from "./AppRepository";
+
 class UserRepository extends AppRepository {
 
     async add (user: User): Promise<any> {
@@ -55,21 +56,28 @@ class UserRepository extends AppRepository {
 
     async getById (uid: string): Promise<any> {
         try {
-            db.collection("Users")
+            let result;
+            await db.collection("Users")
                 .doc(uid)
                 .get()
-                .then((userDoc) => {
+                .then(async (userDoc) => {
                     if (!userDoc.exists) {
-                        return null;
+                        result = null;
                     } else {
-                        return userDoc.data();
+                        const userData = userDoc.data();
+                        if (userData?.deleted === null) {
+                            result = userData;
+                        } else {
+                            result = null
+                        }  
                     }
                 })
                 .catch((error) => {
-                    console.error("Error getting user from Firestore. ", error);
+                    console.error("Error getting User from Firestore. ", error);
                     throw error;
                 });
-            
+
+            return result;   
         } catch (error) {
             console.error("Error getting user by id: ", error);
             throw error;
