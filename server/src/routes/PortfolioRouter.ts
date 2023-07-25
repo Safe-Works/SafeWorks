@@ -1,64 +1,24 @@
-import express from 'express';
-import Portfolio from '../models/Portfolio';
-import PortfolioRepository from '../repositories/PortfolioRepository';
+import express, { RequestHandler } from 'express';
 import {celebrate, Joi} from 'celebrate';
-import Certification from "../models/Certification";
+import PortfolioController from '../controllers/PortfolioController';
 
 const portfolioRouter = express.Router();
-const portfolioRepository = new PortfolioRepository();
+const portfolioController = new PortfolioController();
 
-portfolioRouter.post('/portfolio/:userUid',
+portfolioRouter.post(
+    '/portfolios',
     celebrate({
         body: Joi.object({
+            user_uid: Joi.string().required(),
             description: Joi.string().required(),
             years_experience: Joi.number().required(),
-        }),
+        })
     }),
-    (req, res) => {
-        const portfolioData: Portfolio = req.body;
-        const userUid = req.params.userUid;
+    portfolioController.add as RequestHandler
+);
 
-        portfolioRepository.add(portfolioData, userUid, (error: any, token: any) => {
-            if (error) {
-                if (error.code === "auth/email-already-exists") {
-                    res.status(409).json({message: "E-mail already exists"});
-                } else {
-                    res.status(500).send();
-                }
-            } else {
-                res.status(201).json({token});
-            }
-        });
-    });
-
-
-portfolioRouter.get('/portfolio/:userUid', (req, res) => {
-    const userUid = req.params.userUid;
-    portfolioRepository.get(userUid, (error: any, portfolio: any) => {
-        if (error) {
-            console.error("Error getting portfolio from repository. ", error);
-            res.status(500).send();
-        } else {
-            res.status(200).json([portfolio]);
-        }
-    });
-});
-
-portfolioRouter.delete('/portfolio/:userUid/:certification_url', (req, res) => {
-    const userUid = req.params.userUid;
-    const certification_url = req.params.certification_url;
-
-    portfolioRepository.delete(userUid, certification_url, (error: any) => {
-        if (error) {
-            console.error("Error deleting portfolio from repository. ", error);
-            res.status(500).send();
-        } else {
-            res.status(200).json({ message: "Portfolio deleted successfully" });
-        }
-    });
-});
-
-portfolioRouter.put('/portfolio/:userUid',
+portfolioRouter.post(
+    '/portfolios/:uid/certifications',
     celebrate({
         body: Joi.object({
             title: Joi.string().required(),
@@ -66,19 +26,30 @@ portfolioRouter.put('/portfolio/:userUid',
             issue_organization: Joi.string().required(),
             issue_date: Joi.date().required(),
             certification_url: Joi.string(),
-        }),
+        })
     }),
-    (req, res) => {
-        const certification: Certification = req.body;
-        const userUid = req.params.userUid;
+    portfolioController.addCertification as RequestHandler
+);
 
-        portfolioRepository.update(certification, userUid, (error: any, token: any) => {
-            if (error) {
-                res.status(500).json({ message: "Failed to update portfolio" });
-            } else {
-                res.status(200).json({ message: "Portfolio updated successfully" });
-            }
-        });
-    });
+portfolioRouter.put(
+    '/portfolios/:uid',
+    celebrate({
+        body: Joi.object({
+            description: Joi.string(),
+            years_experience: Joi.number(),
+        })
+    }),
+    portfolioController.update as RequestHandler
+)
+
+portfolioRouter.get(
+    '/portfolios/:uid',
+    portfolioController.getById as RequestHandler
+);
+
+portfolioRouter.delete(
+    '/portfolios/:uid/certifications/:id',
+    portfolioController.deleteCertification as RequestHandler
+)
 
 export default portfolioRouter;
