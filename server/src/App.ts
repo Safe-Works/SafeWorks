@@ -38,8 +38,7 @@ class App {
         this.app.get('/', (req: Request, res: Response) => {
             res.send('SafeWorks server is running! 🛠️');
         });
-        this.app.use('/api', usersRouter, jobAdRouter);
-        this.app.use(portfolioRouter);
+        this.app.use('/api', usersRouter, jobAdRouter, portfolioRouter);
 
         // Swagger Route setup
         const swaggerFile: any = (process.cwd() + '/swagger.json');

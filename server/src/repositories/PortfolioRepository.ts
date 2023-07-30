@@ -1,217 +1,148 @@
 import Portfolio from "../models/Portfolio";
-import { initializeApp } from "firebase/app";
-import { firebaseConfig } from "../../util/firebase";
 import { db } from "../../util/admin";
-import { format } from "date-fns";
 import Certification from "../models/Certification";
+import AppRepository from "./AppRepository";
 
-class PortfolioRepository {
-    constructor() {
-        initializeApp(firebaseConfig);
-    }
+class PortfolioRepository extends AppRepository {
 
-    async add(portfolio: Portfolio, userUid: string, callback: any) {
+    async add(portfolio: Portfolio): Promise<any> {
         try {
-            const userRef = db.collection("Users").doc(userUid);
-            const userDoc = await userRef.get();
-
-            if (!userDoc.exists) {
-                console.error("User does not exist.");
-                callback("User does not exist.", null);
-                return;
-            }
-
-            const userData = userDoc.data();
-            const worker = userData?.worker || {};
-
+            let result;
+            const created = this.getDateTime();
+            const userUid = portfolio.user_uid;
             const newPortfolio = {
-                created: format(new Date(), "dd/MM/yyyy HH:mm:ss"),
-                description: portfolio.description || "",
-                years_experience: portfolio.years_experience || 0,
-                certifications: portfolio.certifications || [],
+                ...portfolio,
+                created: created,
+                modified: null,
+                deleted: null
             };
 
-            if (!worker.portfolio) {
-                // Cria um novo portfólio
-                await userRef.set(
-                    {
-                        worker: {
-                            ...worker,
-                            portfolio: newPortfolio,
-                        },
-                    },
-                    { merge: true }
-                );
-            } else {
-                // Atualiza o portfólio existente
-                const existingCertifications = worker.portfolio.certifications || [];
-                const updatedCertifications = [
-                    ...existingCertifications,
-                    ...newPortfolio.certifications,
-                ];
+            await db.collection("Portfolios").add(newPortfolio)
+                .then(async (docRef) => {
+                    const userRef = db.collection("Users").doc(userUid);
+                    const userDoc = await userRef.get();
+                    const worker = {
+                        ...await userDoc.data()?.worker,
+                        portfolio: docRef.id
+                    }
+                    await userRef.update({worker: worker});
+                    
+                    result = newPortfolio;
+                })
+                .catch((error) => {
+                    console.error("Error adding portfolio: ", error);
+                    throw error;
+                });
 
-                await userRef.set(
-                    {
-                        worker: {
-                            ...worker,
-                            portfolio: {
-                                ...worker.portfolio,
-                                ...newPortfolio,
-                                certifications: updatedCertifications,
-                            },
-                        },
-                    },
-                    { merge: true }
-                );
-            }
-
-            callback(null, userUid);
+            return result
         } catch (error) {
-            console.error("Error adding portfolio:", error);
-            callback(error, null);
+            console.error("Error adding portfolio: ", error);
+            throw error;
         }
     }
 
-    get(userUid: string, callback: any) {
-        const userRef = db.collection("Users").doc(userUid);
-
-        userRef
-            .get()
-            .then((userDoc) => {
-                if (!userDoc.exists) {
-                    callback(`User with uid ${userUid} does not exist`, null);
-                    return;
-                }
-
-                const worker = userDoc.data()?.worker;
-                const portfolio = worker?.portfolio || {};
-                const certifications = portfolio.certifications || [];
-
-                const combinedData = {
-                    ...portfolio,
-                    certifications,
-                };
-
-                callback(null, combinedData);
-            })
-            .catch((error) => {
-                console.error(
-                    "Error getting User and Certifications from Firestore: ",
-                    error
-                );
-                callback(error, null);
-            });
-    }
-
-    delete(userUid: string, certification_url: string, callback: any) {
-        const userRef = db.collection("Users").doc(userUid);
-
-        userRef
-            .get()
-            .then((doc) => {
-                if (!doc.exists) {
-                    console.log("User does not exist.");
-                    callback("User does not exist.", null);
-                    return;
-                }
-
-                const userData = doc.data();
-                const workerData = userData?.worker || {};
-                const portfolio = workerData.portfolio || {};
-                const certifications = portfolio.certifications || [];
-
-                // Encontra o índice da certificação com base no título
-                const certificationIndex = certifications.findIndex(
-                    (certification: any) => certification.certification_url === certification_url
-                );
-
-                if (certificationIndex === -1) {
-                    console.log("Certification not found.");
-                    callback("Certification not found.", null);
-                    return;
-                }
-
-                // Remove a certificação do array
-                certifications.splice(certificationIndex, 1);
-
-                // Atualiza o documento no banco de dados
-                userRef
-                    .set(
-                        {
-                            worker: {
-                                ...workerData,
-                                portfolio: {
-                                    ...portfolio,
-                                    certifications: certifications,
-                                },
-                            },
-                        },
-                        { merge: true }
-                    )
-                    .then(() => {
-                        console.log("Certification deleted successfully.");
-                        callback(null, userUid);
-                    })
-                    .catch((error) => {
-                        console.error("Error deleting certification:", error);
-                        callback(error, null);
-                    });
-            })
-            .catch((error) => {
-                console.error("Error getting user data:", error);
-                callback(error, null);
-            });
-    }
-
-    async update(
-        certification: Certification,
-        userUid: string,
-        callback: any
-    ) {
+    async addCertification(certification: Certification, portfolioUid: string): Promise<any> {
         try {
-            const userRef = db.collection("Users").doc(userUid);
-            const userDoc = await userRef.get();
-
-            if (!userDoc.exists) {
-                console.error("User does not exist.");
-                callback("User does not exist.", null);
-                return;
-            }
-
-            const userData = userDoc.data();
-            const workerData = userData?.worker || {};
-            const portfolio = workerData.portfolio || {};
-            const certifications = portfolio.certifications || [];
+            const modified = this.getDateTime();
+            const portfolioRef = db.collection("Portfolios").doc(portfolioUid);
+            const portfolio = (await portfolioRef.get()).data();
+            const certifications = portfolio?.certifications ?? [];
 
             const newCertification = {
+                id: portfolioUid + (portfolio?.certifications.length + 1),
                 title: certification.title,
                 description: certification.description,
                 issue_organization: certification.issue_organization,
                 issue_date: certification.issue_date,
-                certification_url: certification.certification_url,
+                certification_url: certification.certification_url ?? null,
             };
-
             const updatedCertifications = [...certifications, newCertification];
 
-            await userRef.set(
-                {
-                    worker: {
-                        ...workerData,
-                        portfolio: {
-                            ...portfolio,
-                            certifications: updatedCertifications,
-                        },
-                    },
-                },
-                { merge: true }
-            );
+            await portfolioRef.update({
+                "certifications": updatedCertifications, 
+                "modified": modified
+            });
 
-            callback(null, userUid);
+            return (await portfolioRef.get()).data();
         } catch (error) {
-            console.error("Error updating Certifications to Firestore: ", error);
-            callback(error, null);
+            console.error("Error adding Certification on Portfolio: ", error);
+            throw error;
         }
     }
+
+    async update(portfolio: Portfolio, uid: string): Promise<any> {
+        try {
+            const modified = this.getDateTime();
+            const updatedPortfolio = {
+                ...portfolio,
+                modified: modified
+            };
+
+            await db.collection("Portfolios").doc(uid).update(updatedPortfolio);
+
+            return this.getById(uid);
+        } catch (error) {
+            console.error("Error updating Portfolio: ", error);
+            throw error;
+        }
+    } 
+
+    async getById(uid: string): Promise<any> {
+        try {
+            let result = null;
+            await db.collection("Portfolios")
+                .doc(uid)
+                .get()
+                .then((portfolioDoc) => {
+                    if (portfolioDoc.exists) {
+                        const portfolioData = portfolioDoc.data();
+                        if (portfolioData?.deleted === null) {
+                            result = portfolioData;
+                        }
+                    }
+                })
+                .catch((error) => {
+                    console.error("Error getting Portfolio from Firestore. ", error);
+                    throw error;
+                });
+
+                return result;
+        } catch (error) {
+            console.error("Error retrieving Portfolio by ID: ", error);
+            throw error;
+        }
+    }
+
+    async deleteCertification(portfolioUid: string, certificationId: string) {
+        try {
+            const modified = this.getDateTime();
+            const portfolioRef = db.collection("Portfolios").doc(portfolioUid);
+            const portfolio = (await portfolioRef.get()).data();
+            const certifications = portfolio?.certifications;
+
+            const certificationIndex = certifications.findIndex(
+                (certification: any) => certification.id === portfolioUid + certificationId
+            );
+
+            if (certificationIndex === -1) {
+                return null;
+            }
+
+            // Remove a certificação do array
+            certifications.splice(certificationIndex, 1);
+
+            await portfolioRef.update({
+                "certifications": certifications, 
+                "modified": modified
+            });
+
+            return (await portfolioRef.get()).data();
+        } catch (error) {
+            console.error("Error deleting Certification on Portfolio: ", error);
+            throw error;
+        }
+    }
+
 }
 
 export default PortfolioRepository;

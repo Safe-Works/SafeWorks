@@ -1,87 +1,1414 @@
 {
-    "swagger": "2.0",
-    "info": {
-        "description": "This is the Swagger Documentation of SafeWorks server API",
-        "version": "1.0.0",
-        "title": "SafeWorks API",
-        "contact": {
-            "email": "safeworksadm@gmail.com"
-        }
+  "swagger": "2.0",
+  "info": {
+    "description": "This is the Swagger Documentation of SafeWorks server API",
+    "version": "1.0.0",
+    "title": "SafeWorks API"
+  },
+  "host": "localhost:3001",
+  "basePath": "/api",
+  "tags": [
+    {
+      "name": "JobAd",
+      "descriptions": "Job Advertsiments endpoints"
     },
-    "schemes": ["http"],
-    "host": "localhost:3001",
-    "basePath": "/api",
-    "paths" : {
-        "/users": {
-            "post": {
-                "summary" : "Add a new User",
-                "description": "Add a new User",
-                "produces": ["application/json"],
-                "consumes": ["application/json"],
-                "parameters": [
-                    {
-                        "in": "body",
-                        "name": "body",
-                        "description": "User object",
-                        "required": true,
-                        "schema": {
-                            "type": "object",
-                            "properties": {
-                                "User" : {
-                                    "type": "object",
-                                    "$ref": "#/definitions/User"
-                                } 
-                            }
-                        }
-                    }
-                ],
-                "responses": {
-                    "201": {
-                        "description": "Successful operation",
-                        "schema": {
-                            "type": "array",
-                            "items": {
-                                "$ref": "#/definitions/UserResponse"
-                            }
-                        }
-                    },
-                    "409": {
-                        "description": "Invalid status value",
-                        "schema": {
-                            "$ref": "#/definitions/InvalidResponse"
-                        }
-                    }
-                }
-            }
-        }
+    {
+      "name": "Portfolio",
+      "descriptions": "Portfolio endpoints"
     },
-    "definitions": {
-        "User": {
-            "type": "object",
-            "properties": {
-                "uid": {
-                    "type": "string"
-                }
-            }
-        },
-        "UserResponse": {
-            "type": "object",
-            "properties": {
-                "uid": {
-                    "type": "string"
-                }
-            }
-        },
-        "InvalidResponse": {
-            "type": "object",
-            "properties": {
-                "statusCode": {
-                    "type": "string"
-                },
-                "message": {
-                    "type": "string"
-                }
-            }
-        }
+    {
+      "name": "User",
+      "descriptions": "User endpoints"
     }
+  ],
+  "schemes": [
+    "http",
+    "https"
+  ],
+  "consumes": [
+    "application/json"
+  ],
+  "produces": [
+    "application/json"
+  ],
+  "paths": {
+    "/jobs": {
+      "post": {
+        "tags": [
+          "JobAd"
+        ],
+        "description": "Endpoint to add a new JobAd",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "jobAd",
+            "in": "body",
+            "description": "JobAd data to add",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/AddJobAd"
+            }
+          },
+          {
+            "name": "files",
+            "in": "formData",
+            "type": "file",
+            "description": "Images file to upload with the JobAd data",
+            "required": true
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "Created JobAd UID",
+            "schema": {
+              "$ref": "#/definitions/CreatedJobAd"
+            }
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        }
+      },
+      "put": {
+        "tags": [
+          "JobAd"
+        ],
+        "description": "Endpoint to update a JobAd",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "job",
+            "in": "body",
+            "description": "JobAd data to update",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/AddJobAd"
+            }
+          },
+          {
+            "name": "files",
+            "in": "formData",
+            "type": "file",
+            "description": "Images file to upload with the JobAd data",
+            "required": true
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "Updated JobAd UID",
+            "schema": {
+              "$ref": "#/definitions/CreatedJobAd"
+            }
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        }
+      },
+      "get": {
+        "tags": [
+          "JobAd"
+        ],
+        "description": "Endpoint to get all JobAds",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "page",
+            "in": "query",
+            "description": "Page number",
+            "required": true,
+            "type": "int"
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "description": "Number of items per page",
+            "required": true,
+            "type": "int"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "All found JobAds",
+            "schema": {
+              "$ref": "#/definitions/AllJobAds"
+            }
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "JobAd"
+        ],
+        "description": "Endpoint to delete a JobAd",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "uid",
+            "in": "path",
+            "description": "JobAd UID",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "404": {
+            "description": "Not Found"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        }
+      }
+    },
+    "/jobs/{uid}": {
+      "get": {
+        "tags": [
+          "JobAd"
+        ],
+        "description": "Endpoint to get a JobAd by ID",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "uid",
+            "in": "path",
+            "required": true,
+            "type": "string",
+            "description": "JobAd UID"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "JobAd response object",
+            "schema": {
+              "$ref": "#/definitions/JobAd"
+            }
+          },
+          "404": {
+            "description": "Not Found"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        }
+      }
+    },
+    "/jobs/worker/{uid}": {
+      "get": {
+        "tags": [
+          "JobAd"
+        ],
+        "description": "Endpoint to get all JobAds from a Worker",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "uid",
+            "in": "path",
+            "required": true,
+            "type": "string",
+            "description": "Worker User UID"
+          },
+          {
+            "name": "page",
+            "in": "query",
+            "description": "Page number",
+            "required": true,
+            "type": "int"
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "description": "Number of items per page",
+            "required": true,
+            "type": "int"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "All found JobAds",
+            "schema": {
+              "$ref": "#/definitions/AllJobAds"
+            }
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        }
+      }
+    },
+    "/jobs/find/{term}": {
+      "get": {
+        "tags": [
+          "JobAd"
+        ],
+        "description": "Endpoint to get find JobAds by term",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "term",
+            "in": "path",
+            "required": true,
+            "type": "string",
+            "description": "Term to search"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "All found JobAds",
+            "schema": {
+              "$ref": "#/definitions/AllJobAds"
+            }
+          },
+          "404": {
+            "description": "Not Found"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        }
+      }
+    },
+    "/portfolios": {
+      "post": {
+        "tags": [
+          "Portfolio"
+        ],
+        "description": "Endpoint to add a new Portfolio",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "portfolio",
+            "in": "body",
+            "description": "Porfolio data to add",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/AddPortfolio"
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "Created Portfolio object",
+            "schema": {
+              "$ref": "#/definitions/CreatedPorfolio"
+            }
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "Portfolio"
+        ],
+        "description": "Endpoint to get a Certification from Portfolio",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "uid",
+            "in": "path",
+            "description": "Portfolio UID",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "id",
+            "in": "path",
+            "description": "Certification ID",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "404": {
+            "description": "Not Found"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        }
+      }
+    },
+    "/portfolios/{uid}/certifications": {
+      "post": {
+        "tags": [
+          "Portfolio"
+        ],
+        "description": "Endpoint to add a new Certification on a Portfolio",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "uid",
+            "in": "path",
+            "required": true,
+            "type": "string",
+            "description": "Portfolio UID"
+          },
+          {
+            "name": "certification",
+            "in": "body",
+            "description": "Certification data to add",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/AddCertification"
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "Portfolio object with new Certification",
+            "schema": {
+              "$ref": "#/definitions/Porfolio"
+            }
+          },
+          "404": {
+            "description": "Not Found"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        }
+      }
+    },
+    "/portfolios/{uid}": {
+      "put": {
+        "tags": [
+          "Portfolio"
+        ],
+        "description": "Endpoint to update a Portfolio",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "uid",
+            "in": "path",
+            "required": true,
+            "type": "string",
+            "description": "Portfolio UID"
+          },
+          {
+            "name": "updatedPortfolio",
+            "in": "body",
+            "description": "Portfolio data to update",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/UpdatePortfolio"
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "Updated Portfolio object",
+            "schema": {
+              "$ref": "#/definitions/Porfolio"
+            }
+          },
+          "404": {
+            "description": "Not Found"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        }
+      },
+      "get": {
+        "tags": [
+          "Portfolio"
+        ],
+        "description": "Endpoint to get a Portfolio by UID",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "uid",
+            "in": "path",
+            "required": true,
+            "type": "string",
+            "description": "Portfolio UID"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Portfolio object",
+            "schema": {
+              "$ref": "#/definitions/Porfolio"
+            }
+          },
+          "404": {
+            "description": "Not Found"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        }
+      }
+    },
+    "/users": {
+      "post": {
+        "tags": [
+          "User"
+        ],
+        "description": "Endpoint to add User",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "user",
+            "in": "body",
+            "description": "User data to add",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/AddUser"
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "Created user JWT token",
+            "schema": {
+              "$ref": "#/definitions/CreatedUser"
+            }
+          },
+          "409": {
+            "description": "Email already exists",
+            "schema": {
+              "$ref": "#/definitions/ConflictEmail"
+            }
+          },
+          "500": {
+            "description": "Action fail",
+            "schema": {
+              "$ref": "#/definitions/FailedAction"
+            }
+          }
+        }
+      }
+    },
+    "/users/{uid}": {
+      "get": {
+        "tags": [
+          "User"
+        ],
+        "description": "Endpoint to get a User by ID",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "uid",
+            "in": "path",
+            "required": true,
+            "type": "string",
+            "description": "User UID"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "User response object",
+            "schema": {
+              "$ref": "#/definitions/User"
+            }
+          },
+          "404": {
+            "description": "Not Found"
+          },
+          "500": {
+            "description": "Action fail",
+            "schema": {
+              "$ref": "#/definitions/FailedAction"
+            }
+          }
+        }
+      },
+      "put": {
+        "tags": [
+          "User"
+        ],
+        "description": "Endpoint to update a User",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "uid",
+            "in": "path",
+            "required": true,
+            "type": "string",
+            "description": "User UID"
+          },
+          {
+            "name": "user",
+            "in": "body",
+            "description": "User data to update",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/AddUser"
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "Updated user JWT token",
+            "schema": {
+              "$ref": "#/definitions/CreatedUser"
+            }
+          },
+          "404": {
+            "description": "Not Found"
+          },
+          "500": {
+            "description": "Action fail",
+            "schema": {
+              "$ref": "#/definitions/FailedAction"
+            }
+          }
+        }
+      }
+    },
+    "/users/login": {
+      "post": {
+        "tags": [
+          "User"
+        ],
+        "description": "Endpoint to login a User",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "user",
+            "in": "body",
+            "description": "User data to login",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/LoginUser"
+            }
+          },
+          {
+            "name": "accessToken",
+            "in": "header",
+            "description": "User access token to login",
+            "required": false,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "400": {
+            "description": "User login temporarily disabled"
+          },
+          "401": {
+            "description": "Logged user JWT token",
+            "schema": {
+              "$ref": "#/definitions/LoggedUser"
+            }
+          },
+          "500": {
+            "description": "Action fail",
+            "schema": {
+              "$ref": "#/definitions/FailedAction"
+            }
+          }
+        }
+      }
+    },
+    "/users/upload": {
+      "post": {
+        "tags": [
+          "User"
+        ],
+        "description": "Endpoint to upload a User image file",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "file",
+            "in": "formData",
+            "type": "file",
+            "description": "Image file to upload",
+            "required": true
+          },
+          {
+            "name": "uid",
+            "in": "formData",
+            "type": "string",
+            "description": "User UID",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Uploaded user photo url",
+            "schema": {
+              "$ref": "#/definitions/UploadedUserPhoto"
+            }
+          },
+          "404": {
+            "description": "Not Found"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        }
+      }
+    }
+  },
+  "definitions": {
+    "User": {
+      "type": "object",
+      "properties": {
+        "statusCode": {
+          "type": "number",
+          "example": 200
+        },
+        "user": {
+          "type": "object",
+          "properties": {
+            "uid": {
+              "type": "string",
+              "example": "SXn2duju1bS6uXRZBKgXoVbC43D2"
+            },
+            "email": {
+              "type": "string",
+              "example": "lucas@email.com"
+            },
+            "password": {
+              "type": "string",
+              "example": "@Password1234"
+            },
+            "name": {
+              "type": "string",
+              "example": "Lucas"
+            },
+            "username": {
+              "type": "string",
+              "example": "lucaskleal"
+            },
+            "cpf": {
+              "type": "string",
+              "example": "45644283062"
+            },
+            "telephone_number": {
+              "type": "string",
+              "example": "41935610501"
+            },
+            "district": {
+              "type": "string",
+              "example": "Centro"
+            },
+            "photo_url": {
+              "type": "string",
+              "example": "https://1231245"
+            },
+            "balance": {
+              "type": "number",
+              "example": 0
+            },
+            "contracted_services": {
+              "type": "array",
+              "example": [],
+              "items": {}
+            },
+            "worker": {
+              "type": "object",
+              "properties": {
+                "area": {
+                  "type": "array",
+                  "example": [
+                    "Carpinteiro"
+                  ],
+                  "items": {
+                    "type": "string"
+                  }
+                },
+                "portfolio": {
+                  "type": "string",
+                  "example": "huHwBD3gTccU7pgA3Z94"
+                }
+              }
+            },
+            "created": {
+              "type": "string",
+              "example": "19/06/2023, 18:23:02"
+            },
+            "modified": {},
+            "deleted": {},
+            "accessToken": {
+              "type": "string",
+              "example": "fgjdfgldfgprk"
+            }
+          }
+        }
+      }
+    },
+    "AddUser": {
+      "type": "object",
+      "properties": {
+        "email": {
+          "type": "string",
+          "example": "lucas@email.com"
+        },
+        "password": {
+          "type": "string",
+          "example": "@Password1234"
+        },
+        "name": {
+          "type": "string",
+          "example": "Lucas"
+        },
+        "cpf": {
+          "type": "string",
+          "example": "45644283062"
+        },
+        "telephone_number": {
+          "type": "string",
+          "example": "41935610501"
+        }
+      },
+      "required": [
+        "email",
+        "password",
+        "name",
+        "cpf",
+        "telephone_number"
+      ]
+    },
+    "CreatedUser": {
+      "type": "object",
+      "properties": {
+        "statusCode": {
+          "type": "number",
+          "example": 201
+        },
+        "token": {
+          "type": "string",
+          "example": "asda231234afasfg3dsfsd"
+        }
+      }
+    },
+    "ConflictEmail": {
+      "type": "object",
+      "properties": {
+        "statusCode": {
+          "type": "number",
+          "example": 409
+        },
+        "error": {
+          "type": "string",
+          "example": "email/already-exists"
+        },
+        "message": {
+          "type": "string",
+          "example": "Email already exits..."
+        }
+      }
+    },
+    "LoginUser": {
+      "type": "object",
+      "properties": {
+        "email": {
+          "type": "string",
+          "example": "lucas@email.com"
+        },
+        "password": {
+          "type": "string",
+          "example": "@Password1234"
+        }
+      },
+      "required": [
+        "email",
+        "password"
+      ]
+    },
+    "LoggedUser": {
+      "type": "object",
+      "properties": {
+        "statusCode": {
+          "type": "number",
+          "example": 401
+        },
+        "token": {
+          "type": "string",
+          "example": "asda231234afasfg3dsfsd"
+        }
+      }
+    },
+    "UploadedUserPhoto": {
+      "type": "object",
+      "properties": {
+        "statusCode": {
+          "type": "number",
+          "example": 200
+        },
+        "image": {
+          "type": "string",
+          "example": "https://SXn2duju1bS6uXRZBKgXoVbC43D2_profile_photo"
+        }
+      }
+    },
+    "JobAd": {
+      "type": "object",
+      "properties": {
+        "statusCode": {
+          "type": "number",
+          "example": 200
+        },
+        "job": {
+          "type": "object",
+          "properties": {
+            "uid": {
+              "type": "string",
+              "example": "1YS5YRafCyUThV1kEucM"
+            },
+            "worker": {
+              "type": "object",
+              "properties": {
+                "name": {
+                  "type": "string",
+                  "example": "Lucas"
+                },
+                "id": {
+                  "type": "string",
+                  "example": "NESmmmshXaSSeYHMB5FtU0l2hTg2"
+                }
+              }
+            },
+            "title": {
+              "type": "string",
+              "example": "Teste"
+            },
+            "description": {
+              "type": "string",
+              "example": "Descrição"
+            },
+            "category": {
+              "type": "object",
+              "properties": {
+                "name": {
+                  "type": "string",
+                  "example": "Carpinteiro"
+                },
+                "id": {
+                  "type": "number",
+                  "example": 1
+                }
+              }
+            },
+            "district": {
+              "type": "object",
+              "properties": {
+                "name": {
+                  "type": "string",
+                  "example": "Água Verde"
+                },
+                "id": {
+                  "type": "number",
+                  "example": 1
+                }
+              }
+            },
+            "price": {
+              "type": "number",
+              "example": 10
+            },
+            "price_type": {
+              "type": "object",
+              "properties": {
+                "name": {
+                  "type": "string",
+                  "example": "Dia"
+                },
+                "id": {
+                  "type": "number",
+                  "example": 1
+                }
+              }
+            },
+            "displacement_fee": {
+              "type": "number",
+              "example": 0
+            },
+            "delivery_time": {
+              "type": "number",
+              "example": 1
+            },
+            "media": {
+              "type": "array",
+              "example": [
+                "https://media1.com"
+              ],
+              "items": {
+                "type": "string"
+              }
+            },
+            "contracts": {
+              "type": "array",
+              "example": [
+                "23S5YRafCyUThV1kEu23"
+              ],
+              "items": {
+                "type": "string"
+              }
+            },
+            "expired": {
+              "type": "boolean",
+              "example": false
+            },
+            "created": {
+              "type": "string",
+              "example": "06/07/2023 18:32:28"
+            },
+            "modified": {
+              "type": "string",
+              "example": "07/07/2023 18:32:28"
+            },
+            "deleted": {}
+          }
+        }
+      }
+    },
+    "AllJobAds": {
+      "type": "object",
+      "properties": {
+        "jobs": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "uid": {
+                "type": "string",
+                "example": "1YS5YRafCyUThV1kEucM"
+              },
+              "worker": {
+                "type": "object",
+                "properties": {
+                  "name": {
+                    "type": "string",
+                    "example": "Lucas"
+                  },
+                  "id": {
+                    "type": "string",
+                    "example": "NESmmmshXaSSeYHMB5FtU0l2hTg2"
+                  }
+                }
+              },
+              "title": {
+                "type": "string",
+                "example": "Teste"
+              },
+              "description": {
+                "type": "string",
+                "example": "Descrição"
+              },
+              "category": {
+                "type": "object",
+                "properties": {
+                  "name": {
+                    "type": "string",
+                    "example": "Carpinteiro"
+                  },
+                  "id": {
+                    "type": "number",
+                    "example": 1
+                  }
+                }
+              },
+              "district": {
+                "type": "object",
+                "properties": {
+                  "name": {
+                    "type": "string",
+                    "example": "Água Verde"
+                  },
+                  "id": {
+                    "type": "number",
+                    "example": 1
+                  }
+                }
+              },
+              "price": {
+                "type": "number",
+                "example": 10
+              },
+              "price_type": {
+                "type": "object",
+                "properties": {
+                  "name": {
+                    "type": "string",
+                    "example": "Dia"
+                  },
+                  "id": {
+                    "type": "number",
+                    "example": 1
+                  }
+                }
+              },
+              "displacement_fee": {
+                "type": "number",
+                "example": 0
+              },
+              "delivery_time": {
+                "type": "number",
+                "example": 1
+              },
+              "media": {
+                "type": "array",
+                "example": [
+                  "https://media1.com"
+                ],
+                "items": {
+                  "type": "string"
+                }
+              },
+              "contracts": {
+                "type": "array",
+                "example": [
+                  "23S5YRafCyUThV1kEu23"
+                ],
+                "items": {
+                  "type": "string"
+                }
+              },
+              "expired": {
+                "type": "boolean",
+                "example": false
+              },
+              "created": {
+                "type": "string",
+                "example": "06/07/2023 18:32:28"
+              },
+              "modified": {
+                "type": "string",
+                "example": "07/07/2023 18:32:28"
+              },
+              "deleted": {}
+            }
+          }
+        },
+        "total": {
+          "type": "number",
+          "example": 2
+        },
+        "currentPage": {
+          "type": "number",
+          "example": 1
+        }
+      }
+    },
+    "AddJobAd": {
+      "type": "object",
+      "properties": {
+        "title": {
+          "type": "string",
+          "example": "Teste"
+        },
+        "description": {
+          "type": "string",
+          "example": "Descrição"
+        },
+        "category": {
+          "type": "object",
+          "properties": {
+            "id": {
+              "type": "number",
+              "example": 6
+            },
+            "name": {
+              "type": "string",
+              "example": "Carpinteiro"
+            }
+          }
+        },
+        "district": {
+          "type": "object",
+          "properties": {
+            "id": {
+              "type": "number",
+              "example": 1
+            },
+            "name": {
+              "type": "string",
+              "example": "Água Verde"
+            }
+          }
+        },
+        "price": {
+          "type": "number",
+          "example": 11
+        },
+        "price_type": {
+          "type": "object",
+          "properties": {
+            "id": {
+              "type": "number",
+              "example": 1
+            },
+            "name": {
+              "type": "string",
+              "example": "Dia"
+            }
+          }
+        },
+        "worker": {
+          "type": "object",
+          "properties": {
+            "id": {
+              "type": "string",
+              "example": "NESmmmshXaSSeYHMB5FtU0l2hTg2"
+            },
+            "name": {
+              "type": "string",
+              "example": "Lucas"
+            }
+          }
+        }
+      },
+      "required": [
+        "title",
+        "description",
+        "category",
+        "district",
+        "price",
+        "price_type",
+        "worker"
+      ]
+    },
+    "CreatedJobAd": {
+      "type": "object",
+      "properties": {
+        "statusCode": {
+          "type": "number",
+          "example": 201
+        },
+        "jobAd": {
+          "type": "string",
+          "example": "1YS5YRafCyUThV1kEucM"
+        }
+      }
+    },
+    "Porfolio": {
+      "type": "object",
+      "properties": {
+        "statusCode": {
+          "type": "number",
+          "example": 200
+        },
+        "portfolio": {
+          "type": "object",
+          "properties": {
+            "uid": {
+              "type": "string",
+              "example": "huHwBD3gTccU7pgA3Z94"
+            },
+            "user_uid": {
+              "type": "string",
+              "example": "NESmmmshXaSSeYHMB5FtU0l2hTg2"
+            },
+            "description": {
+              "type": "string",
+              "example": "Descrição"
+            },
+            "certifications": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "issue_date": {
+                    "type": "string",
+                    "example": "07/07/2023 18:32:28"
+                  },
+                  "description": {
+                    "type": "string",
+                    "example": "Descrição"
+                  },
+                  "id": {
+                    "type": "string",
+                    "example": "huHwBD3gTccU7pgA3Z941"
+                  },
+                  "title": {
+                    "type": "string",
+                    "example": "Certificado"
+                  },
+                  "issue_organization": {
+                    "type": "string",
+                    "example": "PUCPR"
+                  },
+                  "certification_url": {}
+                }
+              }
+            },
+            "years_experience": {
+              "type": "number",
+              "example": 1
+            },
+            "created": {
+              "type": "string",
+              "example": "07/07/2023 18:32:28"
+            },
+            "modified": {
+              "type": "string",
+              "example": "08/07/2023 18:32:28"
+            },
+            "deleted": {}
+          }
+        }
+      }
+    },
+    "AddPorfolio": {
+      "type": "object",
+      "properties": {
+        "user_uid": {
+          "type": "string",
+          "example": "NESmmmshXaSSeYHMB5FtU0l2hTg2"
+        },
+        "description": {
+          "type": "string",
+          "example": "Descrição"
+        },
+        "years_experience": {
+          "type": "number",
+          "example": 1
+        }
+      },
+      "required": [
+        "user_uid",
+        "description",
+        "years_experience"
+      ]
+    },
+    "CreatedPorfolio": {
+      "type": "object",
+      "properties": {
+        "statusCode": {
+          "type": "number",
+          "example": 200
+        },
+        "portfolio": {
+          "type": "object",
+          "properties": {
+            "uid": {
+              "type": "string",
+              "example": "huHwBD3gTccU7pgA3Z94"
+            },
+            "user_uid": {
+              "type": "string",
+              "example": "NESmmmshXaSSeYHMB5FtU0l2hTg2"
+            },
+            "description": {
+              "type": "string",
+              "example": "Descrição"
+            },
+            "certifications": {
+              "type": "array",
+              "example": [],
+              "items": {}
+            },
+            "years_experience": {
+              "type": "number",
+              "example": 1
+            },
+            "created": {
+              "type": "string",
+              "example": "07/07/2023 18:32:28"
+            },
+            "modified": {
+              "type": "string",
+              "example": "08/07/2023 18:32:28"
+            },
+            "deleted": {}
+          }
+        }
+      }
+    },
+    "AddCertification": {
+      "type": "object",
+      "properties": {
+        "title": {
+          "type": "string",
+          "example": "Certificado"
+        },
+        "description": {
+          "type": "string",
+          "example": "Descrição Certificado"
+        },
+        "issue_organization": {
+          "type": "string",
+          "example": "PUCR"
+        },
+        "issue_date": {
+          "type": "string",
+          "example": "2023-07-20"
+        }
+      },
+      "required": [
+        "title",
+        "description",
+        "issue_organization",
+        "issue_date"
+      ]
+    },
+    "UpdatePortfolio": {
+      "type": "object",
+      "properties": {
+        "description": {
+          "type": "string",
+          "example": "Descrição"
+        },
+        "years_experience": {
+          "type": "number",
+          "example": 1
+        }
+      }
+    },
+    "FailedAction": {
+      "type": "object",
+      "properties": {
+        "statusCode": {
+          "type": "number",
+          "example": 500
+        },
+        "error": {
+          "type": "string",
+          "example": "model/failed-action"
+        },
+        "message": {
+          "type": "string",
+          "example": "Error on action..."
+        }
+      }
+    }
+  }
 }
