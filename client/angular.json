@@ -13,6 +13,11 @@
         "build": {
           "builder": "@angular-devkit/build-angular:browser",
           "options": {
+            "allowedCommonJsDependencies": [
+              "crypto-js",
+              "sweetalert2",
+              "sweetalert2/dist/sweetalert2.js"
+           ],
             "outputPath": "dist/safe-works",
             "index": "src/index.html",
             "main": "src/main.ts",

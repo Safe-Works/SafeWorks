@@ -1,0 +1,11 @@
+.card-title-container {
+    display: flex;
+    overflow: hidden;
+  }
+  
+  .card-title {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  
