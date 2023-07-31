@@ -1,6 +1,7 @@
 import { Component, Input, ViewChild } from '@angular/core';
 import { MatPaginator, PageEvent } from '@angular/material/paginator';
 import { Router } from '@angular/router';
+import JobAdvertisement from 'src/app/models/job-advertisement.model';
 
 @Component({
   selector: 'app-card-posts',
@@ -17,7 +18,9 @@ export class CardPostsComponent<T> {
   @Input() pageSize: number = 10;
   @Input() isLoading: boolean = false;
   @Input() titleProperty: string = 'title';
-
+  @Input() showActions: boolean = false;
+  @Input() editJobHandler: ((job: JobAdvertisement) => void) = () => {};
+  @Input() deleteJobHandler: ((job: JobAdvertisement) => void) = () => {};
   constructor(private router: Router) { }
 
   viewItem(item: any) {

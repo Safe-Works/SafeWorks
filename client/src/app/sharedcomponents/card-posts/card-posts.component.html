@@ -1,55 +1,57 @@
 <div class="container container-body">
     <div class="row col-md-12" style="padding: 40px 5.6%;">
-      <h1 style="font-size: 40px; font-weight: bold; color: #2d2d2d;">{{ title }}</h1>
+        <h1 style="font-size: 40px; font-weight: bold; color: #2d2d2d;">Anúncios disponíveis</h1>
     </div>
     <div class="card-body" style="margin-bottom: 40px">
-      <div class="row col-md-12" style="padding: 40px 5.6%; background-color: white; border: 1px solid #ced0d4;">
-        <mat-paginator
-          id="mat-paginator-top"
-          [length]="totalItems"
-          [pageSize]="pageSize"
-          [pageSizeOptions]="[5, 10, 25, 50]"
-          [pageIndex]="currentPage - 1"
-          (page)="onPageChange($event)"
-          aria-label="Select page"
-        >
-        </mat-paginator>
-  
-        <div class="card-list" fxLayout="row" fxLayout.xs="column" fxLayoutAlign="start start" fxLayoutGap="20px">
-          <div class="loading-spinner" style="position: relative;" *ngIf="isLoading">
-            <mat-spinner [diameter]="85"></mat-spinner>
-          </div>
-          <mat-card (click)="viewItem(item)" *ngFor="let item of items" class="item-card" [id]="item.uid" [hidden]="isLoading">
-            <mat-card-content>
-              <div
-                class="card-image"
-                [ngStyle]="{
+        <div class="row col-md-12" style="padding: 40px 5.6%; background-color: white; border: 1px solid #ced0d4;">
+            <mat-paginator id="mat-paginator-top" [length]="totalItems" [pageSize]="pageSize"
+                [pageSizeOptions]="[5, 10, 25, 50]" [pageIndex]="currentPage - 1" (page)="onPageChange($event)"
+                aria-label="Select page">
+            </mat-paginator>
+
+            <div class="card-list" fxLayout="row" fxLayout.xs="column" fxLayoutAlign="start start" fxLayoutGap="20px">
+                <div class="loading-spinner" style="position: relative;" *ngIf="isLoading">
+                    <mat-spinner [diameter]="85"></mat-spinner>
+                </div>
+                <mat-card *ngFor="let item of items" class="job-card" [id]="item.uid"
+                    [hidden]="isLoading">
+                    <mat-card-actions *ngIf="showActions">
+                        <button class="card-icon" mat-icon-button [matMenuTriggerFor]="menu" aria-label="Options"
+                            title="Ações">
+                            <mat-icon>more_vert</mat-icon>
+                        </button>
+                        <mat-menu #menu="matMenu">
+                            <button mat-menu-item (click)="editJobHandler(item)">
+                                <mat-icon>edit</mat-icon>
+                                <span>Editar</span>
+                            </button>
+                            <button mat-menu-item (click)="deleteJobHandler(item)">
+                                <mat-icon>delete</mat-icon>
+                                <span>Deletar</span>
+                            </button>
+                        </mat-menu>
+                    </mat-card-actions>
+                    <mat-card-content (click)="viewItem(item)">
+                        <div class="card-image" [ngStyle]="{
                   'background-image': item.media && item.media.length > 0 ? 'url(' + item.media[0] + ')' : 'url(../../assets/default-pic.png)'
-                }"
-              ></div>
-              <div class="card-title-container">
-                <mat-card-title class="card-title" [title]="item[titleProperty]">{{ truncateTitle(item[titleProperty], 30) }}</mat-card-title>
-              </div>
-              <p class="card-price">{{ item.price | currency:'BRL' }} / {{ item.price_type.name }}</p>
-              <p class="card-category">{{ item.category.name }}</p>
-              <p class="card-district">{{ item.district.name }}</p>
-            </mat-card-content>
-          </mat-card>
+                }"></div>
+                        <div class="card-title-container">
+                            <mat-card-title class="card-title" [title]="item[titleProperty]">{{
+                                truncateTitle(item[titleProperty], 30) }}</mat-card-title>
+                        </div>
+                        <p class="card-price">{{ item.price | currency:'BRL' }} / {{ item.price_type.name }}</p>
+                        <p class="card-category">{{ item.category.name }}</p>
+                        <p class="card-district">{{ item.district.name }}</p>
+                    </mat-card-content>
+                </mat-card>
+            </div>
+            <div *ngIf="!isLoading && items.length === 0" class="no-jobs-message">
+                Nenhum serviço encontrado.
+            </div>
+            <mat-paginator id="mat-paginator-bottom" [length]="totalItems" [pageSize]="pageSize"
+                [pageSizeOptions]="[5, 10, 25, 50]" [pageIndex]="currentPage - 1" (page)="onPageChange($event)"
+                aria-label="Select page">
+            </mat-paginator>
         </div>
-        <div *ngIf="!isLoading && items.length === 0" class="no-items-message">
-          Nenhum item encontrado.
-        </div>
-        <mat-paginator
-          id="mat-paginator-bottom"
-          [length]="totalItems"
-          [pageSize]="pageSize"
-          [pageSizeOptions]="[5, 10, 25, 50]"
-          [pageIndex]="currentPage - 1"
-          (page)="onPageChange($event)"
-          aria-label="Select page"
-        >
-        </mat-paginator>
-      </div>
     </div>
-  </div>
-  
+</div>
