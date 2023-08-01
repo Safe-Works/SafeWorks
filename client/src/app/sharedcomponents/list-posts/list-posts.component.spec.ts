@@ -1,5 +1,5 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { CardPostsComponent } from './card-posts.component';
+import { CardPostsComponent } from './list-posts.component';
 import JobAdvertisement from 'src/app/models/job-advertisement.model';
 
 describe('CardPostsComponent', () => {

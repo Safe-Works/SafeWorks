@@ -1,17 +1,13 @@
 import { Component, Input, ViewChild } from '@angular/core';
-import { MatPaginator, PageEvent } from '@angular/material/paginator';
 import { Router } from '@angular/router';
 import JobAdvertisement from 'src/app/models/job-advertisement.model';
 
 @Component({
-  selector: 'app-card-posts',
-  templateUrl: './card-posts.component.html',
-  styleUrls: ['./card-posts.component.css']
+  selector: 'app-card-post',
+  templateUrl: './card-post.component.html',
+  styleUrls: ['./card-post.component.css']
 })
-export class CardPostsComponent<T> {
-  @ViewChild(MatPaginator) paginator!: MatPaginator;
-
-  @Input() title: string = '';
+export class CardPostComponent<T> {
   @Input() items: any[] = [];
   @Input() totalItems: number = 0;
   @Input() currentPage: number = 1;
@@ -26,11 +22,6 @@ export class CardPostsComponent<T> {
   viewItem(item: any) {
     const jobId = item.uid;
     this.router.navigate(['/jobs', 'view', jobId]);
-  }
-
-  onPageChange(event: PageEvent) {
-    this.currentPage = event.pageIndex + 1;
-    this.pageSize = event.pageSize;
   }
 
   truncateTitle(title: string, maxLength: number): string {

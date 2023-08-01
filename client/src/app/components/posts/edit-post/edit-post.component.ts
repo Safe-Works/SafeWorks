@@ -218,7 +218,7 @@ export class EditPostComponent {
 
     this.jobService.UpdateJobAd(filteredJobAd, photos).subscribe(
       (response) => {
-        if (response?.statusCode === 200) {
+        if (response?.statusCode === 201) {
           this.isLoading = false;
           this.loadJobInfo();
           this.openSnackBar("Anúncio editado com sucesso!", "OK", "snackbar-success");

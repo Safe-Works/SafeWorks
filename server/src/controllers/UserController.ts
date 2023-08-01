@@ -187,15 +187,15 @@ class UserController {
                     required: false
                 }
             */
-            const accessToken: string = req.header('accessToken') ?? '';
-            const result = await userRepository.login(user, accessToken);
+           const accessToken: string = req.header('accessToken') ?? '';
+           const result = await userRepository.login(user, accessToken);
             /* 
                 #swagger.responses[401] = { 
                     schema: { $ref: "#/definitions/LoggedUser" },
                     description: 'Logged user JWT token' 
                 } 
             */
-            res.status(401).send({ statusCode: 401, token: result })
+            res.status(200).send({ statusCode: 200, customTokenJwt: result })
         } catch (error) {
             if (error instanceof Error) {
                 console.error('Error to login user:', error.message);

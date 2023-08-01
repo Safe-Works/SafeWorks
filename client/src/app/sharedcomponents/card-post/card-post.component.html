@@ -1,0 +1,34 @@
+<div class="card-list" fxLayout="row" fxLayout.xs="column" fxLayoutAlign="start start" fxLayoutGap="20px">
+    <div class="loading-spinner" style="position: relative;" *ngIf="isLoading">
+        <mat-spinner [diameter]="85"></mat-spinner>
+    </div>
+    <mat-card *ngFor="let item of items" class="job-card" [id]="item.uid" [hidden]="isLoading">
+        <mat-card-actions *ngIf="showActions">
+            <button class="card-icon" mat-icon-button [matMenuTriggerFor]="menu" aria-label="Options" title="Ações">
+                <mat-icon>more_vert</mat-icon>
+            </button>
+            <mat-menu #menu="matMenu">
+                <button mat-menu-item (click)="editJobHandler(item)">
+                    <mat-icon>edit</mat-icon>
+                    <span>Editar</span>
+                </button>
+                <button mat-menu-item (click)="deleteJobHandler(item)">
+                    <mat-icon>delete</mat-icon>
+                    <span>Deletar</span>
+                </button>
+            </mat-menu>
+        </mat-card-actions>
+        <mat-card-content (click)="viewItem(item)">
+            <div class="card-image" [ngStyle]="{
+      'background-image': item.media && item.media.length > 0 ? 'url(' + item.media[0] + ')' : 'url(../../assets/default-pic.png)'
+    }"></div>
+            <div class="card-title-container">
+                <mat-card-title class="card-title" [title]="item[titleProperty]">{{
+                    truncateTitle(item[titleProperty], 30) }}</mat-card-title>
+            </div>
+            <p class="card-price">{{ item.price | currency:'BRL' }} / {{ item.price_type.name }}</p>
+            <p class="card-category">{{ item.category.name }}</p>
+            <p class="card-district">{{ item.district.name }}</p>
+        </mat-card-content>
+    </mat-card>
+</div>
