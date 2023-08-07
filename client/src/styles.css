@@ -197,6 +197,7 @@ a {
   font-size: 20px;
   color: #888;
   margin-top: 20px;
+  margin: 0 auto; 
 }
 
 @media (min-width: 768px) {
@@ -256,8 +257,8 @@ a {
 
 .tag-category {
   background-color: var(--safeworks-yellow);
-  border-radius: 100%;
-  padding: 5px 20px;
+  border-radius: 25px;
+  padding: 5px 10px;
   color: #fff;
   font-weight: 401;
   margin-bottom: 115px !important;

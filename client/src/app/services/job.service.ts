@@ -9,7 +9,7 @@ import { environment } from "../environments/environment";
 })
 
 export class JobService {
-    private api: string = environment.apiEndpoint + '/api/job';
+    private api: string = environment.apiEndpoint + '/api/jobs';
     constructor(private http: HttpClient) { }
     public CreateJobAd(job: Job, photos: any): Observable<any> {
         const formData = new FormData();
@@ -84,7 +84,7 @@ export class JobService {
     }
 
     public GetJobs(page: number, limit: number): Observable<any> {
-        return this.http.get<string>(this.api + '/get/all?page=' + page + '&limit=' + limit).pipe(
+        return this.http.get<string>(this.api + '?page=' + page + '&limit=' + limit).pipe(
             tap((response: any) => {
                 return response;
             }),
@@ -96,7 +96,7 @@ export class JobService {
     };
 
     public GetJobsByWorkerId(page: number, limit: number, worker_id: string): Observable<any> {
-        return this.http.get<string>(this.api + '/getByWorkerId?page=' + page + '&limit=' + limit + '&workerId=' + worker_id).pipe(
+        return this.http.get<string>(this.api + '/worker/'+ worker_id +'?page=' + page + '&limit=' + limit).pipe(
             tap((response: any) => {
                 return response;
             }),
@@ -120,7 +120,7 @@ export class JobService {
     };
 
     public GetById(id: string): Observable<any> {
-        return this.http.get<string>(this.api + '/get?id=' + id).pipe(
+        return this.http.get<string>(this.api + '/' + id).pipe(
             tap((response: any) => {
                 return response;
             }),

@@ -31,7 +31,7 @@ export class ViewPostComponent {
       this.jobService.GetById(this.jobId).subscribe(
         (response) => {
           this.jobInfo = response.job;
-          if (!this.jobInfo.media) {
+          if (!this.jobInfo.media || this.jobInfo.media?.length < 1) {
             this.jobInfo.media = [];
             this.jobInfo.media.push(this.defaultPicUrl);
           }

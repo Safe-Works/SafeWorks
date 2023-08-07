@@ -19,7 +19,8 @@ export class MyPostsComponent implements OnInit {
   currentPage: number = 1;
   pageSize: number = 10;
   isLoading: boolean = false;
-
+  isMyAdsPage: boolean = true;
+  
   constructor(private jobService: JobService, private userAuth: UserAuth, private router: Router) { }
 
   ngOnInit() {
@@ -31,13 +32,22 @@ export class MyPostsComponent implements OnInit {
     this.router.navigate(['/jobs', 'view', jobId]);
   }
 
-  getJobs() {
+  async getJobs() {
     this.isLoading = true;
-    this.jobService.GetJobsByWorkerId(this.currentPage, this.pageSize, this.userAuth.currentUser?.uid ?? "").subscribe(data => {
+    try {
+      const data = await this.jobService.GetJobsByWorkerId(this.currentPage, this.pageSize, this.userAuth.currentUser?.uid ?? "").toPromise();
       this.jobs = data.jobs;
       this.totalJobs = data.total;
       this.isLoading = false;
-    });
+    } catch (error) {
+      console.error('Error fetching jobs:', error);
+      Swal.fire(
+        'Erro!',
+        'Ocorreu um erro ao buscar seus anúncios.',
+        'error'
+      )
+      this.isLoading = false;
+    }
   }
 
   onPageChange(event: PageEvent) {

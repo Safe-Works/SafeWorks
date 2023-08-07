@@ -65,7 +65,7 @@ class UserRepository extends AppRepository {
                         result = null;
                     } else {
                         const userData = userDoc.data();
-                        if (userData?.deleted === null) {
+                        if (userData?.deleted === false || !userData?.deleted || userData?.deleted === null) {
                             result = userData;
                         } else {
                             result = null
@@ -76,7 +76,7 @@ class UserRepository extends AppRepository {
                     console.error("Error getting User from Firestore. ", error);
                     throw error;
                 });
-
+                
             return result;   
         } catch (error) {
             console.error("Error getting user by id: ", error);

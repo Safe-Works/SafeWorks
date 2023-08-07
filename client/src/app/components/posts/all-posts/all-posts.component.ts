@@ -3,6 +3,7 @@ import { MatPaginator, PageEvent } from '@angular/material/paginator';
 import JobAdvertisement from 'src/app/models/job-advertisement.model';
 import { JobService } from 'src/app/services/job.service';
 import { Router } from '@angular/router';
+import Swal from 'sweetalert2/dist/sweetalert2.js';
 
 @Component({
   selector: 'app-all-posts',
@@ -24,30 +25,21 @@ export class AllPostsComponent implements OnInit {
     this.getJobs();
   }
 
-  getJobs() {
+  async getJobs() {
     this.isLoading = true;
-    this.jobService.GetJobs(this.currentPage, this.pageSize).subscribe(data => {
+    try {
+      const data = await this.jobService.GetJobs(this.currentPage, this.pageSize).toPromise();
       this.jobs = data.jobs;
       this.totalJobs = data.total;
       this.isLoading = false;
-    });
-  }
-
-  viewJob(job: JobAdvertisement) {
-    const jobId = job.uid;
-    this.router.navigate(['/jobs', 'view', jobId]);
-  }
-
-  onPageChange(event: PageEvent) {
-    this.currentPage = event.pageIndex + 1;
-    this.pageSize = event.pageSize;
-    this.getJobs();
-  }
-  truncateTitle(title: string, maxLength: number): string {
-    if (title.length > maxLength) {
-      return title.substring(0, maxLength) + '...';
+    } catch (error) {
+      console.error('Error fetching jobs:', error);
+      Swal.fire(
+        'Erro!',
+        'Ocorreu um erro ao buscar os anúncios.',
+        'error'
+      )
+      this.isLoading = false;
     }
-    return title;
   }
-  
 }

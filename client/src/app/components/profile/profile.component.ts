@@ -23,7 +23,7 @@ export class ProfileComponent implements OnInit {
   loadUserInfo() {
     this.userService.GetUserInfo(this.userAuth.currentUser?.uid ?? "").subscribe(
       (response) => {
-        this.userInfo = response;
+        this.userInfo = response.user;
         if (response.photo_url) this.photoUrl = response.photo_url;
         else this.photoUrl = 'https://www.pngitem.com/pimgs/m/551-5510463_default-user-image-png-transparent-png.png';
       },
