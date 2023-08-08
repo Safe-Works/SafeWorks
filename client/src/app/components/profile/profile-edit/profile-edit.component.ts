@@ -55,8 +55,8 @@ export class ProfileEditComponent {
       panelClass: [className],
     });
   }
-  ngOnInit() {
-    this.loadUserInfo();
+  async ngOnInit() {
+    await this.loadUserInfo();
   }
   onFileSelected(event: any) {
     const file = event.target.files[0];
@@ -78,12 +78,11 @@ export class ProfileEditComponent {
     }
   }
   
-
-  loadUserInfo() {
+  async loadUserInfo() {
     this.isLoading = true;
-    this.userService.GetUserInfo(this.userAuth.currentUser?.uid ?? "").subscribe(
-      (response) => {
-        this.userInfo = response;
+    await this.userService.GetUserInfo(this.userAuth.currentUser?.uid ?? '')
+      .then((response) => {
+        this.userInfo = response.user;
         this.fullName.setValue(this.userInfo.name);
         this.cpf.setValue(this.userInfo.cpf);
         this.telephone.setValue(this.userInfo.telephone_number);
@@ -91,12 +90,11 @@ export class ProfileEditComponent {
         this.district.setValue(this.userInfo.district);
         this.urlProfileImage = this.userInfo.photo_url ? this.userInfo.photo_url : "https://www.pngitem.com/pimgs/m/551-5510463_default-user-image-png-transparent-png.png";
         this.isLoading = false;
-      },
-      (error) => {
-        console.log(error);
+      })
+      .catch((error) => {
+        console.error(error);
         this.isLoading = false;
-      }
-    );
+      });
   }
 
   updateUser(): void {
