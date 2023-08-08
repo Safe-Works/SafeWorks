@@ -16,21 +16,22 @@ export class ProfileComponent implements OnInit {
   
   constructor(private userService: UserService, public userAuth: UserAuth, private router: Router, private cookieService: CookieService) { }
 
-  ngOnInit() {
-    this.loadUserInfo();
+  async ngOnInit() {
+    await this.loadUserInfo();
   }
 
-  loadUserInfo() {
-    this.userService.GetUserInfo(this.userAuth.currentUser?.uid ?? "").subscribe(
-      (response) => {
+  async loadUserInfo() {
+    await this.userService.GetUserInfo(this.userAuth.currentUser?.uid ?? '')
+      .then((response) => {
+        console.error(response);
         this.userInfo = response.user;
         if (response.photo_url) this.photoUrl = response.photo_url;
         else this.photoUrl = 'https://www.pngitem.com/pimgs/m/551-5510463_default-user-image-png-transparent-png.png';
-      },
-      (error) => {
-        console.log(error);
-      }
-    );
+      })
+      .catch((error) => {
+        console.error(error);
+      })
+   
   }
 
 }

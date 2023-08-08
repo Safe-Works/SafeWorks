@@ -26,26 +26,26 @@
 
             <div>
                 <h2 style="text-align: center">Adicionar certificação</h2>
-                <form (submit)="updatePortfolio()">
+                <form (submit)="addCertification()">
                     <div class="form-group">
-                        <label for="title">Título</label>
-                        <input placeholder="Título da Certificação" type="text" class="form-control" name="title" id="title" [(ngModel)]="title" required>
+                        <label for="certificationTitle">Título</label>
+                        <input placeholder="Título da Certificação" type="text" class="form-control" name="certificationTitle" id="certificationTitle" [(ngModel)]="certificationTitle" required>
                     </div>
                     <div class="form-group">
-                        <label for="descriptionCertification">Descrição</label>
-                        <textarea placeholder="Descrição da Certificação" style="width: 100%" type="text" class="form-control" name="descriptionCertification" id="descriptionCertification" [(ngModel)]="descriptionCertification" required></textarea>
+                        <label for="certificationDescription">Descrição</label>
+                        <textarea placeholder="Descrição da Certificação" style="width: 100%" type="text" class="form-control" name="certificationDescription" id="certificationDescription" [(ngModel)]="certificationDescription" required></textarea>
                     </div>
                     <div class="form-group">
-                        <label for="issue_organization">Instituição</label>
-                        <input placeholder="Instituição responsável por emitir a Certificação" type="text" class="form-control" name="issue_organization" id="issue_organization" [(ngModel)]="issue_organization" required>
+                        <label for="certificationIssue_organization">Instituição</label>
+                        <input placeholder="Instituição responsável por emitir a Certificação" type="text" class="form-control" name="certificationIssue_organization" id="certificationIssue_organization" [(ngModel)]="certificationIssue_organization" required>
                     </div>
                     <div class="form-group">
-                        <label for="issue_date">Data de emissão</label>
-                        <input type="date" class="form-control" name="issue_date" id="issue_date" [(ngModel)]="issue_date" required>
+                        <label for="certificationIssue_date">Data de emissão</label>
+                        <input type="date" class="form-control" name="certificationIssue_date" id="certificationIssue_date" [(ngModel)]="certificationIssue_date" required>
                     </div>
                     <div class="form-group">
-                        <label for="certification_url">URL</label>
-                        <input placeholder="URL da Certificação" type="text" class="form-control" name="certification_url" id="certification_url" [(ngModel)]="certification_url" required>
+                        <label for="certificationCertification_url">URL</label>
+                        <input placeholder="URL da Certificação" type="text" class="form-control" name="certificationCertification_url" id="certificationCertification_url" [(ngModel)]="certificationCertification_url" required>
                     </div>
                     <button type="submit" class="btn btn-primary btn-autentication button">
                         Salvar Certificação
@@ -53,6 +53,7 @@
                 </form>
             </div>
         </div>
+
         <div class="col-lg-6">
             <h2 style="text-align: center">Certificações</h2>
 
@@ -63,7 +64,7 @@
             <div *ngIf="certifications && certifications.length > 0">
                 <div class="card-deck">
                     <div class="card" *ngFor="let certification of certifications">
-                        <div class="card-body">
+                        <div class="card-body" id="{{certification.id}}">
                             <h2 class="card-title">{{ certification.title }}</h2>
                             <hr>
                             <div class="certification-field">
@@ -82,7 +83,7 @@
                                 <label>URL da Certificação:</label>
                                 <p>{{ certification.certification_url }}</p>
                             </div>
-                            <button class="btn btn-primary btn-autentication button" (click)="deleteCertification(certification.certification_url)">Excluir Certificação</button>
+                            <button class="btn btn-primary btn-autentication button" (click)="deleteCertification(certification.id ?? '')">Excluir Certificação</button>
                         </div>
                     </div>
                 </div>
