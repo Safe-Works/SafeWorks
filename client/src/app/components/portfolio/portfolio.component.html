@@ -1,4 +1,25 @@
 <div class="container container-body">
+
+    
+    <div class="row col-md-12" style="padding: 40px 5.6%;">
+        <h1 style="font-size: 40px; font-weight: bold; color: #2d2d2d;">Portfólio</h1>
+    </div>
+
+    <div *ngFor="let certification of certifications">
+        <app-card-certification 
+            [certification] = certification
+            [deleteCertificationHandler] = deleteCertification
+            [portfolioService] = portfolioService
+            [userService] = userService
+            [portfolioUid] = portfolioUid
+            [getPortfolio] = getPortfolio 
+        >
+        </app-card-certification>
+    </div>
+    
+
+    
+    <!--
     <div class="row col-md-12" style="padding: 40px 5.6%;">
         <h1 style="font-size: 40px; font-weight: bold; color: #2d2d2d;">Editar Portfólio</h1>
     </div>
@@ -83,7 +104,7 @@
                                 <label>URL da Certificação:</label>
                                 <p>{{ certification.certification_url }}</p>
                             </div>
-                            <button class="btn btn-primary btn-autentication button" (click)="deleteCertification(certification.id ?? '')">Excluir Certificação</button>
+                            <button class="btn btn-primary btn-autentication button" (click)="deleteCertification(certification)">Excluir Certificação</button>
                         </div>
                     </div>
                 </div>
@@ -91,4 +112,6 @@
             </div>
         </div>
     </div>
+    -->
+    
 </div>

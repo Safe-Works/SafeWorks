@@ -7,6 +7,7 @@ import { PortfolioService } from 'src/app/services/portfolio.service';
 import { UserService } from 'src/app/services/user.service';
 import Portfolio from 'src/app/models/portfolio.model';
 import Certification from 'src/app/models/certification.model';
+import { PageEvent } from '@angular/material/paginator';
 
 @Component({
     selector: 'app-portfolio',
@@ -34,8 +35,8 @@ export class PortfolioComponent implements OnInit, OnDestroy {
         private http: HttpClient,
         private router: Router,
         private userAuth: UserAuth,
-        private portfolioService: PortfolioService,
-        private userService: UserService
+        public portfolioService: PortfolioService,
+        public userService: UserService
     ) { }
 
     async ngOnInit() {
@@ -49,6 +50,10 @@ export class PortfolioComponent implements OnInit, OnDestroy {
         if (this.certificationsSubscription) {
             this.certificationsSubscription.unsubscribe();
         }
+    }
+
+    onPageChange(event: PageEvent) {
+        this.getPortfolio();
     }
 
     async createPortfolio() {
@@ -127,7 +132,8 @@ export class PortfolioComponent implements OnInit, OnDestroy {
             });
     }
 
-    async deleteCertification(certificationId: string) {
+    async deleteCertification(certification: Certification) {
+        const certificationId = certification.id ?? '';
         await this.portfolioService.DeleteCertification(this.portfolioUid, certificationId.charAt(certificationId.length - 1))
             .then((response) => {
                 this.getPortfolio();

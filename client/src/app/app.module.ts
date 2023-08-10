@@ -39,6 +39,8 @@ import { PortfolioComponent } from './components/portfolio/portfolio.component';
 import { EditPortfolioComponent } from './components/portfolio/edit-portfolio/edit-portfolio.component';
 import { CardPostsComponent } from './sharedcomponents/list-posts/list-posts.component';
 import { CardPostComponent } from './sharedcomponents/card-post/card-post.component';
+import { AddPortfolioComponent } from './components/portfolio/add-portfolio/add-portfolio.component';
+import { CardCertificationComponent } from './sharedcomponents/card-certification/card-certification.component';
 
 @NgModule({
   declarations: [
@@ -60,7 +62,9 @@ import { CardPostComponent } from './sharedcomponents/card-post/card-post.compon
     PortfolioComponent,
     EditPortfolioComponent,
     CardPostsComponent,
-    CardPostComponent
+    CardPostComponent,
+    AddPortfolioComponent,
+    CardCertificationComponent
   ],
   imports: [
     BrowserModule,
