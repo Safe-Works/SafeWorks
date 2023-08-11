@@ -39,6 +39,8 @@ import { PortfolioComponent } from './components/portfolio/portfolio.component';
 import { EditPortfolioComponent } from './components/portfolio/edit-portfolio/edit-portfolio.component';
 import { CardPostsComponent } from './sharedcomponents/list-posts/list-posts.component';
 import { CardPostComponent } from './sharedcomponents/card-post/card-post.component';
+import { NavbarComponent } from './components/navbar/navbar.component';
+import { CollapseModule } from 'ngx-bootstrap/collapse';
 
 @NgModule({
   declarations: [
@@ -60,7 +62,8 @@ import { CardPostComponent } from './sharedcomponents/card-post/card-post.compon
     PortfolioComponent,
     EditPortfolioComponent,
     CardPostsComponent,
-    CardPostComponent
+    CardPostComponent,
+    NavbarComponent
   ],
   imports: [
     BrowserModule,
@@ -84,6 +87,7 @@ import { CardPostComponent } from './sharedcomponents/card-post/card-post.compon
     BsDropdownModule,
     MatMenuModule,
     SweetAlert2Module.forRoot(),
+    CollapseModule.forRoot(),
   ],
   providers: [
     UserService,
