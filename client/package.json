@@ -21,6 +21,7 @@
     "@angular/platform-browser": "^15.2.0",
     "@angular/platform-browser-dynamic": "^15.2.0",
     "@angular/router": "^15.2.0",
+    "@fortawesome/fontawesome-free": "^5.8.2",
     "@sweetalert2/ngx-sweetalert2": "^12.1.0",
     "angular2-text-mask": "^9.0.0",
     "bootstrap": "^5.2.3",
