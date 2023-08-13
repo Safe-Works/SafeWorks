@@ -1,25 +1,22 @@
-import { Component, Input } from '@angular/core';
+import { Component, Input, ViewChild } from '@angular/core';
+import { MatPaginator } from '@angular/material/paginator';
 import { Router } from '@angular/router';
-import { UserAuth } from 'src/app/auth/User.Auth';
 import Certification from 'src/app/models/certification.model';
-import { PortfolioService } from 'src/app/services/portfolio.service';
-import { UserService } from 'src/app/services/user.service';
 
 @Component({
   selector: 'app-card-certification',
   templateUrl: './card-certification.component.html',
   styleUrls: ['./card-certification.component.css']
 })
-export class CardCertificationComponent {
+export class CardCertificationComponent<T> {
 
-  @Input() certification: Partial<Certification> = {};
-  @Input() portfolioUid: string = '';
-  @Input() portfolioService!: PortfolioService;
-  @Input() userService!: UserService;
+  @ViewChild(MatPaginator) paginator!: MatPaginator;
+  @Input() certifications: Certification[] = [];
+  @Input() showActions: boolean = false;
+  @Input() isLoading: boolean = false;
   @Input() deleteCertificationHandler: ((certification: Certification) => void) = () => {};
-  @Input() getPortfolio: (() => void) = () => {};
 
-  constructor(private router: Router, private userAuth: UserAuth) { }
+  constructor(private router: Router) { }
 
   formatIssueDate(issueDate: any): string {
     const seconds = issueDate._seconds;

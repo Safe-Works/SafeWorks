@@ -12,6 +12,7 @@ import { MyPostsComponent} from './components/posts/my-posts/my-posts.component'
 import { EditPostComponent } from './components/posts/edit-post/edit-post.component';
 import { ViewPostComponent } from './components/posts/view-post/view-post.component';
 import { PortfolioComponent } from './components/portfolio/portfolio.component';
+import { AddPortfolioComponent } from './components/portfolio/add-portfolio/add-portfolio.component';
 
 const routes: Routes = [
   { path: '', component: IndexComponent },
@@ -24,7 +25,8 @@ const routes: Routes = [
   { path: 'jobs/myjobs', component: MyPostsComponent, canActivate: [AuthGuard] },
   { path: 'jobs/edit/:id', component: EditPostComponent, canActivate: [AuthGuard] },
   { path: 'jobs/view/:id', component: ViewPostComponent, canActivate: [AuthGuard] },
-  { path: 'portfolio', component: PortfolioComponent }
+  { path: 'portfolio', component: PortfolioComponent, canActivate: [AuthGuard] },
+  { path: 'portfolio/create', component: AddPortfolioComponent, canActivate: [AuthGuard] },
 ];
 
 @NgModule({

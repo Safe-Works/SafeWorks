@@ -64,7 +64,7 @@ import { CardCertificationComponent } from './sharedcomponents/card-certificatio
     CardPostsComponent,
     CardPostComponent,
     AddPortfolioComponent,
-    CardCertificationComponent
+    CardCertificationComponent,
   ],
   imports: [
     BrowserModule,
