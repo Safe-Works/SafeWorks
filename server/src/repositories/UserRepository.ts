@@ -147,7 +147,6 @@ class UserRepository extends AppRepository {
                     photo_url: userData.photo_url
                 };
                 const customToken = await firebaseAdmin.auth().createCustomToken(uid ?? "", customClaims);
-                console.log(customToken);
                 return customToken;
             }
         }
