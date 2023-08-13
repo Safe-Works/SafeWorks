@@ -1,6 +1,13 @@
 <div class="wrapper default-theme" [ngClass]="getClasses()">
     <app-search-modal></app-search-modal>
     <app-navbar></app-navbar>
-    <router-outlet></router-outlet>
-    <app-footer></app-footer>
+    <main>
+        <app-sidebar *ngIf="userAuth.currentUser"></app-sidebar>
+        <div class="pages container-fluid pt-4 pb-4 pl-4 pr-4">
+            <router-outlet></router-outlet>
+            <hr>
+            <app-footer></app-footer>
+        </div>
+        <div class="overlay" (click)="toggleSidebar()"></div>
+    </main>
 </div>

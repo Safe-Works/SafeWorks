@@ -119,35 +119,39 @@ class UserRepository extends AppRepository {
                 await firebaseAdmin.auth().updateUser(uid ?? "", { displayName: name });
             }
 
-            const userRecord = await firebaseAdmin.auth().getUser(uid ?? "");
-
             await db.collection("Users").doc(uid ?? "").update(updatedData);
 
-            const userDoc = await db.collection("Users").doc(uid ?? "").get();
-            if (!userDoc.exists) {
-                return `User with uid ${uid} does not exist`;
-            } else {
-                const userData = userDoc.exists ? userDoc.data() : null;
-                if (!userData) {
-                    return `User with uid ${uid} does not exist or has no data`;
-                } else {
-                    const customClaims = {
-                        displayName: userData.name,
-                        cpf: userData.cpf,
-                        telephone_number: userData.telephone_number,
-                        userAuth: userRecord,
-                        photo_url: userData.photo_url
-                    };
-                    const customToken = await firebaseAdmin.auth().createCustomToken(uid ?? "", customClaims);
-                    return customToken;
-                }
-            }
+            const customToken = await this.createCustomToken(uid ?? "");
+            return customToken;
+          
         } catch (error) {
             console.error("Error updating user in repository. ", error);
             throw error;
         }
     }
-
+    async createCustomToken (uid: string): Promise<any> {
+        const userRecord = await firebaseAdmin.auth().getUser(uid ?? "");
+        const userDoc = await db.collection("Users").doc(uid ?? "").get();
+        if (!userDoc.exists) {
+            return `User with uid ${uid} does not exist`;
+        } else {
+            const userData = userDoc.exists ? userDoc.data() : null;
+            if (!userData) {
+                return `User with uid ${uid} does not exist or has no data`;
+            } else {
+                const customClaims = {
+                    displayName: userData.name,
+                    cpf: userData.cpf,
+                    telephone_number: userData.telephone_number,
+                    userAuth: userRecord,
+                    photo_url: userData.photo_url
+                };
+                const customToken = await firebaseAdmin.auth().createCustomToken(uid ?? "", customClaims);
+                console.log(customToken);
+                return customToken;
+            }
+        }
+    }
     async login (user: User, accessToken: string): Promise<any> {
         try {
             const auth = getAuth();
@@ -169,12 +173,7 @@ class UserRepository extends AppRepository {
                 await signInWithEmailAndPassword(auth, user.email, user.password)
                     .then(async (userCredential) => {
                         const userAuth = userCredential.user;
-                        const expiresInSecs = 259200; // 72 horas em segundos
-                        const customClaims = {
-                            userAuth: userAuth,
-                            expiresIn: expiresInSecs // define o tempo de expiração em segundos
-                        };
-                        result = await firebaseAdmin.auth().createCustomToken(userAuth.uid, customClaims);
+                        result = await this.createCustomToken(userAuth.uid);
                     })
                     .catch((error) => {
                         console.error("Error logging user: ", error);

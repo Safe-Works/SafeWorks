@@ -1,8 +1,7 @@
-<div class="container container-body">
-    <div class="row col-md-12" style="padding: 40px 5.6%;">
-        <h1 style="font-size: 40px; font-weight: bold; color: #2d2d2d;">Anúncios disponíveis</h1>
-    </div>
-    <div class="card-body" style="margin-bottom: 40px">
+<div>
+    <h4 class="mb-4 text-muted">{{title}}</h4>
+    <div class="row">
+      <div class="card-body" *ngIf="!isLoading">
         <div class="row col-md-12" style="padding: 40px 5.6%; background-color: white; border: 1px solid #ced0d4;">
             <mat-paginator id="mat-paginator-top" [length]="totalItems" [pageSize]="pageSize"
                 [pageSizeOptions]="[5, 10, 25, 50]" [pageIndex]="currentPage - 1" (page)="onPageChange($event)"

@@ -38,7 +38,7 @@ $hamburger-hover-opacity       : 0.7 !default;
 }
 
 body {
-  font-family: Roboto, "Helvetica Neue", sans-serif !important;
+  font-family: Poppins, Roboto, sans-serif !important;
   margin: 0;
   height: 100%;
   background-color: var(--white-background);
@@ -286,4 +286,10 @@ a {
   align-items: center;
 }
 
+.text-muted {
+  font-size: 1.5rem !important;
+}
 
+.container-fluid {
+  --bs-gutter-x: 3.5rem !important;
+}

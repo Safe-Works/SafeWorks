@@ -1,0 +1,62 @@
+<aside class="sidebar shadow-sm" style="overflow: hidden;">
+    <div class="sidebar-profile d-flex flex-column justify-content-center pt-5 pb-3">
+        <div class="picture-wrapper mb-4">
+            <div class="user-picture m-auto">
+                <img src={{userAuth.currentUser?.infos.photo_url}} class="img-fluid" alt="">
+            </div>
+        </div>
+        <div class="profile-details text-center pb-4">
+            <p class="mb-0 text-uppercase name">{{userAuth.currentUser?.displayName}}</p>
+            <small class="text-uppercase role">Administrador</small>
+        </div>
+    </div>
+    <div class="sidebar-search pt-1 pb-1 pl-3 pr-3">
+        <input type="search" class="form-control rounded-pill" name="search" placeholder="Pesquisar...">
+    </div>
+    <nav class="sidebar-menu pt-3 pb-3">
+        <ul class="menu-items">
+            <li>
+                <a href="#" routerLink="/" routerLinkActive="active">
+                    <i class="fa fa-tv"></i>
+                    <span>Início</span>
+                </a>
+            </li>
+            <li>
+                <a href="#" routerLink="/jobs" routerLinkActive="active">
+                    <i class="fa fa-th"></i>
+                    <span>Anúncios</span>
+                </a>
+            </li>
+            <li>
+                <a href="#" routerLink="/jobs/create" routerLinkActive="active">
+                    <i class="fa fa-th"></i>
+                    <span>Publicar anúncio</span>
+                </a>
+            </li>
+            <li>
+                <a href="#" routerLink="/jobs/myjobs" routerLinkActive="active">
+                    <i class="fa fa-th"></i>
+                    <span>Meus anúncios</span>
+                </a>
+            </li>
+            <li>
+                <a href="#" routerLink="/jobs/favorites" routerLinkActive="active">
+                    <i class="fa fa-heart"></i>
+                    <span>Favoritos</span>
+                </a>
+            </li>
+            <li>
+                <a href="#" routerLink="/help" routerLinkActive="active">
+                    <i class="fa fa-envelope"></i>
+                    <span>Ajuda</span>
+                </a>
+            </li>
+            <li>
+                <a href="#" routerLink="/chat" routerLinkActive="active">
+                    <i class="fa fa-keyboard"></i>
+                    <span>Chat</span>
+                </a>
+            </li>
+        </ul>
+    </nav>
+</aside>
