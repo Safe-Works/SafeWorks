@@ -1,8 +1,8 @@
-<section style="background-color: #eee;">
+<section style="background-color: var(--white-background); border-radius: 0.5rem;">
     <div class="container py-5">
         <div class="row">
             <div class="col">
-                <nav aria-label="breadcrumb" class="bg-light rounded-3 p-3 mb-4">
+                <nav aria-label="breadcrumb" class="rounded-3 p-3 mb-4" style="background-color: var(--white);">
                     <ol class="breadcrumb mb-0">
                         <li class="breadcrumb-item"><a href="#">Inicio</a></li>
                         <li class="breadcrumb-item active" aria-current="page">Perfil de Usuário</li>
@@ -34,7 +34,7 @@
                         <ul *ngFor="let area of userInfo.worker.area" class="list-group list-group-flush rounded-3">
                             <li class="list-group-item d-flex justify-content-center align-items-center p-3">
                                 <i class="fas fa-globe fa-lg text-warning"></i>
-                                <p class="mb-0">{{ area }}</p>
+                                <p class="mb-0">&nbsp; {{ area }}</p>
                             </li>
                         </ul>
                     </div>

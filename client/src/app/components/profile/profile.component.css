@@ -25,11 +25,6 @@
     opacity: 1;
 }
 
-.rounded-circle {
-    width: 15rem;
-    height: 15rem;
-}
-
 .title {
     margin: 0; 
     padding-bottom: 0.3rem;

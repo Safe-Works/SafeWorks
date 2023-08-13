@@ -56,7 +56,9 @@
                     </div>
                     <div class="certification-field">
                         <label><b>URL da Certificação:</b></label>
-                        <p>{{ certification.certification_url }}</p>
+                        <a [href]=certification.certification_url target="_blank">
+                            <p> {{ certification.certification_url }}</p>
+                        </a>
                     </div>
                 </div>
             </div>

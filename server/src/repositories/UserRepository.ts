@@ -129,6 +129,7 @@ class UserRepository extends AppRepository {
             throw error;
         }
     }
+
     async createCustomToken (uid: string): Promise<any> {
         const userRecord = await firebaseAdmin.auth().getUser(uid ?? "");
         const userDoc = await db.collection("Users").doc(uid ?? "").get();
@@ -147,10 +148,12 @@ class UserRepository extends AppRepository {
                     photo_url: userData.photo_url
                 };
                 const customToken = await firebaseAdmin.auth().createCustomToken(uid ?? "", customClaims);
+                
                 return customToken;
             }
         }
     }
+
     async login (user: User, accessToken: string): Promise<any> {
         try {
             const auth = getAuth();

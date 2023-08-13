@@ -28,7 +28,7 @@ export class UserAuth {
   decodeToken(token: string): any {
     try {
       return jwt_decode(token);
-    } catch (Error) {
+    } catch (error) {
       return null;
     }
   }
