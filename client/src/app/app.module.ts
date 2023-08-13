@@ -16,7 +16,7 @@ import { ProfileEditComponent } from './components/profile/profile-edit/profile-
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { HeaderComponent } from './components/header/header.component';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
-import { FooterComponent } from "./footer/footer.component";
+import { FooterComponent } from "./components/footer/footer.component";
 import { CreatePostComponent } from './components/posts/create-post/create-post.component';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { MatSelectModule } from '@angular/material/select';
@@ -41,6 +41,9 @@ import { CardPostsComponent } from './sharedcomponents/list-posts/list-posts.com
 import { CardPostComponent } from './sharedcomponents/card-post/card-post.component';
 import { AddPortfolioComponent } from './components/portfolio/add-portfolio/add-portfolio.component';
 import { CardCertificationComponent } from './sharedcomponents/card-certification/card-certification.component';
+import { NavbarComponent } from './components/navbar/navbar.component';
+import { CollapseModule } from 'ngx-bootstrap/collapse';
+import { SidebarComponent } from './components/sidebar/sidebar.component';
 
 @NgModule({
   declarations: [
@@ -65,6 +68,8 @@ import { CardCertificationComponent } from './sharedcomponents/card-certificatio
     CardPostComponent,
     AddPortfolioComponent,
     CardCertificationComponent,
+    NavbarComponent,
+    SidebarComponent
   ],
   imports: [
     BrowserModule,
@@ -88,6 +93,7 @@ import { CardCertificationComponent } from './sharedcomponents/card-certificatio
     BsDropdownModule,
     MatMenuModule,
     SweetAlert2Module.forRoot(),
+    CollapseModule.forRoot(),
   ],
   providers: [
     UserService,
