@@ -1,5 +1,5 @@
 import { HttpClient, HttpHeaders } from "@angular/common/http";
-import { Observable } from "rxjs";
+import { Observable, firstValueFrom } from "rxjs";
 import User from "../models/user.model";
 import { Injectable } from "@angular/core";
 import { catchError, tap } from 'rxjs/operators';
@@ -10,7 +10,7 @@ import { environment } from "../environments/environment";
 })
 
 export class UserService {
-  private api: string = environment.apiEndpoint + '/api/users';
+  private api: string = environment.apiEndpoint + '/api/users/';
 
   constructor(private http: HttpClient) { }
 
@@ -31,7 +31,7 @@ export class UserService {
         'Content-Type': 'application/json'
       })
     };
-    return this.http.post<any>(this.api + "/login", body, httpOptions).pipe(
+    return this.http.post<any>(this.api + "login", body, httpOptions).pipe(
       tap((response: any) => {
         if (response.customTokenJwt && !response.customTokenJwt.code) {
           return response;
@@ -42,16 +42,13 @@ export class UserService {
     );
   }
 
-  public GetUserInfo(uid: string): Observable<any> {
-    return this.http.get<any>(this.api + "/" + uid).pipe(
-      tap((response: any) => {
-        return response;
-      }),
-      catchError((error) => {
-        console.log(error);
-        return error;
-      })
-    );
+  public async GetUserInfo(uid: string): Promise<any> {
+    try {
+      return await firstValueFrom(this.http.get<any>(this.api + uid));
+    } catch (error) {
+      console.error(error);
+      throw error;
+    }
   }
 
   public UpdateUser(uid: string, user: User, photo: any): Observable<any> {
@@ -65,7 +62,7 @@ export class UserService {
       formData.append('photo', photo, photo.name);
     }
     const headers = new HttpHeaders().set('enctype', 'multipart/form-data');
-    return this.http.put<any>(`${this.api}/${uid}`, formData, { headers }).pipe(
+    return this.http.put<any>(this.api + uid, formData, { headers }).pipe(
       tap((response: any) => {
         return response;
       }),

@@ -1,3 +1,5 @@
+import Worker from "./worker.model";
+
 class User {
     constructor(
       public email?: string,
@@ -10,6 +12,7 @@ class User {
       public username?: string,
       public district?: string,
       public token?: string,
+      public worker?: Worker
     ) {}
   }
   

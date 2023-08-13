@@ -2,7 +2,11 @@ import { HttpClient } from '@angular/common/http';
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { UserAuth } from "../../auth/User.Auth";
-import { Subscription } from 'rxjs';
+import { Subscription, firstValueFrom } from 'rxjs';
+import { PortfolioService } from 'src/app/services/portfolio.service';
+import { UserService } from 'src/app/services/user.service';
+import Portfolio from 'src/app/models/portfolio.model';
+import Certification from 'src/app/models/certification.model';
 
 @Component({
     selector: 'app-portfolio',
@@ -14,24 +18,28 @@ export class PortfolioComponent implements OnInit, OnDestroy {
     userUid: string = '';
     description: string = '';
     years_experience: number = 0;
-    title: string = '';
-    descriptionCertification: string = '';
-    issue_organization: string = '';
-    issue_date: string = '';
-    certification_url: string = '';
-    portfolio: any = null;
-    certifications: any[] = [];
+    certificationTitle: string = '';
+    certificationDescription: string = '';
+    certificationIssue_organization: string = '';
+    certificationIssue_date: string = '';
+    certificationCertification_url: string = '';
+    portfolio: Partial<Portfolio> = {};
+    portfolioUid: string = '';
+    certification: Partial<Certification> = {};
+    certifications: Certification[] = [];
     portfolioSubscription: Subscription | undefined;
     certificationsSubscription: Subscription | undefined;
 
     constructor(
         private http: HttpClient,
         private router: Router,
-        private userAuth: UserAuth
+        private userAuth: UserAuth,
+        private portfolioService: PortfolioService,
+        private userService: UserService
     ) { }
 
-    ngOnInit() {
-        this.getPortfolio();
+    async ngOnInit() {
+        await this.getPortfolio();
     }
 
     ngOnDestroy() {
@@ -43,95 +51,90 @@ export class PortfolioComponent implements OnInit, OnDestroy {
         }
     }
 
-    createPortfolio() {
-        const userUid = this.userAuth.currentUser?.uid ?? '';
-        const body = {
+    async createPortfolio() {
+        const userUid = this.userAuth.currentUser?.uid;
+
+        const portfolio: Portfolio = {
+            user_uid: userUid,
             description: this.description,
             years_experience: this.years_experience
-        };
-
-        if (this.years_experience < 0) {
-            alert('Dados inválidos. Verifique os campos preenchidos.');
-            return;
         }
 
-        this.http.post<any>('http://localhost:3001/portfolio/' + userUid, body).subscribe(
-            response => {
-                console.log(response);
-                this.getPortfolio(); // Atualiza os dados após a criação
-            },
-            error => {
-                if (error.status === 400) {
-                    alert('Dados inválidos. Verifique os campos preenchidos.');
-                }
+        await this.portfolioService.CreatePorfolio(portfolio)
+            .then((response) => {
+                this.getPortfolio();
+            })
+            .catch((error) => {
                 console.error(error);
-            }
-        );
+            });
     }
 
-    getPortfolio() {
-        const userUid = this.userAuth.currentUser?.uid ?? '';
+    async addCertification() {
+        const portfolioUid = this.portfolioUid ?? '';
+        const certification: Certification = {
+            title: this.certificationTitle ?? '',
+            description: this.certificationDescription ?? '',
+            issue_organization: this.certificationIssue_organization ?? '',
+            issue_date: new Date(this.certificationIssue_date),
+            certification_url: this.certificationCertification_url ?? ''
+        };
+        
+        await this.portfolioService.AddCertification(portfolioUid, certification)
+            .then((response) => {
+                this.getPortfolio();
+            })
+            .catch((error) => {
+                console.error(error);
+            });
+    }
 
-        if (this.portfolioSubscription) {
-            this.portfolioSubscription.unsubscribe();
+    async updatePortfolio() {
+        const portfolioUid = this.portfolio.uid ?? '';
+        const portfolio: Portfolio = {
+            uid: portfolioUid,
+            description: this.portfolio.description ?? '',
         }
 
-        this.portfolioSubscription = this.http.get<any[]>('http://localhost:3001/portfolio/' + userUid).subscribe(
-            response => {
-                if (response && response.length > 0) {
-                    const portfolio = response[0];
+        await this.portfolioService.UpdatePortfolio(portfolio)
+            .then((response) => {
 
-                    this.portfolio = [portfolio];
-                    this.certifications = portfolio.certifications;
+            })
+            .catch((error) => {
+                console.error(error);
+            })
+    }
+
+    async getPortfolio() {
+        await this.userService.GetUserInfo(this.userAuth.currentUser?.uid ?? '')
+            .then((response) => {
+                this.portfolioUid = response.user.worker.portfolio
+            })
+            .catch((error) => {
+                console.error(error);
+            });
+        await this.portfolioService.GetPortfolio(this.portfolioUid)
+            .then((response) => {
+                if (response) {
+                    const portfolio = response.portfolio;
 
                     this.description = portfolio.description;
                     this.years_experience = portfolio.years_experience;
+                    this.certifications = portfolio.certifications;
                 }
-            },
-            error => {
+            })
+            .catch((error) => {
                 console.error(error);
-            }
-        );
+            });
     }
 
-    updatePortfolio() {
-        const userUid = this.userAuth.currentUser?.uid ?? '';
-        const body = {
-            title: this.title,
-            description: this.descriptionCertification,
-            issue_organization: this.issue_organization,
-            issue_date: this.issue_date,
-            certification_url: this.certification_url
-        };
-
-        this.http.put<any>('http://localhost:3001/portfolio/' + userUid + '/', body).subscribe(
-            response => {
-                console.log(response);
-                this.getPortfolio(); // Atualiza os dados após a atualização
-            },
-            error => {
-                if (error.status === 400) {
-                    alert('Dados inválidos. Verifique os campos preenchidos.');
-                }
+    async deleteCertification(certificationId: string) {
+        await this.portfolioService.DeleteCertification(this.portfolioUid, certificationId.charAt(certificationId.length - 1))
+            .then((response) => {
+                this.getPortfolio();
+            })
+            .catch((error) => {
                 console.error(error);
-            }
-        );
-    }
-
-    deleteCertification(certification_url: string) {
-        const userUid = this.userAuth.currentUser?.uid ?? '';
-        const encodedURL = encodeURIComponent(certification_url);
-
-
-        this.http.delete<any>('http://localhost:3001/portfolio/' + userUid + '/' + encodedURL).subscribe(
-            response => {
-                console.log(response);
-                this.getPortfolio(); // Atualiza os dados após a exclusão
-            },
-            error => {
-                console.error(error);
-            }
-        );
+            })
     }
 
     formatIssueDate(issueDate: any): string {
