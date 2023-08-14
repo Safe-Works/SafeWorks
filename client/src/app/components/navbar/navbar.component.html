@@ -23,8 +23,8 @@
       <input class="form-control navbar-search" type="text" placeholder="Pesquisar . . .">
     </li>
   </ul>
-  <div class="collapse navbar-collapse right-nav" id="collapseBasic" [collapse]="isCollapsed" *ngIf="userAuth.currentUser">
-    <ul class="navbar-nav">
+  <div class="collapse navbar-collapse right-nav" id="collapseBasic" [collapse]="isCollapsed" >
+    <ul class="navbar-nav" *ngIf="userAuth.currentUser">
       <li class="nav-item">
         <a [routerLink]="'/profile'" class="btn nav-link" title="Ver perfil">
           <i class="far fa-user"></i>
@@ -37,6 +37,13 @@
           <span class="link-text">Sair</span>
         </a>
       </li>
+    </ul>
+    <ul class="navbar-nav" *ngIf="!userAuth.currentUser">
+      <li class="nav-item">
+        <a class="btn nav-link" [routerLink]="'/login'" title="Entrar" style="color: #ffa500; border-color: #ffa500; padding: 5px; margin-right: 15px;">
+            <span>Entrar</span>
+        </a>
+    </li>
     </ul>
   </div>
 </nav>
