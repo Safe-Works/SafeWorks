@@ -5,10 +5,13 @@ import Portfolio from "../models/portfolio.model";
 import { firstValueFrom } from "rxjs";
 import Certification from "../models/certification.model";
 
+export enum PageVisibilityState {
+    Hidden = 0,
+    Visible = 1
+}
 @Injectable({
     providedIn: 'root'
 })
-
 export class PortfolioService {
     private api: string = environment.apiEndpoint + '/api/portfolios/';
     constructor(private http: HttpClient) { }

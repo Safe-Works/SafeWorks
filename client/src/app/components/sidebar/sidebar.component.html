@@ -6,7 +6,7 @@
             </div>
         </div>
         <div class="profile-details text-center pb-4">
-            <p class="mb-0 text-uppercase name">{{userAuth.currentUser?.displayName}}</p>
+            <a [routerLink]="'/profile'"> <p class="mb-0 text-uppercase name">{{userAuth.currentUser?.displayName}} </p></a>
             <small class="text-uppercase role">Administrador</small>
         </div>
     </div>

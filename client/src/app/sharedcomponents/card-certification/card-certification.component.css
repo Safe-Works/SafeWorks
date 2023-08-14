@@ -1,0 +1,24 @@
+.certification {
+    margin-top: 0.5rem;
+    border-radius: 0.5rem;
+}
+
+.delete-icon {
+    border: 0;
+    float: right;
+    background-color: none;
+}
+
+.action-menu {
+    float: right;
+    margin-top: 1rem;
+    margin-bottom: 0;
+    width: 100% !important;
+}
+
+.title {
+    margin: 0; 
+    padding-bottom: 0.3rem;
+    font-size: 1.5rem;
+    font-weight: 600;
+}
