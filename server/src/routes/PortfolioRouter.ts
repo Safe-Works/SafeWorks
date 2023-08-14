@@ -25,7 +25,7 @@ portfolioRouter.post(
             description: Joi.string(),
             issue_organization: Joi.string().required(),
             issue_date: Joi.date().required(),
-            certification_url: Joi.string(),
+            certification_url: Joi.string().optional().allow(''),
         })
     }),
     portfolioController.addCertification as RequestHandler

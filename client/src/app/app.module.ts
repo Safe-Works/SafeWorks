@@ -16,7 +16,7 @@ import { ProfileEditComponent } from './components/profile/profile-edit/profile-
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { HeaderComponent } from './components/header/header.component';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
-import { FooterComponent } from "./footer/footer.component";
+import { FooterComponent } from "./components/footer/footer.component";
 import { CreatePostComponent } from './components/posts/create-post/create-post.component';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { MatSelectModule } from '@angular/material/select';
@@ -39,6 +39,11 @@ import { PortfolioComponent } from './components/portfolio/portfolio.component';
 import { EditPortfolioComponent } from './components/portfolio/edit-portfolio/edit-portfolio.component';
 import { CardPostsComponent } from './sharedcomponents/list-posts/list-posts.component';
 import { CardPostComponent } from './sharedcomponents/card-post/card-post.component';
+import { AddPortfolioComponent } from './components/portfolio/add-portfolio/add-portfolio.component';
+import { CardCertificationComponent } from './sharedcomponents/card-certification/card-certification.component';
+import { NavbarComponent } from './components/navbar/navbar.component';
+import { CollapseModule } from 'ngx-bootstrap/collapse';
+import { SidebarComponent } from './components/sidebar/sidebar.component';
 
 @NgModule({
   declarations: [
@@ -60,7 +65,11 @@ import { CardPostComponent } from './sharedcomponents/card-post/card-post.compon
     PortfolioComponent,
     EditPortfolioComponent,
     CardPostsComponent,
-    CardPostComponent
+    CardPostComponent,
+    AddPortfolioComponent,
+    CardCertificationComponent,
+    NavbarComponent,
+    SidebarComponent
   ],
   imports: [
     BrowserModule,
@@ -84,6 +93,7 @@ import { CardPostComponent } from './sharedcomponents/card-post/card-post.compon
     BsDropdownModule,
     MatMenuModule,
     SweetAlert2Module.forRoot(),
+    CollapseModule.forRoot(),
   ],
   providers: [
     UserService,

@@ -1,0 +1,117 @@
+
+<!--
+<div class="card-list" [id]="certification.id" fxLayout="row" fxLayout.xs="column" fxLayoutAlign="start start" fxLayoutGap="20px">
+    <div class="card-deck">
+        <div class="card-body" id="{{certification.id}}">
+            <h2 class="card-title">{{ certification.title }}</h2>
+            <hr>
+            <div class="certification-field">
+                <label>Descrição:</label>
+                <p>{{ certification.description }}</p>
+            </div>
+            <div class="certification-field">
+                <label>Organização Emissora:</label>
+                <p>{{ certification.issue_organization }}</p>
+            </div>
+            <div class="certification-field">
+                <label>Data de Emissão:</label>
+                <p>{{ formatIssueDate(certification.issue_date) }}</p>
+            </div>
+            <div class="certification-field">
+                <label>URL da Certificação:</label>
+                <p>{{ certification.certification_url }}</p>
+            </div>
+            <button class="btn btn-primary btn-autentication button"
+                (click)="deleteCertificationHandler(certification)">Excluir Certificação</button>
+        </div>
+    </div>
+</div>
+-->
+<div>
+    <h1 class="title">Certificações</h1>
+    <mat-card *ngFor="let certification of certifications" class="certification card mb-4 mb-md-0" [id]="certification.id" [hidden]="isLoading">
+
+        <div class="action-menu" *ngIf="showActions">
+            <button mat-menu-item class="delete-icon" style="background-color: transparent;" (click)="deleteCertificationHandler(certification)">
+                <mat-icon>delete</mat-icon>
+            </button>
+        </div>
+    
+        <mat-card-content style="margin-top: 0;">
+            <div class="card-deck" style="margin-top: 0;">
+                <div class="card-body" style="margin-top: 0;" id="{{ certification.id }}">
+                    <h2 class="card-title">{{ certification.title }}</h2>
+                    <hr>
+                    <div class="certification-field">
+                        <label><b>Descrição:</b></label>
+                        <p>{{ certification.description }}</p>
+                    </div>
+                    <div class="certification-field">
+                        <label><b>Organização Emissora:</b></label>
+                        <p>{{ certification.issue_organization }}</p>
+                    </div>
+                    <div class="certification-field">
+                        <label><b>Data de Emissão:</b></label>
+                        <p>{{ formatIssueDate(certification.issue_date) }}</p>
+                    </div>
+                    <div class="certification-field">
+                        <label><b>URL da Certificação:</b></label>
+                        <a [href]=certification.certification_url target="_blank">
+                            <p> {{ certification.certification_url }}</p>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </mat-card-content>
+        
+    </mat-card>
+</div>
+
+
+<!--
+<div class="card-list" fxLayout="row" fxLayout.xs="column" fxLayoutAlign="start start" fxLayoutGap="20px">
+    <mat-card *ngFor="let certification of certifications" class="job-card" [id]="certification.id" [hidden]="isLoading">
+
+        <mat-card-actions *ngIf="showActions">
+            <button class="card-icon" mat-icon-button [matMenuTriggerFor]="menu" aria-label="Options" title="Ações">
+                <mat-icon>more_vert</mat-icon>
+            </button>
+            <mat-menu #menu="matMenu">
+                <button mat-menu-item (click)="deleteCertificationHandler(certification)">
+                    <mat-icon>delete</mat-icon>
+                    <span>Deletar</span>
+                </button>
+            </mat-menu>
+        </mat-card-actions>
+
+        <mat-card-content>
+            <div class="card-deck">
+                <div class="card-body" id="{{ certification.id }}">
+                    <h2 class="card-title">{{ certification.title }}</h2>
+                    <hr>
+                    <div class="certification-field">
+                        <label>Descrição:</label>
+                        <p>{{ certification.description }}</p>
+                    </div>
+                    <div class="certification-field">
+                        <label>Organização Emissora:</label>
+                        <p>{{ certification.issue_organization }}</p>
+                    </div>
+                    <div class="certification-field">
+                        <label>Data de Emissão:</label>
+                        <p>{{ formatIssueDate(certification.issue_date) }}</p>
+                    </div>
+                    <div class="certification-field">
+                        <label>URL da Certificação:</label>
+                        <p>{{ certification.certification_url }}</p>
+                    </div>
+                    <button class="btn btn-primary btn-autentication button"
+                        (click)="deleteCertificationHandler(certification)">Excluir Certificação
+                    </button>
+                </div>
+            </div>
+        </mat-card-content>
+        
+    </mat-card>
+</div>
+-->

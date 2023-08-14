@@ -20,6 +20,7 @@ export class UserAuth {
     if (token) {
       let decodedToken = this.decodeToken(token);
       let user = decodedToken.claims.userAuth;
+      user.infos = decodedToken.claims;
       this.setUser(user);
     }
   }
@@ -27,7 +28,7 @@ export class UserAuth {
   decodeToken(token: string): any {
     try {
       return jwt_decode(token);
-    } catch (Error) {
+    } catch (error) {
       return null;
     }
   }
