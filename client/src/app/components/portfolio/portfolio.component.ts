@@ -1,19 +1,25 @@
 import { HttpClient } from '@angular/common/http';
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { Router } from '@angular/router';
 import { UserAuth } from "../../auth/User.Auth";
-import { Subscription, firstValueFrom } from 'rxjs';
 import { PortfolioService } from 'src/app/services/portfolio.service';
 import { UserService } from 'src/app/services/user.service';
 import Portfolio from 'src/app/models/portfolio.model';
 import Certification from 'src/app/models/certification.model';
+import { MatPaginator, PageEvent } from '@angular/material/paginator';
 
 @Component({
     selector: 'app-portfolio',
     templateUrl: './portfolio.component.html',
     styleUrls: ['./portfolio.component.css']
 })
-export class PortfolioComponent implements OnInit, OnDestroy {
+export class PortfolioComponent implements OnInit {
+
+    @ViewChild(MatPaginator) paginator!: MatPaginator;
+    totalCertifications: number = 0;
+    currentPage: number = 1;
+    pageSize: number = 10;
+    isLoading: boolean = false;
 
     userUid: string = '';
     description: string = '';
@@ -27,14 +33,12 @@ export class PortfolioComponent implements OnInit, OnDestroy {
     portfolioUid: string = '';
     certification: Partial<Certification> = {};
     certifications: Certification[] = [];
-    portfolioSubscription: Subscription | undefined;
-    certificationsSubscription: Subscription | undefined;
 
     constructor(
+        private portfolioService: PortfolioService,
         private http: HttpClient,
         private router: Router,
         private userAuth: UserAuth,
-        private portfolioService: PortfolioService,
         private userService: UserService
     ) { }
 
@@ -42,13 +46,10 @@ export class PortfolioComponent implements OnInit, OnDestroy {
         await this.getPortfolio();
     }
 
-    ngOnDestroy() {
-        if (this.portfolioSubscription) {
-            this.portfolioSubscription.unsubscribe();
-        }
-        if (this.certificationsSubscription) {
-            this.certificationsSubscription.unsubscribe();
-        }
+    onPageChange(event: PageEvent) {
+        this.currentPage = event.pageIndex + 1;
+        this.pageSize = event.pageSize;
+        this.getPortfolio();
     }
 
     async createPortfolio() {
@@ -127,14 +128,19 @@ export class PortfolioComponent implements OnInit, OnDestroy {
             });
     }
 
-    async deleteCertification(certificationId: string) {
-        await this.portfolioService.DeleteCertification(this.portfolioUid, certificationId.charAt(certificationId.length - 1))
+    public async deleteCertification(certification: Certification) {
+        const certificationId = certification.id ?? '';
+        try {
+            await this.portfolioService.DeleteCertification(certificationId.slice(0, 20), certificationId.charAt(certificationId.length - 1))
             .then((response) => {
                 this.getPortfolio();
             })
             .catch((error) => {
                 console.error(error);
             })
+        } catch (error) {
+            console.error(error);
+        }
     }
 
     formatIssueDate(issueDate: any): string {
