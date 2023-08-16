@@ -36,10 +36,8 @@ import { ViewPostComponent } from './components/posts/view-post/view-post.compon
 import { MatMenuModule } from '@angular/material/menu';
 import { SweetAlert2Module } from '@sweetalert2/ngx-sweetalert2';
 import { PortfolioComponent } from './components/portfolio/portfolio.component';
-import { EditPortfolioComponent } from './components/portfolio/edit-portfolio/edit-portfolio.component';
 import { CardPostsComponent } from './sharedcomponents/list-posts/list-posts.component';
 import { CardPostComponent } from './sharedcomponents/card-post/card-post.component';
-import { AddPortfolioComponent } from './components/portfolio/add-portfolio/add-portfolio.component';
 import { CardCertificationComponent } from './sharedcomponents/card-certification/card-certification.component';
 import { NavbarComponent } from './components/navbar/navbar.component';
 import { CollapseModule } from 'ngx-bootstrap/collapse';
@@ -63,13 +61,11 @@ import { SidebarComponent } from './components/sidebar/sidebar.component';
     ViewPostComponent,
     SearchModalComponent,
     PortfolioComponent,
-    EditPortfolioComponent,
     CardPostsComponent,
     CardPostComponent,
-    AddPortfolioComponent,
     CardCertificationComponent,
     NavbarComponent,
-    SidebarComponent
+    SidebarComponent,
   ],
   imports: [
     BrowserModule,

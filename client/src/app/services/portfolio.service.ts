@@ -32,11 +32,15 @@ export class PortfolioService {
 
     public async UpdatePortfolio(portfolio: Portfolio): Promise<any> {
         try {
-            const formData = new FormData();
             const url = this.api + portfolio.uid;
-            formData.append('description', portfolio.description ?? '');
+            const httpOptions = {
+                headers: new HttpHeaders({
+                    'Content-Type': 'application/json'
+                })
+            };
+            delete portfolio.uid;
 
-            return await firstValueFrom(this.http.put<any>(url, formData));
+            return await firstValueFrom(this.http.put<any>(url, portfolio, httpOptions));
         } catch (error) {
             console.error(error);
             throw error;
