@@ -126,12 +126,12 @@ class PortfolioController {
             if (portfolio) {
                 const result = await portfolioRepository.update(updatedPortfolio, uid);
                 /* 
-                    #swagger.responses[201] = { 
+                    #swagger.responses[200] = { 
                         schema: { $ref: "#/definitions/Porfolio" },
                         description: 'Updated Portfolio object' 
                     } 
                 */
-                res.status(201).json({ statusCode: 201, portfolio: result });
+                res.status(200).json({ statusCode: 200, portfolio: result });
             } else {
                 res.status(404).json({ statusCode: 404, error: "portfolio/not-found" });
             }
@@ -214,7 +214,7 @@ class PortfolioController {
             if (portfolio) {
                 const result = await portfolioRepository.deleteCertification(portfolioId, certificationId);
                 if (result) {
-                    res.status(200).json({ statusCode: 200, message: 'Certification deleted successfully from Portfolio.' });
+                    res.status(200).json({ statusCode: 200, portfolio: result, message: 'Certification deleted successfully from Portfolio.' });
                 } else {
                     res.status(404).json({ statusCode: 404, error: 'certification/not-found' });
                 } 

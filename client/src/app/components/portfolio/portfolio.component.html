@@ -1,40 +1,57 @@
-<div class="container container-body">
-  
-    <div class="row col-md-12" style="padding: 40px 5.6%;">
-        <h1 style="font-size: 40px; font-weight: bold; color: #2d2d2d;">Portfólio</h1>
-    </div>
-
-    <div class="container" style="padding: 40px 5.6%;">
-        <div class="form-group">
-            <label for="description">Descrição</label>
-            <input disabled="true" style="width: 100%" class="form-control row col-md-10" id="description" name="description" [(ngModel)]="description" required>
-        </div>
-    
-        <div class="form-group">
-            <label for="years_experience">Anos de Experiência</label>
-            <input disabled="true" type="number" class="form-control row col-md-10" id="years_experience" name="years_experience" [(ngModel)]="years_experience" required>
-        </div>
-    </div>
-    
-    
-    <!--
+<div class="loading-spinner" *ngIf="isLoading">
+    <mat-spinner [diameter]="85"></mat-spinner>
+</div>
+<div class="container container-body"> 
     <div class="row col-md-12" style="padding: 40px 5.6%;">
         <h1 style="font-size: 40px; font-weight: bold; color: #2d2d2d;">Editar Portfólio</h1>
     </div>
+
     <div class="row col-md-12" style="padding: 40px 5.6%; background-color: white; border: 1px solid #ced0d4;">
         <div class="col-lg-6">
-            <div>
-                <form (submit)="createPortfolio()">
+            <div *ngIf="!user?.worker?.portfolio">
+                <form (submit)="createPortfolio()" >
                     <h2 style="text-align: center">Adicionar informações</h2>
 
-                    <div class="form-group">
-                        <label for="description">Descrição</label>
-                        <textarea style="width: 100%" class="form-control" id="description" name="description" [(ngModel)]="description" required></textarea>
+                    <label for="description">Descrição</label>
+                    <div class="input-group mb-3">
+                        <input style="width: 100%" class="form-control" id="description" name="description" [formControl]="description" [ngClass]="{ 'is-invalid': description.invalid && formDir.submitted }" required>
+                    </div>
+                    <div class="row validation-error" *ngIf="description.invalid && formDir.submitted">
+                        <p>A descrição é obrigatória*</p>
+                    </div>
+                    
+                    <label for="years_experience">Anos de Experiência</label>
+                    <div class="input-group mb-3">
+                        <input type="number" class="form-control" id="years_experience" name="years_experience" [formControl]="years_experience" [ngClass]="{ 'is-invalid': years_experience.invalid && formDir.submitted }" required>
+                    </div>
+                    <div class="row validation-error" *ngIf="years_experience.invalid && formDir.submitted">
+                        <p>O número de anos de experiência é obrigatório*</p>
                     </div>
 
-                    <div class="form-group">
-                        <label for="years_experience">Anos de Experiência</label>
-                        <input type="number" class="form-control" id="years_experience" name="years_experience" [(ngModel)]="years_experience" required>
+                    <button type="submit" class="btn btn-primary btn-autentication button">
+                        Criar portfólio
+                    </button>
+                </form>
+            </div>
+
+            <div *ngIf="user?.worker?.portfolio">
+                <form #formDir="ngForm" (submit)="formDir.valid && updatePortfolio()">
+                    <h2 style="text-align: center">Atualizar informações</h2>
+
+                    <label for="description">Descrição</label>
+                    <div class="input-group mb-3">
+                        <input style="width: 100%" class="form-control" id="description" name="description" [formControl]="description" [ngClass]="{ 'is-invalid': description.invalid && formDir.submitted }" required>
+                    </div>
+                    <div class="row validation-error" *ngIf="description.invalid && formDir.submitted">
+                        <p>A descrição é obrigatória*</p>
+                    </div>
+                    
+                    <label for="years_experience">Anos de Experiência</label>
+                    <div class="input-group mb-3">
+                        <input type="number" class="form-control" id="years_experience" name="years_experience" [formControl]="years_experience" [ngClass]="{ 'is-invalid': years_experience.invalid && formDir.submitted }" required>
+                    </div>
+                    <div class="row validation-error" *ngIf="years_experience.invalid && formDir.submitted">
+                        <p>O número de anos de experiência é obrigatório*</p>
                     </div>
 
                     <button type="submit" class="btn btn-primary btn-autentication button">
@@ -45,27 +62,49 @@
 
             <div>
                 <h2 style="text-align: center">Adicionar certificação</h2>
-                <form (submit)="addCertification()">
-                    <div class="form-group">
-                        <label for="certificationTitle">Título</label>
-                        <input placeholder="Título da Certificação" type="text" class="form-control" name="certificationTitle" id="certificationTitle" [(ngModel)]="certificationTitle" required>
+                <form #formDir="ngForm" (submit)="formDir.valid && addCertification()">
+                    <label for="certificationTitle">Título</label>
+                    <div class="input-group mb-3">
+                        <input placeholder="Título da Certificação" type="text" class="form-control" name="certificationTitle"
+                            id="certificationTitle" [formControl]="certificationTitle"[ngClass]="{ 'is-invalid': certificationTitle.invalid && formDir.submitted }" required>
                     </div>
-                    <div class="form-group">
-                        <label for="certificationDescription">Descrição</label>
-                        <textarea placeholder="Descrição da Certificação" style="width: 100%" type="text" class="form-control" name="certificationDescription" id="certificationDescription" [(ngModel)]="certificationDescription" required></textarea>
+                    <div class="row validation-error" *ngIf="certificationTitle.invalid && formDir.submitted">
+                        <p>O título do certificado é obrigatório*</p>
                     </div>
-                    <div class="form-group">
-                        <label for="certificationIssue_organization">Instituição</label>
-                        <input placeholder="Instituição responsável por emitir a Certificação" type="text" class="form-control" name="certificationIssue_organization" id="certificationIssue_organization" [(ngModel)]="certificationIssue_organization" required>
+
+                    <label for="certificationDescription">Descrição</label>
+                    <div class="input-group mb-3">   
+                        <textarea placeholder="Descrição da Certificação" style="width: 100%" type="text" class="form-control" name="certificationDescription" 
+                            id="certificationDescription" [formControl]="certificationDescription" [ngClass]="{ 'is-invalid': certificationDescription.invalid && formDir.submitted }" required></textarea>
                     </div>
-                    <div class="form-group">
-                        <label for="certificationIssue_date">Data de emissão</label>
-                        <input type="date" class="form-control" name="certificationIssue_date" id="certificationIssue_date" [(ngModel)]="certificationIssue_date" required>
+                    <div class="row validation-error" *ngIf="certificationDescription.invalid && formDir.submitted">
+                        <p>A descrição do certificado é obrigatória*</p>
                     </div>
-                    <div class="form-group">
-                        <label for="certificationCertification_url">URL</label>
-                        <input placeholder="URL da Certificação" type="text" class="form-control" name="certificationCertification_url" id="certificationCertification_url" [(ngModel)]="certificationCertification_url" required>
+
+                    <label for="certificationIssueOrganization">Instituição</label>
+                    <div class="input-group mb-3">
+                        <input placeholder="Instituição responsável por emitir a Certificação" type="text" class="form-control" name="certificationIssueOrganization" 
+                            id="certificationIssueOrganization" [formControl]="certificationIssueOrganization" [ngClass]="{ 'is-invalid': certificationIssueOrganization.invalid && formDir.submitted }" required>
                     </div>
+                    <div class="row validation-error" *ngIf="certificationIssueOrganization.invalid && formDir.submitted">
+                        <p>A organização que emitiu o certificado é obrigatória*</p>
+                    </div>
+
+                    <label for="certificationIssueDate">Data de emissão</label>
+                    <div class="input-group mb-3">
+                        <input type="date" class="form-control" name="certificationIssueDate" 
+                            id="certificationIssueDate" [formControl]="certificationIssueDate" [ngClass]="{ 'is-invalid': certificationIssueDate.invalid && formDir.submitted }" required>
+                    </div>
+                    <div class="row validation-error" *ngIf="certificationIssueDate.invalid && formDir.submitted">
+                        <p>A data em que a certificação foi emitida é obrigatória*</p>
+                    </div>
+
+                    <label for="certificationUrl">URL</label>
+                    <div class="input-group mb-3">
+                        <input placeholder="URL da Certificação" type="text" class="form-control" name="certificationUrl" 
+                            id="certificationUrl" [formControl]="certificationUrl">
+                    </div>
+
                     <button type="submit" class="btn btn-primary btn-autentication button">
                         Salvar Certificação
                     </button>
@@ -83,7 +122,7 @@
             <div *ngIf="certifications && certifications.length > 0">
                 <div class="card-deck">
                     <div class="card" *ngFor="let certification of certifications">
-                        <div class="card-body" id="{{certification.id}}">
+                        <div class="card-body" id="{{ certification.id }}">
                             <h2 class="card-title">{{ certification.title }}</h2>
                             <hr>
                             <div class="certification-field">
@@ -100,7 +139,9 @@
                             </div>
                             <div class="certification-field">
                                 <label>URL da Certificação:</label>
-                                <p>{{ certification.certification_url }}</p>
+                                <a [href]=certification.certification_url target="_blank">
+                                    <p> {{ certification.certification_url }}</p>
+                                </a>
                             </div>
                             <button class="btn btn-primary btn-autentication button" (click)="deleteCertification(certification)">Excluir Certificação</button>
                         </div>
@@ -110,6 +151,5 @@
             </div>
         </div>
     </div>
-    -->
     
 </div>

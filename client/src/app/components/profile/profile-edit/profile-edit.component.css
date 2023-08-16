@@ -9,3 +9,24 @@
 .validation-error {
     margin-top: .2px;
 }
+
+.profile-image {
+    background-size: cover;
+    background-position: center;
+    width: 12rem;
+    height: 12rem;
+    object-fit: contain;
+    margin: 0 auto;
+    border-radius: 100%;
+}
+
+.change-image-label {
+    font-weight: 550; 
+    color: var(--white); 
+    background-color: var(--safeworks-blue);
+    margin-top: 0.2rem;
+    text-align: center;
+    cursor: pointer;
+    width: 8rem;
+    border-radius: 1rem;
+}
