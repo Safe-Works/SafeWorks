@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { CookieService } from 'ngx-cookie-service';
 import { UserAuth } from 'src/app/auth/User.Auth';
 import Certification from 'src/app/models/certification.model';
@@ -15,6 +15,7 @@ import { UserService } from 'src/app/services/user.service';
 export class ProfileComponent implements OnInit {
 
   userInfo: any = null;
+  userUid: string = '';
   portfolio: Partial<Portfolio> = {};
   certifications: Certification[] = [];
   isMyProfile: boolean = false;
@@ -24,16 +25,16 @@ export class ProfileComponent implements OnInit {
     private userService: UserService,
     private portfolioService: PortfolioService,
     public userAuth: UserAuth, 
-    private router: Router, 
-    private cookieService: CookieService
+    public route: ActivatedRoute
   ) { }
 
   async ngOnInit() {
+    this.userUid = this.route.snapshot.params['id'] ?? this.userAuth.currentUser?.uid;
     await this.loadUserInfo();
   }
 
   async loadUserInfo() {
-    await this.userService.GetUserInfo(this.userAuth.currentUser?.uid ?? '')
+    await this.userService.GetUserInfo(this.userUid)
       .then(async (response) => {
         console.error(response);
         this.userInfo = response.user;
