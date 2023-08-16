@@ -8,8 +8,9 @@
           <div *ngIf="userAuth.currentUser">
             <div style="position: flex;">
               <h1>Olá, </h1>
-              <h1 [routerLink]="'/profile'" style="text-decoration: underline; cursor: pointer;"> {{
-                userAuth.currentUser.displayName }}!</h1>
+              <h1 [routerLink]="'/profile/' + userAuth.currentUser.uid" style="text-decoration: underline; cursor: pointer;"> 
+                {{ userAuth.currentUser.displayName }}!
+              </h1>
             </div>
             <br />
             <br />
