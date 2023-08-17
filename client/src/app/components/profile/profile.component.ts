@@ -25,7 +25,8 @@ export class ProfileComponent implements OnInit {
     private userService: UserService,
     private portfolioService: PortfolioService,
     public userAuth: UserAuth, 
-    public route: ActivatedRoute
+    public route: ActivatedRoute,
+    public router: Router,
   ) { }
 
   async ngOnInit() {
@@ -61,7 +62,10 @@ export class ProfileComponent implements OnInit {
       .catch((error) => {
         console.error(error);
       })
-   
+  }
+
+  redirectToEdit() {
+    this.router.navigate(['profile/edit', this.userUid]);
   }
 
 }
