@@ -6,7 +6,7 @@
         <h1 style="font-size: 40px; font-weight: bold; color: #2d2d2d;">Editar Portfólio</h1>
     </div>
 
-    <div class="row col-md-12" style="padding: 40px 5.6%; background-color: white; border: 1px solid #ced0d4;">
+    <div class="row col-md-12" style="padding: 40px 5.6%; background-color: white; border: 1px solid #ced0d4; border-radius: 1rem;">
         <div class="col-lg-6">
             <div *ngIf="!user?.worker?.portfolio">
                 <form (submit)="createPortfolio()" >

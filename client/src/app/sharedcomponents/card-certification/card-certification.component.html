@@ -1,6 +1,7 @@
 <div>
     <h1 class="title">Certificações</h1>
-    <mat-card *ngFor="let certification of certifications" class="certification card mb-4 mb-md-0" [id]="certification.id" [hidden]="isLoading">
+    <mat-card *ngFor="let certification of certifications" class="certification card mb-4 mb-md-0" 
+        [id]="certification.id" [hidden]="isLoading" style="border-radius: 1rem; border: 1px solid #ced0d4;">
 
         <div class="action-menu" *ngIf="showActions">
             <button mat-menu-item class="delete-icon" style="background-color: transparent;" (click)="deleteCertificationHandler(certification)">

@@ -29,7 +29,7 @@ class JobAdRepository extends AppRepository {
             if (!photos || photos.length === 0) {
                 return uid;
             }
-            const photoUrls = this.updateJobMedia(photos, uid);
+            const photoUrls = await this.updateJobMedia(photos, uid);
 
             await db.collection("JobAdvertisements").doc(uid).update({
                 media: photoUrls,
@@ -78,14 +78,13 @@ class JobAdRepository extends AppRepository {
             if (!photos || photos.length === 0) {
                 return uid;
             }
-            const photoUrls = this.updateJobMedia(photos, uid);
+            const photoUrls = await this.updateJobMedia(photos, uid);
             mediaUrls.forEach((url: string) => {
                 if (!updatedJob.media.includes(url)) {
                     mediaUrls.splice(mediaUrls.indexOf(url), 1);
                 }
             });
             updatedJob.media?.concat(photoUrls);
-
             await db.collection("JobAdvertisements").doc(uid).update({ media: updatedJob.media });
 
             return uid;
@@ -292,6 +291,7 @@ class JobAdRepository extends AppRepository {
                     throw error;
                 }
             }
+
             return photoUrls;
         } catch (error) {
             console.error("Error updating Job media. ", error);

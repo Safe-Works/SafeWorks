@@ -1,4 +1,4 @@
-<section style="background-color: var(--white-background); border-radius: 0.5rem;">
+<section style="background-color: var(--white-background); border-radius: 1rem; border: 1px solid #ced0d4;">
     <div class="container py-5">
         <div class="row">
             <div class="col">
@@ -77,7 +77,7 @@
                 </div>
                 <div class="row">
                     <div class="col-md-12">
-                        <app-card-certification 
+                        <app-card-certification *ngIf="userInfo.worker.portfolio"
                             [certifications] = "certifications"
                         ></app-card-certification>
                     </div>
