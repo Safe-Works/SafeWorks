@@ -20,11 +20,15 @@
                         <p *ngIf="userInfo?.username" class="username">{{ userInfo.username }}</p>
                         <p *ngIf="portfolio" style="padding-top: 0.5rem">{{ portfolio.description }}</p>
                         <div class="d-flex justify-content-center mb-2">
-                            <button *ngIf="!isMyProfile" type="button" class="btn btn-primary">Follow</button>
-                            <button *ngIf="!isMyProfile" type="button"
-                                class="btn btn-outline-primary ms-1">Message</button>
-                            <button *ngIf="userAuth.currentUser && isMyProfile" class="btn edit-button"
-                                [routerLink]="'edit/' + userAuth.currentUser.uid">Editar</button>
+                            <button *ngIf="!isMyProfile" type="button" class="btn btn-primary">
+                                Follow
+                            </button>
+                            <button *ngIf="!isMyProfile" type="button" class="btn btn-outline-primary ms-1">
+                                Message
+                            </button>
+                            <button *ngIf="userAuth.currentUser && isMyProfile" class="btn edit-button" (click)="redirectToEdit()">
+                                Editar
+                            </button>
                         </div>
                     </div>
                 </div>
