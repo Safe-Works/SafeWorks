@@ -18,6 +18,8 @@ export class LoginComponent implements OnInit {
   email = new FormControl('', [Validators.required, Validators.email]);
   password = new FormControl('', [Validators.required]);
   wrongCredentials = false;
+  isLoading: boolean = false;
+
   constructor(private userService: UserService, private userAuth: UserAuth, private router: Router, private cookieService: CookieService) { }
 
   ngOnInit(): void {
@@ -42,6 +44,7 @@ export class LoginComponent implements OnInit {
   }
 
   login(): void {
+    this.isLoading = true;
     const hashedPassword = this.encryptPassword();
     const email = this.loginForm.get('email')?.value;
     this.userService.AuthenticateUser(email, hashedPassword).subscribe(
@@ -54,10 +57,12 @@ export class LoginComponent implements OnInit {
         } else {
           this.wrongCredentials = true;
         }
+        this.isLoading = false;
       },
       (error) => {
         this.wrongCredentials = true;
         this.userAuth.clearUser();
+        this.isLoading = false;
       }
     );
   }
