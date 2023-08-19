@@ -301,14 +301,14 @@ class JobAdRepository extends AppRepository {
 
     // Função para obter a próxima página de documentos
     async getNextPage(ITEMS_PER_PAGE: number, lastDocument?: admin.firestore.QueryDocumentSnapshot): Promise<admin.firestore.QuerySnapshot> {
-        let query = db.collection("JobAdvertisements").orderBy('created').limit(ITEMS_PER_PAGE);
-
+        let query = db.collection("JobAdvertisements")
+            .orderBy('created')
+            .limit(ITEMS_PER_PAGE);
+    
         query = query.where('deleted', '==', null);
-
         if (lastDocument) {
             query = query.startAfter(lastDocument);
         }
-
         const snapshot = await query.get();
         return snapshot;
     }

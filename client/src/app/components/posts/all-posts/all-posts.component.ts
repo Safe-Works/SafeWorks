@@ -42,4 +42,10 @@ export class AllPostsComponent implements OnInit {
       this.isLoading = false;
     }
   }
+  
+  onPageChange(event: PageEvent) {
+    this.currentPage = event.pageIndex + 1;
+    this.pageSize = event.pageSize;
+    this.getJobs();
+  }
 }
