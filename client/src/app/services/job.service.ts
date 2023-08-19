@@ -1,4 +1,4 @@
-import { HttpClient, HttpHeaders } from "@angular/common/http";
+import { HttpClient } from "@angular/common/http";
 import { Observable } from "rxjs";
 import Job from "../models/job-advertisement.model";
 import { Injectable } from "@angular/core";
@@ -9,7 +9,7 @@ import { environment } from "../environments/environment";
 })
 
 export class JobService {
-    private api: string = environment.apiEndpoint + '/api/jobs';
+    private api: string = environment.apiEndpoint + '/api/jobAds';
     constructor(private http: HttpClient) { }
     public CreateJobAd(job: Job, photos: any): Observable<any> {
         const formData = new FormData();

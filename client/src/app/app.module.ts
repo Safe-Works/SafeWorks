@@ -42,6 +42,8 @@ import { CardCertificationComponent } from './sharedcomponents/card-certificatio
 import { NavbarComponent } from './components/navbar/navbar.component';
 import { CollapseModule } from 'ngx-bootstrap/collapse';
 import { SidebarComponent } from './components/sidebar/sidebar.component';
+import { NgChartsModule, NgChartsConfiguration } from 'ng2-charts';
+import { DashboardComponent } from './components/analytics/dashboard/dashboard.component';
 
 @NgModule({
   declarations: [
@@ -66,6 +68,7 @@ import { SidebarComponent } from './components/sidebar/sidebar.component';
     CardCertificationComponent,
     NavbarComponent,
     SidebarComponent,
+    DashboardComponent,
   ],
   imports: [
     BrowserModule,
@@ -90,10 +93,12 @@ import { SidebarComponent } from './components/sidebar/sidebar.component';
     MatMenuModule,
     SweetAlert2Module.forRoot(),
     CollapseModule.forRoot(),
+    NgChartsModule
   ],
   providers: [
     UserService,
-     { provide: MatPaginatorIntl, useClass: MatPaginatorIntlPtBr }
+    { provide: MatPaginatorIntl, useClass: MatPaginatorIntlPtBr },
+    { provide: NgChartsConfiguration, useValue: { generateColors: false }}
   ],
   bootstrap: [AppComponent]
 })
