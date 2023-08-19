@@ -12,6 +12,7 @@ type User = {
     photo_url?: string,
     balance?: Float32Array, // saldo de pagamento
     contracted_services?: Array<string>, // uids dos serviços contratados pelo cliente
+    admin: boolean,
     worker?: Worker,
     created: Date,
     modified?: Date,

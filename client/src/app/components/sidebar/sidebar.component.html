@@ -57,6 +57,12 @@
                     <span>Chat</span>
                 </a>
             </li>
+            <li>
+                <a href="#" routerLink="/analytics/dashboard" routerLinkActive="active" *ngIf="userAuth.currentUser?.infos.admin">
+                    <i class="fa bi-file-earmark-bar-graph-fill"></i>
+                    <span>Analytics</span>
+                </a>
+            </li>
         </ul>
     </nav>
 </aside>
