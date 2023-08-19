@@ -5,6 +5,10 @@
     margin-bottom: 32px;
 }
 
+.card {
+    margin-top: 0.5rem;
+}
+
 .empty-certifications {
     text-align: center;
     font-size: 18px;
@@ -14,6 +18,7 @@
     background-color: #f7f7f7;
     border: 1px solid #ddd;
 }
+
 .certification-field {
     margin-bottom: 10px;
 }

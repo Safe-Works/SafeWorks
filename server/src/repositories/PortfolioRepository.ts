@@ -34,7 +34,7 @@ class PortfolioRepository extends AppRepository {
                     throw error;
                 });
 
-            return result
+            return result;
         } catch (error) {
             console.error("Error adding portfolio: ", error);
             throw error;
@@ -121,7 +121,7 @@ class PortfolioRepository extends AppRepository {
             const certifications = portfolio?.certifications;
 
             const certificationIndex = certifications.findIndex(
-                (certification: any) => certification.id === portfolioUid + certificationId
+                (certification: any) => certification.id === certificationId
             );
 
             if (certificationIndex === -1) {
