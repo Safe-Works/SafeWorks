@@ -3,6 +3,7 @@ import { MatPaginator, PageEvent } from '@angular/material/paginator';
 import { Router } from '@angular/router';
 import JobAdvertisement from 'src/app/models/job-advertisement.model';
 import { JobService } from 'src/app/services/job.service';
+import { UserAuth } from '../../auth/User.Auth';
 
 @Component({
   selector: 'app-list-posts',
@@ -16,12 +17,13 @@ export class CardPostsComponent<T> {
   @Input() totalItems: number = 0;
   @Input() titleProperty: string = 'title';
   @Input() showActions: boolean = false;
+  @Input() isMyPosts: boolean = false;
   currentPage: number = 1;
   pageSize: number = 10;
   isLoading: boolean = false;
   @Input() editJobHandler: ((job: JobAdvertisement) => void) = () => {};
   @Input() deleteJobHandler: ((job: JobAdvertisement) => void) = () => {};
-  constructor(private router: Router, private jobService: JobService) { }
+  constructor(private router: Router, private jobService: JobService, private userAuth: UserAuth) { }
 
   viewItem(item: any) {
     const jobId = item.uid;
@@ -38,7 +40,11 @@ export class CardPostsComponent<T> {
   async getJobs() {
     this.isLoading = true;
     try {
-      const data = await this.jobService.GetJobs(this.currentPage, this.pageSize).toPromise();
+      let data: any;
+      if(this.isMyPosts)
+        data = await this.jobService.GetJobs(this.currentPage, this.pageSize).toPromise();
+      else
+        this.jobService.GetJobsByWorkerId(this.currentPage, this.pageSize, this.userAuth.currentUser?.uid ?? "").toPromise();
       this.items = data.jobs;
       this.totalItems = data.total;
       this.isLoading = false;
