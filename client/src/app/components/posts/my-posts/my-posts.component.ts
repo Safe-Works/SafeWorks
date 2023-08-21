@@ -20,6 +20,7 @@ export class MyPostsComponent implements OnInit {
   pageSize: number = 10;
   isLoading: boolean = false;
   isMyAdsPage: boolean = true;
+  isMyPosts: boolean = true;
   
   constructor(private jobService: JobService, private userAuth: UserAuth, private router: Router) { }
 
