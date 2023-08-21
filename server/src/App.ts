@@ -4,6 +4,7 @@ import swaggerUi from 'swagger-ui-express';
 import usersRouter from './routes/UserRouter';
 import jobAdRouter from './routes/JobAdRouter';
 import portfolioRouter from "./routes/PortfolioRouter";
+import favoritesRouter from "./routes/FavoritesRouter";
 import { errors } from 'celebrate';
 import fs from 'fs';
 
@@ -38,7 +39,7 @@ class App {
         this.app.get('/', (req: Request, res: Response) => {
             res.send('SafeWorks server is running! 🛠️');
         });
-        this.app.use('/api', usersRouter, jobAdRouter, portfolioRouter);
+        this.app.use('/api', usersRouter, jobAdRouter, portfolioRouter, favoritesRouter);
 
         // Swagger Route setup
         const swaggerFile: any = (process.cwd() + '/swagger.json');

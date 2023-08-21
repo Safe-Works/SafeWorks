@@ -1,4 +1,5 @@
 import Worker from "./Worker";
+import Favorites from "./Favorites";
 
 type User = {
     uid?: string,
@@ -17,6 +18,7 @@ type User = {
     modified?: Date,
     deleted?: Date,
     accessToken?: string, // token jwt
+    Favorites?: Favorites,
 };
 
 export default User;
