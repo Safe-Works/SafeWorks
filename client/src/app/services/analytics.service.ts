@@ -1,6 +1,7 @@
 import { Injectable } from "@angular/core";
 import { environment } from "../environments/environment";
 import { HttpClient } from "@angular/common/http";
+import { firstValueFrom } from "rxjs";
 
 @Injectable({
     providedIn: 'root'
@@ -8,4 +9,13 @@ import { HttpClient } from "@angular/common/http";
 export class AnalyticsService {
     private api: string = environment.apiEndpoint + '/api/analytics';
     constructor(private http: HttpClient) { }
+
+    public async GetAllJobAds(): Promise<any> {
+        try {
+            return await firstValueFrom(this.http.get<string>(this.api + '/jobAds'));
+        } catch (error) {
+            console.error(error);
+            throw error;
+        }
+    }
 }

@@ -44,6 +44,7 @@ import { CollapseModule } from 'ngx-bootstrap/collapse';
 import { SidebarComponent } from './components/sidebar/sidebar.component';
 import { NgChartsModule, NgChartsConfiguration } from 'ng2-charts';
 import { DashboardComponent } from './components/analytics/dashboard/dashboard.component';
+import { DoughnutChartComponent } from './components/analytics/doughnut-chart/doughnut-chart.component';
 
 @NgModule({
   declarations: [
@@ -69,6 +70,7 @@ import { DashboardComponent } from './components/analytics/dashboard/dashboard.c
     NavbarComponent,
     SidebarComponent,
     DashboardComponent,
+    DoughnutChartComponent,
   ],
   imports: [
     BrowserModule,
@@ -98,7 +100,7 @@ import { DashboardComponent } from './components/analytics/dashboard/dashboard.c
   providers: [
     UserService,
     { provide: MatPaginatorIntl, useClass: MatPaginatorIntlPtBr },
-    { provide: NgChartsConfiguration, useValue: { generateColors: false }}
+    { provide: NgChartsConfiguration, useValue: { generateColors: true }}
   ],
   bootstrap: [AppComponent]
 })
