@@ -26,20 +26,20 @@
   <div class="collapse navbar-collapse right-nav" id="collapseBasic" [collapse]="isCollapsed">
     <ul class="navbar-nav" *ngIf="userAuth.currentUser">
       <li class="nav-item">
-        <a [routerLink]="'/profile'" class="btn nav-link" title="Ver perfil">
+        <a [routerLink]="'/profile'" (click)="isCollapsed = !isCollapsed" class="btn nav-link" title="Ver perfil">
           <i class="far fa-user"></i>
           <span class="link-text">Perfil</span>
         </a>
       </li>
       <li class="nav-item">
-        <a class="btn nav-link" (click)="logout()" title="Sair">
+        <a class="btn nav-link" (click)="logout(); isCollapsed = !isCollapsed" title="Sair">
           <i class="fas fa-sign-out-alt"></i>
           <span class="link-text">Sair</span>
         </a>
       </li>
     </ul>
   </div>
-  <ul class="navbar-nav">
+  <ul class="navbar-nav" *ngIf="!userAuth.currentUser">
     <li class="nav-item">
       <a class="btn nav-link" [routerLink]="'/login'" title="Entrar"
         style="color: #ffa500; border-color: #ffa500; padding: 5px; margin-right: 15px;">
