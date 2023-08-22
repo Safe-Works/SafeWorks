@@ -8,36 +8,38 @@ import { AnalyticsService } from 'src/app/services/analytics.service';
 })
 export class DashboardComponent implements OnInit {
 
-  constructor(private anlyticsService: AnalyticsService) { }
+  public allJobAdsData: any;
 
-  ngOnInit(): void {
-      
+  constructor(private analyticsService: AnalyticsService) { }
+
+  async ngOnInit() {
+    await this.setAllJobAdsData();
   }
 
-  async getServicesByAreaData() {
+  private async setAllJobAdsData() {
+    this.allJobAdsData = await this.analyticsService.GetAllJobAds();
+  }
 
-    const pieChart = {
-      data: {
-        datasets: [{
+  public chart3 = {
+    data:{
+      datasets: [{
           data: [6, 12, 10],
-          backgroundColor: ["#5b6582", "#98a4c7", "#36a2eb"],
-        }],
-        labels: [
+          backgroundColor: ["#5b6582","#98a4c7","#36a2eb"],
+      }],
+      labels: [
           'html',
           'css',
           'javascript'
-        ]
+      ]
+    },
+    options:{
+      legend: {          
+        position:'bottom',
+        display:false
       },
-      options: {
-        legend: {
-          position: 'bottom',
-          display: false
-        },
-        cutoutPercentage: 80
-      }
+      cutoutPercentage: 80
     }
-    
-  }
+  };
 
   chart1 = {
     data :{
@@ -119,25 +121,8 @@ export class DashboardComponent implements OnInit {
       },
     }
   };
-  public chart3 = {
-    data:{
-      datasets: [{
-          data: [6, 12, 10],
-          backgroundColor: ["#5b6582","#98a4c7","#36a2eb"],
-      }],
-      labels: [
-          'html',
-          'css',
-          'javascript'
-      ]
-    },
-    options:{
-      legend: {          
-        position:'bottom',
-        display:false
-      },
-      cutoutPercentage: 80
-    }
-  };
+
+
+  
 
 }

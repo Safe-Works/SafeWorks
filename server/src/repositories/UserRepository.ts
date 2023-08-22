@@ -25,6 +25,7 @@ class UserRepository extends AppRepository {
                     balance: 0,
                     contracted_services: [],
                     worker: null,
+                    admin: false,
                     created: created,
                     modified: null,
                     deleted: null
