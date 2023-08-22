@@ -7,7 +7,9 @@
         </div>
         <div class="profile-details text-center pb-4">
             <a [routerLink]="'/profile'"> <p class="mb-0 text-uppercase name">{{userAuth.currentUser?.displayName}} </p></a>
-            <small class="text-uppercase role">Administrador</small>
+            <small class="text-uppercase role" *ngIf="userAuth.currentUser?.infos.admin">Administrador</small>
+            <small class="text-uppercase role" *ngIf="userAuth.currentUser?.infos.isWorker && !userAuth.currentUser?.infos.admin">Trabalhador</small>
+            <small class="text-uppercase role" *ngIf="!userAuth.currentUser?.infos.isWorker && !userAuth.currentUser?.infos.admin">Contratante</small>
         </div>
     </div>
     <div class="sidebar-search pt-1 pb-1 pl-3 pr-3">

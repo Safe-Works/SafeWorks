@@ -1,11 +1,11 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { CookieService } from 'ngx-cookie-service';
 import { UserAuth } from 'src/app/auth/User.Auth';
 import Certification from 'src/app/models/certification.model';
 import Portfolio from 'src/app/models/portfolio.model';
 import { PortfolioService } from 'src/app/services/portfolio.service';
 import { UserService } from 'src/app/services/user.service';
+import { districts } from 'enums/districts.enum';
 
 @Component({
   selector: 'app-profile',
@@ -13,7 +13,6 @@ import { UserService } from 'src/app/services/user.service';
   styleUrls: ['./profile.component.css'],
 })
 export class ProfileComponent implements OnInit {
-
   userInfo: any = null;
   userUid: string = '';
   portfolio: Partial<Portfolio> = {};
@@ -37,14 +36,13 @@ export class ProfileComponent implements OnInit {
   async loadUserInfo() {
     await this.userService.GetUserInfo(this.userUid)
       .then(async (response) => {
-        console.error(response);
         this.userInfo = response.user;
         if (this.userInfo.photo_url) {
           this.photoUrl = this.userInfo.photo_url;
         } else {
           this.photoUrl = 'https://www.pngitem.com/pimgs/m/551-5510463_default-user-image-png-transparent-png.png';
         }
-        console.log(this.userInfo);
+        this.userInfo.district = districts.find(d => d.id.toString() === response.user.district)?.name;
         if (this.userInfo.name === this.userAuth.currentUser?.displayName) {
           this.isMyProfile = true;
         }
