@@ -299,6 +299,26 @@ class JobAdRepository extends AppRepository {
         }
     }
 
+    async getAll(): Promise<any> {
+        try {
+            let jobs;
+            await db.collection("JobAdvertisements")
+                .where('deleted', '==', null)
+                .get()
+                .then((querySnapshot) => {
+                    jobs = querySnapshot.docs.map((doc) => {
+                        const data = doc.data();
+                        return { ...data, uid: doc.id };
+                    })
+                });
+            
+            return jobs;
+        } catch (error) {
+            console.error(error);
+            throw error;
+        }
+    }
+
     // Função para obter a próxima página de documentos
     async getNextPage(ITEMS_PER_PAGE: number, lastDocument?: admin.firestore.QueryDocumentSnapshot): Promise<admin.firestore.QuerySnapshot> {
         let query = db.collection("JobAdvertisements")
