@@ -45,6 +45,7 @@ import { SidebarComponent } from './components/sidebar/sidebar.component';
 import { NgChartsModule, NgChartsConfiguration } from 'ng2-charts';
 import { DashboardComponent } from './components/analytics/dashboard/dashboard.component';
 import { DoughnutChartComponent } from './components/analytics/doughnut-chart/doughnut-chart.component';
+import { BarChartComponent } from './components/analytics/bar-chart/bar-chart.component';
 
 @NgModule({
   declarations: [
@@ -71,6 +72,7 @@ import { DoughnutChartComponent } from './components/analytics/doughnut-chart/do
     SidebarComponent,
     DashboardComponent,
     DoughnutChartComponent,
+    BarChartComponent,
   ],
   imports: [
     BrowserModule,

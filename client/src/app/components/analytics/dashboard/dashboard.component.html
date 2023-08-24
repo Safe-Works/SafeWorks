@@ -4,92 +4,92 @@
     <div class="row">
 
         <div class="col-md-6 col-lg-3 mb-4">
-            <div class="card border-0 rounded-0">
-                <div class="card-body">
-                    <div class="card-innerBody d-flex align-items-center">
-                        <div class="card-icon text-light">
-                            <i class="fas fa-dollar-sign" aria-hidden="true"></i>
-                        </div>
-                        <div class="ml-auto">
-                            <p class="card-label text-right text-muted">Revenue</p>
-                            <h4 class="card-text text-right ">$ 199,099</h4>
-                        </div>
-                    </div>
-                </div>
-                <div class="card-footer d-flex ">
-                    <small class="text-muted">Since last month</small>
-                    <small class="text-success ml-auto">
-                        <i class="fa fa-caret-up" aria-hidden="true"></i>
-                        5,35%
-                    </small>
-                </div>
-            </div>
-        </div>
-
-        <div class="col-md-6 col-lg-3 mb-4">
-            <div class="card border-0 rounded-0">
-                <div class="card-body">
-                    <div class="card-innerBody d-flex align-items-center">
-                        <div class="card-icon text-light">
-                            <i class="fa fa-shopping-cart" aria-hidden="true"></i>
-                        </div>
-                        <div class="ml-auto">
-                            <p class="card-label text-right text-muted">Orders</p>
-                            <h4 class="card-text text-right ">2,200</h4>
-                        </div>
-                    </div>
-                </div>
-                <div class="card-footer d-flex ">
-                    <small class="text-muted">Since last month</small>
-                    <small class="text-success ml-auto">
-                        <i class="fa fa-caret-up" aria-hidden="true"></i>
-                        8,66%
-                    </small>
-                </div>
-            </div>
-        </div>
-
-        <div class="col-md-6 col-lg-3 mb-4">
-            <div class="card border-0 rounded-0">
+            <div class="card border-0 rounded-1">
                 <div class="card-body">
                     <div class="card-innerBody d-flex align-items-center">
                         <div class="card-icon text-light">
                             <i class="fa fa-users" aria-hidden="true"></i>
                         </div>
                         <div class="ml-auto">
-                            <p class="card-label text-right text-muted">Visitors</p>
-                            <h4 class="card-text text-right ">702,258</h4>
+                            <p class="card-label text-right text-muted">Trabalhadores</p>
+                            <h4 class="card-text text-right" *ngIf="totalActiveWorkers">{{ totalActiveWorkers }}</h4>
                         </div>
                     </div>
                 </div>
                 <div class="card-footer d-flex ">
-                    <small class="text-muted">Since last month</small>
-                    <small class="text-danger ml-auto">
-                        <i class="fa fa-caret-down" aria-hidden="true"></i>
-                        2,81%
+                    <small class="text-muted">Desde o último mês</small>
+                    <small class="text-success ml-auto">
+                        <i class="fa" [ngClass]="workersPercentIcon ? 'fa-caret-up' : 'fa-caret-down'" aria-hidden="true"></i>
+                        {{ workersPercentIncrease }}%
                     </small>
                 </div>
             </div>
         </div>
 
         <div class="col-md-6 col-lg-3 mb-4">
-            <div class="card border-0 rounded-0">
+            <div class="card border-0 rounded-1">
                 <div class="card-body">
                     <div class="card-innerBody d-flex align-items-center">
                         <div class="card-icon text-light">
-                            <i class="fa fa-heartbeat" aria-hidden="true"></i>
+                            <i class="fa fa-dollar-sign" aria-hidden="true"></i>
                         </div>
                         <div class="ml-auto">
-                            <p class="card-label text-right text-muted">Followers</p>
-                            <h4 class="card-text text-right "> +50K</h4>
+                            <p class="card-label text-right text-muted">Lucro Total</p>
+                            <h4 class="card-text text-right">R$ {{ currentMonthProfit }}</h4>
                         </div>
                     </div>
                 </div>
                 <div class="card-footer d-flex ">
-                    <small class="text-muted">Since last month</small>
+                    <small class="text-muted">Desde o último mês</small>
                     <small class="text-success ml-auto">
-                        <i class="fa fa-caret-up" aria-hidden="true"></i>
-                        1,74%
+                        <i class="fa" [ngClass]="jobAdsPercentIcon ? 'fa-caret-up' : 'fa-caret-down'" aria-hidden="true"></i>
+                        {{ jobsProfitPercentIncrease }}%
+                    </small>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-6 col-lg-3 mb-4">
+            <div class="card border-0 rounded-1">
+                <div class="card-body">
+                    <div class="card-innerBody d-flex align-items-center">
+                        <div class="card-icon text-light">
+                            <i class="fa bi-graph-up-arrow" aria-hidden="true"></i>
+                        </div>
+                        <div class="ml-auto">
+                            <p class="card-label text-right text-muted">Anúncios Ativos</p>
+                            <h4 class="card-text text-right">{{ totalActiveJobAds }}</h4>
+                        </div>
+                    </div>
+                </div>
+                <div class="card-footer d-flex ">
+                    <small class="text-muted">Desde o último mês</small>
+                    <small class="text-success ml-auto" style="margin-left: 1rem;" *ngIf="jobAdsPercentIncrease">
+                        <i class="fa" [ngClass]="jobAdsPercentIcon ? 'fa-caret-up' : 'fa-caret-down'" aria-hidden="true"></i>
+                        {{ jobAdsPercentIncrease }}%
+                    </small>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-6 col-lg-3 mb-4">
+            <div class="card border-0 rounded-1">
+                <div class="card-body">
+                    <div class="card-innerBody d-flex align-items-center">
+                        <div class="card-icon text-light">
+                            <i class="fa bi-clipboard-data" aria-hidden="true"></i>
+                        </div>
+                        <div class="ml-auto">
+                            <p class="card-label text-right text-muted">Contratos Ativos</p>
+                            <h4 class="card-text text-right ">{{ totalActiveJobs }}</h4>
+                        </div>
+                    </div>
+                </div>
+                <div class="card-footer d-flex ">
+                    <small class="text-muted">Desde o último mês</small>
+                    <small class="text-success ml-auto" style="margin-left: 1rem;">
+                        <i class="fa" [ngClass]="jobsPercentIcon ? 'fa-caret-up' : 'fa-caret-down'" aria-hidden="true"></i>
+                        {{ jobsPercentIncrease }}%
                     </small>
                 </div>
             </div>
@@ -97,10 +97,9 @@
 
     </div>
 
-
     <div class="row">
         <div class="col-12 col-xl-6 mb-4">
-            <div class="card border-0 rounded-0">
+            <div class="card border-0 rounded-1">
                 <div class="card-title mb-1 p-3 d-flex">
                     <h6>Chart Line</h6>
                     <a class="btn ml-auto p-0 text-lightning"> <i class="fas fa-ellipsis-h"></i> </a>
@@ -114,7 +113,7 @@
         </div>
 
         <div class="col-12 col-xl-6 mb-4">
-            <div class="card border-0 rounded-0">
+            <div class="card border-0 rounded-1">
                 <div class="card-title mb-1 p-3 d-flex">
                     <h6>Chart Bar</h6>
                     <a class="btn ml-auto p-0 text-lightning"> <i class="fas fa-ellipsis-h"></i> </a>
