@@ -85,6 +85,26 @@ class UserRepository extends AppRepository {
         }
     }
 
+    async getAll(): Promise<any> {
+        try {
+            let jobs;
+            await db.collection("Users")
+                .where('deleted', '==', null)
+                .get()
+                .then((querySnapshot) => {
+                    jobs = querySnapshot.docs.map((doc) => {
+                        const data = doc.data();
+                        return { ...data, uid: doc.id };
+                    })
+                });
+            
+            return jobs;
+        } catch (error) {
+            console.error("Error getting all users: ", error);
+            throw error;
+        }
+    }
+
     async update(user: User, photo: any): Promise<any> {
         const modified = this.getDateTime();
         const { uid, email, password, name, cpf, telephone_number, username, district } = user;

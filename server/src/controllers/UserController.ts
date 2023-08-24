@@ -104,6 +104,22 @@ class UserController {
         // #swagger.end
     }
 
+    async getAll(req: Request, res: Response): Promise<void> {
+        try {
+            const users = await userRepository.getAll();
+            if (users) {
+                res.status(200).json({ statusCode: 200, users: users });
+            } else {
+                res.status(404).json({ statusCode: 404, error: 'users/not-found' });
+            }
+        } catch (error) {
+            if (error instanceof Error) {
+                console.error('Error to get all users: ', error.message);
+                res.status(500).json({ statusCode: 500, error: 'users/failed-getAll', message: error.message });
+            }
+        }
+    }
+
     async update(req: Request, res: Response): Promise<void> {
         /*
             #swagger.start
