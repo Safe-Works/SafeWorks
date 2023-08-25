@@ -1,0 +1,18 @@
+<div *ngFor="let user of favoriteUsers">
+    <h2>Detalhes do Usuário</h2>
+    <p><strong>Nome:</strong> {{ user.name }}</p>
+    <button (click)="user.showDetails = !user.showDetails">
+        {{ user.showDetails ? 'Ocultar Detalhes' : 'Exibir Detalhes' }}
+    </button>
+    <div *ngIf="user.showDetails">
+        <p><strong>E-mail:</strong> {{ user.email }}</p>
+        <p><strong>Telefone:</strong> {{ user.telephone_number }}</p>
+        <p><strong>CPF:</strong> {{ user.cpf }}</p>
+        <p><strong>Data de Criação:</strong> {{ user.created }}</p>
+        <p><strong>Áreas de Atuação:</strong></p>
+        <ul>
+            <li *ngFor="let area of user.worker.area">{{ area }}</li>
+        </ul>
+        <button (click)="redirectToUserDetails(user.id)">Ir para o perfil</button>
+    </div>
+</div>

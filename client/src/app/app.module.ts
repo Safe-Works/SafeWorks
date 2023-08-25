@@ -42,6 +42,7 @@ import { CardCertificationComponent } from './sharedcomponents/card-certificatio
 import { NavbarComponent } from './components/navbar/navbar.component';
 import { CollapseModule } from 'ngx-bootstrap/collapse';
 import { SidebarComponent } from './components/sidebar/sidebar.component';
+import { FavoritesComponent } from './components/favorites/favorites.component';
 
 @NgModule({
   declarations: [
@@ -66,6 +67,7 @@ import { SidebarComponent } from './components/sidebar/sidebar.component';
     CardCertificationComponent,
     NavbarComponent,
     SidebarComponent,
+    FavoritesComponent,
   ],
   imports: [
     BrowserModule,

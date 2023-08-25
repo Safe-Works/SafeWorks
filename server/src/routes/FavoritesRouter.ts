@@ -1,6 +1,7 @@
 import express, { RequestHandler } from 'express';
 import {celebrate, Joi} from 'celebrate';
 import FavoritesController from '../controllers/FavoritesController';
+import jobAdRouter from "./JobAdRouter";
 
 const favoritesRouter = express.Router();
 const favoritesController = new FavoritesController();
@@ -14,6 +15,16 @@ favoritesRouter.post(
         })
     }),
     favoritesController.add as RequestHandler
+);
+
+favoritesRouter.get(
+    '/favorites/:uid',
+    favoritesController.getById as RequestHandler
+);
+
+favoritesRouter.delete(
+    '/favorites/:userUid/:WorkerUid',
+    favoritesController.delete as RequestHandler
 );
 
 export default favoritesRouter;
