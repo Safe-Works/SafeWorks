@@ -1,5 +1,5 @@
 <div>
-    <h4 class="mb-4 text-muted">Dashboard </h4>
+    <h4 class="mb-4 text-muted">Analytics Dashboard</h4>
 
     <div class="row">
 
@@ -99,6 +99,8 @@
 
     <div class="row">
         <div class="col-12 col-xl-6 mb-4">
+            <app-line-chart *ngIf="allJobsData" [rawJobsData]="allJobsData" [rawJobAdsData]="allJobAdsData"></app-line-chart>
+            <!--
             <div class="card border-0 rounded-1">
                 <div class="card-title mb-1 p-3 d-flex">
                     <h6>Chart Line</h6>
@@ -110,21 +112,13 @@
                     </div>
                 </div>
             </div>
+            -->
         </div>
 
         <div class="col-12 col-xl-6 mb-4">
-            <div class="card border-0 rounded-1">
-                <div class="card-title mb-1 p-3 d-flex">
-                    <h6>Chart Bar</h6>
-                    <a class="btn ml-auto p-0 text-lightning"> <i class="fas fa-ellipsis-h"></i> </a>
-                </div>
-                <div class="card-body">
-                    <div class="chart-container" style="position: relative;">
-                        <canvas baseChart type="bar" [data]="chart2.data" width="2" height="1"></canvas>
-                    </div>
-                </div>
-            </div>
+            <app-bar-chart *ngIf="allJobAdsData" [rawData]="allJobAdsData"></app-bar-chart>
         </div>
+
         <div class="col-12 col-xl-4 mb-4 align-items-stretch" >
             <div class="card h-100 border-0 rounded-1">
                 <app-doughnut-chart *ngIf="allJobAdsData" [rawData]="allJobAdsData"></app-doughnut-chart>
