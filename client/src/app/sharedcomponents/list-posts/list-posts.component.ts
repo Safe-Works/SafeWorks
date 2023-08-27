@@ -41,10 +41,10 @@ export class CardPostsComponent<T> {
     this.isLoading = true;
     try {
       let data: any;
-      if(this.isMyPosts)
+      if(!this.isMyPosts)
         data = await this.jobService.GetJobs(this.currentPage, this.pageSize).toPromise();
       else
-        this.jobService.GetJobsByWorkerId(this.currentPage, this.pageSize, this.userAuth.currentUser?.uid ?? "").toPromise();
+        data = await this.jobService.GetJobsByWorkerId(this.currentPage, this.pageSize, this.userAuth.currentUser?.uid ?? "").toPromise();
       this.items = data.jobs;
       this.totalItems = data.total;
       this.isLoading = false;
