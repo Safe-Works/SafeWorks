@@ -1,6 +1,7 @@
 import {Request, Response} from "express";
 import Favorites from "../models/Favorites";
 import FavoritesRepository from "../repositories/FavoritesRepository";
+import {Console} from "inspector";
 
 const favoritesRepository = new FavoritesRepository();
 

@@ -9,7 +9,7 @@ class FavoritesRepository {
 
             const userRef = db.collection("Users").doc(userUid);
             const userDoc = (await userRef.get()).data();
-            const workers = userDoc?.favoritesList ?? [];
+            const workers = userDoc?.favorite_list ?? [];
 
             const updatedFavorites = [...workers, favorite.workerUid];
 
@@ -31,8 +31,8 @@ class FavoritesRepository {
 
             if (userDoc.exists) {
                 const userData = userDoc.data();
-                if (userData?.deleted === null && userData?.favoritesList) {
-                    return userData.favoritesList;
+                if (userData?.deleted === null && userData?.favorite_list) {
+                    return userData.favorite_list;
                 }
             }
 
@@ -49,9 +49,7 @@ class FavoritesRepository {
             const favorite = (await favoriteRef.get()).data();
             const favorites = favorite?.favorite_list;
 
-            const favoriteIndex = favorites.findIndex(
-                (worker: any) => worker.workerUid === workerUid
-            );
+            const favoriteIndex = favorites.indexOf(workerUid);
 
             if (favoriteIndex === -1) {
                 return null;
@@ -64,6 +62,7 @@ class FavoritesRepository {
             });
 
             return (await favoriteRef.get()).data();
+
         } catch (error) {
             console.error("Error deleting Favorite on Favorites: ", error);
             throw error;

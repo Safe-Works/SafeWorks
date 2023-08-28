@@ -23,7 +23,7 @@ favoritesRouter.get(
 );
 
 favoritesRouter.delete(
-    '/favorites/:userUid/:WorkerUid',
+    '/favorites/:userUid/:workerUid',
     favoritesController.delete as RequestHandler
 );
 
