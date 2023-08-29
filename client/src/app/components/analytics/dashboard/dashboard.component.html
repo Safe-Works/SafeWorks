@@ -99,20 +99,7 @@
 
     <div class="row">
         <div class="col-12 col-xl-6 mb-4">
-            <app-line-chart *ngIf="allJobsData" [rawJobsData]="allJobsData" [rawJobAdsData]="allJobAdsData"></app-line-chart>
-            <!--
-            <div class="card border-0 rounded-1">
-                <div class="card-title mb-1 p-3 d-flex">
-                    <h6>Chart Line</h6>
-                    <a class="btn ml-auto p-0 text-lightning"> <i class="fas fa-ellipsis-h"></i> </a>
-                </div>
-                <div class="card-body">
-                    <div class="chart-container" style="position: relative;">
-                        <canvas baseChart type="line" [data]="chart1.data" width="2" height="1"></canvas>
-                    </div>
-                </div>
-            </div>
-            -->
+            <app-line-chart *ngIf="allJobsData" [rawJobsData]="allJobsData.jobs" [rawJobAdsData]="allJobAdsData.jobs"></app-line-chart>
         </div>
 
         <div class="col-12 col-xl-6 mb-4">
