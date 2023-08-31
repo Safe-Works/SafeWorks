@@ -1,5 +1,6 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { ChartOptions } from 'chart.js';
+import { parse } from 'date-fns';
 
 @Component({
   selector: 'app-line-chart',
@@ -15,50 +16,89 @@ export class LineChartComponent implements OnInit {
   public dataLoaded: boolean = false;
 
   async ngOnInit() {
-    this.setChartData(this.rawJobsData, this.rawJobAdsData);
+    this.setChartData();
   }
 
-  async setChartData(rawJobsData: any, rawJobAdsData: any) {
+  async setChartData() {
+    const lineDataset = this.setDateCategoryPriceDataset();
 
-  }
-
-  chart1 = {
-    data :{
-      labels: ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'],
-      datasets: [{
-          label: 'Premium',
-          data: [50, 80, 60, 120, 80, 100, 60],
-          backgroundColor: 'transparent',
-          borderColor: '#5b6582',
-          borderWidth: 2
-      },
-      {
-        label: 'Free',
-        data: [100, 60, 80, 50, 140, 60, 100],
-        backgroundColor: 'transparent',
-        borderColor: '#36a2eb',
-        borderWidth: 2
+    this.lineChartDataset = {
+      data: {
+        labels: lineDataset.chartLabels,
+        datasets: lineDataset.chartData
       }
-    ]
-    },
-    options:{
-      scales: {
-          yAxes: [{
-            ticks: {
-                fontColor: 'rgba(0,0,0,.6)',
-                fontStyle: 'bold',
-                beginAtZero: true,
-                maxTicksLimit: 8,
-                padding: 10
-            }          
-        }]       
-      },
+    };
+    this.lineChartOptions = {
       responsive: true,
-      legend: {          
-        position:'bottom',
-        display:false
-      },
+      maintainAspectRatio: true,
+      scales: {
+        yAxes: {
+          ticks: {
+            callback: (value) => `R$ ${(+value).toFixed(2).replace(/\d(?=(\d{3})+\b)/g, '$&,').replace('.', ',')}`
+          }
+        }
+      }
+    };
+
+    this.dataLoaded = true;
+  }
+
+  setDateCategoryPriceDataset() {
+    const relatedJobs = this.relateJobsAndAds(this.rawJobsData, this.rawJobAdsData);
+    const datePriceMap: { [date: string]: { [category: string]: number } } = {};
+
+    relatedJobs.forEach(job => {
+      const category = job.jobAd.category.name;
+      const createdDate = parse(job.created, 'dd/MM/yyyy HH:mm:ss', new Date()).toLocaleDateString();
+
+      if (!datePriceMap[createdDate]) {
+        datePriceMap[createdDate] = {};
+      }
+
+      if (!datePriceMap[createdDate][category]) {
+        datePriceMap[createdDate][category] = 0;
+      }
+
+      datePriceMap[createdDate][category] += job.contract_price;
+    });
+
+    const categories = Object.keys(relatedJobs.reduce((acc, job) => { acc[job.jobAd.category.name] = true; return acc; }, {}));
+    const chartData: any = [];
+
+    categories.forEach(category => {
+      const data: any = [];
+
+      Object.entries(datePriceMap).forEach(([date, categoryPrices]) => {
+        data.push({
+          x: date,
+          y: categoryPrices[category] || 0
+        });
+      });
+
+      chartData.push({
+        label: category,
+        data: data
+      });
+    });
+    const chartLabels = Object.keys(datePriceMap);
+
+    return { chartData, chartLabels };
+  }
+
+  relateJobsAndAds(jobs: Array<any>, jobAds: Array<any>) {
+    const relatedJobs = [];
+
+    for (const job of jobs) {
+      const relatedAdUid = job.advertisement[0];
+      const relatedAd = jobAds.find(jobAd => jobAd.uid === relatedAdUid);
+
+      if (relatedAd) {
+        const relatedJob = { ...job, jobAd: relatedAd };
+        relatedJobs.push(relatedJob);
+      }
     }
-  };
+
+    return relatedJobs;
+  }
 
 }

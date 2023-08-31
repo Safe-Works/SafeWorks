@@ -28,6 +28,15 @@ export class AnalyticsService {
         }
     }
 
+    public async GetAllJobsPaginated(total: number, page: number): Promise<any> {
+        try {
+            return await firstValueFrom(this.http.get<string>(this.api + '/jobs/paginated'));
+        } catch (error) {
+            console.error(error);
+            throw error;
+        }
+    }
+
     public async GetAllUsers(): Promise<any> {
         try {
             return await firstValueFrom(this.http.get<string>(this.api + '/users'));

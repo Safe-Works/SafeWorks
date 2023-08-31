@@ -1,11 +1,11 @@
 <div class="card border-0 rounded-1">
     <div class="card-title mb-1 p-3 d-flex">
-        <h6>Chart Line</h6>
+        <h6>Relação de preços por categoria</h6>
         <a class="btn ml-auto p-0 text-lightning"> <i class="fas fa-ellipsis-h"></i> </a>
     </div>
     <div class="card-body">
         <div class="chart-container" style="position: relative;">
-            <canvas baseChart type="line" [data]="chart1.data" width="2" height="1"></canvas>
+            <canvas *ngIf="dataLoaded" baseChart type="line" [data]="lineChartDataset.data" [options]="lineChartOptions" width="2" height="1"></canvas>
         </div>
     </div>
 </div>
