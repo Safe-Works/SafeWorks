@@ -304,6 +304,7 @@ class JobAdRepository extends AppRepository {
             let jobs;
             await db.collection("JobAdvertisements")
                 .where('deleted', '==', null)
+                .orderBy('created', 'asc')
                 .get()
                 .then((querySnapshot) => {
                     jobs = querySnapshot.docs.map((doc) => {
