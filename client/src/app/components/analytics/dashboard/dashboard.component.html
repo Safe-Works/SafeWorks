@@ -18,7 +18,7 @@
                 </div>
                 <div class="card-footer d-flex ">
                     <small class="text-muted">Desde o último mês</small>
-                    <small class="text-success ml-auto">
+                    <small class="text-success ml-auto indice-icon">
                         <i class="fa" [ngClass]="workersPercentIcon ? 'fa-caret-up' : 'fa-caret-down'" aria-hidden="true"></i>
                         {{ workersPercentIncrease }}%
                     </small>
@@ -35,13 +35,13 @@
                         </div>
                         <div class="ml-auto">
                             <p class="card-label text-right text-muted">Lucro Total</p>
-                            <h4 class="card-text text-right">R$ {{ currentMonthProfit }}</h4>
+                            <h4 class="card-text text-right">{{ currentMonthProfit }}</h4>
                         </div>
                     </div>
                 </div>
                 <div class="card-footer d-flex ">
                     <small class="text-muted">Desde o último mês</small>
-                    <small class="text-success ml-auto">
+                    <small class="text-success ml-auto indice-icon">
                         <i class="fa" [ngClass]="jobAdsPercentIcon ? 'fa-caret-up' : 'fa-caret-down'" aria-hidden="true"></i>
                         {{ jobsProfitPercentIncrease }}%
                     </small>
@@ -64,7 +64,7 @@
                 </div>
                 <div class="card-footer d-flex ">
                     <small class="text-muted">Desde o último mês</small>
-                    <small class="text-success ml-auto" style="margin-left: 1rem;" *ngIf="jobAdsPercentIncrease">
+                    <small class="text-success ml-auto indice-icon" *ngIf="jobAdsPercentIncrease">
                         <i class="fa" [ngClass]="jobAdsPercentIcon ? 'fa-caret-up' : 'fa-caret-down'" aria-hidden="true"></i>
                         {{ jobAdsPercentIncrease }}%
                     </small>
@@ -87,7 +87,7 @@
                 </div>
                 <div class="card-footer d-flex ">
                     <small class="text-muted">Desde o último mês</small>
-                    <small class="text-success ml-auto" style="margin-left: 1rem;">
+                    <small class="text-success ml-auto indice-icon">
                         <i class="fa" [ngClass]="jobsPercentIcon ? 'fa-caret-up' : 'fa-caret-down'" aria-hidden="true"></i>
                         {{ jobsPercentIncrease }}%
                     </small>
@@ -113,72 +113,7 @@
         </div>
 
         <div class="col-12 col-xl-8 mb-4 align-items-stretch">
-            <div class="card h-100 border-0 rounded-0">
-                <div class="card-title mb-1 p-3 d-flex">
-                    <h6>Últimos contratos de trabalho</h6>
-                    <a class="btn ml-auto p-0 text-lightning"> <i class="fas fa-ellipsis-h"></i> </a>
-                </div>
-                <div class="card-body">
-                    <div class="table-responsive-md">
-                        <div class="table-responsive">
-                            <table class="table ">
-                                <thead>
-                                    <tr>
-                                        <th style="width:40%;">Product</th>
-                                        <th class="number">Price</th>
-                                        <th style="width:20%;">Date</th>
-                                        <th style="width:20%;">State</th>
-                                        <th class="actions" style="width:5%;"></th>
-                                    </tr>
-                                </thead>
-                                <tbody class="no-border-x">
-                                    <tr>
-                                        <td>Sony Xperia M4</td>
-                                        <td class="number">$149</td>
-                                        <td>Aug 23, 2018</td>
-                                        <td class="text-success">Completed</td>
-                                        <td class="actions"><a class="icon" href="#"><i
-                                                    class="mdi mdi-plus-circle-o"></i></a></td>
-                                    </tr>
-                                    <tr>
-                                        <td>Apple iPhone 6</td>
-                                        <td class="number">$535</td>
-                                        <td>Aug 20, 2018</td>
-                                        <td class="text-success">Completed</td>
-                                        <td class="actions"><a class="icon" href="#"><i
-                                                    class="mdi mdi-plus-circle-o"></i></a></td>
-                                    </tr>
-                                    <tr>
-                                        <td>Samsung Galaxy S7</td>
-                                        <td class="number">$583</td>
-                                        <td>Aug 18, 2018</td>
-                                        <td class="text-warning">Pending</td>
-                                        <td class="actions"><a class="icon" href="#"><i
-                                                    class="mdi mdi-plus-circle-o"></i></a></td>
-                                    </tr>
-                                    <tr>
-                                        <td>HTC One M9</td>
-                                        <td class="number">$350</td>
-                                        <td>Aug 15, 2018</td>
-                                        <td class="text-warning">Pending</td>
-                                        <td class="actions"><a class="icon" href="#"><i
-                                                    class="mdi mdi-plus-circle-o"></i></a></td>
-                                    </tr>
-                                    <tr>
-                                        <td>Sony Xperia Z5</td>
-                                        <td class="number">$495</td>
-                                        <td>Aug 13, 2018</td>
-                                        <td class="text-danger">Cancelled</td>
-                                        <td class="actions"><a class="icon" href="#"><i
-                                                    class="mdi mdi-plus-circle-o"></i></a></td>
-                                    </tr>
-                                </tbody>
-                            </table>
-                        </div>
-                    </div>
-                </div>
-
-            </div>
+            <app-jobs-status *ngIf="paginatedJobsData" [paginatedJobsData]="paginatedJobsData.jobs"></app-jobs-status>
         </div>
 
     </div>

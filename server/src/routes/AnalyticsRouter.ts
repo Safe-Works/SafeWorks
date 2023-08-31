@@ -15,6 +15,11 @@ analyticsRouter.get(
 );
 
 analyticsRouter.get(
+    '/analytics/jobs/paginated',
+    analyticsController.getAllJobsPaginated as RequestHandler
+);
+
+analyticsRouter.get(
     '/analytics/users',
     analyticsController.getAllUsers as RequestHandler
 );

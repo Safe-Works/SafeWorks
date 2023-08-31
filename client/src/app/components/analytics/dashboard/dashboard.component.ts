@@ -18,8 +18,8 @@ export class DashboardComponent implements OnInit {
   // Jobs Profits
   public jobsProfitPercentIncrease: number = 0;
   public jobsProfitPercentIcon: boolean = true;
-  public currentMonthProfit: number = 0;
-  public lastMonthProfit: number = 0;
+  public currentMonthProfit: string = '0';
+  public lastMonthProfit: string = '0';
 
   // JobAds
   public allJobAdsData: any;
@@ -29,6 +29,7 @@ export class DashboardComponent implements OnInit {
 
   // JobContracts
   public allJobsData: any;
+  public paginatedJobsData: any;
   public totalActiveJobs: number = 0;
   public jobsPercentIncrease: number = 0;
   public jobsPercentIcon: boolean = true;
@@ -53,7 +54,7 @@ export class DashboardComponent implements OnInit {
 
   private async setAllJobsData() {
     this.allJobsData = await this.analyticsService.GetAllJobs();
-    console.log(this.allJobsData)
+    this.paginatedJobsData = await this.analyticsService.GetAllJobsPaginated(10, 1);
     this.setTotalActiveJobs();
     this.setTotalJobsProfit();
   }
@@ -98,23 +99,31 @@ export class DashboardComponent implements OnInit {
     const currentMonth = new Date().getMonth();
     const lastMonth = (currentMonth - 1 + 12) % 12;
 
+    let currentMonthProfit: number = 0;
+    let lastMonthProfit: number = 0;
+
+    // Filter the jobs to calcule and set the current month total profit
     this.allJobsData.jobs.filter((job: any) => {
       const jobDate = parse(job.created, 'dd/MM/yyyy HH:mm:ss', new Date());
       if (jobDate.getMonth() === currentMonth && !job.canceled) {
-        this.currentMonthProfit += job.contract_price;
+        currentMonthProfit += job.contract_price;
       }
       return jobDate.getMonth() === currentMonth && !job.canceled;
     });
+    this.currentMonthProfit = currentMonthProfit.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
 
+    // Filter the jobs to calcule and set the last month total profit
     this.allJobsData.jobs.filter((job: any) => {
       const jobDate = parse(job.created, 'dd/MM/yyyy HH:mm:ss', new Date());
       if (jobDate.getMonth() === currentMonth && !job.canceled) {
-        this.lastMonthProfit += job.contract_price;
+        lastMonthProfit += job.contract_price;
       }
       return jobDate.getMonth() === lastMonth && !job.canceled;;
     });
+    this.lastMonthProfit = lastMonthProfit.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
 
-    const jobsProfitPercentIncrease = ((this.currentMonthProfit - this.lastMonthProfit) / this.lastMonthProfit) * 100;
+    // Compare the current and last month profits to set the percent of increase or decrease
+    const jobsProfitPercentIncrease = ((currentMonthProfit - lastMonthProfit) / lastMonthProfit) * 100;
     if (jobsProfitPercentIncrease === Infinity) {
       this.jobsProfitPercentIncrease = 0;
     } else {

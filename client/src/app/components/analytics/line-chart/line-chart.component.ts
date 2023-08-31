@@ -34,7 +34,7 @@ export class LineChartComponent implements OnInit {
       scales: {
         yAxes: {
           ticks: {
-            callback: (value) => `R$ ${(+value).toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,')}`
+            callback: (value) => `R$ ${(+value).toFixed(2).replace(/\d(?=(\d{3})+\b)/g, '$&,').replace('.', ',')}`
           }
         }
       }
