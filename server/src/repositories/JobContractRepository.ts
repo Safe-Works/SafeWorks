@@ -47,6 +47,7 @@ class JobContractRepository extends AppRepository {
             let jobs;
             await db.collection("JobContracts")
                 .where('deleted', '==', null)
+                .orderBy('created', 'asc')
                 .get()
                 .then((querySnapshot) => {
                     jobs = querySnapshot.docs.map((doc) => {
