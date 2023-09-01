@@ -3,6 +3,44 @@ import { db, firebaseAdmin } from "../../util/admin";
 import * as admin from 'firebase-admin';
 
 class JobContractRepository extends AppRepository {
+    async add(jobContract: JobContract): Promise<string> {
+        try {
+            const created = this.getDateTime();
+            const newJobContract = {
+                ...jobContract,
+                expired: false,
+                created: created,
+                modified: null,
+                deleted: null
+            };
+            const docRef = await db.collection("JobContracts").add(newJobContract);
+            const uid = docRef.id;
+
+            return uid;
+        } catch (error) {
+            console.error("Error adding job contract to Firestore: ", error);
+            throw error; 
+        }
+    }
+    async create(): Promise<any> {
+        try {
+            let jobs;
+            await db.collection("JobContracts")
+                .where('deleted', '==', null)
+                .get()
+                .then((querySnapshot) => {
+                    jobs = querySnapshot.docs.map((doc) => {
+                        const data = doc.data();
+                        return { ...data, uid: doc.id };
+                    })
+                });
+            
+            return jobs;
+        } catch (error) {
+            console.error(error);
+            throw error;
+        }
+    }
 
     async getAll(): Promise<any> {
         try {
