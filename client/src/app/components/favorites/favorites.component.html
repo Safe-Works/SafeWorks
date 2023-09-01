@@ -1,18 +1,26 @@
-<div *ngFor="let user of favoriteUsers">
+
+<div *ngFor="let worker of favoriteUsers">
     <h2>Detalhes do Usuário</h2>
-    <p><strong>Nome:</strong> {{ user.name }}</p>
-    <button (click)="user.showDetails = !user.showDetails">
-        {{ user.showDetails ? 'Ocultar Detalhes' : 'Exibir Detalhes' }}
+    <p><strong>Nome:</strong> {{ worker.name }}</p>
+    <button (click)="worker.showDetails = !worker.showDetails">
+        {{ worker.showDetails ? 'Ocultar Detalhes' : 'Exibir Detalhes' }}
     </button>
-    <div *ngIf="user.showDetails">
-        <p><strong>E-mail:</strong> {{ user.email }}</p>
-        <p><strong>Telefone:</strong> {{ user.telephone_number }}</p>
-        <p><strong>CPF:</strong> {{ user.cpf }}</p>
-        <p><strong>Data de Criação:</strong> {{ user.created }}</p>
+    <button (click)="deleteFavorite(worker.workerUid)">Deletar</button>
+
+    <div *ngIf="worker.showDetails">
+        <p><strong>E-mail:</strong> {{ worker.email }}</p>
+        <p><strong>Telefone:</strong> {{ worker.telephone_number }}</p>
+        <p><strong>CPF:</strong> {{ worker.cpf }}</p>
+        <p><strong>Data de Criação:</strong> {{ worker.created }}</p>
         <p><strong>Áreas de Atuação:</strong></p>
         <ul>
-            <li *ngFor="let area of user.worker.area">{{ area }}</li>
+            <li *ngFor="let area of worker.worker.area">{{ area }}</li>
         </ul>
-        <button (click)="redirectToUserDetails(user.id)">Ir para o perfil</button>
+        <button (click)="redirectToUserDetails(worker.workerUid)">Ir para o perfil</button>
     </div>
+
+</div>
+
+<div class="no-favorites-message" *ngIf="favoriteUsers && favoriteUsers.length === 0">
+    <p>Você não posssui favoritos</p>
 </div>

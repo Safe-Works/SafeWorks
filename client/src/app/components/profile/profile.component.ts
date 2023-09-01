@@ -20,7 +20,8 @@ export class ProfileComponent implements OnInit {
   certifications: Certification[] = [];
   isMyProfile: boolean = false;
   photoUrl: string = '';
-  
+  deleted: boolean = false;
+
   constructor(
     private userService: UserService,
     private portfolioService: PortfolioService,
@@ -32,6 +33,7 @@ export class ProfileComponent implements OnInit {
   async ngOnInit() {
     this.userUid = this.route.snapshot.params['id'] ?? this.userAuth.currentUser?.uid;
     await this.loadUserInfo();
+    this.deleted = await this.isDeleted(this.userUid);
   }
 
   async loadUserInfo() {
@@ -68,4 +70,28 @@ export class ProfileComponent implements OnInit {
     this.router.navigate(['profile/edit', this.userUid]);
   }
 
+  getUserUid(){
+      return this.userAuth.currentUser?.uid ?? '';
+  }
+
+    async isDeleted(workerUid: string) {
+        let userInfo = await this.userService.GetUserInfo(this.getUserUid());
+        this.userInfo = userInfo.user;
+
+        if (this.userInfo.favorite_list) {
+            return this.userInfo.favorite_list.includes(workerUid);
+        } else {
+            return false;
+        }
+    }
+
+
+    async deleteFavorite(workerUid: string) {
+      //this.isDeleted(workerUid)
+
+      this.userService.deleteFavorite(this.getUserUid(), workerUid)
+        this.ngOnInit();
+        //alert("Deletado")
+        //this.deleted = true;
+    }
 }
