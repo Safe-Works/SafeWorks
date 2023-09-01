@@ -38,17 +38,22 @@ export class ViewPostComponent {
       confirmButtonText: 'Sim, contratar!',
       cancelButtonText: 'Cancelar'
     }).then(async (result) => {
-      if (result.isConfirmed) {
-        let response = await this.contractService.CreateJobContract(this.jobInfo);
-        if (response?.statusCode === 201) {
+      try {
+        if (result.isConfirmed) {
+          let response = await this.contractService.CreateJobContract(this.jobInfo);
+          if (response?.statusCode === 201) {
             this.isLoading = false;
             this.openSnackBar("Serviço contratado com sucesso!", "OK", "snackbar-success");
+          } else {
+            this.isLoading = false;
+            this.openSnackBar("Ocorreu um erro ao contratar o serviço!", "OK", "snackbar-error");
           }
         }
-        else {
-          this.isLoading = false;
-          this.openSnackBar("Ocorreu um erro ao contratar o serviço!", "OK", "snackbar-error");
-        }
+      } catch (error) {
+        console.error('contractJob error:', error);
+        this.isLoading = false;
+        this.openSnackBar("Ocorreu um erro ao contratar o serviço!", "OK", "snackbar-error");
+      }
     })
   }
   openSnackBar(message: string, action: string, className: string) {

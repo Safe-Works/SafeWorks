@@ -27,11 +27,6 @@ export class ContractService {
             },
             price: advertisement.price,
         };
-        try {
-            return await this.http.post<any>(this.api, contractData).toPromise();
-        } catch (error) {
-            console.error(error);
-            throw error;
-        }
+        return await this.http.post<any>(this.api, contractData).toPromise();
     }
 }
