@@ -15,14 +15,22 @@ import Swal from 'sweetalert2/dist/sweetalert2.js';
 })
 export class ViewPostComponent {
   jobId = "";
+  isMyAdvertisement = true;
   isLoading = false;
   isError = false;
   defaultPicUrl = "../../assets/default-pic.png"
   jobInfo = {} as JobAdvertisement;
   slides: any[] = new Array(3).fill({ id: -1, src: '', title: '', subtitle: '' });
-  constructor(private userAuth: UserAuth, private router: Router, private jobService: JobService, private _snackBar: MatSnackBar, private route: ActivatedRoute, private contractService: ContractService) {
 
-  }
+  constructor(
+    private userAuth: UserAuth,
+    private router: Router,
+    private jobService: JobService,
+    private _snackBar: MatSnackBar,
+    private route: ActivatedRoute,
+    private contractService: ContractService
+  ) {}
+
   ngOnInit() {
     this.jobId = this.route.snapshot.params['id'];
     this.loadJobInfo();
@@ -40,6 +48,7 @@ export class ViewPostComponent {
     }).then(async (result) => {
       try {
         if (result.isConfirmed) {
+          this.isLoading = true;
           let response = await this.contractService.CreateJobContract(this.jobInfo);
           if (response?.statusCode === 201) {
             this.isLoading = false;
@@ -73,6 +82,8 @@ export class ViewPostComponent {
             this.jobInfo.media = [];
             this.jobInfo.media.push(this.defaultPicUrl);
           }
+          if (this.jobInfo.worker.id !== this.userAuth.currentUser?.uid)
+            this.isMyAdvertisement = false;
           this.isLoading = false;
         },
         (error) => {

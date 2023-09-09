@@ -1,12 +1,12 @@
 type JobContract = {
     uid: string,
-    advertisement: Array<string>, // dados do anuncio que o trabalho pertence
-    worker: Array<string>, // dados do trabalhador que o contrato pertence
-    client: Array<string>, // dados do cliente que o contrato pertence
-    contract_price: Number, // preço total do serviço contratado
-    payed: boolean, // se o pagamento já foi realizado
-    worker_rating?: Int16Array, // avaliação do trabalhador do contrato
-    client_rating?: Int16Array, // avaliação do cliente do contrato
+    advertisement: any, // dados do anuncio que o trabalho pertence
+    worker: any, // dados do trabalhador que o contrato pertence
+    client: any, // dados do cliente que o contrato pertence
+    price: number, // preço total do serviço contratado
+    paid: boolean, // se o pagamento já foi realizado
+    worker_rating?: number, // avaliação do trabalhador do contrato
+    client_rating?: number, // avaliação do cliente do contrato
     canceled: boolean, // se o serviço foi cancelado antes de finalizado
     created: Date,
     modified?: Date,
