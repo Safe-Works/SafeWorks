@@ -11,6 +11,42 @@ interface PaginatedResponse {
 }
 class JobContractController {
 
+    async add(req: Request, res: Response): Promise<void> {
+        /*
+            #swagger.start
+            #swagger.path = '/jobcontracts'
+            #swagger.method = 'post'
+            #swagger.description = 'Endpoint to add a new Job Contract'
+            #swagger.produces = ["application/json"]
+            #swagger.tags = ['JobContract']
+        */
+        try {
+            /*
+                #swagger.parameters['jobContract'] = {
+                    in: 'body',
+                    description: 'JobContract data to add',
+                    required: true,
+                    schema: { $ref: "#/definitions/AddJobContract" }
+                }
+            */
+            const jobContract: JobContract = req.body;
+            const result = await jobContractRepository.add(jobContract);
+            /* 
+                #swagger.responses[201] = { 
+                    schema: { $ref: "#/definitions/CreatedJobContract" },
+                    description: 'Created JobContract UID' 
+                } 
+            */
+            res.status(201).json({ statusCode: 201, jobAd: result })
+        } catch (error) {
+            if (error instanceof Error) {
+                console.error("Error to add job contract: ", error.message);
+                res.status(500).json({ statusCode: 500, error: 'jobContract/failed-add', message: error.message });
+            }
+        }
+        // #swagger.end
+    }
+
     async getAll(req: Request, res: Response): Promise<void> {
         try {
             const jobs = await jobContractRepository.getAll();
