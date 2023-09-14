@@ -94,4 +94,13 @@ export class ProfileComponent implements OnInit {
         //alert("Deletado")
         //this.deleted = true;
     }
+
+    addFavorite(workerUid: string) {
+        this.userService.addFavorite(this.getUserUid(), workerUid)
+        //alert("Adicionado aos favoritos")
+        //alert(this.getUserUid())
+        //alert(workerUid)
+
+        this.ngOnInit();
+    }
 }

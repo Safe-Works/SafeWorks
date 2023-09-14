@@ -11,7 +11,7 @@ import { environment } from "../environments/environment";
 
 export class UserService {
   private api: string = environment.apiEndpoint + '/api/users/';
-  private favoriteUrl: string = environment.apiEndpoint + '/api/favorites/';
+  private favoriteApi: string = environment.apiEndpoint + '/api/favorites/';
 
   constructor(private http: HttpClient) { }
 
@@ -76,7 +76,25 @@ export class UserService {
 
   public async deleteFavorite(userId: string, workerUid: string): Promise<any> {
     try {
-      return await firstValueFrom(this.http.delete<string>(this.favoriteUrl + userId + '/' + workerUid));
+      return await firstValueFrom(this.http.delete<string>(this.favoriteApi + userId + '/' + workerUid));
+    } catch (error) {
+      console.error(error);
+      alert("Usuario ja deletado dos favoritos")
+      throw error;
+    }
+  }
+
+  async addFavorite(userId: string, workerUid: string) {
+
+    const body = {
+      userUid: userId,
+      workerUid: workerUid
+    };
+
+    try {
+      await firstValueFrom(this.http.post<any>(this.favoriteApi, body));
+      alert("Usuario adicionado")
+
     } catch (error) {
       console.error(error);
       alert("Usuario ja deletado dos favoritos")

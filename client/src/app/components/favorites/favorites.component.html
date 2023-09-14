@@ -1,4 +1,6 @@
-
+<div class="loading-spinner" *ngIf="isLoading">
+    <mat-spinner [diameter]="85"></mat-spinner>
+</div>
 <div *ngFor="let worker of favoriteUsers">
     <h2>Detalhes do Usuário</h2>
     <p><strong>Nome:</strong> {{ worker.name }}</p>

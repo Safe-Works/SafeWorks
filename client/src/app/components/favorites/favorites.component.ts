@@ -11,6 +11,7 @@ import {environment} from "../../environments/environment";
     styleUrls: ['./favorites.component.css']
 })
 export class FavoritesComponent implements OnInit {
+    isLoading: boolean = false;
     favoriteUsers: any[] = [];
     userUid: string = this.userAuth.currentUser?.uid ?? '';
 
@@ -25,6 +26,8 @@ export class FavoritesComponent implements OnInit {
     }
 
     async getFavorites() {
+        this.favoriteUsers = [];
+
         try {
             const response = await this.userService.GetUserInfo(this.userUid);
             const favoritesList = response.user.favorite_list;
@@ -47,9 +50,13 @@ export class FavoritesComponent implements OnInit {
         this.router.navigate(['/profile', workerUid]);
     }
 
-    deleteFavorite(workerUid: string) {
-        this.userService.deleteFavorite(this.userUid, workerUid);
-        window.location.reload()
+    async deleteFavorite(workerUid: string) {
+        this.isLoading = true;
+        await this.userService.deleteFavorite(this.userUid, workerUid);
+        //this.ngOnInit();
+        // window.location.reload()
+        this.getFavorites()
+        this.isLoading = false;
 
     }
 }
