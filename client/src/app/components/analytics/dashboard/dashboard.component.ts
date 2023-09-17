@@ -16,7 +16,7 @@ export class DashboardComponent implements OnInit {
   public workersPercentIcon: boolean = true;
 
   // Jobs Profits
-  public jobsProfitPercentIncrease: number = 0;
+  public jobsProfitPercentIncrease: string = '0';
   public jobsProfitPercentIcon: boolean = true;
   public currentMonthProfit: string = '0';
   public lastMonthProfit: string = '0';
@@ -24,7 +24,7 @@ export class DashboardComponent implements OnInit {
   // JobAds
   public allJobAdsData: any;
   public totalActiveJobAds: number = 0;
-  public jobAdsPercentIncrease: number = 0;
+  public jobAdsPercentIncrease: string = '0';
   public jobAdsPercentIcon: boolean = true;
 
   // JobContracts
@@ -106,7 +106,7 @@ export class DashboardComponent implements OnInit {
     this.allJobsData.jobs.filter((job: any) => {
       const jobDate = parse(job.created, 'dd/MM/yyyy HH:mm:ss', new Date());
       if (jobDate.getMonth() === currentMonth && !job.canceled) {
-        currentMonthProfit += job.contract_price;
+        currentMonthProfit += job.price;
       }
       return jobDate.getMonth() === currentMonth && !job.canceled;
     });
@@ -116,7 +116,7 @@ export class DashboardComponent implements OnInit {
     this.allJobsData.jobs.filter((job: any) => {
       const jobDate = parse(job.created, 'dd/MM/yyyy HH:mm:ss', new Date());
       if (jobDate.getMonth() === currentMonth && !job.canceled) {
-        lastMonthProfit += job.contract_price;
+        lastMonthProfit += job.price;
       }
       return jobDate.getMonth() === lastMonth && !job.canceled;;
     });
@@ -125,13 +125,13 @@ export class DashboardComponent implements OnInit {
     // Compare the current and last month profits to set the percent of increase or decrease
     const jobsProfitPercentIncrease = ((currentMonthProfit - lastMonthProfit) / lastMonthProfit) * 100;
     if (jobsProfitPercentIncrease === Infinity) {
-      this.jobsProfitPercentIncrease = 0;
+      this.jobsProfitPercentIncrease = '0';
     } else {
       if (jobsProfitPercentIncrease > 0) {
-        this.jobsProfitPercentIncrease = jobsProfitPercentIncrease;
+        this.jobsProfitPercentIncrease = jobsProfitPercentIncrease.toFixed(2);
         this.jobsProfitPercentIcon = true;
       } else {
-        this.jobsProfitPercentIncrease = jobsProfitPercentIncrease;
+        this.jobsProfitPercentIncrease = jobsProfitPercentIncrease.toFixed(2);
         this.jobsProfitPercentIcon = false;
       }
     }
@@ -158,13 +158,13 @@ export class DashboardComponent implements OnInit {
 
     const jobAdsPercentIncrease = ((currentMonthJobCount - lastMonthJobCount) / lastMonthJobCount) * 100;
     if (jobAdsPercentIncrease === Infinity) {
-      this.jobAdsPercentIncrease = 0;
+      this.jobAdsPercentIncrease = '0';
     } else {
       if (jobAdsPercentIncrease > 0) {
-        this.jobAdsPercentIncrease = jobAdsPercentIncrease;
+        this.jobAdsPercentIncrease = jobAdsPercentIncrease.toFixed(2);
         this.jobAdsPercentIcon = true;
       } else {
-        this.jobAdsPercentIncrease = jobAdsPercentIncrease;
+        this.jobAdsPercentIncrease = jobAdsPercentIncrease.toFixed(2);
         this.jobAdsPercentIcon = false;
       }
     }

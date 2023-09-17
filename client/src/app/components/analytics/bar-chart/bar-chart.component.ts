@@ -1,7 +1,6 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { ChartOptions } from 'chart.js';
 import { parse } from 'date-fns';
-import { districts } from 'enums/districts.enum';
 
 @Component({
   selector: 'app-bar-chart',
