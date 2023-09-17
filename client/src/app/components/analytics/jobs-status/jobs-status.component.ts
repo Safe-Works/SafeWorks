@@ -17,10 +17,10 @@ export class JobsStatusComponent implements OnInit {
 
   setJobsStatusData() {
     console.log(this.jobsStatusData);
-    this.paginatedJobsData.forEach((job: { advertisement: any[]; contract_price: number; created: string; }) => {
+    this.paginatedJobsData.forEach((job: { advertisement: {id: number, title: string}; price: number; created: string; }) => {
       this.jobsStatusData.push({
-        title: job.advertisement[1],
-        price: job.contract_price.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' }),
+        title: job.advertisement.title,
+        price: job.price.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' }),
         created: this.setJobDate(job.created),
         status: this.setJobStatus(job),
         statusClass: this.setJobStatusClass(job),

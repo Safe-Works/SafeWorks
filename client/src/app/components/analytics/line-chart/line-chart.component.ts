@@ -34,7 +34,14 @@ export class LineChartComponent implements OnInit {
       scales: {
         yAxes: {
           ticks: {
-            callback: (value) => `R$ ${(+value).toFixed(2).replace(/\d(?=(\d{3})+\b)/g, '$&,').replace('.', ',')}`
+            stepSize: 1,
+            callback: (value) => {
+              if (Number.isInteger(value)) {
+                return value.toString();
+              } else {
+                return '';
+              }
+            }
           }
         }
       }
@@ -45,21 +52,21 @@ export class LineChartComponent implements OnInit {
 
   setDateCategoryPriceDataset() {
     const relatedJobs = this.relateJobsAndAds(this.rawJobsData, this.rawJobAdsData);
-    const datePriceMap: { [date: string]: { [category: string]: number } } = {};
+    const dateCategoryCounts: { [date: string]: { [category: string]: number } } = {};
 
     relatedJobs.forEach(job => {
       const category = job.jobAd.category.name;
       const createdDate = parse(job.created, 'dd/MM/yyyy HH:mm:ss', new Date()).toLocaleDateString();
 
-      if (!datePriceMap[createdDate]) {
-        datePriceMap[createdDate] = {};
+      if (!dateCategoryCounts[createdDate]) {
+        dateCategoryCounts[createdDate] = {};
       }
 
-      if (!datePriceMap[createdDate][category]) {
-        datePriceMap[createdDate][category] = 0;
+      if (!dateCategoryCounts[createdDate][category]) {
+        dateCategoryCounts[createdDate][category] = 0;
       }
 
-      datePriceMap[createdDate][category] += job.contract_price;
+      dateCategoryCounts[createdDate][category]++;
     });
 
     const categories = Object.keys(relatedJobs.reduce((acc, job) => { acc[job.jobAd.category.name] = true; return acc; }, {}));
@@ -68,10 +75,10 @@ export class LineChartComponent implements OnInit {
     categories.forEach(category => {
       const data: any = [];
 
-      Object.entries(datePriceMap).forEach(([date, categoryPrices]) => {
+      Object.entries(dateCategoryCounts).forEach(([date, categoryCounts]) => {
         data.push({
           x: date,
-          y: categoryPrices[category] || 0
+          y: categoryCounts[category] || 0
         });
       });
 
@@ -80,7 +87,7 @@ export class LineChartComponent implements OnInit {
         data: data
       });
     });
-    const chartLabels = Object.keys(datePriceMap);
+    const chartLabels = Object.keys(dateCategoryCounts);
 
     return { chartData, chartLabels };
   }
@@ -89,7 +96,7 @@ export class LineChartComponent implements OnInit {
     const relatedJobs = [];
 
     for (const job of jobs) {
-      const relatedAdUid = job.advertisement[0];
+      const relatedAdUid = job.advertisement.id;
       const relatedAd = jobAds.find(jobAd => jobAd.uid === relatedAdUid);
 
       if (relatedAd) {
