@@ -53,10 +53,7 @@ export class FavoritesComponent implements OnInit {
     async deleteFavorite(workerUid: string) {
         this.isLoading = true;
         await this.userService.deleteFavorite(this.userUid, workerUid);
-        //this.ngOnInit();
-        // window.location.reload()
         this.getFavorites()
         this.isLoading = false;
-
     }
 }

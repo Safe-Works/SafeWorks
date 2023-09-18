@@ -74,30 +74,28 @@ export class UserService {
     );
   }
 
-  public async deleteFavorite(userId: string, workerUid: string): Promise<any> {
+  public deleteFavorite(userId: string, workerUid: string): Promise<any> {
     try {
-      return await firstValueFrom(this.http.delete<string>(this.favoriteApi + userId + '/' + workerUid));
-    } catch (error) {
+      return firstValueFrom(this.http.delete<string>(this.favoriteApi + userId + '/' + workerUid));
+    }
+    catch (error) {
       console.error(error);
-      alert("Usuario ja deletado dos favoritos")
       throw error;
     }
   }
 
-  async addFavorite(userId: string, workerUid: string) {
-
+  addFavorite(userId: string, workerUid: string) {
     const body = {
       userUid: userId,
       workerUid: workerUid
     };
 
     try {
-      await firstValueFrom(this.http.post<any>(this.favoriteApi, body));
-      alert("Usuario adicionado")
+      firstValueFrom(this.http.post<any>(this.favoriteApi, body));
 
-    } catch (error) {
+    }
+    catch (error) {
       console.error(error);
-      alert("Usuario ja deletado dos favoritos")
       throw error;
     }
   }

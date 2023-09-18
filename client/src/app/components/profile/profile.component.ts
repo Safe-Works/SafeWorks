@@ -21,6 +21,7 @@ export class ProfileComponent implements OnInit {
   isMyProfile: boolean = false;
   photoUrl: string = '';
   deleted: boolean = false;
+  isLoading: boolean = false;
 
   constructor(
     private userService: UserService,
@@ -87,20 +88,16 @@ export class ProfileComponent implements OnInit {
 
 
     async deleteFavorite(workerUid: string) {
-      //this.isDeleted(workerUid)
-
-      this.userService.deleteFavorite(this.getUserUid(), workerUid)
+        this.isLoading = true;
+        await this.userService.deleteFavorite(this.getUserUid(), workerUid)
         this.ngOnInit();
-        //alert("Deletado")
-        //this.deleted = true;
+        this.isLoading = false;
     }
 
-    addFavorite(workerUid: string) {
-        this.userService.addFavorite(this.getUserUid(), workerUid)
-        //alert("Adicionado aos favoritos")
-        //alert(this.getUserUid())
-        //alert(workerUid)
-
+    async addFavorite(workerUid: string) {
+        this.isLoading = true;
+        await this.userService.addFavorite(this.getUserUid(), workerUid)
         this.ngOnInit();
+        this.isLoading = false;
     }
 }
