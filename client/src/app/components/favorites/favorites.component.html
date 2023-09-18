@@ -4,10 +4,15 @@
 <div *ngFor="let worker of favoriteUsers">
     <h2>Detalhes do Usuário</h2>
     <p><strong>Nome:</strong> {{ worker.name }}</p>
-    <button (click)="worker.showDetails = !worker.showDetails">
-        {{ worker.showDetails ? 'Ocultar Detalhes' : 'Exibir Detalhes' }}
-    </button>
-    <button (click)="deleteFavorite(worker.workerUid)">Deletar</button>
+
+    <a (click)="worker.showDetails = !worker.showDetails">
+        <i class="btn btn-outline-primary bi-chevron-{{ worker.showDetails ? 'up' : 'down' }}"></i>
+    </a>
+
+    <a (click)="deleteFavorite(worker.workerUid)" class="icon-link">
+        <i class="bi-trash-fill btn btn-outline-primary"></i>
+    </a>
+
 
     <div *ngIf="worker.showDetails">
         <p><strong>E-mail:</strong> {{ worker.email }}</p>
@@ -18,7 +23,12 @@
         <ul>
             <li *ngFor="let area of worker.worker.area">{{ area }}</li>
         </ul>
-        <button (click)="redirectToUserDetails(worker.workerUid)">Ir para o perfil</button>
+
+        <a (click)="redirectToUserDetails(worker.workerUid)">
+            <i class="bi bi-person-fill btn btn-outline-primary">
+                Ir para o perfil
+            </i>
+        </a>
     </div>
 
 </div>

@@ -23,13 +23,14 @@
                         <p *ngIf="userInfo?.username" class="username">{{ userInfo.username }}</p>
                         <p *ngIf="portfolio" style="padding-top: 0.5rem">{{ portfolio.description }}</p>
                         <div class="d-flex justify-content-center mb-2">
-                            <!--                            <button (click)="deleteFavorite(); user.favorite = !user.favorite" >-->
-<!--                                {{ user.favorite ? 'Adicionar aos favoritos' : 'Remover dos favoritos'}}-->
-<!--                            </button>-->
 
-                            <button *ngIf="deleted && !isMyProfile" (click)="deleteFavorite(userUid)">Deletar</button>
+                            <a *ngIf="deleted && !isMyProfile" (click)="deleteFavorite(userUid)">
+                                <i class="bi bi-heart-fill btn btn-outline-primary"></i>
+                            </a>
 
-                            <button *ngIf="!deleted && !isMyProfile" (click)="addFavorite(userUid)">Adicionar aos Favoritos</button>
+                            <a *ngIf="!deleted && !isMyProfile" (click)="addFavorite(userUid)">
+                                <i class="bi bi-heart btn btn-outline-primary"></i>
+                            </a>
 
                             <button *ngIf="!isMyProfile" type="button" class="btn btn-outline-primary ms-1">
                                 Message
