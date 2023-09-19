@@ -77,10 +77,10 @@ export class ProfileComponent implements OnInit {
 
     async isDeleted(workerUid: string) {
         let userInfo = await this.userService.GetUserInfo(this.getUserUid());
-        this.userInfo = userInfo.user;
+        userInfo = userInfo.user;
 
-        if (this.userInfo.favorite_list) {
-            return this.userInfo.favorite_list.includes(workerUid);
+        if (userInfo.favorite_list) {
+            return userInfo.favorite_list.includes(workerUid);
         } else {
             return false;
         }
