@@ -2,33 +2,47 @@
     <mat-spinner [diameter]="85"></mat-spinner>
 </div>
 <div *ngFor="let worker of favoriteUsers">
-    <h2>Detalhes do Usuário</h2>
-    <p><strong>Nome:</strong> {{ worker.name }}</p>
+    <h2>{{ worker.name }}</h2>
+    <ul>
+        <li *ngFor="let area of worker.worker.area">{{ area }}</li>
+    </ul>
 
-    <a (click)="worker.showDetails = !worker.showDetails">
-        <i class="btn btn-outline-primary bi-chevron-{{ worker.showDetails ? 'up' : 'down' }}"></i>
+    <a (click)="worker.showDetails = !worker.showDetails" (click)="getJobs(worker.workerUid)">
+        <i class="btn btn-outline-primary bi-chevron-{{ worker.showDetails ? 'up' : 'down' }}">anúncios</i>
     </a>
 
     <a (click)="deleteFavorite(worker.workerUid)" class="icon-link">
         <i class="bi-trash-fill btn btn-outline-primary"></i>
     </a>
 
+    <a (click)="redirectToUserDetails(worker.workerUid)">
+        <i class="bi bi-person-fill btn btn-outline-primary">
+            Ir para o perfil
+        </i>
+    </a>
 
     <div *ngIf="worker.showDetails">
-        <p><strong>E-mail:</strong> {{ worker.email }}</p>
-        <p><strong>Telefone:</strong> {{ worker.telephone_number }}</p>
-        <p><strong>CPF:</strong> {{ worker.cpf }}</p>
-        <p><strong>Data de Criação:</strong> {{ worker.created }}</p>
-        <p><strong>Áreas de Atuação:</strong></p>
-        <ul>
-            <li *ngFor="let area of worker.worker.area">{{ area }}</li>
-        </ul>
+        <!--        <p><strong>E-mail:</strong> {{ worker.email }}</p>-->
+        <!--        <p><strong>Telefone:</strong> {{ worker.telephone_number }}</p>-->
+        <!--        <p><strong>CPF:</strong> {{ worker.cpf }}</p>-->
+        <!--        <p><strong>Data de Criação:</strong> {{ worker.created }}</p>-->
+        <!--        <p><strong>Áreas de Atuação:</strong></p>-->
+        <!--        <ul>-->
+        <!--            <li *ngFor="let area of worker.worker.area">{{ area }}</li>-->
+        <!--        </ul>-->
 
-        <a (click)="redirectToUserDetails(worker.workerUid)">
-            <i class="bi bi-person-fill btn btn-outline-primary">
-                Ir para o perfil
-            </i>
-        </a>
+        <app-list-posts
+                [items]="jobs"
+                [totalItems]="totalJobs"
+                [currentPage]="currentPage"
+                [pageSize]="pageSize"
+                [isLoading]="isLoading"
+        >
+            <!--                [titleProperty]="'title'"-->
+            <!--                [showActions]="isMyAdsPage"-->
+            <!--                [editJobHandler]="editJob"-->
+            <!--                [deleteJobHandler]="deleteJob"-->
+        </app-list-posts>
     </div>
 
 </div>

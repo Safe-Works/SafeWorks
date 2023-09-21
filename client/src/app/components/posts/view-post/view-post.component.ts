@@ -5,6 +5,7 @@ import { JobService } from 'src/app/services/job.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { ActivatedRoute } from '@angular/router';
 import { Router } from '@angular/router';
+import {Location} from '@angular/common';
 
 @Component({
   selector: 'app-view-post',
@@ -18,7 +19,7 @@ export class ViewPostComponent {
   defaultPicUrl = "../../assets/default-pic.png"
   jobInfo = {} as JobAdvertisement;
   slides: any[] = new Array(3).fill({ id: -1, src: '', title: '', subtitle: '' });
-  constructor(private userAuth: UserAuth, private router: Router, private jobService: JobService, private _snackBar: MatSnackBar, private route: ActivatedRoute) {
+  constructor(private userAuth: UserAuth, private router: Router, private jobService: JobService, private _snackBar: MatSnackBar, private route: ActivatedRoute, private location: Location) {
 
   }
   ngOnInit() {
@@ -49,4 +50,8 @@ export class ViewPostComponent {
   onItemChange($event: any): void {
     console.log('Carousel onItemChange', $event);
   }
+
+  back() {
+      this.location.back();
+    }
 }
