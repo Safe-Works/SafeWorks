@@ -37,7 +37,7 @@
                   <h2 style="font-weight: 500;">{{ jobInfo.title }}</h2>
                 </div>
                 <div class="col-md-2 ">
-                  <span class="tag-category">{{ jobInfo.category.name }}</span>
+                  <span class="tag-category">{{ jobInfo.category?.name }}</span>
                 </div>
               </div>
               <div class="price">
@@ -63,7 +63,7 @@
               <div class="d-flex align-items-center mt-5 delivery">
                 <i class="fa fa-map-marker"></i>
                 <span class="ms-2">
-                  {{ jobInfo.district.name }}<br>
+                  {{ jobInfo.district?.name }}<br>
                 </span>
                 <span class="ms-2 me-2">
                   |
@@ -82,7 +82,7 @@
                   Anunciante:
                 </span>
                 <span class="ms-2">
-                  {{ jobInfo.worker.name }}
+                  {{ jobInfo.worker?.name }}
                 </span>
               </div>
               <div class="mt-3">
