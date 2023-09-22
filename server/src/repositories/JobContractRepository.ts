@@ -4,12 +4,12 @@ import * as admin from 'firebase-admin';
 import EmailNotificationModel from '../models/EmailNotificationModel';
 
 class JobContractRepository extends AppRepository {
-    async add(jobContract: JobContract): Promise<string> {
+    async add(jobContract: JobContract): Promise<any> {
         try {
             if (jobContract.client.id === jobContract.worker.id) {
                 throw new Error("Não é permitido criar um contrato entre o mesmo cliente e trabalhador.");
             }
-
+        
             const created = this.getDateTime();
             const newJobContract = {
                 ...jobContract,
@@ -80,6 +80,19 @@ class JobContractRepository extends AppRepository {
         });
     }
 
+    async verifyUserBalance(userId: string, contractValue: number): Promise<boolean> {
+        const userRef = db.collection("Users").doc(userId);
+        const userDoc = await userRef.get();
+        if (userDoc.exists) {
+            const userData = userDoc.data();
+            const currentBalance = userData?.balance || 0;
+            if (currentBalance >= contractValue) {
+                return true;
+            }
+        }
+        return false;
+    }
+    
     async updateUserContractedServices(userId: string, contractId: string, advertisementTitle: string, price: number) {
         const userRef = db.collection("Users").doc(userId);
         const userDoc = await userRef.get();

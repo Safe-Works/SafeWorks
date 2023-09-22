@@ -7,6 +7,7 @@ import JobAdvertisement from 'src/app/models/job-advertisement.model';
 import { UserAuth } from '../../../auth/User.Auth';
 import { JobService } from 'src/app/services/job.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { Router } from '@angular/router';
 
 interface Photo {
   url: string;
@@ -35,7 +36,7 @@ export class CreatePostComponent {
   deliveryTimeFormControl = new FormControl('', [Validators.required]);
   isDisplacementFormControl = new FormControl(false);
   displacementFeeFormControl = new FormControl('', [Validators.required]);
-  constructor(private userAuth: UserAuth, private jobService: JobService, private _snackBar: MatSnackBar) {
+  constructor(private userAuth: UserAuth, private jobService: JobService, private _snackBar: MatSnackBar, private router: Router) {
     this.postFormControl = new FormGroup({
       titleFormControl: this.titleFormControl,
       categoryFormControl: this.categoryFormControl,
@@ -151,6 +152,7 @@ export class CreatePostComponent {
         if (response?.statusCode === 201) {
           this.isLoading = false;
           this.openSnackBar("Anúncio criado com sucesso!", "OK", "snackbar-success");
+          this.router.navigate(['/jobs', 'view', response.jobAd]); 
         }
       },
       (error) => {

@@ -29,7 +29,7 @@ export class ViewPostComponent {
     private _snackBar: MatSnackBar,
     private route: ActivatedRoute,
     private contractService: ContractService
-  ) {}
+  ) { }
 
   ngOnInit() {
     this.jobId = this.route.snapshot.params['id'];
@@ -38,7 +38,7 @@ export class ViewPostComponent {
   contractJob() {
     Swal.fire({
       title: 'Você tem certeza?',
-      text: "O anúncio será contratado!",
+      text: "O serviço será contratado!",
       icon: 'warning',
       showCancelButton: true,
       confirmButtonColor: '#3085d6',
@@ -58,10 +58,30 @@ export class ViewPostComponent {
             this.openSnackBar("Ocorreu um erro ao contratar o serviço!", "OK", "snackbar-error");
           }
         }
-      } catch (error) {
+      } catch (error: any) {
         console.error('contractJob error:', error);
         this.isLoading = false;
-        this.openSnackBar("Ocorreu um erro ao contratar o serviço!", "OK", "snackbar-error");
+        if (error.error?.statusCode === 402) {
+          Swal.fire({
+            title: 'Saldo insuficiente',
+            text: "Deseja pagar por outro meio de pagamento?",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Sim',
+            cancelButtonText: 'Não'
+          }).then(async (result) => {
+            try {
+              if (result.isConfirmed) {
+              }
+            } catch (error: any) {
+              this.openSnackBar("Ocorreu um erro ao contratar o serviço!", "OK", "snackbar-error");
+            }
+          })
+        }
+        else
+          this.openSnackBar("Ocorreu um erro ao contratar o serviço!", "OK", "snackbar-error");
       }
     })
   }
