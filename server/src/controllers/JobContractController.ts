@@ -30,6 +30,12 @@ class JobContractController {
                 }
             */
             const jobContract: JobContract = req.body;
+            const hasSufficientBalance = await jobContractRepository.verifyUserBalance(jobContract.client.id, jobContract.price);
+            if (!hasSufficientBalance) {
+                res.status(402).json({ statusCode: 402, error: 'jobContract/insufficient-balance', message: 'Você não possui saldo suficiente' });
+                return;
+            }
+            
             const result = await jobContractRepository.add(jobContract);
             /* 
                 #swagger.responses[201] = { 

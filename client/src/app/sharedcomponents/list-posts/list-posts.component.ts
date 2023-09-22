@@ -4,6 +4,7 @@ import { Router } from '@angular/router';
 import JobAdvertisement from 'src/app/models/job-advertisement.model';
 import { JobService } from 'src/app/services/job.service';
 import { UserAuth } from '../../auth/User.Auth';
+import Swal from 'sweetalert2/dist/sweetalert2.js';
 
 @Component({
   selector: 'app-list-posts',
@@ -58,5 +59,37 @@ export class CardPostsComponent<T> {
     this.currentPage = event.pageIndex + 1;
     this.pageSize = event.pageSize;
     this.getJobs();
+  }
+
+  deleteJob(job: JobAdvertisement) {
+    Swal.fire({
+      title: 'Você tem certeza?',
+      text: "Você não poderá reverter isso!",
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#3085d6',
+      cancelButtonColor: '#d33',
+      confirmButtonText: 'Sim, deletar!',
+      cancelButtonText: 'Cancelar'
+    }).then((result) => {
+      if (result.isConfirmed) {
+        this.jobService.DeleteById(job.uid ?? "").subscribe((response) => {
+          if (response.statusCode === 200) {
+            this.getJobs();
+            Swal.fire(
+              'Deletado!',
+              'Seu anúncio foi deletado com sucesso.',
+              'success'
+            )
+          } else {
+            Swal.fire(
+              'Erro!',
+              'Ocorreu um erro ao deletar o anúncio.',
+              'error'
+            )
+          }
+        })
+      }
+    })
   }
 }
