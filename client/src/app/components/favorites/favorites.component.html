@@ -1,48 +1,42 @@
 <div class="loading-spinner" *ngIf="isLoading">
     <mat-spinner [diameter]="85"></mat-spinner>
 </div>
-<div *ngFor="let worker of favoriteUsers">
+<div *ngFor="let worker of favoriteUsers" style="padding: 40px 5.6%; background-color: white; border: 1px solid #ced0d4; border-top: 0; margin-top: 10px; margin-bottom: 5px;">
     <h2>{{ worker.name }}</h2>
-    <ul>
-        <li *ngFor="let area of worker.worker.area">{{ area }}</li>
-    </ul>
 
-    <a (click)="worker.showDetails = !worker.showDetails" (click)="getJobs(worker.workerUid)">
-        <i class="btn btn-outline-primary bi-chevron-{{ worker.showDetails ? 'up' : 'down' }}">anúncios</i>
-    </a>
+    <div class="row col-md-12 justify-content-end">
+        <div class="col-6">
+            <button (click)="redirectToUserDetails(worker.workerUid)"
+                    class="bi-person-fill btn btn-primary btn-autentication"
+                    style="width: 100%; border-radius: 30.4px; margin-top: 10px; margin-bottom: 5px;">
+                Ir para o perfil
+            </button>
+        </div>
+        <div class="col-6">
+            <a (click)="deleteFavorite(worker.workerUid)" class="icon-link">
+                <i class="btn bi-trash-fill btn-primary btn-autentication" title="Deletar favorito"
+                   style="width: 100%; border-radius: 30.4px; margin-top: 10px; margin-bottom: 5px;"></i>
+            </a>
+        </div>
+        <div class="col-12" style="margin-top: 10px;">
+            <a (click)="worker.showDetails = !worker.showDetails" (click)="getJobs(worker.workerUid)">
+                <i class="btn btn-outline-secondary bi-chevron-{{ worker.showDetails ? 'up' : 'down' }}"
+                   style="width: 100%; border-radius: 30.4px;">
+                    Ver anúncios
+                </i>
+            </a>
+        </div>
+    </div>
 
-    <a (click)="deleteFavorite(worker.workerUid)" class="icon-link">
-        <i class="bi-trash-fill btn btn-outline-primary"></i>
-    </a>
-
-    <a (click)="redirectToUserDetails(worker.workerUid)">
-        <i class="bi bi-person-fill btn btn-outline-primary">
-            Ir para o perfil
-        </i>
-    </a>
 
     <div *ngIf="worker.showDetails">
-        <!--        <p><strong>E-mail:</strong> {{ worker.email }}</p>-->
-        <!--        <p><strong>Telefone:</strong> {{ worker.telephone_number }}</p>-->
-        <!--        <p><strong>CPF:</strong> {{ worker.cpf }}</p>-->
-        <!--        <p><strong>Data de Criação:</strong> {{ worker.created }}</p>-->
-        <!--        <p><strong>Áreas de Atuação:</strong></p>-->
-        <!--        <ul>-->
-        <!--            <li *ngFor="let area of worker.worker.area">{{ area }}</li>-->
-        <!--        </ul>-->
-
         <app-list-posts
                 [items]="jobs"
                 [totalItems]="totalJobs"
                 [currentPage]="currentPage"
                 [pageSize]="pageSize"
                 [isLoading]="isLoading"
-        >
-            <!--                [titleProperty]="'title'"-->
-            <!--                [showActions]="isMyAdsPage"-->
-            <!--                [editJobHandler]="editJob"-->
-            <!--                [deleteJobHandler]="deleteJob"-->
-        </app-list-posts>
+        ></app-list-posts>
     </div>
 
 </div>

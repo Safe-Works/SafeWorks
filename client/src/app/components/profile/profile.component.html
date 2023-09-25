@@ -25,11 +25,11 @@
                         <div class="d-flex justify-content-center mb-2">
 
                             <a *ngIf="deleted && !isMyProfile" (click)="deleteFavorite(userUid)">
-                                <i class="bi bi-heart-fill btn btn-outline-primary"></i>
+                                <i class="bi bi-heart-fill btn btn-primary btn-autentication"></i>
                             </a>
 
                             <a *ngIf="!deleted && !isMyProfile" (click)="addFavorite(userUid)">
-                                <i class="bi bi-heart btn btn-outline-primary"></i>
+                                <i class="bi bi-heart btn btn-primary btn-autentication"></i>
                             </a>
 
                             <button *ngIf="!isMyProfile" type="button" class="btn btn-outline-primary ms-1">

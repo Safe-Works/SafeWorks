@@ -6,6 +6,7 @@ import Certification from 'src/app/models/certification.model';
 import Portfolio from 'src/app/models/portfolio.model';
 import { PortfolioService } from 'src/app/services/portfolio.service';
 import { UserService } from 'src/app/services/user.service';
+import {MatSnackBar} from "@angular/material/snack-bar";
 
 @Component({
   selector: 'app-profile',
@@ -29,6 +30,7 @@ export class ProfileComponent implements OnInit {
     public userAuth: UserAuth, 
     public route: ActivatedRoute,
     public router: Router,
+    private _snackBar: MatSnackBar,
   ) { }
 
   async ngOnInit() {
@@ -91,6 +93,7 @@ export class ProfileComponent implements OnInit {
         this.isLoading = true;
         await this.userService.deleteFavorite(this.getUserUid(), workerUid)
         this.ngOnInit();
+        this.openSnackBar("Favorito deletado com sucesso!", "OK", "snackbar-success")
         this.isLoading = false;
     }
 
@@ -98,6 +101,14 @@ export class ProfileComponent implements OnInit {
         this.isLoading = true;
         await this.userService.addFavorite(this.getUserUid(), workerUid)
         this.ngOnInit();
+        this.openSnackBar("Usuário adicionado aos favoritos", "OK", "snackbar-success")
         this.isLoading = false;
+    }
+
+    openSnackBar(message: string, action: string, className: string) {
+        this._snackBar.open(message, action, {
+            duration: 20000,
+            panelClass: [className],
+        });
     }
 }

@@ -5,6 +5,7 @@ import {Router} from "@angular/router";
 import {JobService} from "../../services/job.service";
 import JobAdvertisement from "../../models/job-advertisement.model";
 import Swal from 'sweetalert2/dist/sweetalert2.js';
+import {MatSnackBar} from "@angular/material/snack-bar";
 
 @Component({
     selector: 'app-favorites',
@@ -25,6 +26,7 @@ export class FavoritesComponent implements OnInit {
         private userAuth: UserAuth,
         public router: Router,
         private jobService: JobService,
+        private _snackBar: MatSnackBar,
     ) {}
 
     ngOnInit(): void {
@@ -61,6 +63,7 @@ export class FavoritesComponent implements OnInit {
         await this.userService.deleteFavorite(this.userUid, workerUid);
         this.getFavorites()
         this.isLoading = false;
+        this.openSnackBar("Favorito deletado com sucesso!", "OK", "snackbar-success")
     }
 
     async getJobs(workerUid: string) {
@@ -79,5 +82,12 @@ export class FavoritesComponent implements OnInit {
             )
             this.isLoading = false;
         }
+    }
+
+    openSnackBar(message: string, action: string, className: string) {
+        this._snackBar.open(message, action, {
+            duration: 20000,
+            panelClass: [className],
+        });
     }
 }
