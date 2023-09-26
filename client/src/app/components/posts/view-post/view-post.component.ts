@@ -124,4 +124,8 @@ export class ViewPostComponent {
   back() {
       this.location.back();
     }
+
+  redirectToUserDetails() {
+    this.router.navigate(['/profile', this.jobInfo.worker.id]);
+  }
 }
