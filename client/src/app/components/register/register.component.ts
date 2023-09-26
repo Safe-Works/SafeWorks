@@ -48,6 +48,7 @@ export class RegisterComponent implements OnInit {
   email = new FormControl('', [Validators.required, Validators.email]);
   password = new FormControl('', [Validators.required, this.validarSenhaForte]);
   confirmPassword = new FormControl('', [Validators.required, passwordMatchValidator]);
+  isLoading: boolean = false;
 
   constructor(private userService: UserService, private router: Router) { }
 
@@ -81,6 +82,7 @@ export class RegisterComponent implements OnInit {
   }
 
   register(): void {
+    this.isLoading = true;
     const hashedPassword = this.encryptPassword();
     const newUser = new User(
       this.registerForm.get('email')?.value,
@@ -92,6 +94,7 @@ export class RegisterComponent implements OnInit {
     this.userService.RegisterUser(newUser).subscribe(
       (response) => {
         this.router.navigateByUrl('/login');
+        this.isLoading = false;
       },
       (error) => {
         if (error.status === 409) {
@@ -99,6 +102,7 @@ export class RegisterComponent implements OnInit {
           this.emailInvalidLabel = "O e-mail já está em uso."
         }
         console.log(error);
+        this.isLoading = false;
       }
     );
   }

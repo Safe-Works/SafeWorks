@@ -1,13 +1,15 @@
-<aside class="sidebar shadow-sm" style="overflow: hidden;">
+<aside class="sidebar shadow-sm">
     <div class="sidebar-profile d-flex flex-column justify-content-center pt-5 pb-3">
         <div class="picture-wrapper mb-4">
             <div class="user-picture m-auto">
-                <img src={{userAuth.currentUser?.infos.photo_url}} class="img-fluid" alt="">
+                <img src={{profile_photo}} class="img-fluid" alt="">
             </div>
         </div>
         <div class="profile-details text-center pb-4">
             <a [routerLink]="'/profile'"> <p class="mb-0 text-uppercase name">{{userAuth.currentUser?.displayName}} </p></a>
-            <small class="text-uppercase role">Administrador</small>
+            <small class="text-uppercase role" *ngIf="userAuth.currentUser?.infos.admin">Administrador</small>
+            <small class="text-uppercase role" *ngIf="userAuth.currentUser?.infos.isWorker && !userAuth.currentUser?.infos.admin">Trabalhador</small>
+            <small class="text-uppercase role" *ngIf="!userAuth.currentUser?.infos.isWorker && !userAuth.currentUser?.infos.admin">Contratante</small>
         </div>
     </div>
     <div class="sidebar-search pt-1 pb-1 pl-3 pr-3">
@@ -55,6 +57,12 @@
                 <a href="#" routerLink="/chat" routerLinkActive="active">
                     <i class="fa fa-keyboard"></i>
                     <span>Chat</span>
+                </a>
+            </li>
+            <li>
+                <a href="#" routerLink="/analytics/dashboard" routerLinkActive="active" *ngIf="userAuth.currentUser?.infos.admin">
+                    <i class="fa bi-file-earmark-bar-graph-fill"></i>
+                    <span>Analytics</span>
                 </a>
             </li>
         </ul>

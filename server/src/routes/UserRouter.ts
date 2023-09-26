@@ -37,6 +37,11 @@ usersRouter.get(
     userController.getById as RequestHandler
 );
 
+usersRouter.get(
+    '/users',
+    userController.getAll as RequestHandler
+);
+
 usersRouter.put(
     '/users/:uid',
     upload.single('photo'),

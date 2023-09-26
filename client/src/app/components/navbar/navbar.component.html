@@ -5,45 +5,46 @@
       <span class="ml-1">SafeWorks</span>
     </a>
   </div>
-  <div class="sidebar-toggler">
+  <div class="sidebar-toggler" *ngIf="userAuth.currentUser">
     <a class="btn nav-link" (click)="toggleSidebar()"><i class="fa fa-bars"></i></a>
   </div>
-  <div class="nav-toggler-right mr-4 d-md-none">
+  <div class="nav-toggler-right mr-4 d-md-none" *ngIf="userAuth.currentUser">
     <button class="" type="button" (click)="isCollapsed = !isCollapsed" [attr.aria-expanded]="!isCollapsed"
       aria-controls="collapseBasic">
-      <img src="../../../assets/img/user.png" class="img-fluid" alt="">
+      <img src="{{userAuth.currentUser.infos.photo_url}}" class="img-fluid" alt="">
     </button>
     <span class="user-profile nav-alert bg-danger"></span>
   </div>
   <ul class="navbar-nav flex-fill mt-1 align-items-center left-nav">
-    <li class="nav-item navicon">
+    <li class="nav-item navicon" *ngIf="userAuth.currentUser">
       <a class="btn nav-link" (click)="toggleSidebarPin()"><i class="fa fa-bars"></i></a>
     </li>
     <li class="nav-item flex-fill">
       <input class="form-control navbar-search" type="text" placeholder="Pesquisar . . .">
     </li>
   </ul>
-  <div class="collapse navbar-collapse right-nav" id="collapseBasic" [collapse]="isCollapsed" >
+  <div class="collapse navbar-collapse right-nav" id="collapseBasic" [collapse]="isCollapsed">
     <ul class="navbar-nav" *ngIf="userAuth.currentUser">
       <li class="nav-item">
-        <a [routerLink]="'/profile'" class="btn nav-link" title="Ver perfil">
+        <a [routerLink]="'/profile'" (click)="isCollapsed = !isCollapsed" class="btn nav-link" title="Ver perfil">
           <i class="far fa-user"></i>
           <span class="link-text">Perfil</span>
         </a>
       </li>
       <li class="nav-item">
-        <a class="btn nav-link" (click)="logout()" title="Sair">
+        <a class="btn nav-link" (click)="logout(); isCollapsed = !isCollapsed" title="Sair">
           <i class="fas fa-sign-out-alt"></i>
           <span class="link-text">Sair</span>
         </a>
       </li>
     </ul>
-    <ul class="navbar-nav" *ngIf="!userAuth.currentUser">
-      <li class="nav-item">
-        <a class="btn nav-link" [routerLink]="'/login'" title="Entrar" style="color: #ffa500; border-color: #ffa500; padding: 5px; margin-right: 15px;">
-            <span>Entrar</span>
-        </a>
-    </li>
-    </ul>
   </div>
+  <ul class="navbar-nav" *ngIf="!userAuth.currentUser">
+    <li class="nav-item">
+      <a class="btn nav-link" [routerLink]="'/login'" title="Entrar"
+        style="color: #ffa500; border-color: #ffa500; padding: 5px; margin-right: 15px;">
+        <span>Entrar</span>
+      </a>
+    </li>
+  </ul>
 </nav>

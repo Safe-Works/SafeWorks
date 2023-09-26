@@ -30,7 +30,9 @@ $hamburger-hover-opacity       : 0.7 !default;
   --interaction-blue: #1A73E8;
   --material-blue: #3F51B5;
   --safeworks-blue: #2C3E50;
+  --safeworks-blue-light: #56799C;
   --safeworks-yellow: #FFA500;
+  --safeworks-yellow-light: #FFBA00;
   --safeworks-yellow-hover: #FF7A00;
   --red-fire: #FF0000;
   --red-error: #DC3545;
@@ -59,7 +61,6 @@ a {
 
 .card {
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-  padding: 0 45px 0 45px;
 }
 
 .container-body {
@@ -87,9 +88,7 @@ a {
 .title-autentication {
   font-weight: bold !important;
   font-size: 26px !important;
-  line-height: 1.23px !important;
   border: none !important;
-  margin: 15px 0 42px 0 !important;
   color: var(--safeworks-blue) !important;
 }
 

@@ -29,7 +29,7 @@ class JobAdRepository extends AppRepository {
             if (!photos || photos.length === 0) {
                 return uid;
             }
-            const photoUrls = this.updateJobMedia(photos, uid);
+            const photoUrls = await this.updateJobMedia(photos, uid);
 
             await db.collection("JobAdvertisements").doc(uid).update({
                 media: photoUrls,
@@ -78,14 +78,13 @@ class JobAdRepository extends AppRepository {
             if (!photos || photos.length === 0) {
                 return uid;
             }
-            const photoUrls = this.updateJobMedia(photos, uid);
+            const photoUrls = await this.updateJobMedia(photos, uid);
             mediaUrls.forEach((url: string) => {
                 if (!updatedJob.media.includes(url)) {
                     mediaUrls.splice(mediaUrls.indexOf(url), 1);
                 }
             });
             updatedJob.media?.concat(photoUrls);
-
             await db.collection("JobAdvertisements").doc(uid).update({ media: updatedJob.media });
 
             return uid;
@@ -292,6 +291,7 @@ class JobAdRepository extends AppRepository {
                     throw error;
                 }
             }
+
             return photoUrls;
         } catch (error) {
             console.error("Error updating Job media. ", error);
@@ -299,16 +299,37 @@ class JobAdRepository extends AppRepository {
         }
     }
 
+    async getAll(): Promise<any> {
+        try {
+            let jobs;
+            await db.collection("JobAdvertisements")
+                .where('deleted', '==', null)
+                .orderBy('created', 'asc')
+                .get()
+                .then((querySnapshot) => {
+                    jobs = querySnapshot.docs.map((doc) => {
+                        const data = doc.data();
+                        return { ...data, uid: doc.id };
+                    })
+                });
+            
+            return jobs;
+        } catch (error) {
+            console.error(error);
+            throw error;
+        }
+    }
+
     // Função para obter a próxima página de documentos
     async getNextPage(ITEMS_PER_PAGE: number, lastDocument?: admin.firestore.QueryDocumentSnapshot): Promise<admin.firestore.QuerySnapshot> {
-        let query = db.collection("JobAdvertisements").orderBy('created').limit(ITEMS_PER_PAGE);
-
+        let query = db.collection("JobAdvertisements")
+            .orderBy('created')
+            .limit(ITEMS_PER_PAGE);
+    
         query = query.where('deleted', '==', null);
-
         if (lastDocument) {
             query = query.startAfter(lastDocument);
         }
-
         const snapshot = await query.get();
         return snapshot;
     }

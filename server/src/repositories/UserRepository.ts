@@ -25,6 +25,7 @@ class UserRepository extends AppRepository {
                     balance: 0,
                     contracted_services: [],
                     worker: null,
+                    admin: false,
                     created: created,
                     modified: null,
                     deleted: null
@@ -80,6 +81,26 @@ class UserRepository extends AppRepository {
             return result;   
         } catch (error) {
             console.error("Error getting user by id: ", error);
+            throw error;
+        }
+    }
+
+    async getAll(): Promise<any> {
+        try {
+            let jobs;
+            await db.collection("Users")
+                .where('deleted', '==', null)
+                .get()
+                .then((querySnapshot) => {
+                    jobs = querySnapshot.docs.map((doc) => {
+                        const data = doc.data();
+                        return { ...data, uid: doc.id };
+                    })
+                });
+            
+            return jobs;
+        } catch (error) {
+            console.error("Error getting all users: ", error);
             throw error;
         }
     }
@@ -145,7 +166,10 @@ class UserRepository extends AppRepository {
                     cpf: userData.cpf,
                     telephone_number: userData.telephone_number,
                     userAuth: userRecord,
-                    photo_url: userData.photo_url
+                    photo_url: userData.photo_url,
+                    admin: userData.admin,
+                    isWorker: !!userData.worker,
+                    uid: userData.id,
                 };
                 const customToken = await firebaseAdmin.auth().createCustomToken(uid ?? "", customClaims);
                 

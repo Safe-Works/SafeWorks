@@ -1,0 +1,121 @@
+<div>
+    <h4 class="mb-4 text-muted">Analytics Dashboard</h4>
+
+    <div class="row">
+
+        <div class="col-md-6 col-lg-3 mb-4">
+            <div class="card border-0 rounded-1">
+                <div class="card-body">
+                    <div class="card-innerBody d-flex align-items-center">
+                        <div class="card-icon text-light">
+                            <i class="fa fa-users" aria-hidden="true"></i>
+                        </div>
+                        <div class="ml-auto">
+                            <p class="card-label text-right text-muted">Trabalhadores Ativos</p>
+                            <h4 class="card-text text-right" *ngIf="totalActiveWorkers">{{ totalActiveWorkers }}</h4>
+                        </div>
+                    </div>
+                </div>
+                <div class="card-footer d-flex ">
+                    <small class="text-muted">Desde o último mês</small>
+                    <small class="text-success ml-auto indice-icon">
+                        <i class="fa" [ngClass]="workersPercentIcon ? 'fa-caret-up' : 'fa-caret-down'" aria-hidden="true"></i>
+                        {{ workersPercentIncrease }}%
+                    </small>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-6 col-lg-3 mb-4">
+            <div class="card border-0 rounded-1">
+                <div class="card-body">
+                    <div class="card-innerBody d-flex align-items-center">
+                        <div class="card-icon text-light">
+                            <i class="fa fa-dollar-sign" aria-hidden="true"></i>
+                        </div>
+                        <div class="ml-auto">
+                            <p class="card-label text-right text-muted">Receita Gerada</p>
+                            <h4 class="card-text text-right">{{ currentMonthProfit }}</h4>
+                        </div>
+                    </div>
+                </div>
+                <div class="card-footer d-flex ">
+                    <small class="text-muted">Desde o último mês</small>
+                    <small class="text-success ml-auto indice-icon">
+                        <i class="fa" [ngClass]="jobAdsPercentIcon ? 'fa-caret-up' : 'fa-caret-down'" aria-hidden="true"></i>
+                        {{ jobsProfitPercentIncrease }}%
+                    </small>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-6 col-lg-3 mb-4">
+            <div class="card border-0 rounded-1">
+                <div class="card-body">
+                    <div class="card-innerBody d-flex align-items-center">
+                        <div class="card-icon text-light">
+                            <i class="fa bi-graph-up-arrow" aria-hidden="true"></i>
+                        </div>
+                        <div class="ml-auto">
+                            <p class="card-label text-right text-muted">Anúncios Ativos</p>
+                            <h4 class="card-text text-right">{{ totalActiveJobAds }}</h4>
+                        </div>
+                    </div>
+                </div>
+                <div class="card-footer d-flex ">
+                    <small class="text-muted">Desde o último mês</small>
+                    <small class="text-success ml-auto indice-icon" *ngIf="jobAdsPercentIncrease">
+                        <i class="fa" [ngClass]="jobAdsPercentIcon ? 'fa-caret-up' : 'fa-caret-down'" aria-hidden="true"></i>
+                        {{ jobAdsPercentIncrease }}%
+                    </small>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-6 col-lg-3 mb-4">
+            <div class="card border-0 rounded-1">
+                <div class="card-body">
+                    <div class="card-innerBody d-flex align-items-center">
+                        <div class="card-icon text-light">
+                            <i class="fa bi-clipboard-data" aria-hidden="true"></i>
+                        </div>
+                        <div class="ml-auto">
+                            <p class="card-label text-right text-muted">Contratos Ativos</p>
+                            <h4 class="card-text text-right ">{{ totalActiveJobs }}</h4>
+                        </div>
+                    </div>
+                </div>
+                <div class="card-footer d-flex ">
+                    <small class="text-muted">Desde o último mês</small>
+                    <small class="text-success ml-auto indice-icon">
+                        <i class="fa" [ngClass]="jobsPercentIcon ? 'fa-caret-up' : 'fa-caret-down'" aria-hidden="true"></i>
+                        {{ jobsPercentIncrease }}%
+                    </small>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <div class="row">
+        <div class="col-12 col-xl-6 mb-4">
+            <app-line-chart *ngIf="allJobsData" [rawJobsData]="allJobsData.jobs" [rawJobAdsData]="allJobAdsData.jobs"></app-line-chart>
+        </div>
+
+        <div class="col-12 col-xl-6 mb-4">
+            <app-bar-chart *ngIf="allJobAdsData" [rawData]="allJobAdsData"></app-bar-chart>
+        </div>
+
+        <div class="col-12 col-xl-4 mb-4 align-items-stretch" >
+            <div class="card h-100 border-0 rounded-1">
+                <app-doughnut-chart *ngIf="allJobAdsData" [rawData]="allJobAdsData"></app-doughnut-chart>
+            </div>
+        </div>
+
+        <div class="col-12 col-xl-8 mb-4 align-items-stretch">
+            <app-jobs-status *ngIf="paginatedJobsData" [paginatedJobsData]="paginatedJobsData.jobs"></app-jobs-status>
+        </div>
+
+    </div>
+
+</div>

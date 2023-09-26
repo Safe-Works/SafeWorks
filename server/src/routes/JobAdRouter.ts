@@ -21,7 +21,7 @@ const storage = multer.diskStorage({
 const upload = multer({ storage: storage });
 
 jobAdRouter.post(
-    '/jobs', 
+    '/jobAds', 
     upload.array('photos'),
     celebrate({
         body: Joi.object({
@@ -57,7 +57,7 @@ jobAdRouter.post(
 );
 
 jobAdRouter.put(
-    '/jobs',
+    '/jobAds',
     upload.array('photos'),
     celebrate({
         body: Joi.object({
@@ -94,27 +94,27 @@ jobAdRouter.put(
 );
 
 jobAdRouter.get(
-    '/jobs/:uid',
+    '/jobAds/:uid',
     jobAdController.getById as RequestHandler
 );
 
 jobAdRouter.get(
-    '/jobs',
+    '/jobAds',
     jobAdController.getAll as RequestHandler
 );
 
 jobAdRouter.get(
-    '/jobs/worker/:uid',
+    '/jobAds/worker/:uid',
     jobAdController.getByWorker as RequestHandler
 );
 
 jobAdRouter.get(
-    '/jobs/find/:term',
+    '/jobAds/find/:term',
     jobAdController.findByTerm as RequestHandler
 );
 
 jobAdRouter.delete(
-    '/jobs/:uid',
+    '/jobAds/:uid',
     jobAdController.delete as RequestHandler
 );
 

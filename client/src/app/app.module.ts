@@ -42,6 +42,12 @@ import { CardCertificationComponent } from './sharedcomponents/card-certificatio
 import { NavbarComponent } from './components/navbar/navbar.component';
 import { CollapseModule } from 'ngx-bootstrap/collapse';
 import { SidebarComponent } from './components/sidebar/sidebar.component';
+import { NgChartsModule, NgChartsConfiguration } from 'ng2-charts';
+import { DashboardComponent } from './components/analytics/dashboard/dashboard.component';
+import { DoughnutChartComponent } from './components/analytics/doughnut-chart/doughnut-chart.component';
+import { BarChartComponent } from './components/analytics/bar-chart/bar-chart.component';
+import { LineChartComponent } from './components/analytics/line-chart/line-chart.component';
+import { JobsStatusComponent } from './components/analytics/jobs-status/jobs-status.component';
 import { FavoritesComponent } from './components/favorites/favorites.component';
 
 @NgModule({
@@ -67,6 +73,11 @@ import { FavoritesComponent } from './components/favorites/favorites.component';
     CardCertificationComponent,
     NavbarComponent,
     SidebarComponent,
+    DashboardComponent,
+    DoughnutChartComponent,
+    BarChartComponent,
+    LineChartComponent,
+    JobsStatusComponent,
     FavoritesComponent,
   ],
   imports: [
@@ -92,10 +103,12 @@ import { FavoritesComponent } from './components/favorites/favorites.component';
     MatMenuModule,
     SweetAlert2Module.forRoot(),
     CollapseModule.forRoot(),
+    NgChartsModule
   ],
   providers: [
     UserService,
-     { provide: MatPaginatorIntl, useClass: MatPaginatorIntlPtBr }
+    { provide: MatPaginatorIntl, useClass: MatPaginatorIntlPtBr },
+    { provide: NgChartsConfiguration, useValue: { generateColors: true }}
   ],
   bootstrap: [AppComponent]
 })
