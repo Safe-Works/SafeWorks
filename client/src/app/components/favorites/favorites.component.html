@@ -1,29 +1,41 @@
 <div class="loading-spinner" *ngIf="isLoading">
     <mat-spinner [diameter]="85"></mat-spinner>
 </div>
-<div *ngFor="let worker of favoriteUsers" style="padding: 40px 5.6%; background-color: white; border: 1px solid #ced0d4; border-top: 0; margin-top: 10px; margin-bottom: 5px;">
-    <h2>{{ worker.name }}</h2>
+<div *ngFor="let worker of favoriteUsers"
+     style="padding: 40px 5.6%; background-color: white; border: 1px solid #ced0d4; border-top: 0; margin-top: 10px; margin-bottom: 5px;">
+
+    <div class="row col-md-12 justify-content-end" >
+        <div class="col-1">
+            <img [src]="worker.photoUrl" alt="avatar" class="rounded-circle img-fluid"
+                 style="width: 100px; min-width:35px">
+        </div>
+        <div class="col-11">
+            <h2 style="margin-left: 10px">{{ worker.name }}</h2>
+
+        </div>
+    </div>
+
 
     <div class="row col-md-12 justify-content-end">
-        <div class="col-6">
-            <button (click)="redirectToUserDetails(worker.workerUid)"
-                    class="bi-person-fill btn btn-primary btn-autentication"
-                    style="width: 100%; border-radius: 30.4px; margin-top: 10px; margin-bottom: 5px;">
-                Ir para o perfil
-            </button>
-        </div>
-        <div class="col-6">
-            <a (click)="deleteFavorite(worker.workerUid)" class="icon-link">
-                <i class="btn bi-trash-fill btn-primary btn-autentication" title="Deletar favorito"
-                   style="width: 100%; border-radius: 30.4px; margin-top: 10px; margin-bottom: 5px;"></i>
-            </a>
-        </div>
-        <div class="col-12" style="margin-top: 10px;">
+        <div class="col-6" style="margin-top: 10px;">
             <a (click)="worker.showDetails = !worker.showDetails" (click)="getJobs(worker.workerUid)">
                 <i class="btn btn-outline-secondary bi-chevron-{{ worker.showDetails ? 'up' : 'down' }}"
                    style="width: 100%; border-radius: 30.4px;">
-                    Ver anúncios
+                    Anúncios
                 </i>
+            </a>
+        </div>
+        <div class="col-4">
+            <button (click)="redirectToUserDetails(worker.workerUid)"
+                    class="bi-person-fill btn btn-primary btn-autentication"
+                    style="width: 100%; border-radius: 30.4px; margin-top: 10px; margin-bottom: 5px;">
+                Perfil
+            </button>
+        </div>
+        <div class="col-2">
+            <a (click)="deleteFavorite(worker.workerUid)" class="icon-link">
+                <i class="btn bi-trash-fill btn-primary btn-autentication" title="Deletar favorito"
+                   style="width: 100%; border-radius: 30.4px; margin-top: 10px; margin-bottom: 5px;"></i>
             </a>
         </div>
     </div>

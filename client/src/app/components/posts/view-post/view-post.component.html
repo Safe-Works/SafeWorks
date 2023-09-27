@@ -81,10 +81,12 @@
                 <span class="fw-bold">
                   Anunciante:
                 </span>
-                <span class="ms-2">
+
+                <a (click)="redirectToUserDetails()" class="nome-link">
+                  <span class="ms-2">
                   {{ jobInfo.worker?.name }}
                 </span>
-                <a (click)="redirectToUserDetails()" class="bi-person-fill btn btn-primary btn-autentication"></a>
+                </a>
               </div>
               <div class="mt-3">
                 <a class="btn btn-dark me-2" (click)="back()" type="button">

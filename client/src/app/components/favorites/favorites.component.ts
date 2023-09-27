@@ -20,6 +20,7 @@ export class FavoritesComponent implements OnInit {
     totalJobs: number = 0;
     currentPage: number = 1;
     pageSize: number = 10;
+    photoUrl: string = '';
 
     constructor(
         private userService: UserService,
@@ -40,13 +41,19 @@ export class FavoritesComponent implements OnInit {
             const response = await this.userService.GetUserInfo(this.userUid);
             const favoritesList = response.user.favorite_list;
 
-            // Para cada ID na lista de favoritos, busca e adiciona no array
             for (const workerUid of favoritesList) {
                 const userResponse = await this.userService.GetUserInfo(workerUid);
                 const worker = userResponse.user;
                 worker.showDetails = false;
                 worker.delete = false;
                 worker.workerUid = workerUid;
+
+                if (worker.photo_url) {
+                    worker.photoUrl = worker.photo_url;
+                } else {
+                    worker.photoUrl = 'https://www.pngitem.com/pimgs/m/551-5510463_default-user-image-png-transparent-png.png';
+                }
+
                 this.favoriteUsers.push(worker);
             }
         } catch (error) {
@@ -63,7 +70,7 @@ export class FavoritesComponent implements OnInit {
         await this.userService.deleteFavorite(this.userUid, workerUid);
         this.getFavorites()
         this.isLoading = false;
-        this.openSnackBar("Favorito deletado com sucesso!", "OK", "snackbar-success")
+        this.openSnackBar("Usuário removido dos favoritos", "OK", "snackbar-success")
     }
 
     async getJobs(workerUid: string) {

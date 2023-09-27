@@ -91,7 +91,7 @@ export class ProfileComponent implements OnInit {
         this.isLoading = true;
         await this.userService.deleteFavorite(this.getUserUid(), workerUid)
         this.ngOnInit();
-        this.openSnackBar("Favorito deletado com sucesso!", "OK", "snackbar-success")
+        this.openSnackBar("Usuário removido dos favoritos", "OK", "snackbar-success")
         this.isLoading = false;
     }
 
