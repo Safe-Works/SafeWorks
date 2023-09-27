@@ -48,6 +48,7 @@ import { DoughnutChartComponent } from './components/analytics/doughnut-chart/do
 import { BarChartComponent } from './components/analytics/bar-chart/bar-chart.component';
 import { LineChartComponent } from './components/analytics/line-chart/line-chart.component';
 import { JobsStatusComponent } from './components/analytics/jobs-status/jobs-status.component';
+import { FavoritesComponent } from './components/favorites/favorites.component';
 
 @NgModule({
   declarations: [
@@ -77,6 +78,7 @@ import { JobsStatusComponent } from './components/analytics/jobs-status/jobs-sta
     BarChartComponent,
     LineChartComponent,
     JobsStatusComponent,
+    FavoritesComponent,
   ],
   imports: [
     BrowserModule,

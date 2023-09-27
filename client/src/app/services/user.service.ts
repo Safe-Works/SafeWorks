@@ -11,6 +11,7 @@ import { environment } from "../environments/environment";
 
 export class UserService {
   private api: string = environment.apiEndpoint + '/api/users/';
+  private favoriteApi: string = environment.apiEndpoint + '/api/favorites/';
 
   constructor(private http: HttpClient) { }
 
@@ -72,5 +73,30 @@ export class UserService {
       })
     );
   }
-  
+
+  public deleteFavorite(userId: string, workerUid: string): Promise<any> {
+    try {
+      return firstValueFrom(this.http.delete<string>(this.favoriteApi + userId + '/' + workerUid));
+    }
+    catch (error) {
+      console.error(error);
+      throw error;
+    }
+  }
+
+  addFavorite(userId: string, workerUid: string) {
+    const body = {
+      userUid: userId,
+      workerUid: workerUid
+    };
+
+    try {
+      firstValueFrom(this.http.post<any>(this.favoriteApi, body));
+
+    }
+    catch (error) {
+      console.error(error);
+      throw error;
+    }
+  }
 }

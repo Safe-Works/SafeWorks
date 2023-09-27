@@ -7,6 +7,7 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 import { ActivatedRoute } from '@angular/router';
 import { Router } from '@angular/router';
 import Swal from 'sweetalert2/dist/sweetalert2.js';
+import {Location} from '@angular/common';
 
 @Component({
   selector: 'app-view-post',
@@ -28,7 +29,8 @@ export class ViewPostComponent {
     private jobService: JobService,
     private _snackBar: MatSnackBar,
     private route: ActivatedRoute,
-    private contractService: ContractService
+    private contractService: ContractService,
+    private location: Location,
   ) { }
 
   ngOnInit() {
@@ -117,5 +119,13 @@ export class ViewPostComponent {
   }
   onItemChange($event: any): void {
     console.log('Carousel onItemChange', $event);
+  }
+
+  back() {
+      this.location.back();
+    }
+
+  redirectToUserDetails() {
+    this.router.navigate(['/profile', this.jobInfo.worker.id]);
   }
 }
