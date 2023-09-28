@@ -57,14 +57,10 @@ label.radio input:checked+span {
 .container-info-job {
     padding: 40px !important;
 }
-.nome-link {
-    color: black;
-}
 
 .nome-link:hover {
     font-weight: bold;
     text-decoration: underline;
     font-style: normal;
-    color: black;
     cursor: pointer;
 }
