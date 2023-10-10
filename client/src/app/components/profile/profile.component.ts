@@ -6,6 +6,7 @@ import Portfolio from 'src/app/models/portfolio.model';
 import { PortfolioService } from 'src/app/services/portfolio.service';
 import { UserService } from 'src/app/services/user.service';
 import { districts } from 'enums/districts.enum';
+import {MatSnackBar} from "@angular/material/snack-bar";
 
 @Component({
   selector: 'app-profile',
@@ -19,18 +20,22 @@ export class ProfileComponent implements OnInit {
   certifications: Certification[] = [];
   isMyProfile: boolean = false;
   photoUrl: string = '';
-  
+  deleted: boolean = false;
+  isLoading: boolean = false;
+
   constructor(
     private userService: UserService,
     private portfolioService: PortfolioService,
     public userAuth: UserAuth, 
     public route: ActivatedRoute,
     public router: Router,
+    private _snackBar: MatSnackBar,
   ) { }
 
   async ngOnInit() {
     this.userUid = this.route.snapshot.params['id'] ?? this.userAuth.currentUser?.uid;
     await this.loadUserInfo();
+    this.deleted = await this.isDeleted(this.userUid);
   }
 
   async loadUserInfo() {
@@ -66,4 +71,42 @@ export class ProfileComponent implements OnInit {
     this.router.navigate(['profile/edit', this.userUid]);
   }
 
+  getUserUid(){
+      return this.userAuth.currentUser?.uid ?? '';
+  }
+
+    async isDeleted(workerUid: string) {
+        let userInfo = await this.userService.GetUserInfo(this.getUserUid());
+        userInfo = userInfo.user;
+
+        if (userInfo.favorite_list) {
+            return userInfo.favorite_list.includes(workerUid);
+        } else {
+            return false;
+        }
+    }
+
+
+    async deleteFavorite(workerUid: string) {
+        this.isLoading = true;
+        await this.userService.deleteFavorite(this.getUserUid(), workerUid)
+        this.ngOnInit();
+        this.openSnackBar("Usuário removido dos favoritos", "OK", "snackbar-success")
+        this.isLoading = false;
+    }
+
+    async addFavorite(workerUid: string) {
+        this.isLoading = true;
+        await this.userService.addFavorite(this.getUserUid(), workerUid)
+        this.ngOnInit();
+        this.openSnackBar("Usuário adicionado aos favoritos", "OK", "snackbar-success")
+        this.isLoading = false;
+    }
+
+    openSnackBar(message: string, action: string, className: string) {
+        this._snackBar.open(message, action, {
+            duration: 20000,
+            panelClass: [className],
+        });
+    }
 }

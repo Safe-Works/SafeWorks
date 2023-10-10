@@ -13,6 +13,7 @@ import { EditPostComponent } from './components/posts/edit-post/edit-post.compon
 import { ViewPostComponent } from './components/posts/view-post/view-post.component';
 import { PortfolioComponent } from './components/portfolio/portfolio.component';
 import { DashboardComponent } from './components/analytics/dashboard/dashboard.component';
+import {FavoritesComponent} from "./components/favorites/favorites.component";
 
 const routes: Routes = [
   { path: '', component: IndexComponent },
@@ -28,6 +29,7 @@ const routes: Routes = [
   { path: 'jobs/view/:id', component: ViewPostComponent, canActivate: [AuthGuard] },
   { path: 'portfolio', component: PortfolioComponent, canActivate: [AuthGuard] },
   { path: 'analytics/dashboard', component: DashboardComponent, canActivate: [AuthGuard] },
+  { path: 'jobs/favorites', component: FavoritesComponent, canActivate: [AuthGuard] },
 ];
 
 @NgModule({
