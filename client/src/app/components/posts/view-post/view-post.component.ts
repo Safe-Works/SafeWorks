@@ -22,6 +22,7 @@ export class ViewPostComponent {
   defaultPicUrl = "../../assets/default-pic.png"
   jobInfo = {} as JobAdvertisement;
   slides: any[] = new Array(3).fill({ id: -1, src: '', title: '', subtitle: '' });
+  evaluate: number = 0;
 
   constructor(
     private userAuth: UserAuth,
@@ -117,6 +118,28 @@ export class ViewPostComponent {
     }
 
   }
+
+  stars: boolean[] = [false, false, false, false, false];
+
+fillStars(starNumber: number) {
+  this.resetStars();
+  for (let i = 0; i < starNumber; i++) {
+    this.stars[i] = true;
+  }
+}
+
+resetStars() {
+  this.stars = [false, false, false, false, false];
+}
+
+evaluateJob(starNumber: number) {
+  this.evaluate = starNumber;
+}
+
+evaluateJobSend(){
+  this.jobService.EvaluateJob(this.evaluate)
+  this.openSnackBar("Nota avaliada" + this.evaluate, "OK", "snackbar-success");
+}
   onItemChange($event: any): void {
     console.log('Carousel onItemChange', $event);
   }

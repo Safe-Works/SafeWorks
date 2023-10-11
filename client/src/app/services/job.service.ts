@@ -130,5 +130,8 @@ export class JobService {
             })
         )
     };
-
+    
+    public EvaluateJob(number: Number){
+        alert(number);
+    }
 }
