@@ -106,6 +106,41 @@ class JobContractController {
             }
         }
     }
+
+    async getAllJobsFromUserUid(req: Request, res: Response): Promise<void> {
+        try {
+            const userUid = req.params.uid;
+            const jobs = await jobContractRepository.getAllJobsFromUserUid(userUid);
+            if (jobs) {
+                res.status(200).json({ statusCode: 200, jobs: jobs });
+            } else {
+                res.status(404).json({ statusCode: 404, error: 'jobContract/not-found' });
+            }
+        } catch (error) {
+            if (error instanceof Error) {
+                console.error('Error to get all Jobs from User UID: ', error.message);
+                res.status(500).json({ statusCode: 500, error: 'jobContract/failed-getAllFromUserUid', message: error.message })
+            }
+        }
+    }
+
+    async finishContract(req: Request, res: Response): Promise<void> {
+        try {
+            const jobUid = req.params.uid;
+            const userType = req.params.user_type;
+            const finished = await jobContractRepository.finishContract(jobUid, userType);
+            if (finished) {
+                res.status(200).json({ statusCode: 200, finished: finished });
+            } else {
+                res.status(404).json({ statusCode: 404, error: 'jobContract/not-found' });
+            }
+        } catch (error) {
+            if (error instanceof Error) {
+                console.error('Error to finish the contract: ', error.message);
+                res.status(500).json({ statusCode: 500, error: 'jobContract/failed-finishContract', message: error.message })
+            }
+        }
+    }
 }
 
 export default JobContractController;

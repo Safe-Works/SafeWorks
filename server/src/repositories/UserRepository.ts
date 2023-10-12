@@ -170,6 +170,7 @@ class UserRepository extends AppRepository {
                     admin: userData.admin,
                     isWorker: !!userData.worker,
                     uid: userData.id,
+                    contracted_services: userData.contracted_services,
                 };
                 const customToken = await firebaseAdmin.auth().createCustomToken(uid ?? "", customClaims);
                 
