@@ -64,7 +64,7 @@ class UserRepository extends AppRepository {
             await emailModel.sendCustomEmail("safeworksadm@gmail.com", "Nova solicitação de ajuda!", helpEmailContent);
             return result;
         } catch (error) {
-            console.error("Error adding user to Authentication: ", error);
+            console.error("Error sending help request: ", error);
             throw error;
         }
     }
