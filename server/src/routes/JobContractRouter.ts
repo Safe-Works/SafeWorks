@@ -6,7 +6,7 @@ const jobContractRouter = express.Router();
 const jobContractController = new JobContractController();
 
 jobContractRouter.post(
-    '/jobContracts', 
+    '/jobs', 
     celebrate({
         body: Joi.object({
             worker:
@@ -39,5 +39,15 @@ jobContractRouter.get(
     '/jobs/paginate',
     jobContractController.getAllPaginate as RequestHandler
 )
+
+jobContractRouter.get(
+    '/jobs/user/:uid',
+    jobContractController.getAllJobsFromUserUid as RequestHandler
+);
+
+jobContractRouter.patch(
+    '/jobs/finish/:uid/:user_type',
+    jobContractController.finishContract as RequestHandler
+);
 
 export default jobContractRouter;
