@@ -8,6 +8,9 @@ type JobContract = {
     worker_rating?: number, // avaliação do trabalhador do contrato
     client_rating?: number, // avaliação do cliente do contrato
     canceled: boolean, // se o serviço foi cancelado antes de finalizado
+    clientFinished: boolean, // se o cliente marcou o contrato como finalizado
+    workerFinished: boolean, // se o trabalhador marcou o contrato como finalizado
+    finished?: Date, // datetime que o contrato foi finalizado
     created: Date,
     modified?: Date,
     deleted?: Date

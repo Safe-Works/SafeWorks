@@ -17,8 +17,11 @@ class JobContractRepository extends AppRepository {
                 created: created,
                 modified: null,
                 deleted: null,
-                paid: true,
-                status: "open"
+                paid: false,
+                status: "open",
+                client_finished: false,
+                worker_finished: false,
+                finished: null,
             };
             const docRef = await db.collection("JobContracts").add(newJobContract);
             const uid = docRef.id;
@@ -137,7 +140,6 @@ class JobContractRepository extends AppRepository {
         }
     }
 
-
     async create(): Promise<any> {
         try {
             let jobs;
@@ -201,6 +203,57 @@ class JobContractRepository extends AppRepository {
         const snapshot = await query.get();
 
         return snapshot;
+    }
+
+    async getAllJobsFromUserUid(userUid: string): Promise<any> {
+        try {
+            let jobs;
+            
+            await db.collection("JobContracts")
+                .where('client.id', '==', userUid)
+                .where('deleted', '==', null)
+                .orderBy('created', 'asc')
+                .get()
+                .then((querySnapshot) => {
+                    jobs = querySnapshot.docs.map((doc) => {
+                        const data = doc.data();
+                        return { ...data, uid: doc.id };
+                    })
+                })
+                .catch((error) => {
+                    console.error("Error getting Jobs from Firestore. ", error);
+                    throw error;
+                });
+
+            return jobs;
+        } catch (error) {
+            console.error('Error retrieving jobs from User UID: ', error);
+            throw error;
+        }
+    }
+
+    async finishContract(jobUid: string, userType: string): Promise<any> {
+        try {
+            const jobRef = db.collection("JobContracts").doc(jobUid);
+            const jobDoc = await jobRef.get();
+
+            if (jobDoc.exists && jobDoc.data()?.expired === false) {
+                if (userType === 'client') {
+                    await jobRef.update({ client_finished: true });
+                } else {
+                    await jobRef.update({ worker_finished: true });
+                }
+                const finishedJob = (await jobRef.get()).data();
+                if (finishedJob?.client_finished && finishedJob?.worker_finished) {
+                    await jobRef.update({ status: 'finished', paid: true, finished: this.getDateTime() })
+                }
+            }
+
+            return (await jobRef.get()).data();
+        } catch (error) {
+            console.error('Error finishing contract: ', error);
+            throw error;
+        }
     }
 
 }
