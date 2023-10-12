@@ -5,6 +5,7 @@ import { Router } from '@angular/router';
 import { UserAuth } from 'src/app/auth/User.Auth';
 import { UserService } from 'src/app/services/user.service';
 import { HelpRequest } from 'src/app/utils/interfaces/help-request.interface';
+import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-help',
@@ -39,11 +40,23 @@ export class HelpComponent {
     };
     try {
       let response = await this.userService.HelpRequest(helpRequestInfos);
-      if (response.statusCode === 200) {
+      
+      if (response.statusCode === 201) {
         this.isLoading = false;
+        Swal.fire(
+          'Sucesso!',
+          'Sua solicitação foi enviada. Em breve, um de nossos administradores entrará em contato com você por e-mail.',
+          'success'
+        )
+        this.router.navigate(['/']);
       } else {
         console.log(response.error);
         this.isLoading = false;
+        Swal.fire(
+          'Erro!',
+          'Ocorreu um erro ao enviar a sua solicitação.',
+          'error'
+        )
       }
     } catch (error) {
       console.error('Erro na solicitação:', error);

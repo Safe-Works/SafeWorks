@@ -125,6 +125,97 @@ class EmailNotificationModel {
         `;
         return emailHtml;
     }
+    createEmailHelpRequest(helpRequest: any) {
+        const emailHtml = `
+            <html>
+                <head>
+                    <style>
+                        body {
+                            font-family: Arial, sans-serif;
+                            background-color: #f4f4f4;
+                            margin: 0;
+                            padding: 0;
+                        }
+                    
+                        h1 {
+                            color: #FFA500;
+                        }
+                    
+                        p {
+                            font-size: 16px;
+                            line-height: 1.6;
+                            color: #666;
+                        }
+                    
+                        ul {
+                            list-style: none;
+                            padding: 0;
+                        }
+                    
+                        ul li {
+                            margin-bottom: 10px;
+                        }
+                    
+                        a {
+                            color: #007bff;
+                            text-decoration: none;
+                        }
+                    
+                        .container {
+                            background: #fff;
+                            max-width: 600px;
+                            margin: 0 auto;
+                            padding: 20px;
+                            border: 2px solid #2C3E50;
+                            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+                        }
+                    
+                        .header {
+                            background: #2C3E50;
+                            color: #FFA500;
+                            text-align: center;
+                            padding: 10px 0;
+                        }
+                    
+                        .header h1 {
+                            margin: 0;
+                            font-size: 24px;
+                        }
+                    
+                        .content {
+                            padding: 20px 0;
+                        }
+                    
+                        .signature {
+                            text-align: center;
+                            margin-top: 20px;
+                        }
+                    </style>
+                </head>
+                <body>
+                    <div class="container">
+                        <div class="header">
+                            <h1>Solicitação de ajuda!</h1>
+                        </div>
+                        <div class="content">
+                            <p><b>${helpRequest.title}</b></p>
+                            <p>${helpRequest.description}</p>
+                            <p>Detalhes do solicitante:</p>
+                            <ul>
+                                <li>Nome: ${helpRequest.user.name}</li>
+                                <li>E-mail: ${helpRequest.user.email}</li>
+                                <li>ID: ${helpRequest.user.id}</li>
+                            </ul>
+                        </div>
+                        <div class="signature">
+                            <p>Atenciosamente,<br>SafeWorks!</p>
+                        </div>
+                    </div>
+                </body>
+            </html>
+        `;
+        return emailHtml;
+    }
     clientEmailWorkerNotification(contract: any, contractId: string, workerContact: any) {
         const emailHtml = `
             <html>

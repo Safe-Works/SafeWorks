@@ -32,6 +32,21 @@ usersRouter.post('/users',
     }), userController.add as RequestHandler
 );
 
+usersRouter.post('/users/help',
+    celebrate({
+        body: Joi.object({
+            title: Joi.string().required(),
+            description: Joi.string().required(),
+            contractId: Joi.string(),
+            user: Joi.object({
+                email: Joi.string().required().email(),
+                name: Joi.string().required(),
+                id: Joi.string().required(),
+            }),
+        })
+    }), userController.helpRequest as RequestHandler
+);
+
 usersRouter.get(
     '/users/:uid',
     userController.getById as RequestHandler
@@ -70,7 +85,7 @@ usersRouter.post('/users/login',
 
 usersRouter.post(
     '/users/upload',
-    upload.single('file'), 
+    upload.single('file'),
     userController.upload as RequestHandler
 );
 
