@@ -4,6 +4,7 @@ import User from "../models/user.model";
 import { Injectable } from "@angular/core";
 import { catchError, tap } from 'rxjs/operators';
 import { environment } from "../environments/environment";
+import { HelpRequest } from "../utils/interfaces/help-request.interface";
 
 @Injectable({
   providedIn: 'root'
@@ -23,6 +24,15 @@ export class UserService {
     };
 
     return this.http.post<string>(this.api, user, httpOptions);
+  }
+
+  public async HelpRequest(helpRequest: HelpRequest): Promise<any> {
+    const httpOptions = {
+      headers: new HttpHeaders({
+        'Content-Type': 'application/json'
+      })
+    };
+    return await this.http.post<any>(this.api + "help", helpRequest, httpOptions).toPromise();
   }
 
   public AuthenticateUser(email: string, password: string): Observable<any> {
