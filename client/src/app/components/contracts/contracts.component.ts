@@ -91,11 +91,11 @@ export class ContractsComponent {
 
   setProgressBarStatus(contract: any): void {
     if (contract.worker_finished && contract.client_finished) {
-      const element = document.getElementById('step3');
+      const element = document.getElementById('step3 ' + contract.uid);
       element?.classList.add('active');
     }
     if (contract.worker_finished || contract.client_finished) {
-      const element = document.getElementById('step2');
+      const element = document.getElementById('step2 ' + contract.uid);
       element?.classList.add('active');
     }
   }
