@@ -11,7 +11,7 @@
     position: relative;
 }
 
-#progressbar-1 #step1:before {
+#progressbar-1 .step1:before {
     content: "1";
     color: var(--white);
     width: 1.8rem;
@@ -19,13 +19,13 @@
     padding-left: 0.7rem;
 }
 
-#progressbar-1 #step2:before {
+#progressbar-1 .step2:before {
     content: "2";
     color: var(--white);
     width: 1.8rem;
 }
 
-#progressbar-1 #step3:before {
+#progressbar-1 .step3:before {
     content: "3";
     color: var(--white);
     width: 1.8rem;
