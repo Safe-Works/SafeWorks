@@ -1,38 +1,42 @@
 import nodemailer from "nodemailer";
-import dotenv from 'dotenv';
+import dotenv from "dotenv";
 dotenv.config();
 
 class EmailNotificationModel {
-    private transporter;
-    constructor() {
-        this.transporter = nodemailer.createTransport({
-            host: "smtp.gmail.com",
-            port: 587,
-            secure: false,
-            service: process.env.EMAIL_SERVICE,
-            auth: {
-                user: process.env.EMAIL_USER,
-                pass: process.env.EMAIL_PASSWORD
-            }
-        });
-    }
+  private transporter;
+  constructor() {
+    this.transporter = nodemailer.createTransport({
+      host: "smtp.gmail.com",
+      port: 587,
+      secure: false,
+      service: process.env.EMAIL_SERVICE,
+      auth: {
+        user: process.env.EMAIL_USER,
+        pass: process.env.EMAIL_PASSWORD,
+      },
+    });
+  }
 
-    async sendCustomEmail(toEmail: string, subject: string, htmlContent: string) {
-        try {
-            const mailOptions = {
-                from: process.env.EMAIL_USER,
-                to: toEmail,
-                subject: subject,
-                html: htmlContent
-            };
-            await this.transporter.sendMail(mailOptions);
-        } catch (error) {
-            console.error("Erro ao enviar e-mail:", error);
-        }
+  async sendCustomEmail(toEmail: string, subject: string, htmlContent: string) {
+    try {
+      const mailOptions = {
+        from: process.env.EMAIL_USER,
+        to: toEmail,
+        subject: subject,
+        html: htmlContent,
+      };
+      await this.transporter.sendMail(mailOptions);
+    } catch (error) {
+      console.error("Erro ao enviar e-mail:", error);
     }
+  }
 
-    createEmailWorkerNotification(contract: any, contractId: string, clientContact: any) {
-        const emailHtml = `
+  createEmailWorkerNotification(
+    contract: any,
+    contractId: string,
+    clientContact: any
+  ) {
+    const emailHtml = `
             <html>
                 <head>
                     <style>
@@ -123,10 +127,10 @@ class EmailNotificationModel {
                 </body>
             </html>
         `;
-        return emailHtml;
-    }
-    createEmailHelpRequest(helpRequest: any) {
-        const emailHtml = `
+    return emailHtml;
+  }
+  createEmailHelpRequest(helpRequest: any) {
+    const emailHtml = `
             <html>
                 <head>
                     <style>
@@ -206,6 +210,14 @@ class EmailNotificationModel {
                                 <li>E-mail: ${helpRequest.user.email}</li>
                                 <li>ID: ${helpRequest.user.id}</li>
                             </ul>
+                            <p>Detalhe do contrato</p>
+                            <ul>
+                                <li>${
+                                  helpRequest.contractId
+                                    ? 'ID:' + helpRequest.contractId
+                                    : "Nenhum contrato foi especificado."
+                                }</li>
+                            </ul>
                         </div>
                         <div class="signature">
                             <p>Atenciosamente,<br>SafeWorks!</p>
@@ -214,10 +226,14 @@ class EmailNotificationModel {
                 </body>
             </html>
         `;
-        return emailHtml;
-    }
-    clientEmailWorkerNotification(contract: any, contractId: string, workerContact: any) {
-        const emailHtml = `
+    return emailHtml;
+  }
+  clientEmailWorkerNotification(
+    contract: any,
+    contractId: string,
+    workerContact: any
+  ) {
+    const emailHtml = `
             <html>
                 <head>
                     <style>
@@ -308,8 +324,8 @@ class EmailNotificationModel {
                 </body>
             </html>
         `;
-        return emailHtml;
-    }
+    return emailHtml;
+  }
 }
 
 export default EmailNotificationModel;

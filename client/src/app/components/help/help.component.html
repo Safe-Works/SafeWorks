@@ -3,67 +3,121 @@
   <mat-spinner [diameter]="85"></mat-spinner>
 </div>
 <div>
-    <h4 class="mb-4 text-muted">Solicitar ajuda</h4>
-    <div class="row">
-        <div class="card-body">
-            <div class="row col-md-12" style="padding: 40px 5.6%; background-color: white; border: 1px solid #ced0d4;">
-                <form [formGroup]="helpForm" #formDir="ngForm" (ngSubmit)="formDir.valid && requestHelp()">
-                    <div class="row col-md-12" style="padding: 20px;">
-                        <div class="col-md-6">
-                            <div class="row">
-                                <div class="input-field-edit">
-                                    <label for="title">Assunto</label>
-                                    <input type="text" class="form-control" id="title" aria-describedby="title"
-                                        [formControl]="title" placeholder="Informe o assunto"
-                                        [ngClass]="{ 'is-invalid': title.invalid && formDir.submitted }">
-                                </div>
-                                <div class="row validation-error" *ngIf="title.invalid && formDir.submitted">
-                                    <p>O assunto é obrigatório*</p>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-md-6">
-                            <div class="row">
-                                <div class="input-field-edit">
-                                    <label for="contractId">Contrato</label>
-                                    <select class="form-control" id="contractId" placeholder="Bairro"
-                                        aria-describedby="contractId" [formControl]="contractId">
-                                        <option value="" disabled selected>Selecione um contrato</option>
-                                        <option>1</option>
-                                        <option>2</option>
-                                        <option>3</option>
-                                    </select>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-md-12">
-                            <div class="row">
-                                <div class="input-field-edit">
-                                    <label for="description">Descrição</label>
-                                    <textarea type="textarea" class="form-control " id="description"
-                                        aria-describedby="description" [formControl]="description"
-                                        placeholder="Descreva o seu problema"
-                                        [ngClass]="{ 'is-invalid': description.invalid && formDir.submitted }"></textarea>
-                                </div>
-                                <div class="row validation-error" *ngIf="description.invalid && formDir.submitted">
-                                    <p>A descrição é obrigatória*</p>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="row d-flex flex-column align-items-center justify-content-center"
-                            style="background-color: var(--white);">
-                            <button class="btn btn-primary btn-autentication"
-                                style="width: 50%; border-radius: 2rem; margin-top: 2rem; margin-bottom: 0.5rem">
-                                Solicitar ajuda
-                            </button>
-                            <a class="btn btn-outline-secondary" routerLink="/profile"
-                                style="width: 50%; border-radius: 2rem;">
-                                Cancelar
-                            </a>
-                        </div>
-                    </div>
-                </form>
+  <h4 class="mb-4 text-muted">Solicitar ajuda</h4>
+  <div class="row">
+    <div class="card-body">
+      <div
+        class="row col-md-12"
+        style="
+          padding: 40px 5.6%;
+          background-color: white;
+          border: 1px solid #ced0d4;
+        "
+      >
+        <form
+          [formGroup]="helpForm"
+          #formDir="ngForm"
+          (ngSubmit)="formDir.valid && requestHelp()"
+        >
+          <div class="row col-md-12" style="padding: 20px">
+            <div class="col-md-6">
+              <div class="row">
+                <div class="input-field-edit">
+                  <label for="title">Assunto</label>
+                  <input
+                    type="text"
+                    class="form-control"
+                    id="title"
+                    aria-describedby="title"
+                    [formControl]="title"
+                    placeholder="Informe o assunto"
+                    [ngClass]="{
+                      'is-invalid': title.invalid && formDir.submitted
+                    }"
+                  />
+                </div>
+                <div
+                  class="row validation-error"
+                  *ngIf="title.invalid && formDir.submitted"
+                >
+                  <p>O assunto é obrigatório*</p>
+                </div>
+              </div>
             </div>
-        </div>
+            <div class="col-md-6">
+              <div class="row">
+                <div class="input-field-edit">
+                  <label for="contractId">Contrato</label>
+                  <select
+                    class="form-control"
+                    id="contractId"
+                    placeholder="Bairro"
+                    aria-describedby="contractId"
+                    [formControl]="contract"
+                  >
+                    <option value="" disabled selected>
+                      Selecione um contrato
+                    </option>
+                    <option
+                      *ngFor="let contract of contracts.jobs"
+                      [value]="contract.uid"
+                    >
+                      {{ contract.advertisement.title }}
+                    </option>
+                  </select>
+                </div>
+              </div>
+            </div>
+            <div class="col-md-12">
+              <div class="row">
+                <div class="input-field-edit">
+                  <label for="description">Descrição</label>
+                  <textarea
+                    type="textarea"
+                    class="form-control"
+                    id="description"
+                    aria-describedby="description"
+                    [formControl]="description"
+                    placeholder="Descreva o seu problema"
+                    [ngClass]="{
+                      'is-invalid': description.invalid && formDir.submitted
+                    }"
+                  ></textarea>
+                </div>
+                <div
+                  class="row validation-error"
+                  *ngIf="description.invalid && formDir.submitted"
+                >
+                  <p>A descrição é obrigatória*</p>
+                </div>
+              </div>
+            </div>
+            <div
+              class="row d-flex flex-column align-items-center justify-content-center"
+              style="background-color: var(--white)"
+            >
+              <button
+                class="btn btn-primary btn-autentication"
+                style="
+                  width: 50%;
+                  border-radius: 2rem;
+                  margin-top: 2rem;
+                  margin-bottom: 0.5rem;
+                "
+              >
+                Solicitar ajuda
+              </button>
+              <a
+                class="btn btn-outline-secondary"
+                routerLink="/profile"
+                style="width: 50%; border-radius: 2rem"
+              >
+                Cancelar
+              </a>
+            </div>
+          </div>
+        </form>
+      </div>
     </div>
+  </div>
 </div>
