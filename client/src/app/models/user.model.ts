@@ -12,6 +12,7 @@ class User {
       public username?: string,
       public district?: string,
       public token?: string,
+      public contracted_services?: Array<{}>,
       public admin?: boolean,
       public worker?: Worker
     ) {}

@@ -49,6 +49,8 @@ import { BarChartComponent } from './components/analytics/bar-chart/bar-chart.co
 import { LineChartComponent } from './components/analytics/line-chart/line-chart.component';
 import { JobsStatusComponent } from './components/analytics/jobs-status/jobs-status.component';
 import { FavoritesComponent } from './components/favorites/favorites.component';
+import { ContractsComponent } from './components/contracts/contracts.component';
+import { HelpComponent } from './components/help/help.component';
 
 @NgModule({
   declarations: [
@@ -79,6 +81,8 @@ import { FavoritesComponent } from './components/favorites/favorites.component';
     LineChartComponent,
     JobsStatusComponent,
     FavoritesComponent,
+    HelpComponent,
+    ContractsComponent,
   ],
   imports: [
     BrowserModule,

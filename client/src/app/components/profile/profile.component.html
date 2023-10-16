@@ -82,6 +82,15 @@
                                 <p *ngIf="userInfo" class="text-muted mb-0">{{ userInfo.district }}</p>
                             </div>
                         </div>
+                        <hr>
+                        <div class="row">
+                            <div class="col-sm-3">
+                                <p class="mb-0">Saldo</p>
+                            </div>
+                            <div class="col-sm-9">
+                                <p *ngIf="userInfo" class="text-muted mb-0">R${{ userInfo.balance }}</p>
+                            </div>
+                        </div>
                     </div>
                 </div>
                 <div class="row">

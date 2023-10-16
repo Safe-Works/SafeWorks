@@ -33,7 +33,7 @@ class UserController {
                 } 
             */
             res.status(201).json({ statusCode: 201, token: result });
-        } catch(error) {
+        } catch (error) {
             if (error instanceof Error) {
                 console.log('Error to add user:', error.message);
                 if (error.message.includes('The email address is already in use by another account.')) {
@@ -56,6 +56,20 @@ class UserController {
             }
         }
         // #swagger.end
+    }
+
+    async helpRequest(req: Request, res: Response): Promise<void> {
+        try {
+            const helpRequest: any = req.body;
+            const result = await userRepository.helpRequest(helpRequest);
+            res.status(201).json({ statusCode: 201, token: result });
+        } catch (error) {
+            if (error instanceof Error) {
+                console.log('Error to send help request:', error.message);
+
+                res.status(500).json({ statusCode: 500, error: 'user/failed-help-request', message: error.message });
+            }
+        }
     }
 
     async getById(req: Request, res: Response): Promise<void> {
@@ -203,8 +217,8 @@ class UserController {
                     required: false
                 }
             */
-           const accessToken: string = req.header('accessToken') ?? '';
-           const result = await userRepository.login(user, accessToken);
+            const accessToken: string = req.header('accessToken') ?? '';
+            const result = await userRepository.login(user, accessToken);
             /* 
                 #swagger.responses[401] = { 
                     schema: { $ref: "#/definitions/LoggedUser" },
@@ -281,7 +295,7 @@ class UserController {
                 } 
                 */
                 res.status(200).json({ statusCode: 200, image: result });
-            } 
+            }
         } catch (error) {
             if (error instanceof Error) {
                 console.error('Error to upload user photo:', error.message);
