@@ -128,9 +128,9 @@ class JobContractController {
         try {
             const jobUid = req.params.uid;
             const userType = req.params.user_type;
-            const finished = await jobContractRepository.finishContract(jobUid, userType);
-            if (finished) {
-                res.status(200).json({ statusCode: 200, finished: finished });
+            const jobs = await jobContractRepository.finishContract(jobUid, userType);
+            if (jobs) {
+                res.status(200).json({ statusCode: 200, jobs: jobs });
             } else {
                 res.status(404).json({ statusCode: 404, error: 'jobContract/not-found' });
             }

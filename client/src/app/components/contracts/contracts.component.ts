@@ -47,6 +47,7 @@ export class ContractsComponent {
           let response = await this.contractService.FinishContract(contractUid, this.getUserType());
           if (response?.statusCode === 200) {
             this.isLoading = false;
+            this.contracts = response;
             this.openSnackBar("Contrato finalizado com sucesso!", "OK", "snackbar-success");
           } else {
             this.isLoading = false;
@@ -98,6 +99,14 @@ export class ContractsComponent {
       const element = document.getElementById('step2 ' + contract.uid);
       element?.classList.add('active');
     }
+  }
+
+  viewAdvertisement(uid: any) {
+    this.router.navigate(['/jobs', 'view', uid]);
+  }
+
+  viewWorker(uid: any) {
+    this.router.navigate(['/profile', uid]);
   }
 
 }
