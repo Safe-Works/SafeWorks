@@ -236,23 +236,44 @@ class JobContractRepository extends AppRepository {
         try {
             const jobRef = db.collection("JobContracts").doc(jobUid);
             const jobDoc = await jobRef.get();
+            const jobData = jobDoc.data();
+            let userUid;
 
             if (jobDoc.exists && jobDoc.data()?.expired === false) {
                 if (userType === 'client') {
+                    userUid = jobData?.client.id;
                     await jobRef.update({ client_finished: true });
-                } else {
+                }  
+                if (userType === 'worker') {
+                    userUid = jobData?.worker.id;
                     await jobRef.update({ worker_finished: true });
                 }
                 const finishedJob = (await jobRef.get()).data();
                 if (finishedJob?.client_finished && finishedJob?.worker_finished) {
-                    await jobRef.update({ status: 'finished', paid: true, finished: this.getDateTime() })
+                    await jobRef.update({ status: 'finished', paid: true, finished: this.getDateTime() });
+                    await this.transferPaymentToWorker(jobDoc.data());
                 }
             }
 
-            return (await jobRef.get()).data();
+            return this.getAllJobsFromUserUid(userUid);
         } catch (error) {
             console.error('Error finishing contract: ', error);
             throw error;
+        }
+    }
+
+    async transferPaymentToWorker(job: any): Promise<any> {
+        try {
+            const workerRef = db.collection("Users").doc(job.worker.id);
+            const workerDoc = await workerRef.get();
+            const workerData = workerDoc.data();
+
+            if (workerDoc.exists) {
+                const totalBalance = workerData?.balance + job.price;
+                await workerRef.update({ balance: totalBalance, modified: this.getDateTime() });
+            }
+        } catch (error) {
+            console.error('Error to transfer payment to worker: ', error);
         }
     }
 

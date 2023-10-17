@@ -9,10 +9,10 @@
     <div class="row" *ngFor="let contract of contracts.jobs">
         <div class="py-1 h-1">
             <div class="row d-flex justify-content-center align-items-center h-1">
-                <div class="col-md-5 col-lg-5 col-xl-5">
+                <div class="col-md-5 col-lg-5 col-xl-5 min-width-div">
                     <div class="card card-stepper" style="border-radius: 16px;">
                         <div class="card-header p-4">
-                            <div class="d-flex justify-content-between align-items-center">
+                            <div class="d-flex flex-wrap justify-content-between align-items-center">
                                 <div>
                                     <p class="text mb-1"> 
                                         ID do Contrato <span class="fw-bold text-body">{{ contract.uid }}</span>
@@ -22,7 +22,7 @@
                                     </p>
                                 </div>
                                 <div>
-                                    <h6 class="mb-0"> <a href="#">Ver Detalhes</a> </h6>
+                                    <h6 class="mb-0 action-button" (click)="viewAdvertisement(contract.advertisement.id)">Ver Detalhes</h6>
                                 </div>
                             </div>
                         </div>
@@ -32,7 +32,7 @@
                                     <h4 class="bold">{{ contract.advertisement.title }}</h4>
                                     <h5 class="mb-3"> R$ {{ contract.price }}</h5>
                                     <p class="text mb-1">
-                                        Nome do trabalhador: <span class="fw-bold text-body">{{ contract.worker.name }}</span>
+                                        Nome do trabalhador: <span class="fw-bold action-button" (click)="viewWorker(contract.worker.id)">{{ contract.worker.name }}</span>
                                     </p>
                                 </div>
                                 <div>
@@ -54,13 +54,10 @@
                             </ul>
                         </div>
                         <div class="card-footer p-4">
-                            <div class="d-flex justify-content-between">
-                                <h6 *ngIf="!isContractFinalized(contract)" class="fw-normal mb-0 action-button" (click)="finishContract(contract.uid)">Finalizar</h6>
-                                <div class="border-start h-100"></div>
-                                <h6 class="fw-normal mb-0"><a href="#!">Cancelar</a></h6>
-                                <div class="border-start h-100"></div>
-                                <h6 class="fw-normal mb-0"><a href="#!">Denunciar</a></h6>
-                                <div class="border-start h-100"></div>
+                            <div class="d-flex flex-wrap justify-content-between">
+                                <h6 *ngIf="!isContractFinalized(contract)" class="action-button" (click)="finishContract(contract.uid)">Finalizar</h6>
+                                <h6 class="action-button"><a href="#!">Cancelar</a></h6>
+                                <h6 class="action-button"><a href="#!">Denunciar</a></h6>
                             </div>
                         </div>
                     </div>
