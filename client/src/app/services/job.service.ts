@@ -1,5 +1,5 @@
 import { HttpClient } from "@angular/common/http";
-import { Observable } from "rxjs";
+import { Observable, firstValueFrom } from "rxjs";
 import Job from "../models/job-advertisement.model";
 import { Injectable } from "@angular/core";
 import { catchError, tap } from 'rxjs/operators';
@@ -131,7 +131,19 @@ export class JobService {
         )
     };
     
-    public EvaluateJob(number: Number){
-        alert(number);
-    }
+    public AddEvaluation(contractId: string, evaluation: number) {
+        const body = {
+          contractId: contractId,
+          evaluation: evaluation
+        };
+      
+        try {
+            firstValueFrom(this.http.post<any>('/api/evaluateJob', body));
+      
+        }
+        catch (error) {
+          console.error(error);
+          throw error;
+        }
+      }
 }

@@ -106,7 +106,7 @@
                   <a (click)="fillStars(5)" (click)="evaluateJob(5)" >
                     <i [ngClass]="stars[4] ? 'fa fa-star star-filled' : 'fa fa-star-o star-empty'"></i>
                   </a>
-                  <a *ngIf="evaluate>0" class="fa buttonEvaluate" (click)="evaluateJobSend()">Avaliar</a>
+                  <a *ngIf="evaluation>0" class="fa buttonEvaluate" (click)="sendEvaluation()">Avaliar</a>
                 </div>
               </div>
 

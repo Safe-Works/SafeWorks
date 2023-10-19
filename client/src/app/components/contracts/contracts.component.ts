@@ -4,6 +4,7 @@ import { Router } from '@angular/router';
 import { UserAuth } from 'src/app/auth/User.Auth';
 import { ContractService } from 'src/app/services/contract.service';
 import Swal from 'sweetalert2';
+import {JobService} from "../../services/job.service";
 
 @Component({
   selector: 'app-contracts',
@@ -17,12 +18,16 @@ export class ContractsComponent {
   isLoading: boolean = false;
   firstFinished: string = 'Aguardando conclusão';
   lastFinished: string = 'Finalizado';
+  evaluation: number = 0;
+  idContract: any = "testeTiago";
+  stars: boolean[] = [false, false, false, false, false];
 
   constructor(
     private contractService: ContractService,
     private userAuth: UserAuth,
     public router: Router,
     private _snackBar: MatSnackBar,
+    private jobService: JobService,
   ) {}
 
   async ngOnInit() {
@@ -39,7 +44,7 @@ export class ContractsComponent {
       confirmButtonColor: '#3085d6',
       cancelButtonColor: '#d33',
       confirmButtonText: 'Sim, finalizar!',
-      cancelButtonText: 'Cancelar'
+      cancelButtonText: 'Cancelar',
     }).then(async (result) => {
       try {
         if (result.isConfirmed) {
@@ -100,4 +105,76 @@ export class ContractsComponent {
     }
   }
 
+  async evaluateJob(number: any) {
+    const result = await Swal.fire({
+      title: 'Qual nota você dá para o serviço prestado?',
+      text: "Escolha um valor de 1 a 5",
+      icon: 'question',
+      input: 'range',
+      inputLabel: 'Deslize a barra abaixo para escolher',
+      inputValue: this.evaluation,
+      inputAttributes: {
+        min: '0',
+        max: '5',
+        step: '1',
+      },
+      showCancelButton: true,
+      confirmButtonColor: '#3085d6',
+      cancelButtonColor: '#d33',
+      confirmButtonText: 'Avaliar',
+      cancelButtonText: 'Cancelar',
+    });
+
+    if (result.isConfirmed) {
+      this.isLoading = true;
+      try {
+        let response = this.teste(); // Substitua pelo código real
+        // if (response?.statusCode === 200) {
+        //   this.isLoading = false;
+        //   this.openSnackBar("Contrato finalizado com sucesso!", "OK", "snackbar-success");
+        // } else {
+        //   this.isLoading = false;
+        //   this.openSnackBar("Ocorreu um erro ao finalizar o contrato!", "OK", "snackbar-error");
+        // }
+      } catch (error: any) {
+        console.error('finishContract error: ', error);
+        this.isLoading = false;
+        this.openSnackBar("Ocorreu um erro ao finalizar o contrato!", "OK", "snackbar-error");
+      }
+    }
+
+    if (result.value) {
+      Swal.fire("Avaliação salva com sucesso");
+    }
+    this.evaluation = result.value;
+  }
+
+
+  // fillStars(starNumber: number) {
+  //   this.resetStars();
+  //   for (let i = 0; i < starNumber; i++) {
+  //     this.stars[i] = true;
+  //   }
+  // }
+
+  // resetStars() {
+  //   this.stars = [false, false, false, false, false];
+  // }
+  //
+  // evaluateJob(starNumber: number) {
+  //   this.evaluation = starNumber;
+  // }
+  //
+  // sendEvaluation(){
+  //   this.isLoading = true;
+  //   this.jobService.AddEvaluation(this.idContract, this.evaluation)
+  //   this.openSnackBar("Avaliação enviada", "OK", "snackbar-success");
+  //   this.isLoading = false;
+  // }
+
+  teste(){
+    alert("oi")
+
+    return null
+  }
 }
