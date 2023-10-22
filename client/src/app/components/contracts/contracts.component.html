@@ -31,8 +31,11 @@
                                 <div class="flex-fill">
                                     <h4 class="bold">{{ contract.advertisement.title }}</h4>
                                     <h5 class="mb-3"> R$ {{ contract.price }}</h5>
-                                    <p class="text mb-1">
-                                        Nome do trabalhador: <span class="fw-bold action-button" (click)="viewWorker(contract.worker.id)">{{ contract.worker.name }}</span>
+                                    <p class="text mb-1" *ngIf="!isWorker">
+                                        Nome do trabalhador: <span class="fw-bold action-button" (click)="viewProfile(contract.worker.id)">{{ contract.worker.name }}</span>
+                                    </p>
+                                    <p class="text mb-1" *ngIf="isWorker">
+                                        Nome do cliente: <span class="fw-bold action-button" (click)="viewProfile(contract.client.id)">{{ contract.client.name }}</span>
                                     </p>
                                 </div>
                                 <div>

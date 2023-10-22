@@ -17,6 +17,7 @@ export class ContractsComponent {
   isLoading: boolean = false;
   firstFinished: string = 'Aguardando conclusão';
   lastFinished: string = 'Finalizado';
+  isWorker: string = '';
 
   constructor(
     private contractService: ContractService,
@@ -26,8 +27,13 @@ export class ContractsComponent {
   ) {}
 
   async ngOnInit() {
-    this.contracts = await this.contractService.GetAllFromUser(this.userAuth.currentUser?.uid ?? '');
     this.userInfo = this.userAuth.currentUser?.infos;
+    this.isWorker = this.userInfo.isWorker;
+    if (this.isWorker) {
+      this.contracts = await this.contractService.GetAllFromWorker(this.userAuth.currentUser?.uid ?? '');
+    } else {
+      this.contracts = await this.contractService.GetAllFromClient(this.userAuth.currentUser?.uid ?? '');
+    }
   }
 
   finishContract(contractUid: string) {
@@ -70,7 +76,7 @@ export class ContractsComponent {
   }
 
   getUserType(): string {
-    if (this.userInfo.worker) {
+    if (this.userInfo.isWorker) {
       return 'worker';
     } else {
       return 'client';
@@ -105,7 +111,7 @@ export class ContractsComponent {
     this.router.navigate(['/jobs', 'view', uid]);
   }
 
-  viewWorker(uid: any) {
+  viewProfile(uid: any) {
     this.router.navigate(['/profile', uid]);
   }
 
