@@ -2,10 +2,11 @@ import User from "../models/User";
 import { db, firebaseAdmin } from "../../util/admin";
 import { getAuth, signInWithEmailAndPassword } from "firebase/auth";
 import AppRepository from "./AppRepository";
+import EmailNotificationModel from "../models/EmailNotificationModel";
 
 class UserRepository extends AppRepository {
 
-    async add (user: User): Promise<any> {
+    async add(user: User): Promise<any> {
         try {
             let result;
             await firebaseAdmin.auth().createUser({
@@ -49,13 +50,26 @@ class UserRepository extends AppRepository {
             });
 
             return result;
-        } catch(error) {
+        } catch (error) {
             console.error("Error adding user to Authentication: ", error);
             throw error;
         }
     }
 
-    async getById (uid: string): Promise<any> {
+    async helpRequest(helpRequestInfos: any): Promise<any> {
+        try {
+            let result;
+            const emailModel = new EmailNotificationModel();
+            const helpEmailContent = emailModel.createEmailHelpRequest(helpRequestInfos);
+            await emailModel.sendCustomEmail("safeworksadm@gmail.com", "Nova solicitação de ajuda!", helpEmailContent);
+            return result;
+        } catch (error) {
+            console.error("Error sending help request: ", error);
+            throw error;
+        }
+    }
+
+    async getById(uid: string): Promise<any> {
         try {
             let result;
             await db.collection("Users")
@@ -70,15 +84,15 @@ class UserRepository extends AppRepository {
                             result = userData;
                         } else {
                             result = null
-                        }  
+                        }
                     }
                 })
                 .catch((error) => {
                     console.error("Error getting User from Firestore. ", error);
                     throw error;
                 });
-                
-            return result;   
+
+            return result;
         } catch (error) {
             console.error("Error getting user by id: ", error);
             throw error;
@@ -97,7 +111,7 @@ class UserRepository extends AppRepository {
                         return { ...data, uid: doc.id };
                     })
                 });
-            
+
             return jobs;
         } catch (error) {
             console.error("Error getting all users: ", error);
@@ -144,14 +158,14 @@ class UserRepository extends AppRepository {
 
             const customToken = await this.createCustomToken(uid ?? "");
             return customToken;
-          
+
         } catch (error) {
             console.error("Error updating user in repository. ", error);
             throw error;
         }
     }
 
-    async createCustomToken (uid: string): Promise<any> {
+    async createCustomToken(uid: string): Promise<any> {
         const userRecord = await firebaseAdmin.auth().getUser(uid ?? "");
         const userDoc = await db.collection("Users").doc(uid ?? "").get();
         if (!userDoc.exists) {
@@ -173,13 +187,13 @@ class UserRepository extends AppRepository {
                     contracted_services: userData.contracted_services,
                 };
                 const customToken = await firebaseAdmin.auth().createCustomToken(uid ?? "", customClaims);
-                
+
                 return customToken;
             }
         }
     }
 
-    async login (user: User, accessToken: string): Promise<any> {
+    async login(user: User, accessToken: string): Promise<any> {
         try {
             const auth = getAuth();
             let result;
