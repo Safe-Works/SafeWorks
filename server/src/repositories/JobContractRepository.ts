@@ -2,6 +2,7 @@ import AppRepository from "./AppRepository";
 import { db } from "../../util/admin";
 import * as admin from 'firebase-admin';
 import EmailNotificationModel from '../models/EmailNotificationModel';
+import UserRepository from "./UserRepository";
 
 class JobContractRepository extends AppRepository {
     async add(jobContract: JobContract): Promise<any> {
@@ -205,12 +206,12 @@ class JobContractRepository extends AppRepository {
         return snapshot;
     }
 
-    async getAllJobsFromUserUid(userUid: string): Promise<any> {
+    async getAllJobsFromClient(clientUid: string): Promise<any> {
         try {
             let jobs;
             
             await db.collection("JobContracts")
-                .where('client.id', '==', userUid)
+                .where('client.id', '==', clientUid)
                 .where('deleted', '==', null)
                 .orderBy('created', 'asc')
                 .get()
@@ -221,7 +222,7 @@ class JobContractRepository extends AppRepository {
                     })
                 })
                 .catch((error) => {
-                    console.error("Error getting Jobs from Firestore. ", error);
+                    console.error("Error getting all Client Jobs from Firestore. ", error);
                     throw error;
                 });
 
@@ -232,26 +233,101 @@ class JobContractRepository extends AppRepository {
         }
     }
 
+    async getAllJobsFromWorker(workerUid: string): Promise<any> {
+        try {
+            let jobs;
+            
+            await db.collection("JobContracts")
+                .where('worker.id', '==', workerUid)
+                .where('deleted', '==', null)
+                .orderBy('created', 'asc')
+                .get()
+                .then((querySnapshot) => {
+                    jobs = querySnapshot.docs.map((doc) => {
+                        const data = doc.data();
+                        return { ...data, uid: doc.id };
+                    })
+                })
+                .catch((error) => {
+                    console.error("Error getting all Worker Jobs from Firestore. ", error);
+                    throw error;
+                });
+
+            return jobs;
+        } catch (error) {
+            console.error('Error retrieving jobs from Worker: ', error);
+            throw error;
+        }
+    }
+
     async finishContract(jobUid: string, userType: string): Promise<any> {
         try {
             const jobRef = db.collection("JobContracts").doc(jobUid);
             const jobDoc = await jobRef.get();
+            const jobData = jobDoc.data();
+            let userUid;
 
             if (jobDoc.exists && jobDoc.data()?.expired === false) {
                 if (userType === 'client') {
+                    userUid = jobData?.client.id;
                     await jobRef.update({ client_finished: true });
-                } else {
+                }  
+                if (userType === 'worker') {
+                    userUid = jobData?.worker.id;
                     await jobRef.update({ worker_finished: true });
                 }
                 const finishedJob = (await jobRef.get()).data();
+                await this.sendEmailFinishedContract(jobUid, finishedJob, userType);
                 if (finishedJob?.client_finished && finishedJob?.worker_finished) {
-                    await jobRef.update({ status: 'finished', paid: true, finished: this.getDateTime() })
+                    await jobRef.update({ status: 'finished', paid: true, finished: this.getDateTime() });
+                    await this.transferPaymentToWorker(jobDoc.data());
                 }
             }
 
-            return (await jobRef.get()).data();
+            return this.getAllJobsFromClient(userUid);
         } catch (error) {
             console.error('Error finishing contract: ', error);
+            throw error;
+        }
+    }
+
+    async transferPaymentToWorker(job: any): Promise<any> {
+        try {
+            const workerRef = db.collection("Users").doc(job.worker.id);
+            const workerDoc = await workerRef.get();
+            const workerData = workerDoc.data();
+
+            if (workerDoc.exists) {
+                const totalBalance = workerData?.balance + job.price;
+                await workerRef.update({ balance: totalBalance, modified: this.getDateTime() });
+            }
+        } catch (error) {
+            console.error('Error to transfer payment to worker: ', error);
+            throw error;
+        }
+    }
+
+    async sendEmailFinishedContract(jobUid: string, jobData: any, userType: string): Promise<any> {
+        try {
+            const emailModel = new EmailNotificationModel();
+            const userRepository = new UserRepository();
+            const workerData = await userRepository.getById(jobData.worker.id);
+            const clientData = await userRepository.getById(jobData.worker.id);
+            
+            if (userType === 'client') {
+                const clientEmailContent = emailModel.clientFinishedContractToWorker(jobData, jobUid);
+                await emailModel.sendCustomEmail(workerData?.email, "Cliente finalizou o contrato.", clientEmailContent);
+            }
+            if (userType === 'worker') {
+                const workerEmailContent = emailModel.workerFinishedContractToClient(jobData, jobUid);
+                await emailModel.sendCustomEmail(clientData?.email, "Trabalhador finalizou o contrato.", workerEmailContent);
+                if (jobData?.client_finished && jobData?.worker_finished) {
+                    const finishedEmailContent = emailModel.finishedContract(jobData, jobUid);
+                    await emailModel.sendCustomEmail(workerData?.email, "Contrato finalizado!", finishedEmailContent);
+                }
+            }
+        } catch (error) {
+            console.error("Error to send finished contract email: ", error);
             throw error;
         }
     }

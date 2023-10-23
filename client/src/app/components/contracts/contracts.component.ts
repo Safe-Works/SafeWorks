@@ -17,6 +17,7 @@ export class ContractsComponent {
   isLoading: boolean = false;
   firstFinished: string = 'Aguardando conclusão';
   lastFinished: string = 'Finalizado';
+  isWorker: string = '';
 
   constructor(
     private contractService: ContractService,
@@ -26,8 +27,13 @@ export class ContractsComponent {
   ) {}
 
   async ngOnInit() {
-    this.contracts = await this.contractService.GetAllFromUser(this.userAuth.currentUser?.uid ?? '');
     this.userInfo = this.userAuth.currentUser?.infos;
+    this.isWorker = this.userInfo.isWorker;
+    if (this.isWorker) {
+      this.contracts = await this.contractService.GetAllFromWorker(this.userAuth.currentUser?.uid ?? '');
+    } else {
+      this.contracts = await this.contractService.GetAllFromClient(this.userAuth.currentUser?.uid ?? '');
+    }
   }
 
   finishContract(contractUid: string) {
@@ -47,6 +53,7 @@ export class ContractsComponent {
           let response = await this.contractService.FinishContract(contractUid, this.getUserType());
           if (response?.statusCode === 200) {
             this.isLoading = false;
+            this.contracts = response;
             this.openSnackBar("Contrato finalizado com sucesso!", "OK", "snackbar-success");
           } else {
             this.isLoading = false;
@@ -69,7 +76,7 @@ export class ContractsComponent {
   }
 
   getUserType(): string {
-    if (this.userInfo.worker) {
+    if (this.userInfo.isWorker) {
       return 'worker';
     } else {
       return 'client';
@@ -98,6 +105,14 @@ export class ContractsComponent {
       const element = document.getElementById('step2 ' + contract.uid);
       element?.classList.add('active');
     }
+  }
+
+  viewAdvertisement(uid: any) {
+    this.router.navigate(['/jobs', 'view', uid]);
+  }
+
+  viewProfile(uid: any) {
+    this.router.navigate(['/profile', uid]);
   }
 
 }
