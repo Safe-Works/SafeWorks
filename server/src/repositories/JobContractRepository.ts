@@ -282,9 +282,15 @@ class JobContractRepository extends AppRepository {
                     await jobRef.update({ status: 'finished', paid: true, finished: this.getDateTime() });
                     await this.transferPaymentToWorker(jobDoc.data());
                 }
+                if (userType === 'client') {
+                    return this.getAllJobsFromClient(userUid);
+                }
+                if (userType === 'worker') {
+                    return this.getAllJobsFromWorker(userUid);
+                }
+            } else {
+                return 'expired';
             }
-
-            return this.getAllJobsFromClient(userUid);
         } catch (error) {
             console.error('Error finishing contract: ', error);
             throw error;
@@ -312,7 +318,7 @@ class JobContractRepository extends AppRepository {
             const emailModel = new EmailNotificationModel();
             const userRepository = new UserRepository();
             const workerData = await userRepository.getById(jobData.worker.id);
-            const clientData = await userRepository.getById(jobData.worker.id);
+            const clientData = await userRepository.getById(jobData.client.id);
             
             if (userType === 'client') {
                 const clientEmailContent = emailModel.clientFinishedContractToWorker(jobData, jobUid);

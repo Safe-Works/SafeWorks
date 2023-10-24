@@ -17,7 +17,8 @@ export class ContractsComponent {
   isLoading: boolean = false;
   firstFinished: string = 'Aguardando conclusão';
   lastFinished: string = 'Finalizado';
-  isWorker: string = '';
+  isWorker: boolean = false;
+  selectOption: string = 'worker_contracts';
 
   constructor(
     private contractService: ContractService,
@@ -76,7 +77,7 @@ export class ContractsComponent {
   }
 
   getUserType(): string {
-    if (this.userInfo.isWorker) {
+    if (this.isWorker) {
       return 'worker';
     } else {
       return 'client';
@@ -107,12 +108,33 @@ export class ContractsComponent {
     }
   }
 
-  viewAdvertisement(uid: any) {
+  viewAdvertisement(uid: any): void {
     this.router.navigate(['/jobs', 'view', uid]);
   }
 
-  viewProfile(uid: any) {
+  viewProfile(uid: any): void {
     this.router.navigate(['/profile', uid]);
+  }
+
+  selectListener(event: any): void {
+    const option = event.target.value;
+    this.selectOption = option;
+    if (option === 'worker_contracts') {
+      this.fetchWorkerContracts();
+    }
+    if (option === 'client_contracts') {
+      this.fetchClientContracts();
+    }
+  }
+
+  async fetchWorkerContracts() {
+    this.contracts = await this.contractService.GetAllFromWorker(this.userAuth.currentUser?.uid ?? '');
+    this.isWorker = true;
+  }
+
+  async fetchClientContracts() {
+    this.contracts = await this.contractService.GetAllFromClient(this.userAuth.currentUser?.uid ?? '');
+    this.isWorker = false;
   }
 
 }
