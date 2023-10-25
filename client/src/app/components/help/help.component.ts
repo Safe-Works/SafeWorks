@@ -34,7 +34,7 @@ export class HelpComponent {
     });
   }
   async ngOnInit() {
-    this.contracts = await this.contractService.GetAllFromUser(
+    this.contracts = await this.contractService.GetAllFromClient(
       this.userAuth.currentUser?.uid ?? ""
     );
   }

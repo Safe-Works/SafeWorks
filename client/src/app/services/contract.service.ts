@@ -31,9 +31,18 @@ export class ContractService {
         return await this.http.post<any>(this.api, contractData).toPromise();
     }
 
-    public async GetAllFromUser(userUid: string): Promise<any> {
+    public async GetAllFromClient(userUid: string): Promise<any> {
         try {
-            return await firstValueFrom(this.http.get<any>(this.api + 'user/' + userUid));
+            return await firstValueFrom(this.http.get<any>(this.api + 'client/' + userUid));
+        } catch (error) {
+            console.error(error);
+            throw error;
+        }
+    }
+
+    public async GetAllFromWorker(workerUid: string): Promise<any> {
+        try {
+            return await firstValueFrom(this.http.get<any>(this.api + 'worker/' + workerUid));
         } catch (error) {
             console.error(error);
             throw error;

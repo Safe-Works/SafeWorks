@@ -108,10 +108,10 @@ class JobContractController {
         }
     }
 
-    async getAllJobsFromUserUid(req: Request, res: Response): Promise<void> {
+    async getAllJobsFromClient(req: Request, res: Response): Promise<void> {
         try {
-            const userUid = req.params.uid;
-            const jobs = await jobContractRepository.getAllJobsFromUserUid(userUid);
+            const clientUid = req.params.uid;
+            const jobs = await jobContractRepository.getAllJobsFromClient(clientUid);
             if (jobs) {
                 res.status(200).json({ statusCode: 200, jobs: jobs });
             } else {
@@ -120,7 +120,24 @@ class JobContractController {
         } catch (error) {
             if (error instanceof Error) {
                 console.error('Error to get all Jobs from User UID: ', error.message);
-                res.status(500).json({ statusCode: 500, error: 'jobContract/failed-getAllFromUserUid', message: error.message })
+                res.status(500).json({ statusCode: 500, error: 'jobContract/failed-getAllFromClient', message: error.message })
+            }
+        }
+    }
+
+    async getAllJobsFromWorker(req: Request, res: Response): Promise<void> {
+        try {
+            const workerUid = req.params.uid;
+            const jobs = await jobContractRepository.getAllJobsFromWorker(workerUid);
+            if (jobs) {
+                res.status(200).json({ statusCode: 200, jobs: jobs });
+            } else {
+                res.status(404).json({ statusCode: 404, error: 'jobContract/not-found' });
+            }
+        } catch (error) {
+            if (error instanceof Error) {
+                console.error('Error to get all Jobs from User UID: ', error.message);
+                res.status(500).json({ statusCode: 500, error: 'jobContract/failed-getAllFromWorker', message: error.message })
             }
         }
     }
@@ -129,9 +146,9 @@ class JobContractController {
         try {
             const jobUid = req.params.uid;
             const userType = req.params.user_type;
-            const finished = await jobContractRepository.finishContract(jobUid, userType);
-            if (finished) {
-                res.status(200).json({ statusCode: 200, finished: finished });
+            const jobs = await jobContractRepository.finishContract(jobUid, userType);
+            if (jobs) {
+                res.status(200).json({ statusCode: 200, jobs: jobs });
             } else {
                 res.status(404).json({ statusCode: 404, error: 'jobContract/not-found' });
             }

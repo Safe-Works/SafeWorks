@@ -79,11 +79,18 @@
 
 a {
     color: var(--interaction-blue);
+    font-size: 1rem;
 }
 
 .action-button {
     color: var(--interaction-blue);
     cursor: pointer;
+    margin-top: 0.3rem;
+    margin-bottom: 0.3rem;
+}
+
+.min-width-div {
+    min-width: 24rem;
 }
 .icons button:hover i {
     color: gold; /* Cor das estrelas preenchidas quando o mouse passa por cima */
