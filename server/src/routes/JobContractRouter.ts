@@ -29,6 +29,18 @@ jobContractRouter.post(
     }),
     jobContractController.add as RequestHandler
 );
+jobContractRouter.post(
+    '/jobs/checkout', 
+    celebrate({
+        body: Joi.object({
+            id: Joi.string().required(),
+            title: Joi.string().required(),
+            price: Joi.number().required(),
+            description: Joi.string().required(),
+        }),
+    }),
+    jobContractController.checkout as RequestHandler
+);
 
 jobContractRouter.get(
     '/jobs',

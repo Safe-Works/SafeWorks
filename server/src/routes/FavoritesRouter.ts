@@ -1,7 +1,6 @@
 import express, { RequestHandler } from 'express';
 import {celebrate, Joi} from 'celebrate';
 import FavoritesController from '../controllers/FavoritesController';
-import jobAdRouter from "./JobAdRouter";
 
 const favoritesRouter = express.Router();
 const favoritesController = new FavoritesController();

@@ -22,6 +22,7 @@
   },
   "homepage": "https://github.com/Safe-Works/SafeWorks-Server#readme",
   "dependencies": {
+    "@types/mercadopago": "^1.5.10",
     "@types/uuid": "^9.0.1",
     "celebrate": "^15.0.1",
     "cors": "^2.8.5",
@@ -31,6 +32,7 @@
     "firebase": "^9.19.0",
     "firebase-admin": "^11.5.0",
     "joi": "^17.9.1",
+    "mercadopago": "^2.0.3",
     "multer": "^1.4.5-lts.1",
     "nodemailer": "^6.9.5",
     "swagger-jsdoc": "^6.2.8",
