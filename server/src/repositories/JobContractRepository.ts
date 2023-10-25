@@ -2,6 +2,7 @@ import AppRepository from "./AppRepository";
 import { db } from "../../util/admin";
 import * as admin from 'firebase-admin';
 import EmailNotificationModel from '../models/EmailNotificationModel';
+import Favorites from "../models/Favorites";
 
 class JobContractRepository extends AppRepository {
     async add(jobContract: JobContract): Promise<any> {
@@ -252,6 +253,29 @@ class JobContractRepository extends AppRepository {
             return (await jobRef.get()).data();
         } catch (error) {
             console.error('Error finishing contract: ', error);
+            throw error;
+        }
+    }
+
+    async evaluateJob(evaluation: any): Promise<any> {
+        try {
+            console.log("cheogu na repoioty")
+            console.log(evaluation)
+            // const userUid = favorite.userUid;
+            //
+            // const userRef = db.collection("Users").doc(userUid);
+            // const userDoc = (await userRef.get()).data();
+            // const workers = userDoc?.favorite_list ?? [];
+            //
+            // const updatedFavorites = [...workers, favorite.workerUid];
+            //
+            // await userRef.update({
+            //     "favorite_list": updatedFavorites,
+            // });
+            //
+            // return (await userRef.get()).data();
+        } catch (error) {
+            console.error("Error adding new evaluation: ", error);
             throw error;
         }
     }

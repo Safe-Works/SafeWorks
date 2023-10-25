@@ -1,6 +1,7 @@
 import express, { RequestHandler } from 'express';
 import JobContractController from "../controllers/JobContractController";
 import { Joi, celebrate } from 'celebrate';
+import favoritesRouter from "./FavoritesRouter";
 
 const jobContractRouter = express.Router();
 const jobContractController = new JobContractController();
@@ -28,6 +29,17 @@ jobContractRouter.post(
         }),
     }),
     jobContractController.add as RequestHandler
+);
+
+jobContractRouter.post(
+    '/jobs/evaluateJob',
+    celebrate({
+        body: Joi.object({
+            contractUid: Joi.any().required(),
+            evaluation: Joi.number().required(),
+        })
+    }),
+    jobContractController.evaluateJob as RequestHandler
 );
 
 jobContractRouter.get(

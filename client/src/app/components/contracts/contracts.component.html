@@ -56,7 +56,7 @@
 
                         <div class="card-footer p-4">
                             <div class="d-flex justify-content-between">
-                                <h6 *ngIf="!isContractFinalized(contract) " class="fw-normal mb-0 action-button" (click)="evaluateJob(1)">Avaliar</h6>
+                                <h6 *ngIf="!isContractFinalized(contract) " class="fw-normal mb-0 action-button" (click)="evaluateJob(contract.uid)">Avaliar</h6>
                                 <h6 *ngIf="!isContractFinalized(contract)" class="fw-normal mb-0 action-button" (click)="finishContract(contract.uid)">Finalizar</h6>
                                 <div class="border-start h-100"></div>
                                 <h6 class="fw-normal mb-0"><a href="#!">Cancelar</a></h6>

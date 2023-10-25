@@ -105,7 +105,7 @@ export class ContractsComponent {
     }
   }
 
-  async evaluateJob(number: any) {
+  async evaluateJob(contractUid: string) {
     const result = await Swal.fire({
       title: 'Qual nota você dá para o serviço prestado?',
       text: "Escolha um valor de 1 a 5",
@@ -127,8 +127,9 @@ export class ContractsComponent {
 
     if (result.isConfirmed) {
       this.isLoading = true;
+      this.evaluation = result.value;
       try {
-        let response = this.teste(); // Substitua pelo código real
+        let response = this.contractService.evaluateJob(this.evaluation, contractUid); // Substitua pelo código real
         // if (response?.statusCode === 200) {
         //   this.isLoading = false;
         //   this.openSnackBar("Contrato finalizado com sucesso!", "OK", "snackbar-success");
@@ -136,17 +137,17 @@ export class ContractsComponent {
         //   this.isLoading = false;
         //   this.openSnackBar("Ocorreu um erro ao finalizar o contrato!", "OK", "snackbar-error");
         // }
-      } catch (error: any) {
-        console.error('finishContract error: ', error);
         this.isLoading = false;
-        this.openSnackBar("Ocorreu um erro ao finalizar o contrato!", "OK", "snackbar-error");
+
+        if (result.value) {
+          Swal.fire("Avaliação salva com sucesso");
+        }
+      } catch (error: any) {
+        console.error('evaluateJob error: ', error);
+        this.openSnackBar("Ocorreu um erro ao salvar a avaliação!", "OK", "snackbar-error");
       }
     }
 
-    if (result.value) {
-      Swal.fire("Avaliação salva com sucesso");
-    }
-    this.evaluation = result.value;
   }
 
 
@@ -173,7 +174,7 @@ export class ContractsComponent {
   // }
 
   teste(){
-    alert("oi")
+    alert("oi" + this.evaluation)
 
     return null
   }
