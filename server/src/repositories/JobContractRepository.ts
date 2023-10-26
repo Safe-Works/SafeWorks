@@ -340,21 +340,17 @@ class JobContractRepository extends AppRepository {
 
     async evaluateJob(evaluation: any): Promise<any> {
         try {
-            console.log("cheogu na repoioty")
-            console.log(evaluation)
-            // const userUid = favorite.userUid;
-            //
-            // const userRef = db.collection("Users").doc(userUid);
-            // const userDoc = (await userRef.get()).data();
-            // const workers = userDoc?.favorite_list ?? [];
-            //
-            // const updatedFavorites = [...workers, favorite.workerUid];
-            //
-            // await userRef.update({
-            //     "favorite_list": updatedFavorites,
-            // });
-            //
-            // return (await userRef.get()).data();
+            const evaluationNumber = evaluation.evaluation;
+            const contractUid = evaluation.contractUid;
+
+            const evaluationData = {
+                evaluation: evaluationNumber
+            };
+
+            const contractRef = db.collection("JobContracts").doc(contractUid);
+
+            await contractRef.update(evaluationData);
+
         } catch (error) {
             console.error("Error adding new evaluation: ", error);
             throw error;

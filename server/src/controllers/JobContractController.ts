@@ -162,14 +162,7 @@ class JobContractController {
 
     async evaluateJob(req: Request, res: Response): Promise<void> {
         try {
-
             const evaluation = req.body;
-            // const result = await favoritesRepository.add(favorite);
-
-
-            console.log(evaluation)
-            //console.log(contractUid)
-
             const result = await jobContractRepository.evaluateJob(evaluation);
 
             res.status(201).json({ statusCode: 201, evaluation: result });

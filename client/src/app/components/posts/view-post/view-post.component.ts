@@ -22,9 +22,6 @@ export class ViewPostComponent {
   defaultPicUrl = "../../assets/default-pic.png"
   jobInfo = {} as JobAdvertisement;
   slides: any[] = new Array(3).fill({ id: -1, src: '', title: '', subtitle: '' });
-  evaluation: number = 0;
-  idContract: any = "testeTiago";
-  stars: boolean[] = [false, false, false, false, false];
 
   constructor(
     private userAuth: UserAuth,
@@ -120,40 +117,15 @@ export class ViewPostComponent {
     }
 
   }
-
-fillStars(starNumber: number) {
-  this.resetStars();
-  for (let i = 0; i < starNumber; i++) {
-    this.stars[i] = true;
-  }
-}
-
-resetStars() {
-  this.stars = [false, false, false, false, false];
-}
-
-evaluateJob(starNumber: number) {
-  this.evaluation = starNumber;
-}
-
-sendEvaluation(){
-  this.isLoading = true;
-  this.jobService.AddEvaluation(this.idContract, this.evaluation)
-  this.openSnackBar("Avaliação enviada", "OK", "snackbar-success");
-  this.isLoading = false;
-}
-
-onItemChange($event: any): void {
-  console.log('Carousel onItemChange', $event);
-}
-
-back() {
-    this.location.back();
+  onItemChange($event: any): void {
+    console.log('Carousel onItemChange', $event);
   }
 
-redirectToUserDetails() {
-  this.router.navigate(['/profile', this.jobInfo.worker.id]);
-}
+  back() {
+      this.location.back();
+    }
 
-
+  redirectToUserDetails() {
+    this.router.navigate(['/profile', this.jobInfo.worker.id]);
+  }
 }

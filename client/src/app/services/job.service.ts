@@ -130,20 +130,4 @@ export class JobService {
             })
         )
     };
-    
-    public AddEvaluation(contractId: string, evaluation: number) {
-        const body = {
-          contractId: contractId,
-          evaluation: evaluation
-        };
-      
-        try {
-            firstValueFrom(this.http.post<any>('/api/evaluateJob', body));
-      
-        }
-        catch (error) {
-          console.error(error);
-          throw error;
-        }
-      }
 }

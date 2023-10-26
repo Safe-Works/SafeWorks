@@ -20,9 +20,6 @@ export class ContractsComponent {
   lastFinished: string = 'Finalizado';
   isWorker: boolean = false;
   selectOption: string = 'worker_contracts';
-  evaluation: number = 0;
-  idContract: any = "testeTiago";
-  stars: boolean[] = [false, false, false, false, false];
 
   constructor(
     private contractService: ContractService,
@@ -51,8 +48,18 @@ export class ContractsComponent {
       confirmButtonColor: '#3085d6',
       cancelButtonColor: '#d33',
       confirmButtonText: 'Sim, finalizar!',
-      cancelButtonText: 'Cancelar'
+      cancelButtonText: 'Cancelar',
+      input: 'range',
+      inputLabel: 'Avalie o serviço, escolha uma nota de 1 a 5',
+      inputValue: 0,
+      inputAttributes: {
+        min: '0',
+        max: '5',
+        step: '1',
+      }
     }).then(async (result) => {
+      await this.evaluateJob(contractUid, result);
+
       try {
         if (result.isConfirmed) {
           this.isLoading = true;
@@ -142,39 +149,10 @@ export class ContractsComponent {
     this.isWorker = false;
   }
 
-  async evaluateJob(contractUid: string) {
-    const result = await Swal.fire({
-      title: 'Qual nota você dá para o serviço prestado?',
-      text: "Escolha um valor de 1 a 5",
-      icon: 'question',
-      input: 'range',
-      inputLabel: 'Deslize a barra abaixo para escolher',
-      inputValue: this.evaluation,
-      inputAttributes: {
-        min: '0',
-        max: '5',
-        step: '1',
-      },
-      showCancelButton: true,
-      confirmButtonColor: '#3085d6',
-      cancelButtonColor: '#d33',
-      confirmButtonText: 'Avaliar',
-      cancelButtonText: 'Cancelar',
-    });
-
+  async evaluateJob(contractUid: string, result: any) {
     if (result.isConfirmed) {
-      this.isLoading = true;
-      this.evaluation = result.value;
       try {
-        let response = this.contractService.evaluateJob(this.evaluation, contractUid); // Substitua pelo código real
-        // if (response?.statusCode === 200) {
-        //   this.isLoading = false;
-        //   this.openSnackBar("Contrato finalizado com sucesso!", "OK", "snackbar-success");
-        // } else {
-        //   this.isLoading = false;
-        //   this.openSnackBar("Ocorreu um erro ao finalizar o contrato!", "OK", "snackbar-error");
-        // }
-        this.isLoading = false;
+        await this.contractService.evaluateJob(result.value, contractUid);
 
         if (result.value) {
           Swal.fire("Avaliação salva com sucesso");
@@ -185,34 +163,5 @@ export class ContractsComponent {
       }
     }
 
-  }
-
-
-  // fillStars(starNumber: number) {
-  //   this.resetStars();
-  //   for (let i = 0; i < starNumber; i++) {
-  //     this.stars[i] = true;
-  //   }
-  // }
-
-  // resetStars() {
-  //   this.stars = [false, false, false, false, false];
-  // }
-  //
-  // evaluateJob(starNumber: number) {
-  //   this.evaluation = starNumber;
-  // }
-  //
-  // sendEvaluation(){
-  //   this.isLoading = true;
-  //   this.jobService.AddEvaluation(this.idContract, this.evaluation)
-  //   this.openSnackBar("Avaliação enviada", "OK", "snackbar-success");
-  //   this.isLoading = false;
-  // }
-
-  teste(){
-    alert("oi" + this.evaluation)
-
-    return null
   }
 }
