@@ -1,7 +1,6 @@
 <div class="loading-spinner" *ngIf="isLoading">
     <mat-spinner [diameter]="85"></mat-spinner>
 </div>
-
 <div class="container" *ngIf="contracts">
 
     <h4 class="mb-4 text-muted">Meus Contratos</h4>
@@ -65,8 +64,10 @@
                                 </li>
                             </ul>
                         </div>
+
                         <div class="card-footer p-4">
                             <div class="d-flex flex-wrap justify-content-between">
+<!--                                <h6 *ngIf="!isContractFinalized(contract) " class="action-button" (click)="evaluateJob(contract.uid)">Avaliar</h6>-->
                                 <h6 *ngIf="!isContractFinalized(contract)" class="action-button" (click)="finishContract(contract.uid)">Finalizar</h6>
                                 <h6 class="action-button"><a href="#!">Cancelar</a></h6>
                                 <h6 class="action-button"><a href="#!">Denunciar</a></h6>
@@ -74,6 +75,7 @@
                         </div>
                     </div>
                 </div>
+
             </div>
         </div>
     </div>

@@ -92,3 +92,17 @@ a {
 .min-width-div {
     min-width: 24rem;
 }
+.icons button:hover i {
+    color: gold; /* Cor das estrelas preenchidas quando o mouse passa por cima */
+}
+
+.buttonEvaluate:hover {
+    font-weight: bold;
+    text-decoration: underline;
+    font-style: normal;
+    cursor: pointer;
+}
+
+.bi{
+    color: gold;
+}

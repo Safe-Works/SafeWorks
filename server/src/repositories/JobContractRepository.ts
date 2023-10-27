@@ -236,7 +236,7 @@ class JobContractRepository extends AppRepository {
     async getAllJobsFromWorker(workerUid: string): Promise<any> {
         try {
             let jobs;
-            
+
             await db.collection("JobContracts")
                 .where('worker.id', '==', workerUid)
                 .where('deleted', '==', null)
@@ -271,7 +271,7 @@ class JobContractRepository extends AppRepository {
                 if (userType === 'client') {
                     userUid = jobData?.client.id;
                     await jobRef.update({ client_finished: true });
-                }  
+                }
                 if (userType === 'worker') {
                     userUid = jobData?.worker.id;
                     await jobRef.update({ worker_finished: true });
@@ -319,7 +319,7 @@ class JobContractRepository extends AppRepository {
             const userRepository = new UserRepository();
             const workerData = await userRepository.getById(jobData.worker.id);
             const clientData = await userRepository.getById(jobData.client.id);
-            
+
             if (userType === 'client') {
                 const clientEmailContent = emailModel.clientFinishedContractToWorker(jobData, jobUid);
                 await emailModel.sendCustomEmail(workerData?.email, "Cliente finalizou o contrato.", clientEmailContent);
@@ -334,6 +334,25 @@ class JobContractRepository extends AppRepository {
             }
         } catch (error) {
             console.error("Error to send finished contract email: ", error);
+            throw error;
+        }
+    }
+
+    async evaluateJob(evaluation: any): Promise<any> {
+        try {
+            const evaluationNumber = evaluation.evaluation;
+            const contractUid = evaluation.contractUid;
+
+            const evaluationData = {
+                evaluation: evaluationNumber
+            };
+
+            const contractRef = db.collection("JobContracts").doc(contractUid);
+
+            await contractRef.update(evaluationData);
+
+        } catch (error) {
+            console.error("Error adding new evaluation: ", error);
             throw error;
         }
     }

@@ -4,6 +4,7 @@ import { Router } from '@angular/router';
 import { UserAuth } from 'src/app/auth/User.Auth';
 import { ContractService } from 'src/app/services/contract.service';
 import Swal from 'sweetalert2';
+import {JobService} from "../../services/job.service";
 
 @Component({
   selector: 'app-contracts',
@@ -25,6 +26,7 @@ export class ContractsComponent {
     private userAuth: UserAuth,
     public router: Router,
     private _snackBar: MatSnackBar,
+    private jobService: JobService,
   ) {}
 
   async ngOnInit() {
@@ -46,8 +48,18 @@ export class ContractsComponent {
       confirmButtonColor: '#3085d6',
       cancelButtonColor: '#d33',
       confirmButtonText: 'Sim, finalizar!',
-      cancelButtonText: 'Cancelar'
+      cancelButtonText: 'Cancelar',
+      input: 'range',
+      inputLabel: 'Avalie o serviço, escolha uma nota de 1 a 5',
+      inputValue: 0,
+      inputAttributes: {
+        min: '0',
+        max: '5',
+        step: '1',
+      }
     }).then(async (result) => {
+      await this.evaluateJob(contractUid, result);
+
       try {
         if (result.isConfirmed) {
           this.isLoading = true;
@@ -137,4 +149,19 @@ export class ContractsComponent {
     this.isWorker = false;
   }
 
+  async evaluateJob(contractUid: string, result: any) {
+    if (result.isConfirmed) {
+      try {
+        await this.contractService.evaluateJob(result.value, contractUid);
+
+        if (result.value) {
+          Swal.fire("Avaliação salva com sucesso");
+        }
+      } catch (error: any) {
+        console.error('evaluateJob error: ', error);
+        this.openSnackBar("Ocorreu um erro ao salvar a avaliação!", "OK", "snackbar-error");
+      }
+    }
+
+  }
 }

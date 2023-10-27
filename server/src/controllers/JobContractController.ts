@@ -1,6 +1,7 @@
 import { Request, Response } from "express";
 import JobContractRepository from "../repositories/JobContractRepository";
 import * as admin from 'firebase-admin';
+import Favorites from "../models/Favorites";
 
 const jobContractRepository = new JobContractRepository();
 
@@ -155,6 +156,20 @@ class JobContractController {
             if (error instanceof Error) {
                 console.error('Error to finish the contract: ', error.message);
                 res.status(500).json({ statusCode: 500, error: 'jobContract/failed-finishContract', message: error.message })
+            }
+        }
+    }
+
+    async evaluateJob(req: Request, res: Response): Promise<void> {
+        try {
+            const evaluation = req.body;
+            const result = await jobContractRepository.evaluateJob(evaluation);
+
+            res.status(201).json({ statusCode: 201, evaluation: result });
+        } catch (error) {
+            if (error instanceof Error) {
+                console.error("Error to evaluate Job: ", error.message);
+                res.status(500).json({ statusCode: 500, error: 'evalateJob/failed-add', message: error.message });
             }
         }
     }
