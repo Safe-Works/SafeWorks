@@ -119,11 +119,13 @@ export class ViewPostComponent {
             try {
               if (result.isConfirmed) {
                 const checkoutContract: ContractCheckout = {
-                  id: "abc",
-                  title: "teste",
-                  price: 1000,
-                  description: "teste",
+                  id: this.jobInfo.uid || "",
+                  title: this.jobInfo.title,
+                  price: this.jobInfo.price,
+                  description: this.jobInfo.description,
                 };
+                if (!this.jobInfo.media[0].includes(".png"))
+                  checkoutContract.picture_url = this.jobInfo.media[0];
                 const responsePromise =
                   this.contractService.CreatePreference(checkoutContract);
                 const response = await responsePromise;

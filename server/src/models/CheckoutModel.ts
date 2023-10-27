@@ -4,6 +4,7 @@ type CheckoutModel = {
     price: number,
     description: Date,
     accessToken: string,
+    picture_url: string,
 }
 
 export default CheckoutModel;

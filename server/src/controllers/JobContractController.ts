@@ -84,6 +84,7 @@ class JobContractController {
               title: checkout.title,
               quantity: 1,
               unit_price: checkout.price,
+              picture_url: checkout.picture_url
             },
           ],
           auto_return: "approved",

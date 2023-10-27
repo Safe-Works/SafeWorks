@@ -34,6 +34,7 @@ jobContractRouter.post(
       title: Joi.string().required(),
       price: Joi.number().required(),
       description: Joi.string().required(),
+      picture_url: Joi.string()
     }),
   }),
   jobContractController.checkout as RequestHandler
