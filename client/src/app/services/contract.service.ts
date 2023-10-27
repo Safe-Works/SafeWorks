@@ -4,6 +4,7 @@ import { HttpClient } from "@angular/common/http";
 import JobAdvertisement from "../models/job-advertisement.model";
 import { UserAuth } from '../auth/User.Auth';
 import { firstValueFrom } from "rxjs";
+import { ContractCheckout } from "../utils/interfaces/contract-checkout.interface";
 
 @Injectable({
     providedIn: 'root'
@@ -34,6 +35,15 @@ export class ContractService {
     public async GetAllFromUser(userUid: string): Promise<any> {
         try {
             return await firstValueFrom(this.http.get<any>(this.api + 'user/' + userUid));
+        } catch (error) {
+            console.error(error);
+            throw error;
+        }
+    }
+
+    public async CreatePreference(contractCheckout: ContractCheckout): Promise<any> {
+        try {
+            return await this.http.post<any>(this.api + 'checkout', contractCheckout).toPromise();
         } catch (error) {
             console.error(error);
             throw error;

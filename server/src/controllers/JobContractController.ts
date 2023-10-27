@@ -2,7 +2,7 @@ import { Request, Response } from "express";
 import JobContractRepository from "../repositories/JobContractRepository";
 import * as admin from "firebase-admin";
 import CheckoutModel from "../models/CheckoutModel";
-import { MercadoPagoConfig, Preference } from "MercadoPago";
+import { MercadoPagoConfig, Preference, Payment } from "MercadoPago";
 import { CreatePreferencePayload } from "mercadopago/models/preferences/create-payload.model";
 const jobContractRepository = new JobContractRepository();
 
@@ -71,8 +71,9 @@ class JobContractController {
 
   async checkout(req: Request, res: Response): Promise<void> {
     const checkout: CheckoutModel = req.body;
-    const URL = "http://localhost:3001";
-
+    const URL = "https://safe-works.azurewebsites.net/#/";
+    const URL_NOTIFY =
+      "https://4557-2804-14c-8797-c352-30a5-27ab-ea50-d911.ngrok.io";
     try {
       const preference = new Preference(client);
       const response = await preference.create({
@@ -86,12 +87,47 @@ class JobContractController {
             },
           ],
           auto_return: "approved",
-          notification_url: `${URL}/api/notify`,
+          back_urls: {
+            success: `${URL}`,
+            failure: `${URL}`,
+          },
+          notification_url: `${URL_NOTIFY}/api/jobs/notify`,
         },
       });
 
       // Retorna a resposta para o cliente
-      res.status(200).json(response);
+      res.status(200).json({ url: response.init_point });
+    } catch (error) {
+      if (error instanceof Error) {
+        console.error(
+          "Erro ao adicionar contrato de trabalho: ",
+          error.message
+        );
+        res.status(500).json({
+          statusCode: 500,
+          error: "jobContract/failed-add",
+          message: error.message,
+        });
+      }
+    }
+  }
+
+  async notify(req: Request, res: Response): Promise<void> {
+    const { query } = req;
+    console.log(query);
+    const topic = query.topic || query.type;
+    const payment = new Payment(client);
+
+    try {
+      if (topic === "payment") {
+        const paymentId = query.id || query["data.id"];
+        let paymentInfo = await payment.get({
+          id: Number(paymentId),
+        });
+        let paymentStatus = paymentInfo.status;
+        console.log([paymentInfo, paymentStatus]);
+      }
+      res.status(200);
     } catch (error) {
       if (error instanceof Error) {
         console.error(
