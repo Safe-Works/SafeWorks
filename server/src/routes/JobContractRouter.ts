@@ -47,8 +47,13 @@ jobContractRouter.post(
 jobContractRouter.get("/jobs", jobContractController.getAll as RequestHandler);
 
 jobContractRouter.get(
-  "/jobs/user/:uid",
-  jobContractController.getAllJobsFromUserUid as RequestHandler
+  "/jobs/client/:uid",
+  jobContractController.getAllJobsFromClient as RequestHandler
+);
+
+jobContractRouter.get(
+  "/jobs/worker/:uid",
+  jobContractController.getAllJobsFromWorker as RequestHandler
 );
 
 jobContractRouter.patch(
