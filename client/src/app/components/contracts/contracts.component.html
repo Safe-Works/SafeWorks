@@ -1,10 +1,18 @@
 <div class="loading-spinner" *ngIf="isLoading">
     <mat-spinner [diameter]="85"></mat-spinner>
 </div>
-
 <div class="container" *ngIf="contracts">
 
     <h4 class="mb-4 text-muted">Meus Contratos</h4>
+
+    <div class="d-flex justify-content-center align-items-center flex-column min-width-div" *ngIf="userInfo.isWorker">
+        <div class="col-md-5 col-lg-5 col-xl-5 min-width-div">
+            <select class="form-select mt-3" (change)="selectListener($event)" [(ngModel)]="selectOption">
+                <option value="worker_contracts">Serviços prestados</option>
+                <option value="client_contracts">Serviços contratados</option>
+            </select>
+        </div>
+    </div>
 
     <div class="row" *ngFor="let contract of contracts.jobs">
         <div class="py-1 h-1">
@@ -59,8 +67,10 @@
                                 </li>
                             </ul>
                         </div>
+
                         <div class="card-footer p-4">
                             <div class="d-flex flex-wrap justify-content-between">
+<!--                                <h6 *ngIf="!isContractFinalized(contract) " class="action-button" (click)="evaluateJob(contract.uid)">Avaliar</h6>-->
                                 <h6 *ngIf="!isContractFinalized(contract)" class="action-button" (click)="finishContract(contract.uid)">Finalizar</h6>
                                 <h6 class="action-button"><a href="#!">Cancelar</a></h6>
                                 <h6 class="action-button"><a href="#!">Denunciar</a></h6>
@@ -68,6 +78,7 @@
                         </div>
                     </div>
                 </div>
+
             </div>
         </div>
     </div>

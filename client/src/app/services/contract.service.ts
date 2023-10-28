@@ -69,4 +69,19 @@ export class ContractService {
             throw error;
         }
     }
+
+    public evaluateJob(evaluation: number, contractUid: any): Promise<any> {
+        const body = {
+            contractUid: contractUid,
+            evaluation: evaluation
+        };
+
+        try {
+            return firstValueFrom(this.http.post<string>(this.api + "evaluateJob", body));
+        }
+        catch (error) {
+            console.error(error);
+            throw error;
+        }
+    }
 }

@@ -387,29 +387,25 @@ class JobContractRepository extends AppRepository {
     }
   }
 
-  async getAllJobsFromWorker(workerUid: string): Promise<any> {
-    try {
-      let jobs;
+    async getAllJobsFromWorker(workerUid: string): Promise<any> {
+        try {
+            let jobs;
 
-      await db
-        .collection("JobContracts")
-        .where("worker.id", "==", workerUid)
-        .where("deleted", "==", null)
-        .orderBy("created", "asc")
-        .get()
-        .then((querySnapshot) => {
-          jobs = querySnapshot.docs.map((doc) => {
-            const data = doc.data();
-            return { ...data, uid: doc.id };
-          });
-        })
-        .catch((error) => {
-          console.error(
-            "Error getting all Worker Jobs from Firestore. ",
-            error
-          );
-          throw error;
-        });
+            await db.collection("JobContracts")
+                .where('worker.id', '==', workerUid)
+                .where('deleted', '==', null)
+                .orderBy('created', 'asc')
+                .get()
+                .then((querySnapshot) => {
+                    jobs = querySnapshot.docs.map((doc) => {
+                        const data = doc.data();
+                        return { ...data, uid: doc.id };
+                    })
+                })
+                .catch((error) => {
+                    console.error("Error getting all Worker Jobs from Firestore. ", error);
+                    throw error;
+                });
 
       return jobs;
     } catch (error) {
@@ -425,33 +421,35 @@ class JobContractRepository extends AppRepository {
       const jobData = jobDoc.data();
       let userUid;
 
-      if (jobDoc.exists && jobDoc.data()?.expired === false) {
-        if (userType === "client") {
-          userUid = jobData?.client.id;
-          await jobRef.update({ client_finished: true });
+            if (jobDoc.exists && jobDoc.data()?.expired === false) {
+                if (userType === 'client') {
+                    userUid = jobData?.client.id;
+                    await jobRef.update({ client_finished: true });
+                }
+                if (userType === 'worker') {
+                    userUid = jobData?.worker.id;
+                    await jobRef.update({ worker_finished: true });
+                }
+                const finishedJob = (await jobRef.get()).data();
+                await this.sendEmailFinishedContract(jobUid, finishedJob, userType);
+                if (finishedJob?.client_finished && finishedJob?.worker_finished) {
+                    await jobRef.update({ status: 'finished', paid: true, finished: this.getDateTime() });
+                    await this.transferPaymentToWorker(jobDoc.data());
+                }
+                if (userType === 'client') {
+                    return this.getAllJobsFromClient(userUid);
+                }
+                if (userType === 'worker') {
+                    return this.getAllJobsFromWorker(userUid);
+                }
+            } else {
+                return 'expired';
+            }
+        } catch (error) {
+            console.error('Error finishing contract: ', error);
+            throw error;
         }
-        if (userType === "worker") {
-          userUid = jobData?.worker.id;
-          await jobRef.update({ worker_finished: true });
-        }
-        const finishedJob = (await jobRef.get()).data();
-        await this.sendEmailFinishedContract(jobUid, finishedJob, userType);
-        if (finishedJob?.client_finished && finishedJob?.worker_finished) {
-          await jobRef.update({
-            status: "finished",
-            paid: true,
-            finished: this.getDateTime(),
-          });
-          await this.transferPaymentToWorker(jobDoc.data());
-        }
-      }
-
-      return this.getAllJobsFromClient(userUid);
-    } catch (error) {
-      console.error("Error finishing contract: ", error);
-      throw error;
     }
-  }
 
   async transferPaymentToWorker(job: any): Promise<any> {
     try {
@@ -472,55 +470,50 @@ class JobContractRepository extends AppRepository {
     }
   }
 
-  async sendEmailFinishedContract(
-    jobUid: string,
-    jobData: any,
-    userType: string
-  ): Promise<any> {
-    try {
-      const emailModel = new EmailNotificationModel();
-      const userRepository = new UserRepository();
-      const workerData = await userRepository.getById(jobData.worker.id);
-      const clientData = await userRepository.getById(jobData.worker.id);
+    async sendEmailFinishedContract(jobUid: string, jobData: any, userType: string): Promise<any> {
+        try {
+            const emailModel = new EmailNotificationModel();
+            const userRepository = new UserRepository();
+            const workerData = await userRepository.getById(jobData.worker.id);
+            const clientData = await userRepository.getById(jobData.client.id);
 
-      if (userType === "client") {
-        const clientEmailContent = emailModel.clientFinishedContractToWorker(
-          jobData,
-          jobUid
-        );
-        await emailModel.sendCustomEmail(
-          workerData?.email,
-          "Cliente finalizou o contrato.",
-          clientEmailContent
-        );
-      }
-      if (userType === "worker") {
-        const workerEmailContent = emailModel.workerFinishedContractToClient(
-          jobData,
-          jobUid
-        );
-        await emailModel.sendCustomEmail(
-          clientData?.email,
-          "Trabalhador finalizou o contrato.",
-          workerEmailContent
-        );
-        if (jobData?.client_finished && jobData?.worker_finished) {
-          const finishedEmailContent = emailModel.finishedContract(
-            jobData,
-            jobUid
-          );
-          await emailModel.sendCustomEmail(
-            workerData?.email,
-            "Contrato finalizado!",
-            finishedEmailContent
-          );
+            if (userType === 'client') {
+                const clientEmailContent = emailModel.clientFinishedContractToWorker(jobData, jobUid);
+                await emailModel.sendCustomEmail(workerData?.email, "Cliente finalizou o contrato.", clientEmailContent);
+            }
+            if (userType === 'worker') {
+                const workerEmailContent = emailModel.workerFinishedContractToClient(jobData, jobUid);
+                await emailModel.sendCustomEmail(clientData?.email, "Trabalhador finalizou o contrato.", workerEmailContent);
+                if (jobData?.client_finished && jobData?.worker_finished) {
+                    const finishedEmailContent = emailModel.finishedContract(jobData, jobUid);
+                    await emailModel.sendCustomEmail(workerData?.email, "Contrato finalizado!", finishedEmailContent);
+                }
+            }
+        } catch (error) {
+            console.error("Error to send finished contract email: ", error);
+            throw error;
         }
-      }
-    } catch (error) {
-      console.error("Error to send finished contract email: ", error);
-      throw error;
     }
-  }
+
+    async evaluateJob(evaluation: any): Promise<any> {
+        try {
+            const evaluationNumber = evaluation.evaluation;
+            const contractUid = evaluation.contractUid;
+
+            const evaluationData = {
+                evaluation: evaluationNumber
+            };
+
+            const contractRef = db.collection("JobContracts").doc(contractUid);
+
+            await contractRef.update(evaluationData);
+
+        } catch (error) {
+            console.error("Error adding new evaluation: ", error);
+            throw error;
+        }
+    }
+
 }
 
 export default JobContractRepository;

@@ -4,6 +4,7 @@ import { Router } from '@angular/router';
 import { UserAuth } from 'src/app/auth/User.Auth';
 import { ContractService } from 'src/app/services/contract.service';
 import Swal from 'sweetalert2';
+import {JobService} from "../../services/job.service";
 
 @Component({
   selector: 'app-contracts',
@@ -17,13 +18,15 @@ export class ContractsComponent {
   isLoading: boolean = false;
   firstFinished: string = 'Aguardando conclusão';
   lastFinished: string = 'Finalizado';
-  isWorker: string = '';
+  isWorker: boolean = false;
+  selectOption: string = 'worker_contracts';
 
   constructor(
     private contractService: ContractService,
     private userAuth: UserAuth,
     public router: Router,
     private _snackBar: MatSnackBar,
+    private jobService: JobService,
   ) {}
 
   async ngOnInit() {
@@ -45,8 +48,18 @@ export class ContractsComponent {
       confirmButtonColor: '#3085d6',
       cancelButtonColor: '#d33',
       confirmButtonText: 'Sim, finalizar!',
-      cancelButtonText: 'Cancelar'
+      cancelButtonText: 'Cancelar',
+      input: 'range',
+      inputLabel: 'Avalie o serviço, escolha uma nota de 1 a 5',
+      inputValue: 0,
+      inputAttributes: {
+        min: '0',
+        max: '5',
+        step: '1',
+      }
     }).then(async (result) => {
+      await this.evaluateJob(contractUid, result);
+
       try {
         if (result.isConfirmed) {
           this.isLoading = true;
@@ -76,7 +89,7 @@ export class ContractsComponent {
   }
 
   getUserType(): string {
-    if (this.userInfo.isWorker) {
+    if (this.isWorker) {
       return 'worker';
     } else {
       return 'client';
@@ -111,12 +124,48 @@ export class ContractsComponent {
     }
   }
 
-  viewAdvertisement(uid: any) {
+  viewAdvertisement(uid: any): void {
     this.router.navigate(['/jobs', 'view', uid]);
   }
 
-  viewProfile(uid: any) {
+  viewProfile(uid: any): void {
     this.router.navigate(['/profile', uid]);
   }
 
+  selectListener(event: any): void {
+    const option = event.target.value;
+    this.selectOption = option;
+    if (option === 'worker_contracts') {
+      this.fetchWorkerContracts();
+    }
+    if (option === 'client_contracts') {
+      this.fetchClientContracts();
+    }
+  }
+
+  async fetchWorkerContracts() {
+    this.contracts = await this.contractService.GetAllFromWorker(this.userAuth.currentUser?.uid ?? '');
+    this.isWorker = true;
+  }
+
+  async fetchClientContracts() {
+    this.contracts = await this.contractService.GetAllFromClient(this.userAuth.currentUser?.uid ?? '');
+    this.isWorker = false;
+  }
+
+  async evaluateJob(contractUid: string, result: any) {
+    if (result.isConfirmed) {
+      try {
+        await this.contractService.evaluateJob(result.value, contractUid);
+
+        if (result.value) {
+          Swal.fire("Avaliação salva com sucesso");
+        }
+      } catch (error: any) {
+        console.error('evaluateJob error: ', error);
+        this.openSnackBar("Ocorreu um erro ao salvar a avaliação!", "OK", "snackbar-error");
+      }
+    }
+
+  }
 }

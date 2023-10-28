@@ -1,5 +1,5 @@
 import { HttpClient } from "@angular/common/http";
-import { Observable } from "rxjs";
+import { Observable, firstValueFrom } from "rxjs";
 import Job from "../models/job-advertisement.model";
 import { Injectable } from "@angular/core";
 import { catchError, tap } from 'rxjs/operators';
@@ -130,5 +130,4 @@ export class JobService {
             })
         )
     };
-
 }
