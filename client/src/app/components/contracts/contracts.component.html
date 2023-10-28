@@ -56,7 +56,7 @@
                                 <li class="step0 active" id="step0 {{ contract.uid }}">
                                     <span>Aguardando pagamento</span>
                                 </li>
-                                <li class="step1 active" id="step1 {{ contract.uid }}">
+                                <li class="step1" id="step1 {{ contract.uid }}">
                                     <span style="margin-left: 22px; margin-top: 12px;">Contratado</span>
                                 </li>
                                 <li class="step2 text-center" id="step2 {{ contract.uid }}">
@@ -68,7 +68,7 @@
                             </ul>
                         </div>
 
-                        <div class="card-footer p-4">
+                        <div class="card-footer p-4" *ngIf="(contract.paid)">
                             <div class="d-flex flex-wrap justify-content-between">
 <!--                                <h6 *ngIf="!isContractFinalized(contract) " class="action-button" (click)="evaluateJob(contract.uid)">Avaliar</h6>-->
                                 <h6 *ngIf="!isContractFinalized(contract)" class="action-button" (click)="finishContract(contract.uid)">Finalizar</h6>
