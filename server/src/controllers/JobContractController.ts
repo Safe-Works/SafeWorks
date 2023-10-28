@@ -73,7 +73,7 @@ class JobContractController {
 
   async checkout(req: Request, res: Response): Promise<void> {
     const checkout: CheckoutModel = req.body;
-    const URL = "https://safe-works.azurewebsites.net/#/";
+    const URL = "https://safe-works.azurewebsites.net/#";
     const URL_NOTIFY =
       "https://safeworks-server.vercel.app";
     try {
