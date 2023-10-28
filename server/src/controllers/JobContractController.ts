@@ -75,7 +75,7 @@ class JobContractController {
     const checkout: CheckoutModel = req.body;
     const URL = "https://safe-works.azurewebsites.net/#/";
     const URL_NOTIFY =
-      "https://9071-2804-14c-8797-c352-3006-1ec0-4266-11b1.ngrok.io";
+      "https://safeworks-server.vercel.app";
     try {
       const preference = new Preference(client);
       const response = await preference.create({
