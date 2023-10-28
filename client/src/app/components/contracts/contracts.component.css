@@ -50,7 +50,7 @@
 
 #progressbar-1 li:after {
     content: '';
-    width: 81%;
+    width: 121%;
     height: 2px;
     background: var(--safeworks-blue);
     position: absolute;
@@ -60,13 +60,13 @@
     z-index: -1;
 }
 
-#progressbar-1 li:nth-child(2):after {
-    left: 50%
-}
-
 #progressbar-1 li:nth-child(1):after {
     left: 25%;
-    width: 121%
+    width: 121%;
+}
+#progressbar-1 li:nth-child(2):after {
+    left: 25%;
+    width: 121%;
 }
 
 #progressbar-1 li:nth-child(3):after {

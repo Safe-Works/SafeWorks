@@ -122,7 +122,6 @@ class JobContractRepository extends AppRepository {
         await jobContractRef.update(updatedContract);
 
         // Se a propriedade 'paid' for atualizada, atualiza o status
-        console.log("updatedData.paid", updatedData.paid);
         if (updatedData.paid !== undefined) {
           const newStatus = updatedData.paid ? "open" : "pending";
           await jobContractRef.update({ status: newStatus });
