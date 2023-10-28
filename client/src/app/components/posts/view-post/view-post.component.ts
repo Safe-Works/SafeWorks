@@ -118,21 +118,35 @@ export class ViewPostComponent {
           }).then(async (result) => {
             try {
               if (result.isConfirmed) {
-                const checkoutContract: ContractCheckout = {
-                  id: this.jobInfo.uid || "",
-                  title: this.jobInfo.title,
-                  price: this.jobInfo.price,
-                  description: this.jobInfo.description,
-                };
-                if (!this.jobInfo.media[0].includes(".png"))
-                  checkoutContract.picture_url = this.jobInfo.media[0];
-                const responsePromise =
-                  this.contractService.CreatePreference(checkoutContract);
-                const response = await responsePromise;
-                if (response.url) {
-                  window.location.href = response.url;
+                this.isLoading = true;
+                let responseContract =
+                  await this.contractService.CreateJobContract(
+                    this.jobInfo,
+                    true
+                  );
+                if (responseContract.statusCode === 201) {
+                  const checkoutContract: ContractCheckout = {
+                    id: responseContract.jobAd,
+                    title: this.jobInfo.title,
+                    price: this.jobInfo.price,
+                    description: this.jobInfo.description,
+                  };
+                  if (!this.jobInfo.media[0].includes(".png"))
+                    checkoutContract.picture_url = this.jobInfo.media[0];
+                  const responsePromise =
+                    this.contractService.CreatePreference(checkoutContract);
+                  const response = await responsePromise;
+                  if (response.init_point) {
+                    window.location.href = response.init_point;
+                    this.isLoading = false;
+                  }
                 } else {
-                  console.error("Resposta inesperada do serviço:", response);
+                  this.isLoading = false;
+                  this.openSnackBar(
+                    "Ocorreu um erro ao contratar o serviço!",
+                    "OK",
+                    "snackbar-error"
+                  );
                 }
               }
             } catch (error: any) {

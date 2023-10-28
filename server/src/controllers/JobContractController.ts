@@ -3,7 +3,6 @@ import JobContractRepository from "../repositories/JobContractRepository";
 import * as admin from "firebase-admin";
 import CheckoutModel from "../models/CheckoutModel";
 import { MercadoPagoConfig, Preference, Payment } from "MercadoPago";
-import { CreatePreferencePayload } from "mercadopago/models/preferences/create-payload.model";
 const jobContractRepository = new JobContractRepository();
 
 interface PaginatedResponse {
@@ -35,10 +34,12 @@ class JobContractController {
             */
       const jobContract: JobContract = req.body;
       const hasSufficientBalance =
-        await jobContractRepository.verifyUserBalance(
-          jobContract.client.id,
-          jobContract.price
-        );
+        jobContract.paid === true
+          ? await jobContractRepository.verifyUserBalance(
+              jobContract.client.id,
+              jobContract.price
+            )
+          : true;
       if (!hasSufficientBalance) {
         res.status(402).json({
           statusCode: 402,
@@ -73,7 +74,7 @@ class JobContractController {
     const checkout: CheckoutModel = req.body;
     const URL = "https://safe-works.azurewebsites.net/#/";
     const URL_NOTIFY =
-      "https://4557-2804-14c-8797-c352-30a5-27ab-ea50-d911.ngrok.io";
+      "https://597b-2804-14c-8797-c352-3006-1ec0-4266-11b1.ngrok.io";
     try {
       const preference = new Preference(client);
       const response = await preference.create({
@@ -84,20 +85,20 @@ class JobContractController {
               title: checkout.title,
               quantity: 1,
               unit_price: checkout.price,
-              picture_url: checkout.picture_url
+              picture_url: checkout.picture_url,
             },
           ],
           auto_return: "approved",
           back_urls: {
-            success: `${URL}`,
-            failure: `${URL}`,
+            success: `${URL}/contracts`,
+            failure: `${URL}/contracts`,
           },
           notification_url: `${URL_NOTIFY}/api/jobs/notify`,
         },
       });
 
       // Retorna a resposta para o cliente
-      res.status(200).json({ url: response.init_point });
+      res.status(200).json(response);
     } catch (error) {
       if (error instanceof Error) {
         console.error(
@@ -115,26 +116,46 @@ class JobContractController {
 
   async notify(req: Request, res: Response): Promise<void> {
     const { query } = req;
-    console.log(query);
     const topic = query.topic || query.type;
     const payment = new Payment(client);
 
     try {
       if (topic === "payment") {
         const paymentId = query.id || query["data.id"];
-        let paymentInfo = await payment.get({
+        const paymentInfo = await payment.get({
           id: Number(paymentId),
         });
-        let paymentStatus = paymentInfo.status;
-        console.log([paymentInfo, paymentStatus]);
+
+        if (
+          paymentInfo.status === "approved" &&
+          paymentInfo.additional_info?.items
+        ) {
+          const contractId = paymentInfo.additional_info.items[0].id;
+          const jobContract = await jobContractRepository.getById(contractId);
+
+          if (
+            !jobContract.paid &&
+            jobContract.status === "pending"
+          ) {
+            const responseUpdateContract = await jobContractRepository.update(
+              jobContract.uid,
+              {
+                paid: true,
+                payment_id: paymentId as string,
+                status: "open",
+              }
+            );
+
+            if (responseUpdateContract.statusCode === 201) {
+              res.status(201).json({ statusCode: 201, message: "success" });
+              return;
+            }
+          };
+        }
       }
-      res.status(200);
     } catch (error) {
       if (error instanceof Error) {
-        console.error(
-          "Erro ao adicionar contrato de trabalho: ",
-          error.message
-        );
+        console.error("Erro ao gerenciar pagamento: ", error.message);
         res.status(500).json({
           statusCode: 500,
           error: "jobContract/failed-add",
@@ -142,6 +163,9 @@ class JobContractController {
         });
       }
     }
+
+    // Se não houver correspondência ou algum erro, retornar uma resposta padrão
+    res.status(200).json({ statusCode: 200, message: "success" });
   }
 
   async getAll(req: Request, res: Response): Promise<void> {
@@ -218,57 +242,75 @@ class JobContractController {
     }
   }
 
-    async getAllJobsFromClient(req: Request, res: Response): Promise<void> {
-        try {
-            const clientUid = req.params.uid;
-            const jobs = await jobContractRepository.getAllJobsFromClient(clientUid);
-            if (jobs) {
-                res.status(200).json({ statusCode: 200, jobs: jobs });
-            } else {
-                res.status(404).json({ statusCode: 404, error: 'jobContract/not-found' });
-            }
-        } catch (error) {
-            if (error instanceof Error) {
-                console.error('Error to get all Jobs from User UID: ', error.message);
-                res.status(500).json({ statusCode: 500, error: 'jobContract/failed-getAllFromClient', message: error.message })
-            }
-        }
+  async getAllJobsFromClient(req: Request, res: Response): Promise<void> {
+    try {
+      const clientUid = req.params.uid;
+      const jobs = await jobContractRepository.getAllJobsFromClient(clientUid);
+      if (jobs) {
+        res.status(200).json({ statusCode: 200, jobs: jobs });
+      } else {
+        res
+          .status(404)
+          .json({ statusCode: 404, error: "jobContract/not-found" });
+      }
+    } catch (error) {
+      if (error instanceof Error) {
+        console.error("Error to get all Jobs from User UID: ", error.message);
+        res.status(500).json({
+          statusCode: 500,
+          error: "jobContract/failed-getAllFromClient",
+          message: error.message,
+        });
+      }
     }
+  }
 
-    async getAllJobsFromWorker(req: Request, res: Response): Promise<void> {
-        try {
-            const workerUid = req.params.uid;
-            const jobs = await jobContractRepository.getAllJobsFromWorker(workerUid);
-            if (jobs) {
-                res.status(200).json({ statusCode: 200, jobs: jobs });
-            } else {
-                res.status(404).json({ statusCode: 404, error: 'jobContract/not-found' });
-            }
-        } catch (error) {
-            if (error instanceof Error) {
-                console.error('Error to get all Jobs from User UID: ', error.message);
-                res.status(500).json({ statusCode: 500, error: 'jobContract/failed-getAllFromWorker', message: error.message })
-            }
-        }
+  async getAllJobsFromWorker(req: Request, res: Response): Promise<void> {
+    try {
+      const workerUid = req.params.uid;
+      const jobs = await jobContractRepository.getAllJobsFromWorker(workerUid);
+      if (jobs) {
+        res.status(200).json({ statusCode: 200, jobs: jobs });
+      } else {
+        res
+          .status(404)
+          .json({ statusCode: 404, error: "jobContract/not-found" });
+      }
+    } catch (error) {
+      if (error instanceof Error) {
+        console.error("Error to get all Jobs from User UID: ", error.message);
+        res.status(500).json({
+          statusCode: 500,
+          error: "jobContract/failed-getAllFromWorker",
+          message: error.message,
+        });
+      }
     }
+  }
 
-    async finishContract(req: Request, res: Response): Promise<void> {
-        try {
-            const jobUid = req.params.uid;
-            const userType = req.params.user_type;
-            const jobs = await jobContractRepository.finishContract(jobUid, userType);
-            if (jobs) {
-                res.status(200).json({ statusCode: 200, jobs: jobs });
-            } else {
-                res.status(404).json({ statusCode: 404, error: 'jobContract/not-found' });
-            }
-        } catch (error) {
-            if (error instanceof Error) {
-                console.error('Error to finish the contract: ', error.message);
-                res.status(500).json({ statusCode: 500, error: 'jobContract/failed-finishContract', message: error.message })
-            }
-        }
+  async finishContract(req: Request, res: Response): Promise<void> {
+    try {
+      const jobUid = req.params.uid;
+      const userType = req.params.user_type;
+      const jobs = await jobContractRepository.finishContract(jobUid, userType);
+      if (jobs) {
+        res.status(200).json({ statusCode: 200, jobs: jobs });
+      } else {
+        res
+          .status(404)
+          .json({ statusCode: 404, error: "jobContract/not-found" });
+      }
+    } catch (error) {
+      if (error instanceof Error) {
+        console.error("Error to finish the contract: ", error.message);
+        res.status(500).json({
+          statusCode: 500,
+          error: "jobContract/failed-finishContract",
+          message: error.message,
+        });
+      }
     }
+  }
 }
 
 export default JobContractController;

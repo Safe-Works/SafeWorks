@@ -13,7 +13,7 @@ export class ContractService {
     private api: string = environment.apiEndpoint + '/api/jobs/';
     constructor(private http: HttpClient, private user: UserAuth) { }
 
-    public async CreateJobContract(advertisement: JobAdvertisement): Promise<any> {
+    public async CreateJobContract(advertisement: JobAdvertisement, external_payment?: boolean): Promise<any> {
         const contractData = {
             advertisement: {
                 title: advertisement.title,
@@ -28,6 +28,7 @@ export class ContractService {
                 name: advertisement.worker?.name || "",
             },
             price: advertisement.price,
+            paid: external_payment ? false : true,
         };
         return await this.http.post<any>(this.api, contractData).toPromise();
     }

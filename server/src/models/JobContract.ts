@@ -12,6 +12,8 @@ type JobContract = {
     workerFinished: boolean, // se o trabalhador marcou o contrato como finalizado
     finished?: Date, // datetime que o contrato foi finalizado
     created: Date,
-    modified?: Date,
-    deleted?: Date
+    modified?: string,
+    deleted?: Date,
+    payment_id?: string,
+    status?: string,
 }

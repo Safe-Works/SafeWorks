@@ -22,6 +22,7 @@ jobContractRouter.post(
         id: Joi.string().max(28).required(),
       }).required(),
       price: Joi.number().required(),
+      paid: Joi.boolean()
     }),
   }),
   jobContractController.add as RequestHandler
