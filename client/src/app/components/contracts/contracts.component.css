@@ -6,13 +6,19 @@
 #progressbar-1 li {
     list-style-type: none;
     font-size: 13px;
-    width: 33.33%;
+    width: 25%;
     float: left;
     position: relative;
 }
-
-#progressbar-1 .step1:before {
+#progressbar-1 .step0:before {
     content: "1";
+    color: var(--white);
+    width: 1.8rem;
+    margin-left: 1.5rem;
+    padding-left: 0.7rem;
+}
+#progressbar-1 .step1:before {
+    content: "2";
     color: var(--white);
     width: 1.8rem;
     margin-left: 1.5rem;
@@ -20,13 +26,13 @@
 }
 
 #progressbar-1 .step2:before {
-    content: "2";
+    content: "3";
     color: var(--white);
     width: 1.8rem;
 }
 
 #progressbar-1 .step3:before {
-    content: "3";
+    content: "4";
     color: var(--white);
     width: 1.8rem;
     margin-right: 1.5rem;
@@ -44,7 +50,7 @@
 
 #progressbar-1 li:after {
     content: '';
-    width: 121%;
+    width: 81%;
     height: 2px;
     background: var(--safeworks-blue);
     position: absolute;
@@ -65,9 +71,12 @@
 
 #progressbar-1 li:nth-child(3):after {
     left: 25%;
-    width: 50%;
+    width: 130%;
 }
-
+#progressbar-1 li:nth-child(4):after {
+    left: 25%;
+    width: 0%;
+}
 #progressbar-1 li.active:before,
 #progressbar-1 li.active:after {
     background: var(--interaction-blue);

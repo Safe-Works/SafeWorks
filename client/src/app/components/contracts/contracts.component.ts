@@ -97,6 +97,10 @@ export class ContractsComponent {
   }
 
   setProgressBarStatus(contract: any): void {
+    if (contract.paid) {
+      const element = document.getElementById('step1 ' + contract.uid);
+      element?.classList.add('active');
+    }
     if (contract.worker_finished && contract.client_finished) {
       const element = document.getElementById('step3 ' + contract.uid);
       element?.classList.add('active');
