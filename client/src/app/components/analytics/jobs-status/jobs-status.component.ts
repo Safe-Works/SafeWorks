@@ -16,7 +16,6 @@ export class JobsStatusComponent implements OnInit {
   }
 
   setJobsStatusData() {
-    console.log(this.jobsStatusData);
     this.paginatedJobsData.forEach((job: { advertisement: {id: number, title: string}; price: number; created: string; }) => {
       this.jobsStatusData.push({
         title: job.advertisement.title,

@@ -108,8 +108,6 @@ class JobContractRepository extends AppRepository {
     try {
       const jobContractRef = db.collection("JobContracts").doc(jobContractId);
       const jobContractDoc = await jobContractRef.get();
-      console.log("entrou");
-
       if (jobContractDoc.exists) {
         const existingData = jobContractDoc.data() as JobContract;
 

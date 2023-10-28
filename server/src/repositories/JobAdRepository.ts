@@ -167,7 +167,6 @@ class JobAdRepository extends AppRepository {
                 .get();
 
             snapshotTitle.forEach(doc => {
-                console.log(doc.data().deleted)
                 if (!doc.data().deleted) {
                     results.push(doc.data());
                 }

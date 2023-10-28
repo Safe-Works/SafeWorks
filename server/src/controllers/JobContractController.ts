@@ -120,22 +120,17 @@ class JobContractController {
     const payment = new Payment(client);
 
     try {
-      console.log("entrou no notify");
-
       if (topic === "payment") {
-        console.log("entrou no payment");
         const paymentId = query.id || query["data.id"];
         const paymentInfo = await payment.get({
           id: Number(paymentId),
         });
-
         if (
           paymentInfo.status === "approved" &&
           paymentInfo.additional_info?.items
         ) {
           const contractId = paymentInfo.additional_info.items[0].id;
           const jobContract = await jobContractRepository.getById(contractId);
-          console.log("jobContract.status", jobContract.status);
           if (!jobContract.paid && jobContract.status === "pending") {
             const responseUpdateContract = await jobContractRepository.update(
               jobContract.uid,
