@@ -16,4 +16,6 @@ type JobContract = {
     deleted?: Date,
     payment_id?: string,
     status?: string,
+    payment_status?: string,
+    external_payment?: boolean,
 }

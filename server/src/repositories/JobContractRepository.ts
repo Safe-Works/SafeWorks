@@ -5,7 +5,10 @@ import EmailNotificationModel from "../models/EmailNotificationModel";
 import UserRepository from "./UserRepository";
 
 class JobContractRepository extends AppRepository {
-  async add(jobContract: JobContract): Promise<any> {
+  async add(
+    jobContract: JobContract,
+    external_payment?: boolean
+  ): Promise<any> {
     try {
       if (jobContract.client.id === jobContract.worker.id) {
         throw new Error(
@@ -55,44 +58,43 @@ class JobContractRepository extends AppRepository {
 
         await advertisementRef.update({ Contracts: contractsArray });
       }
+      if (!external_payment) {
+        await this.updateUserBalance(jobContract.client.id, -jobContract.price);
+        const clientContact = await this.updateUserContractedServices(
+          jobContract.client.id,
+          uid,
+          jobContract.advertisement.title,
+          jobContract.price
+        );
+        const workerContact = await this.updateWorkerSelledServices(
+          jobContract.worker.id,
+          uid,
+          jobContract.advertisement.title,
+          jobContract.price
+        );
+        const emailModel = new EmailNotificationModel();
+        const clientEmailContent = emailModel.createEmailClientNotification(
+          jobContract,
+          uid,
+          workerContact
+        );
+        const workerEmailContent = emailModel.createEmailWorkerNotification(
+          jobContract,
+          uid,
+          clientContact
+        );
 
-      await this.updateUserBalance(jobContract.client.id, -jobContract.price);
-
-      const clientContact = await this.updateUserContractedServices(
-        jobContract.client.id,
-        uid,
-        jobContract.advertisement.title,
-        jobContract.price
-      );
-      const workerContact = await this.updateWorkerSelledServices(
-        jobContract.worker.id,
-        uid,
-        jobContract.advertisement.title,
-        jobContract.price
-      );
-
-      const emailModel = new EmailNotificationModel();
-      const clientEmailContent = emailModel.clientEmailWorkerNotification(
-        jobContract,
-        uid,
-        workerContact
-      );
-      const workerEmailContent = emailModel.createEmailWorkerNotification(
-        jobContract,
-        uid,
-        clientContact
-      );
-
-      await emailModel.sendCustomEmail(
-        workerContact?.email,
-        "Venda de serviço!",
-        workerEmailContent
-      );
-      await emailModel.sendCustomEmail(
-        clientContact?.email,
-        "Serviço contratado!",
-        clientEmailContent
-      );
+        await emailModel.sendCustomEmail(
+          workerContact?.email,
+          "Venda de serviço!",
+          workerEmailContent
+        );
+        await emailModel.sendCustomEmail(
+          clientContact?.email,
+          "Serviço contratado!",
+          clientEmailContent
+        );
+      }
       return uid;
     } catch (error) {
       console.error("Error adding job contract to Firestore: ", error);
@@ -106,6 +108,7 @@ class JobContractRepository extends AppRepository {
     try {
       const jobContractRef = db.collection("JobContracts").doc(jobContractId);
       const jobContractDoc = await jobContractRef.get();
+      console.log("entrou");
 
       if (jobContractDoc.exists) {
         const existingData = jobContractDoc.data() as JobContract;
@@ -121,12 +124,49 @@ class JobContractRepository extends AppRepository {
         await jobContractRef.update(updatedContract);
 
         // Se a propriedade 'paid' for atualizada, atualiza o status
+        console.log("updatedData.paid", updatedData.paid);
         if (updatedData.paid !== undefined) {
           const newStatus = updatedData.paid ? "open" : "pending";
           await jobContractRef.update({ status: newStatus });
+          if (updatedData.paid) {
+            const clientContact = await this.updateUserContractedServices(
+              updatedContract.client.id,
+              jobContractId,
+              updatedContract.advertisement.title,
+              updatedContract.price
+            );
+            const workerContact = await this.updateWorkerSelledServices(
+              updatedContract.worker.id,
+              jobContractId,
+              updatedContract.advertisement.title,
+              updatedContract.price
+            );
+            const emailModel = new EmailNotificationModel();
+            const clientEmailContent = emailModel.createEmailClientNotification(
+              updatedContract,
+              jobContractId,
+              workerContact
+            );
+            const workerEmailContent = emailModel.createEmailWorkerNotification(
+              updatedContract,
+              jobContractId,
+              clientContact
+            );
+
+            await emailModel.sendCustomEmail(
+              workerContact?.email,
+              "Venda de serviço!",
+              workerEmailContent
+            );
+            await emailModel.sendCustomEmail(
+              clientContact?.email,
+              "Serviço contratado!",
+              clientEmailContent
+            );
+          }
         }
 
-        return ({ statusCode: 201});
+        return { statusCode: 201 };
       } else {
         throw new Error(
           `Contrato de trabalho com ID ${jobContractId} não encontrado.`

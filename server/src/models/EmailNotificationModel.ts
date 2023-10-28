@@ -109,14 +109,23 @@ class EmailNotificationModel {
                         </div>
                         <div class="content">
                             <p>Olá ${contract.worker.name},</p>
-                            <p>Você recebeu um novo contrato para o serviço: ${contract.advertisement.title}</p>
+                            <p>Você recebeu um novo contrato para o serviço: ${
+                              contract.advertisement.title
+                            }</p>
                             <p>ID do Contrato: ${contractId}</p>
                             <p>Detalhes do Contrato:</p>
                             <ul>
                                 <li>Cliente: ${contract.client.name}</li>
                                 <li>E-mail: ${clientContact.email}</li>
-                                <li>Telefone: ${clientContact.telephone_number}</li>
+                                <li>Telefone: ${
+                                  clientContact.telephone_number
+                                }</li>
                                 <li>Valor: R$${contract.price}</li>
+                                <li>Pagamento: ${
+                                  contract.status === "open"
+                                    ? "Aprovado"
+                                    : "Pendente"
+                                }</li>
                             </ul>
                             <p>Entre em contato com o seu cliente para discutir os detalhes.</p>
                         </div>
@@ -127,10 +136,10 @@ class EmailNotificationModel {
                 </body>
             </html>
         `;
-      
+
     return emailHtml;
   }
-  
+
   createEmailHelpRequest(helpRequest: any) {
     const emailHtml = `
             <html>
@@ -216,7 +225,7 @@ class EmailNotificationModel {
                             <ul>
                                 <li>${
                                   helpRequest.contractId
-                                    ? 'ID:' + helpRequest.contractId
+                                    ? "ID:" + helpRequest.contractId
                                     : "Nenhum contrato foi especificado."
                                 }</li>
                             </ul>
@@ -228,11 +237,11 @@ class EmailNotificationModel {
                 </body>
             </html>
         `;
-    
+
     return emailHtml;
   }
-  
-  clientEmailWorkerNotification(
+
+  createEmailClientNotification(
     contract: any,
     contractId: string,
     workerContact: any
@@ -328,12 +337,12 @@ class EmailNotificationModel {
                 </body>
             </html>
         `;
-      
-        return emailHtml;
-    }
 
-    workerFinishedContractToClient(contract: any, contractId: string) {
-        const emailHtml = `
+    return emailHtml;
+  }
+
+  workerFinishedContractToClient(contract: any, contractId: string) {
+    const emailHtml = `
             <html>
                 <head>
                     <style>
@@ -424,11 +433,11 @@ class EmailNotificationModel {
             </html>
         `;
 
-        return emailHtml;
-    }
+    return emailHtml;
+  }
 
-    clientFinishedContractToWorker(contract: any, contractId: string) {
-        const emailHtml = `
+  clientFinishedContractToWorker(contract: any, contractId: string) {
+    const emailHtml = `
             <html>
                 <head>
                     <style>
@@ -519,11 +528,11 @@ class EmailNotificationModel {
             </html>
         `;
 
-        return emailHtml;
-    }
+    return emailHtml;
+  }
 
-    finishedContract(contract: any, contractId: string) {
-        const emailHtml = `
+  finishedContract(contract: any, contractId: string) {
+    const emailHtml = `
             <html>
                 <head>
                     <style>
@@ -615,8 +624,8 @@ class EmailNotificationModel {
             </html>
         `;
 
-        return emailHtml;
-    }
+    return emailHtml;
+  }
 }
 
 export default EmailNotificationModel;

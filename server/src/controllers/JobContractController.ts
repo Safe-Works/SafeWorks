@@ -49,13 +49,13 @@ class JobContractController {
         return;
       }
 
-      const result = await jobContractRepository.add(jobContract);
+      const result = await jobContractRepository.add(jobContract, jobContract.external_payment);
       /* 
-                #swagger.responses[201] = { 
-                    schema: { $ref: "#/definitions/CreatedJobContract" },
-                    description: 'Created JobContract UID' 
-                } 
-            */
+        #swagger.responses[201] = { 
+            schema: { $ref: "#/definitions/CreatedJobContract" },
+            description: 'Created JobContract UID' 
+        } 
+      */
       res.status(201).json({ statusCode: 201, jobAd: result });
     } catch (error) {
       if (error instanceof Error) {
@@ -74,7 +74,7 @@ class JobContractController {
     const checkout: CheckoutModel = req.body;
     const URL = "https://safe-works.azurewebsites.net/#/";
     const URL_NOTIFY =
-      "https://597b-2804-14c-8797-c352-3006-1ec0-4266-11b1.ngrok.io";
+      "https://9071-2804-14c-8797-c352-3006-1ec0-4266-11b1.ngrok.io";
     try {
       const preference = new Preference(client);
       const response = await preference.create({
@@ -120,7 +120,10 @@ class JobContractController {
     const payment = new Payment(client);
 
     try {
+      console.log("entrou no notify");
+
       if (topic === "payment") {
+        console.log("entrou no payment");
         const paymentId = query.id || query["data.id"];
         const paymentInfo = await payment.get({
           id: Number(paymentId),
@@ -132,17 +135,15 @@ class JobContractController {
         ) {
           const contractId = paymentInfo.additional_info.items[0].id;
           const jobContract = await jobContractRepository.getById(contractId);
-
-          if (
-            !jobContract.paid &&
-            jobContract.status === "pending"
-          ) {
+          console.log("jobContract.status", jobContract.status);
+          if (!jobContract.paid && jobContract.status === "pending") {
             const responseUpdateContract = await jobContractRepository.update(
               jobContract.uid,
               {
                 paid: true,
                 payment_id: paymentId as string,
                 status: "open",
+                payment_status: paymentInfo.status,
               }
             );
 
@@ -150,7 +151,7 @@ class JobContractController {
               res.status(201).json({ statusCode: 201, message: "success" });
               return;
             }
-          };
+          }
         }
       }
     } catch (error) {

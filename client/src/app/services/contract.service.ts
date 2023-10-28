@@ -29,6 +29,7 @@ export class ContractService {
             },
             price: advertisement.price,
             paid: external_payment ? false : true,
+            external_payment: external_payment,
         };
         return await this.http.post<any>(this.api, contractData).toPromise();
     }
