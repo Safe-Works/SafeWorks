@@ -1,4 +1,5 @@
-type Certification = {
+interface Complaint {
+    uid?: string,
     title: string,
     description: string,
     status: string,
@@ -11,4 +12,4 @@ type Certification = {
     deleted: Date
 }
 
-export default Certification;
+export default Complaint;
