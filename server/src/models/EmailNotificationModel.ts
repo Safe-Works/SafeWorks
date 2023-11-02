@@ -31,77 +31,82 @@ class EmailNotificationModel {
     }
   }
 
+  getStyle(): string {
+    return `<html>
+        <head>
+            <style>
+                body {
+                    font-family: Arial, sans-serif;
+                    background-color: #f4f4f4;
+                    margin: 0;
+                    padding: 0;
+                }
+            
+                h1 {
+                    color: #FFA500;
+                }
+            
+                p {
+                    font-size: 16px;
+                    line-height: 1.6;
+                    color: #666;
+                }
+            
+                ul {
+                    list-style: none;
+                    padding: 0;
+                }
+            
+                ul li {
+                    margin-bottom: 10px;
+                }
+            
+                a {
+                    color: #007bff;
+                    text-decoration: none;
+                }
+            
+                .container {
+                    background: #fff;
+                    max-width: 600px;
+                    margin: 0 auto;
+                    padding: 20px;
+                    border: 2px solid #2C3E50;
+                    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+                }
+            
+                .header {
+                    background: #2C3E50;
+                    color: #FFA500;
+                    text-align: center;
+                    padding: 10px 0;
+                }
+            
+                .header h1 {
+                    margin: 0;
+                    font-size: 24px;
+                }
+            
+                .content {
+                    padding: 20px 0;
+                }
+            
+                .signature {
+                    text-align: center;
+                    margin-top: 20px;
+                }
+            </style>
+        </head>`
+  }
+
   createEmailWorkerNotification(
     contract: any,
     contractId: string,
     clientContact: any
   ) {
+    const emailStyle = this.getStyle();
     const emailHtml = `
-            <html>
-                <head>
-                    <style>
-                        body {
-                            font-family: Arial, sans-serif;
-                            background-color: #f4f4f4;
-                            margin: 0;
-                            padding: 0;
-                        }
-                    
-                        h1 {
-                            color: #FFA500;
-                        }
-                    
-                        p {
-                            font-size: 16px;
-                            line-height: 1.6;
-                            color: #666;
-                        }
-                    
-                        ul {
-                            list-style: none;
-                            padding: 0;
-                        }
-                    
-                        ul li {
-                            margin-bottom: 10px;
-                        }
-                    
-                        a {
-                            color: #007bff;
-                            text-decoration: none;
-                        }
-                    
-                        .container {
-                            background: #fff;
-                            max-width: 600px;
-                            margin: 0 auto;
-                            padding: 20px;
-                            border: 2px solid #2C3E50;
-                            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-                        }
-                    
-                        .header {
-                            background: #2C3E50;
-                            color: #FFA500;
-                            text-align: center;
-                            padding: 10px 0;
-                        }
-                    
-                        .header h1 {
-                            margin: 0;
-                            font-size: 24px;
-                        }
-                    
-                        .content {
-                            padding: 20px 0;
-                        }
-                    
-                        .signature {
-                            text-align: center;
-                            margin-top: 20px;
-                        }
-                    </style>
-                </head>
+            ${emailStyle}
                 <body>
                     <div class="container">
                         <div class="header">
@@ -141,72 +146,9 @@ class EmailNotificationModel {
   }
 
   createEmailHelpRequest(helpRequest: any) {
+    const emailStyle = this.getStyle();
     const emailHtml = `
-            <html>
-                <head>
-                    <style>
-                        body {
-                            font-family: Arial, sans-serif;
-                            background-color: #f4f4f4;
-                            margin: 0;
-                            padding: 0;
-                        }
-                    
-                        h1 {
-                            color: #FFA500;
-                        }
-                    
-                        p {
-                            font-size: 16px;
-                            line-height: 1.6;
-                            color: #666;
-                        }
-                    
-                        ul {
-                            list-style: none;
-                            padding: 0;
-                        }
-                    
-                        ul li {
-                            margin-bottom: 10px;
-                        }
-                    
-                        a {
-                            color: #007bff;
-                            text-decoration: none;
-                        }
-                    
-                        .container {
-                            background: #fff;
-                            max-width: 600px;
-                            margin: 0 auto;
-                            padding: 20px;
-                            border: 2px solid #2C3E50;
-                            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-                        }
-                    
-                        .header {
-                            background: #2C3E50;
-                            color: #FFA500;
-                            text-align: center;
-                            padding: 10px 0;
-                        }
-                    
-                        .header h1 {
-                            margin: 0;
-                            font-size: 24px;
-                        }
-                    
-                        .content {
-                            padding: 20px 0;
-                        }
-                    
-                        .signature {
-                            text-align: center;
-                            margin-top: 20px;
-                        }
-                    </style>
-                </head>
+            ${emailStyle}
                 <body>
                     <div class="container">
                         <div class="header">
@@ -246,72 +188,9 @@ class EmailNotificationModel {
     contractId: string,
     workerContact: any
   ) {
+    const emailStyle = this.getStyle();
     const emailHtml = `
-            <html>
-                <head>
-                    <style>
-                        body {
-                            font-family: Arial, sans-serif;
-                            background-color: #f4f4f4;
-                            margin: 0;
-                            padding: 0;
-                        }
-                    
-                        h1 {
-                            color: #FFA500;
-                        }
-                    
-                        p {
-                            font-size: 16px;
-                            line-height: 1.6;
-                            color: #666;
-                        }
-                    
-                        ul {
-                            list-style: none;
-                            padding: 0;
-                        }
-                    
-                        ul li {
-                            margin-bottom: 10px;
-                        }
-                    
-                        a {
-                            color: #007bff;
-                            text-decoration: none;
-                        }
-                    
-                        .container {
-                            background: #fff;
-                            max-width: 600px;
-                            margin: 0 auto;
-                            padding: 20px;
-                            border: 2px solid #2C3E50;
-                            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-                        }
-                    
-                        .header {
-                            background: #2C3E50;
-                            color: #FFA500;
-                            text-align: center;
-                            padding: 10px 0;
-                        }
-                    
-                        .header h1 {
-                            margin: 0;
-                            font-size: 24px;
-                        }
-                    
-                        .content {
-                            padding: 20px 0;
-                        }
-                    
-                        .signature {
-                            text-align: center;
-                            margin-top: 20px;
-                        }
-                    </style>
-                </head>
+            ${emailStyle}
                 <body>
                     <div class="container">
                         <div class="header">
@@ -342,72 +221,9 @@ class EmailNotificationModel {
   }
 
   workerFinishedContractToClient(contract: any, contractId: string) {
+    const emailStyle = this.getStyle();
     const emailHtml = `
-            <html>
-                <head>
-                    <style>
-                        body {
-                            font-family: Arial, sans-serif;
-                            background-color: #f4f4f4;
-                            margin: 0;
-                            padding: 0;
-                        }
-                    
-                        h1 {
-                            color: #FFA500;
-                        }
-                    
-                        p {
-                            font-size: 16px;
-                            line-height: 1.6;
-                            color: #666;
-                        }
-                    
-                        ul {
-                            list-style: none;
-                            padding: 0;
-                        }
-                    
-                        ul li {
-                            margin-bottom: 10px;
-                        }
-                    
-                        a {
-                            color: #007bff;
-                            text-decoration: none;
-                        }
-                    
-                        .container {
-                            background: #fff;
-                            max-width: 600px;
-                            margin: 0 auto;
-                            padding: 20px;
-                            border: 2px solid #2C3E50;
-                            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-                        }
-                    
-                        .header {
-                            background: #2C3E50;
-                            color: #FFA500;
-                            text-align: center;
-                            padding: 10px 0;
-                        }
-                    
-                        .header h1 {
-                            margin: 0;
-                            font-size: 24px;
-                        }
-                    
-                        .content {
-                            padding: 20px 0;
-                        }
-                    
-                        .signature {
-                            text-align: center;
-                            margin-top: 20px;
-                        }
-                    </style>
-                </head>
+            ${emailStyle}
                 <body>
                     <div class="container">
                         <div class="header">
@@ -437,72 +253,9 @@ class EmailNotificationModel {
   }
 
   clientFinishedContractToWorker(contract: any, contractId: string) {
+    const emailStyle = this.getStyle();
     const emailHtml = `
-            <html>
-                <head>
-                    <style>
-                        body {
-                            font-family: Arial, sans-serif;
-                            background-color: #f4f4f4;
-                            margin: 0;
-                            padding: 0;
-                        }
-                    
-                        h1 {
-                            color: #FFA500;
-                        }
-                    
-                        p {
-                            font-size: 16px;
-                            line-height: 1.6;
-                            color: #666;
-                        }
-                    
-                        ul {
-                            list-style: none;
-                            padding: 0;
-                        }
-                    
-                        ul li {
-                            margin-bottom: 10px;
-                        }
-                    
-                        a {
-                            color: #007bff;
-                            text-decoration: none;
-                        }
-                    
-                        .container {
-                            background: #fff;
-                            max-width: 600px;
-                            margin: 0 auto;
-                            padding: 20px;
-                            border: 2px solid #2C3E50;
-                            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-                        }
-                    
-                        .header {
-                            background: #2C3E50;
-                            color: #FFA500;
-                            text-align: center;
-                            padding: 10px 0;
-                        }
-                    
-                        .header h1 {
-                            margin: 0;
-                            font-size: 24px;
-                        }
-                    
-                        .content {
-                            padding: 20px 0;
-                        }
-                    
-                        .signature {
-                            text-align: center;
-                            margin-top: 20px;
-                        }
-                    </style>
-                </head>
+            ${emailStyle}
                 <body>
                     <div class="container">
                         <div class="header">
@@ -532,72 +285,9 @@ class EmailNotificationModel {
   }
 
   finishedContract(contract: any, contractId: string) {
+    const emailStyle = this.getStyle();
     const emailHtml = `
-            <html>
-                <head>
-                    <style>
-                        body {
-                            font-family: Arial, sans-serif;
-                            background-color: #f4f4f4;
-                            margin: 0;
-                            padding: 0;
-                        }
-                    
-                        h1 {
-                            color: #FFA500;
-                        }
-                    
-                        p {
-                            font-size: 16px;
-                            line-height: 1.6;
-                            color: #666;
-                        }
-                    
-                        ul {
-                            list-style: none;
-                            padding: 0;
-                        }
-                    
-                        ul li {
-                            margin-bottom: 10px;
-                        }
-                    
-                        a {
-                            color: #007bff;
-                            text-decoration: none;
-                        }
-                    
-                        .container {
-                            background: #fff;
-                            max-width: 600px;
-                            margin: 0 auto;
-                            padding: 20px;
-                            border: 2px solid #2C3E50;
-                            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-                        }
-                    
-                        .header {
-                            background: #2C3E50;
-                            color: #FFA500;
-                            text-align: center;
-                            padding: 10px 0;
-                        }
-                    
-                        .header h1 {
-                            margin: 0;
-                            font-size: 24px;
-                        }
-                    
-                        .content {
-                            padding: 20px 0;
-                        }
-                    
-                        .signature {
-                            text-align: center;
-                            margin-top: 20px;
-                        }
-                    </style>
-                </head>
+            ${emailStyle}
                 <body>
                     <div class="container">
                         <div class="header">
@@ -615,6 +305,41 @@ class EmailNotificationModel {
                                 <li>Valor: R$${contract.price}</li>
                             </ul>
                             <p>Caso tenha ocorrido algum problema com o contrato, você pode fazer uma denuncia no seu histórico de contratos.</p>
+                        </div>
+                        <div class="signature">
+                            <p>Atenciosamente,<br>SafeWorks!</p>
+                        </div>
+                    </div>
+                </body>
+            </html>
+        `;
+
+    return emailHtml;
+  }
+
+  onAnalysisComplaint(complaint: any, complaintId: string, userName: string): string {
+    const emailStyle = this.getStyle();
+    const emailHtml = `
+            ${emailStyle}
+                <body>
+                    <div class="container">
+                        <div class="header">
+                            <h1>Denúncia em Análise</h1>
+                        </div>
+                        <div class="content">
+                            <p>Olá ${userName},</p>
+                            <p>A denúncia ${complaint.title} entrou em análise.</p>
+                            <p>Um administrador irá análisar os motivos da denúncia e deferir seu resultado em breve.</p>
+                            <p>Você receberá uma notificação por email informando quando o status da denúncia for alterado.</p>
+                            <p>ID da denúncia: ${complaintId}</p>
+                            <p>Detalhes do Contrato:</p>
+                            <ul>
+                                <li>ID do contrato: ${complaint.contract.id}</li>
+                                <li>Título do anúncio: ${complaint.advertisement.title}</li>
+                                <li>Cliente: ${complaint.client.name}</li>
+                                <li>Trabalhador: ${complaint.worker.name}</li>
+                            </ul>
+                            <p>Caso tenha ocorrido algum problema, você pode cancelar a denúncia no seu histórico de contratos.</p>
                         </div>
                         <div class="signature">
                             <p>Atenciosamente,<br>SafeWorks!</p>
