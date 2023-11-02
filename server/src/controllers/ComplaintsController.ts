@@ -28,8 +28,8 @@ class ComplaintsController {
     async updateStatus(req: Request, res: Response): Promise<void> {
         try {
             const complaintUid = req.params.uid;
-            const status = req.body.status;
-            const complaints = await complaintsRepository.updateStatus(complaintUid, status);
+            const body = req.body;
+            const complaints = await complaintsRepository.updateStatus(complaintUid, body);
             if (complaints) {
                 res.status(200).json({ statusCode: 200, complaints: complaints });
             } else {

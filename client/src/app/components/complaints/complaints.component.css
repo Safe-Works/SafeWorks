@@ -92,3 +92,11 @@ a {
 .min-width-div {
     min-width: 25rem;
 }
+
+.accept-button {
+    color: var(--interaction-blue);
+}
+
+.reject-button {
+    color: var(--red-fire);
+}

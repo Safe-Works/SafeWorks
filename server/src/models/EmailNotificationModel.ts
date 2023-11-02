@@ -351,6 +351,335 @@ class EmailNotificationModel {
 
     return emailHtml;
   }
+
+  acceptComplaintByClientToWorker(complaint: any, complaintId: string, workerName: string, resultDescription: string): string {
+    const emailStyle = this.getStyle();
+    const emailHtml = `
+            ${emailStyle}
+                <body>
+                    <div class="container">
+                        <div class="header">
+                            <h1>Denúncia Aceita</h1>
+                        </div>
+                        <div class="content">
+                            <p>Olá ${workerName},</p>
+                            <p>A denúncia ${complaint.title} feita pelo cliente foi aceita por um administrador.</p>
+                            <p>Desta maneira, o contrato em questão foi marcado como finalizado, e o valor de contratação será restituído para o cliente.</p>
+                            <p>Abaixo estão as informações do contrato e a descrição dos motivos que levaram a aceitação da denúncia pelo administrador.</p>
+                            <p>Detalhes da Denúncia:</p>
+                            <ul>
+                                <li>ID da denúncia: ${complaintId}</li>
+                                <li>Data da denúncia: ${complaint.created}</li>
+                                <li>Motivo de aceite da denúncia: ${resultDescription}</li>
+                            </ul>
+                            <p>Detalhes do Contrato:</p>
+                            <ul>
+                                <li>ID do contrato: ${complaint.contract.id}</li>
+                                <li>Data de criação do contrato: ${complaint.contract.created}</li>
+                                <li>Título do anúncio: ${complaint.advertisement.title}</li>
+                                <li>Cliente: ${complaint.client.name}</li>
+                                <li>Trabalhador: ${complaint.worker.name}</li>
+                            </ul>
+                            <p>Seu saldo será atualizado automaticamente, e pode ser consultado em seu perfil na plataforma.</p>
+                        </div>
+                        <div class="signature">
+                            <p>Atenciosamente,<br>SafeWorks!</p>
+                        </div>
+                    </div>
+                </body>
+            </html>
+        `;
+
+    return emailHtml;
+  }
+
+  acceptComplaintByClientToClient(complaint: any, complaintId: string, clientName: string, resultDescription: string): string {
+    const emailStyle = this.getStyle();
+    const emailHtml = `
+            ${emailStyle}
+                <body>
+                    <div class="container">
+                        <div class="header">
+                            <h1>Denúncia Aceita</h1>
+                        </div>
+                        <div class="content">
+                            <p>Olá ${clientName},</p>
+                            <p>A sua denúncia ${complaint.title} foi aceita por um administrador.</p>
+                            <p>Desta maneira, o contrato em questão foi marcado como finalizado, e o valor de contratação será restituído para o saldo da sua conta na plataforma.</p>
+                            <p>Abaixo estão as informações do contrato e a descrição dos motivos que levaram a aceitação da denúncia pelo administrador.</p>
+                            <p>Detalhes da Denúncia:</p>
+                            <ul>
+                                <li>ID da denúncia: ${complaintId}</li>
+                                <li>Data da denúncia: ${complaint.created}</li>
+                                <li>Motivo de aceite da denúncia: ${resultDescription}</li>
+                            </ul>
+                            <p>Detalhes do Contrato:</p>
+                            <ul>
+                                <li>ID do contrato: ${complaint.contract.id}</li>
+                                <li>Data de criação do contrato: ${complaint.contract.created}</li>
+                                <li>Título do anúncio: ${complaint.advertisement.title}</li>
+                                <li>Cliente: ${complaint.client.name}</li>
+                                <li>Trabalhador: ${complaint.worker.name}</li>
+                            </ul>
+                            <p>Seu saldo será atualizado automaticamente, e pode ser consultado em seu perfil na plataforma.</p>
+                        </div>
+                        <div class="signature">
+                            <p>Atenciosamente,<br>SafeWorks!</p>
+                        </div>
+                    </div>
+                </body>
+            </html>
+        `;
+
+    return emailHtml;
+  }
+
+  acceptComplaintByWorkerToClient(complaint: any, complaintId: string, clientName: string, resultDescription: string): string {
+    const emailStyle = this.getStyle();
+    const emailHtml = `
+            ${emailStyle}
+                <body>
+                    <div class="container">
+                        <div class="header">
+                            <h1>Denúncia Aceita</h1>
+                        </div>
+                        <div class="content">
+                            <p>Olá ${clientName},</p>
+                            <p>A denúncia ${complaint.title} feita pelo trabalhador foi aceita por um administrador.</p>
+                            <p>Desta maneira, o contrato em questão foi marcado como finalizado, e o valor de contratação será restituído para o trabalhador.</p>
+                            <p>Abaixo estão as informações do contrato e a descrição dos motivos que levaram a aceitação da denúncia pelo administrador.</p>
+                            <p>Detalhes da Denúncia:</p>
+                            <ul>
+                                <li>ID da denúncia: ${complaintId}</li>
+                                <li>Data da denúncia: ${complaint.created}</li>
+                                <li>Motivo de aceite da denúncia: ${resultDescription}</li>
+                            </ul>
+                            <p>Detalhes do Contrato:</p>
+                            <ul>
+                                <li>ID do contrato: ${complaint.contract.id}</li>
+                                <li>Data de criação do contrato: ${complaint.contract.created}</li>
+                                <li>Título do anúncio: ${complaint.advertisement.title}</li>
+                                <li>Cliente: ${complaint.client.name}</li>
+                                <li>Trabalhador: ${complaint.worker.name}</li>
+                            </ul>
+                            <p>Seu saldo será atualizado automaticamente, e pode ser consultado em seu perfil na plataforma.</p>
+                        </div>
+                        <div class="signature">
+                            <p>Atenciosamente,<br>SafeWorks!</p>
+                        </div>
+                    </div>
+                </body>
+            </html>
+        `;
+
+    return emailHtml;
+  }
+
+  acceptComplaintByWorkerToWorker(complaint: any, complaintId: string, workerName: string, resultDescription: string): string {
+    const emailStyle = this.getStyle();
+    const emailHtml = `
+            ${emailStyle}
+                <body>
+                    <div class="container">
+                        <div class="header">
+                            <h1>Denúncia Aceita</h1>
+                        </div>
+                        <div class="content">
+                            <p>Olá ${workerName},</p>
+                            <p>A sua denúncia ${complaint.title} foi aceita por um administrador.</p>
+                            <p>Desta maneira, o contrato em questão foi marcado como finalizado, e o valor de contratação será restituído para o saldo da sua conta na plataforma.</p>
+                            <p>Abaixo estão as informações do contrato e a descrição dos motivos que levaram a aceitação da denúncia pelo administrador.</p>
+                            <p>Detalhes da Denúncia:</p>
+                            <ul>
+                                <li>ID da denúncia: ${complaintId}</li>
+                                <li>Data da denúncia: ${complaint.created}</li>
+                                <li>Motivo de aceite da denúncia: ${resultDescription}</li>
+                            </ul>
+                            <p>Detalhes do Contrato:</p>
+                            <ul>
+                                <li>ID do contrato: ${complaint.contract.id}</li>
+                                <li>Data de criação do contrato: ${complaint.contract.created}</li>
+                                <li>Título do anúncio: ${complaint.advertisement.title}</li>
+                                <li>Cliente: ${complaint.client.name}</li>
+                                <li>Trabalhador: ${complaint.worker.name}</li>
+                            </ul>
+                            <p>Seu saldo será atualizado automaticamente, e pode ser consultado em seu perfil na plataforma.</p>
+                        </div>
+                        <div class="signature">
+                            <p>Atenciosamente,<br>SafeWorks!</p>
+                        </div>
+                    </div>
+                </body>
+            </html>
+        `;
+
+    return emailHtml;
+  }
+
+  rejectComplaintByClientToWorker(complaint: any, complaintId: string, workerName: string, resultDescription: string): string {
+    const emailStyle = this.getStyle();
+    const emailHtml = `
+            ${emailStyle}
+                <body>
+                    <div class="container">
+                        <div class="header">
+                            <h1>Denúncia Recusada</h1>
+                        </div>
+                        <div class="content">
+                            <p>Olá ${workerName},</p>
+                            <p>A denúncia ${complaint.title} feita pelo cliente foi recusada por um administrador.</p>
+                            <p>Desta maneira, o contrato em questão foi marcado como finalizado, e o valor de contratação será transferido normalmente para seu saldo na plataforma.</p>
+                            <p>Abaixo estão as informações do contrato e a descrição dos motivos que levaram a recusa da denúncia pelo administrador.</p>
+                            <p>Detalhes da Denúncia:</p>
+                            <ul>
+                                <li>ID da denúncia: ${complaintId}</li>
+                                <li>Data da denúncia: ${complaint.created}</li>
+                                <li>Motivo de recusa da denúncia: ${resultDescription}</li>
+                            </ul>
+                            <p>Detalhes do Contrato:</p>
+                            <ul>
+                                <li>ID do contrato: ${complaint.contract.id}</li>
+                                <li>Data de criação do contrato: ${complaint.contract.created}</li>
+                                <li>Título do anúncio: ${complaint.advertisement.title}</li>
+                                <li>Cliente: ${complaint.client.name}</li>
+                                <li>Trabalhador: ${complaint.worker.name}</li>
+                            </ul>
+                            <p>Seu saldo será atualizado automaticamente, e pode ser consultado em seu perfil na plataforma.</p>
+                        </div>
+                        <div class="signature">
+                            <p>Atenciosamente,<br>SafeWorks!</p>
+                        </div>
+                    </div>
+                </body>
+            </html>
+        `;
+
+    return emailHtml;
+  }
+
+  rejectComplaintByClientToClient(complaint: any, complaintId: string, clientName: string, resultDescription: string): string {
+    const emailStyle = this.getStyle();
+    const emailHtml = `
+            ${emailStyle}
+                <body>
+                    <div class="container">
+                        <div class="header">
+                            <h1>Denúncia Recusada</h1>
+                        </div>
+                        <div class="content">
+                            <p>Olá ${clientName},</p>
+                            <p>A sua denúncia ${complaint.title} foi recusada por um administrador.</p>
+                            <p>Desta maneira, o contrato em questão foi marcado como finalizado, e o valor de contratação será transferido normalmente para o trabalhador</p>
+                            <p>Abaixo estão as informações do contrato e a descrição dos motivos que levaram a recusa da denúncia pelo administrador.</p>
+                            <p>Detalhes da Denúncia:</p>
+                            <ul>
+                                <li>ID da denúncia: ${complaintId}</li>
+                                <li>Data da denúncia: ${complaint.created}</li>
+                                <li>Motivo de recusa da denúncia: ${resultDescription}</li>
+                            </ul>
+                            <p>Detalhes do Contrato:</p>
+                            <ul>
+                                <li>ID do contrato: ${complaint.contract.id}</li>
+                                <li>Data de criação do contrato: ${complaint.contract.created}</li>
+                                <li>Título do anúncio: ${complaint.advertisement.title}</li>
+                                <li>Cliente: ${complaint.client.name}</li>
+                                <li>Trabalhador: ${complaint.worker.name}</li>
+                            </ul>
+                            <p>Seu saldo será atualizado automaticamente, e pode ser consultado em seu perfil na plataforma.</p>
+                        </div>
+                        <div class="signature">
+                            <p>Atenciosamente,<br>SafeWorks!</p>
+                        </div>
+                    </div>
+                </body>
+            </html>
+        `;
+
+    return emailHtml;
+  }
+
+  rejectComplaintByWorkerToClient(complaint: any, complaintId: string, clientName: string, resultDescription: string): string {
+    const emailStyle = this.getStyle();
+    const emailHtml = `
+            ${emailStyle}
+                <body>
+                    <div class="container">
+                        <div class="header">
+                            <h1>Denúncia Recusada</h1>
+                        </div>
+                        <div class="content">
+                            <p>Olá ${clientName},</p>
+                            <p>A denúncia ${complaint.title} feita pelo trabalhador foi recusada por um administrador.</p>
+                            <p>Desta maneira, o contrato em questão foi marcado como finalizado, e o valor de contratação será restituído para o saldo da sua conta na plataforma.</p>
+                            <p>Abaixo estão as informações do contrato e a descrição dos motivos que levaram a recusa da denúncia pelo administrador.</p>
+                            <p>Detalhes da Denúncia:</p>
+                            <ul>
+                                <li>ID da denúncia: ${complaintId}</li>
+                                <li>Data da denúncia: ${complaint.created}</li>
+                                <li>Motivo de recusa da denúncia: ${resultDescription}</li>
+                            </ul>
+                            <p>Detalhes do Contrato:</p>
+                            <ul>
+                                <li>ID do contrato: ${complaint.contract.id}</li>
+                                <li>Data de criação do contrato: ${complaint.contract.created}</li>
+                                <li>Título do anúncio: ${complaint.advertisement.title}</li>
+                                <li>Cliente: ${complaint.client.name}</li>
+                                <li>Trabalhador: ${complaint.worker.name}</li>
+                            </ul>
+                            <p>Seu saldo será atualizado automaticamente, e pode ser consultado em seu perfil na plataforma.</p>
+                        </div>
+                        <div class="signature">
+                            <p>Atenciosamente,<br>SafeWorks!</p>
+                        </div>
+                    </div>
+                </body>
+            </html>
+        `;
+
+    return emailHtml;
+  }
+
+  rejectComplaintByWorkerToWorker(complaint: any, complaintId: string, workerName: string, resultDescription: string): string {
+    const emailStyle = this.getStyle();
+    const emailHtml = `
+            ${emailStyle}
+                <body>
+                    <div class="container">
+                        <div class="header">
+                            <h1>Denúncia Recusada</h1>
+                        </div>
+                        <div class="content">
+                            <p>Olá ${workerName},</p>
+                            <p>A sua denúncia ${complaint.title} foi recusada por um administrador.</p>
+                            <p>Desta maneira, o contrato em questão foi marcado como finalizado, e o valor de contratação será restituído para o cliente</p>
+                            <p>Abaixo estão as informações do contrato e a descrição dos motivos que levaram a recusa da denúncia pelo administrador.</p>
+                            <p>Detalhes da Denúncia:</p>
+                            <ul>
+                                <li>ID da denúncia: ${complaintId}</li>
+                                <li>Data da denúncia: ${complaint.created}</li>
+                                <li>Motivo de recusa da denúncia: ${resultDescription}</li>
+                            </ul>
+                            <p>Detalhes do Contrato:</p>
+                            <ul>
+                                <li>ID do contrato: ${complaint.contract.id}</li>
+                                <li>Data de criação do contrato: ${complaint.contract.created}</li>
+                                <li>Título do anúncio: ${complaint.advertisement.title}</li>
+                                <li>Cliente: ${complaint.client.name}</li>
+                                <li>Trabalhador: ${complaint.worker.name}</li>
+                            </ul>
+                            <p>Seu saldo será atualizado automaticamente, e pode ser consultado em seu perfil na plataforma.</p>
+                        </div>
+                        <div class="signature">
+                            <p>Atenciosamente,<br>SafeWorks!</p>
+                        </div>
+                    </div>
+                </body>
+            </html>
+        `;
+
+    return emailHtml;
+  }
+  
 }
 
 export default EmailNotificationModel;

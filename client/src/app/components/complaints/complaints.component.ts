@@ -41,26 +41,33 @@ export class ComplaintsComponent {
   }
 
   setProgressBarStatus(complaint: any): boolean {
-    if (complaint.status === 'onAnalysis') {
+    console.log('progressBar')
+    if (complaint.status !== 'onAnalysis') {
       const element = document.getElementById('step2 ' + complaint.uid);
-      element?.classList.add('active');
-      
-      return true
+      element?.classList.add('active');    
     }
-    if (complaint.status === 'accepted' || complaint.status === 'refused' || complaint.status === 'canceled') {
+    if (complaint.status === 'accepted' || complaint.status === 'refused') {
       const element = document.getElementById('step3 ' + complaint.uid);
       element?.classList.add('active');
-
-      return true
+      
+      const elementSpan = document.getElementById('step3Span ' + complaint.uid);
+      if (elementSpan) {
+        if (complaint.status === 'accepted') {
+          elementSpan.innerText = 'Denúncia Aceita';
+        }
+        if (complaint.status === 'refused') {
+          elementSpan.innerText = 'Denúncia Recusada';
+        }
+      }
     }
 
-    return false
+    return true;
   }
 
   async startAnalysis(complaintUid: string) {
     Swal.fire({
       title: 'Você tem certeza que deseja iniciar a análise?',
-      text: "Você terá um prazo de 1h para aceitar ou recusar a denúncia!",
+      text: 'Você terá um prazo de 1h para aceitar ou recusar a denúncia!',
       icon: 'warning',
       showCancelButton: true,
       confirmButtonColor: '#3085d6',
@@ -87,6 +94,92 @@ export class ComplaintsComponent {
       }
     });
     
+  }
+
+  async acceptComplaint(complaintUid: string) {
+    Swal.fire({
+      title: 'Aceitar denúncia',
+      text: 'Ao aceitar a denúncia, o valor do contrato será restituído para o cliente.',
+      input: 'textarea',
+      inputLabel: 'Insira os motivos para aceitar a denúncia',
+      inputPlaceholder: 'Descreva os motivos para aceitar a denúncia...',
+      inputValue: '',
+      showCancelButton: true,
+      confirmButtonText: 'Aceitar',
+      confirmButtonColor: '#1A73E8',
+      inputAttributes: {
+        maxlength: '500',
+      },
+      inputValidator: (value) => {
+        if (!value) {
+          return 'Você precisa inserir os motivos para aceitar a denúncia.'
+        } else {
+          return ''
+        }
+      }
+    }).then(async (result) => {
+      try {
+        if (result.isConfirmed) {
+          this.isLoading = true;
+          let response = await this.complaintService.AcceptComplaint(complaintUid, result.value);
+          if (response?.statusCode === 200) {
+            this.isLoading = false;
+            this.complaints = response;
+            this.openSnackBar("Denúncia aceita com sucesso!", "OK", "snackbar-success");
+          } else {
+            this.isLoading = false;
+            this.openSnackBar("Ocorreu um erro ao aceitar a denúncia!", "OK", "snackbar-error");
+          }
+        }
+      } catch (error) {
+        console.error('acceptComplaint error: ', error);
+        this.isLoading = false;
+        this.openSnackBar("Ocorreu um erro ao aceitar a denúncia!", "OK", "snackbar-error");
+      }
+    })
+  }
+
+  async rejectComplaint(complaintUid: string) {
+    Swal.fire({
+      title: 'Recusar denúncia',
+      text: 'Ao recusar a denúncia, o valor do contrato será restituído para o cliente.',
+      input: 'textarea',
+      inputLabel: 'Insira os motivos para recusar a denúncia',
+      inputPlaceholder: 'Descreva os motivos para recusar a denúncia...',
+      inputValue: '',
+      showCancelButton: true,
+      confirmButtonText: 'Recusar',
+      confirmButtonColor: '#1A73E8',
+      inputAttributes: {
+        maxlength: '500',
+      },
+      inputValidator: (value) => {
+        if (!value) {
+          return 'Você precisa inserir os motivos para recusar a denúncia.'
+        } else {
+          return ''
+        }
+      }
+    }).then(async (result) => {
+      try {
+        if (result.isConfirmed) {
+          this.isLoading = true;
+          let response = await this.complaintService.RejectComplaint(complaintUid, result.value);
+          if (response?.statusCode === 200) {
+            this.isLoading = false;
+            this.complaints = response;
+            this.openSnackBar("Denúncia rejeitada com sucesso!", "OK", "snackbar-success");
+          } else {
+            this.isLoading = false;
+            this.openSnackBar("Ocorreu um erro ao recusar a denúncia!", "OK", "snackbar-error");
+          }
+        }
+      } catch (error) {
+        console.error('rejectComplaint error: ', error);
+        this.isLoading = false;
+        this.openSnackBar("Ocorreu um erro ao recusar a denúncia!", "OK", "snackbar-error");
+      }
+    })
   }
 
   openSnackBar(message: string, action: string, className: string) {
