@@ -23,7 +23,40 @@ export class ComplaintService {
 
     public async StartAnalysis(complaintUid: string): Promise<any> {
         try {
-            return await firstValueFrom(this.http.patch<any>(this.api + '/status/' + complaintUid , { status: "onAnalysis" }));
+            const body = {
+                status: 'accepted',
+                result_description: ''
+            };
+
+            return await firstValueFrom(this.http.patch<any>(this.api + '/status/' + complaintUid , body));
+        } catch (error) {
+            console.error(error);
+            throw error;
+        }
+    }
+
+    public async AcceptComplaint(complaintUid: string, resultDescription: string): Promise<any> {
+        try {
+            const body = {
+                status: 'accepted',
+                result_description: resultDescription
+            };
+
+            return await firstValueFrom(this.http.patch<any>(this.api + '/status/' + complaintUid, body));
+        } catch (error) {
+            console.error(error);
+            throw error;
+        }
+    }
+
+    public async RejectComplaint(complaintUid: string, resultDescription: string): Promise<any> {
+        try {
+            const body = {
+                status: 'refused',
+                result_description: resultDescription
+            };
+
+            return await firstValueFrom(this.http.patch<any>(this.api + '/status/' + complaintUid, body));
         } catch (error) {
             console.error(error);
             throw error;

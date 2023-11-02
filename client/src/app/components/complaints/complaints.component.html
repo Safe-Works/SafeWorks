@@ -58,7 +58,7 @@
                                     <span>Em Análise</span>
                                 </li>
                                 <li class="step3 text-end" id="step3 {{ complaint.uid }}">
-                                    <span style="margin-right: 22px;">Analisado</span>
+                                    <span style="margin-right: 22px;" id="step3Span {{ complaint.uid }}">Analisado</span>
                                 </li>
                             </ul>
                         </div>
@@ -66,9 +66,8 @@
                         <div class="card-footer p-4">
                             <div class="d-flex flex-wrap justify-content-between">
                                 <h6 class="action-button" *ngIf="complaint.status === 'open'"><a href="#!" (click)="startAnalysis(complaint.uid)">Iniciar Análise</a></h6>
-                                <h6 class="action-button" *ngIf="complaint.status === 'onAnalysis'"><a href="#!">Aceitar</a></h6>
-                                <h6 class="action-button" *ngIf="complaint.status === 'onAnalysis'"><a href="#!">Recusar</a></h6>
-                                <h6 class="action-button" *ngIf="complaint.status === 'onAnalysis'"><a href="#!">Cancelar</a></h6>
+                                <h6 class="action-button" *ngIf="complaint.status === 'onAnalysis'"><a href="#!" class="accept-button" (click)="acceptComplaint(complaint.uid)">Aceitar</a></h6>
+                                <h6 class="action-button" *ngIf="complaint.status === 'onAnalysis'"><a href="#!" class="reject-button" (click)="rejectComplaint(complaint.uid)">Recusar</a></h6>
                             </div>
                         </div>
                     </div>
