@@ -469,30 +469,30 @@ class JobContractRepository extends AppRepository {
     }
   }
 
-    async sendEmailFinishedContract(jobUid: string, jobData: any, userType: string): Promise<any> {
-        try {
-            const emailModel = new EmailNotificationModel();
-            const userRepository = new UserRepository();
-            const workerData = await userRepository.getById(jobData.worker.id);
-            const clientData = await userRepository.getById(jobData.client.id);
+  async sendEmailFinishedContract(jobUid: string, jobData: any, userType: string): Promise<any> {
+    try {
+      const emailModel = new EmailNotificationModel();
+      const userRepository = new UserRepository();
+      const workerData = await userRepository.getById(jobData.worker.id);
+      const clientData = await userRepository.getById(jobData.client.id);
 
-            if (userType === 'client') {
-                const clientEmailContent = emailModel.clientFinishedContractToWorker(jobData, jobUid);
-                await emailModel.sendCustomEmail(workerData?.email, "Cliente finalizou o contrato.", clientEmailContent);
-            }
-            if (userType === 'worker') {
-                const workerEmailContent = emailModel.workerFinishedContractToClient(jobData, jobUid);
-                await emailModel.sendCustomEmail(clientData?.email, "Trabalhador finalizou o contrato.", workerEmailContent);
-                if (jobData?.client_finished && jobData?.worker_finished) {
-                    const finishedEmailContent = emailModel.finishedContract(jobData, jobUid);
-                    await emailModel.sendCustomEmail(workerData?.email, "Contrato finalizado!", finishedEmailContent);
-                }
-            }
-        } catch (error) {
-            console.error("Error to send finished contract email: ", error);
-            throw error;
+      if (userType === 'client') {
+        const clientEmailContent = emailModel.clientFinishedContractToWorker(jobData, jobUid);
+        await emailModel.sendCustomEmail(workerData?.email, "Cliente finalizou o contrato.", clientEmailContent);
+      }
+      if (userType === 'worker') {
+        const workerEmailContent = emailModel.workerFinishedContractToClient(jobData, jobUid);
+        await emailModel.sendCustomEmail(clientData?.email, "Trabalhador finalizou o contrato.", workerEmailContent);
+        if (jobData?.client_finished && jobData?.worker_finished) {
+          const finishedEmailContent = emailModel.finishedContract(jobData, jobUid);
+          await emailModel.sendCustomEmail(workerData?.email, "Contrato finalizado!", finishedEmailContent);
         }
+      }
+    } catch (error) {
+      console.error("Error to send finished contract email: ", error);
+      throw error;
     }
+  }
 
     async evaluateJob(evaluation: any): Promise<any> {
         try {

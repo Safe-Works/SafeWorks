@@ -16,6 +16,7 @@ import { DashboardComponent } from './components/analytics/dashboard/dashboard.c
 import {FavoritesComponent} from "./components/favorites/favorites.component";
 import { HelpComponent } from './components/help/help.component';
 import { ContractsComponent } from './components/contracts/contracts.component';
+import { ComplaintsComponent } from './components/complaints/complaints.component';
 
 const routes: Routes = [
   { path: '', component: IndexComponent },
@@ -34,6 +35,7 @@ const routes: Routes = [
   { path: 'jobs/favorites', component: FavoritesComponent, canActivate: [AuthGuard] },
   { path: 'help', component: HelpComponent, canActivate: [AuthGuard] },
   { path: 'contracts', component: ContractsComponent, canActivate: [AuthGuard] },
+  { path: 'complaints', component: ComplaintsComponent, canActivate: [AuthGuard] },
 ];
 
 @NgModule({
