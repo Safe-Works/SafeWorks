@@ -2,7 +2,7 @@ import { Request, Response } from "express";
 import JobContractRepository from "../repositories/JobContractRepository";
 import * as admin from "firebase-admin";
 import CheckoutModel from "../models/CheckoutModel";
-import { MercadoPagoConfig, Preference, Payment } from "MercadoPago";import Favorites from "../models/Favorites";
+import { MercadoPagoConfig, Preference, Payment } from "mercadopago";
 
 const jobContractRepository = new JobContractRepository();
 
