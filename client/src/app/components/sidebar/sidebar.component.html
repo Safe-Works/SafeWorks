@@ -65,6 +65,12 @@
                     <span>Analytics</span>
                 </a>
             </li>
+            <li>
+                <a href="#" routerLink="/complaints" routerLinkActive="active" *ngIf="userAuth.currentUser?.infos.admin">
+                    <i class="fa bi-kanban-fill"></i>
+                    <span>Gerir Denúncias</span>
+                </a>
+            </li>
         </ul>
     </nav>
 </aside>

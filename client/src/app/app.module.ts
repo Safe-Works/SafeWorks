@@ -51,6 +51,7 @@ import { JobsStatusComponent } from './components/analytics/jobs-status/jobs-sta
 import { FavoritesComponent } from './components/favorites/favorites.component';
 import { ContractsComponent } from './components/contracts/contracts.component';
 import { HelpComponent } from './components/help/help.component';
+import { ComplaintsComponent } from './components/complaints/complaints.component';
 
 @NgModule({
   declarations: [
@@ -83,6 +84,7 @@ import { HelpComponent } from './components/help/help.component';
     FavoritesComponent,
     HelpComponent,
     ContractsComponent,
+    ComplaintsComponent,
   ],
   imports: [
     BrowserModule,

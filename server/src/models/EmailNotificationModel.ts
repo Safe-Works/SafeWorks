@@ -31,77 +31,82 @@ class EmailNotificationModel {
     }
   }
 
+  getStyle(): string {
+    return `<html>
+        <head>
+            <style>
+                body {
+                    font-family: Arial, sans-serif;
+                    background-color: #f4f4f4;
+                    margin: 0;
+                    padding: 0;
+                }
+            
+                h1 {
+                    color: #FFA500;
+                }
+            
+                p {
+                    font-size: 16px;
+                    line-height: 1.6;
+                    color: #666;
+                }
+            
+                ul {
+                    list-style: none;
+                    padding: 0;
+                }
+            
+                ul li {
+                    margin-bottom: 10px;
+                }
+            
+                a {
+                    color: #007bff;
+                    text-decoration: none;
+                }
+            
+                .container {
+                    background: #fff;
+                    max-width: 600px;
+                    margin: 0 auto;
+                    padding: 20px;
+                    border: 2px solid #2C3E50;
+                    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+                }
+            
+                .header {
+                    background: #2C3E50;
+                    color: #FFA500;
+                    text-align: center;
+                    padding: 10px 0;
+                }
+            
+                .header h1 {
+                    margin: 0;
+                    font-size: 24px;
+                }
+            
+                .content {
+                    padding: 20px 0;
+                }
+            
+                .signature {
+                    text-align: center;
+                    margin-top: 20px;
+                }
+            </style>
+        </head>`
+  }
+
   createEmailWorkerNotification(
     contract: any,
     contractId: string,
     clientContact: any
   ) {
+    const emailStyle = this.getStyle();
     const emailHtml = `
-            <html>
-                <head>
-                    <style>
-                        body {
-                            font-family: Arial, sans-serif;
-                            background-color: #f4f4f4;
-                            margin: 0;
-                            padding: 0;
-                        }
-                    
-                        h1 {
-                            color: #FFA500;
-                        }
-                    
-                        p {
-                            font-size: 16px;
-                            line-height: 1.6;
-                            color: #666;
-                        }
-                    
-                        ul {
-                            list-style: none;
-                            padding: 0;
-                        }
-                    
-                        ul li {
-                            margin-bottom: 10px;
-                        }
-                    
-                        a {
-                            color: #007bff;
-                            text-decoration: none;
-                        }
-                    
-                        .container {
-                            background: #fff;
-                            max-width: 600px;
-                            margin: 0 auto;
-                            padding: 20px;
-                            border: 2px solid #2C3E50;
-                            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-                        }
-                    
-                        .header {
-                            background: #2C3E50;
-                            color: #FFA500;
-                            text-align: center;
-                            padding: 10px 0;
-                        }
-                    
-                        .header h1 {
-                            margin: 0;
-                            font-size: 24px;
-                        }
-                    
-                        .content {
-                            padding: 20px 0;
-                        }
-                    
-                        .signature {
-                            text-align: center;
-                            margin-top: 20px;
-                        }
-                    </style>
-                </head>
+            ${emailStyle}
                 <body>
                     <div class="container">
                         <div class="header">
@@ -141,72 +146,9 @@ class EmailNotificationModel {
   }
 
   createEmailHelpRequest(helpRequest: any) {
+    const emailStyle = this.getStyle();
     const emailHtml = `
-            <html>
-                <head>
-                    <style>
-                        body {
-                            font-family: Arial, sans-serif;
-                            background-color: #f4f4f4;
-                            margin: 0;
-                            padding: 0;
-                        }
-                    
-                        h1 {
-                            color: #FFA500;
-                        }
-                    
-                        p {
-                            font-size: 16px;
-                            line-height: 1.6;
-                            color: #666;
-                        }
-                    
-                        ul {
-                            list-style: none;
-                            padding: 0;
-                        }
-                    
-                        ul li {
-                            margin-bottom: 10px;
-                        }
-                    
-                        a {
-                            color: #007bff;
-                            text-decoration: none;
-                        }
-                    
-                        .container {
-                            background: #fff;
-                            max-width: 600px;
-                            margin: 0 auto;
-                            padding: 20px;
-                            border: 2px solid #2C3E50;
-                            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-                        }
-                    
-                        .header {
-                            background: #2C3E50;
-                            color: #FFA500;
-                            text-align: center;
-                            padding: 10px 0;
-                        }
-                    
-                        .header h1 {
-                            margin: 0;
-                            font-size: 24px;
-                        }
-                    
-                        .content {
-                            padding: 20px 0;
-                        }
-                    
-                        .signature {
-                            text-align: center;
-                            margin-top: 20px;
-                        }
-                    </style>
-                </head>
+            ${emailStyle}
                 <body>
                     <div class="container">
                         <div class="header">
@@ -246,72 +188,9 @@ class EmailNotificationModel {
     contractId: string,
     workerContact: any
   ) {
+    const emailStyle = this.getStyle();
     const emailHtml = `
-            <html>
-                <head>
-                    <style>
-                        body {
-                            font-family: Arial, sans-serif;
-                            background-color: #f4f4f4;
-                            margin: 0;
-                            padding: 0;
-                        }
-                    
-                        h1 {
-                            color: #FFA500;
-                        }
-                    
-                        p {
-                            font-size: 16px;
-                            line-height: 1.6;
-                            color: #666;
-                        }
-                    
-                        ul {
-                            list-style: none;
-                            padding: 0;
-                        }
-                    
-                        ul li {
-                            margin-bottom: 10px;
-                        }
-                    
-                        a {
-                            color: #007bff;
-                            text-decoration: none;
-                        }
-                    
-                        .container {
-                            background: #fff;
-                            max-width: 600px;
-                            margin: 0 auto;
-                            padding: 20px;
-                            border: 2px solid #2C3E50;
-                            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-                        }
-                    
-                        .header {
-                            background: #2C3E50;
-                            color: #FFA500;
-                            text-align: center;
-                            padding: 10px 0;
-                        }
-                    
-                        .header h1 {
-                            margin: 0;
-                            font-size: 24px;
-                        }
-                    
-                        .content {
-                            padding: 20px 0;
-                        }
-                    
-                        .signature {
-                            text-align: center;
-                            margin-top: 20px;
-                        }
-                    </style>
-                </head>
+            ${emailStyle}
                 <body>
                     <div class="container">
                         <div class="header">
@@ -342,72 +221,9 @@ class EmailNotificationModel {
   }
 
   workerFinishedContractToClient(contract: any, contractId: string) {
+    const emailStyle = this.getStyle();
     const emailHtml = `
-            <html>
-                <head>
-                    <style>
-                        body {
-                            font-family: Arial, sans-serif;
-                            background-color: #f4f4f4;
-                            margin: 0;
-                            padding: 0;
-                        }
-                    
-                        h1 {
-                            color: #FFA500;
-                        }
-                    
-                        p {
-                            font-size: 16px;
-                            line-height: 1.6;
-                            color: #666;
-                        }
-                    
-                        ul {
-                            list-style: none;
-                            padding: 0;
-                        }
-                    
-                        ul li {
-                            margin-bottom: 10px;
-                        }
-                    
-                        a {
-                            color: #007bff;
-                            text-decoration: none;
-                        }
-                    
-                        .container {
-                            background: #fff;
-                            max-width: 600px;
-                            margin: 0 auto;
-                            padding: 20px;
-                            border: 2px solid #2C3E50;
-                            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-                        }
-                    
-                        .header {
-                            background: #2C3E50;
-                            color: #FFA500;
-                            text-align: center;
-                            padding: 10px 0;
-                        }
-                    
-                        .header h1 {
-                            margin: 0;
-                            font-size: 24px;
-                        }
-                    
-                        .content {
-                            padding: 20px 0;
-                        }
-                    
-                        .signature {
-                            text-align: center;
-                            margin-top: 20px;
-                        }
-                    </style>
-                </head>
+            ${emailStyle}
                 <body>
                     <div class="container">
                         <div class="header">
@@ -437,72 +253,9 @@ class EmailNotificationModel {
   }
 
   clientFinishedContractToWorker(contract: any, contractId: string) {
+    const emailStyle = this.getStyle();
     const emailHtml = `
-            <html>
-                <head>
-                    <style>
-                        body {
-                            font-family: Arial, sans-serif;
-                            background-color: #f4f4f4;
-                            margin: 0;
-                            padding: 0;
-                        }
-                    
-                        h1 {
-                            color: #FFA500;
-                        }
-                    
-                        p {
-                            font-size: 16px;
-                            line-height: 1.6;
-                            color: #666;
-                        }
-                    
-                        ul {
-                            list-style: none;
-                            padding: 0;
-                        }
-                    
-                        ul li {
-                            margin-bottom: 10px;
-                        }
-                    
-                        a {
-                            color: #007bff;
-                            text-decoration: none;
-                        }
-                    
-                        .container {
-                            background: #fff;
-                            max-width: 600px;
-                            margin: 0 auto;
-                            padding: 20px;
-                            border: 2px solid #2C3E50;
-                            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-                        }
-                    
-                        .header {
-                            background: #2C3E50;
-                            color: #FFA500;
-                            text-align: center;
-                            padding: 10px 0;
-                        }
-                    
-                        .header h1 {
-                            margin: 0;
-                            font-size: 24px;
-                        }
-                    
-                        .content {
-                            padding: 20px 0;
-                        }
-                    
-                        .signature {
-                            text-align: center;
-                            margin-top: 20px;
-                        }
-                    </style>
-                </head>
+            ${emailStyle}
                 <body>
                     <div class="container">
                         <div class="header">
@@ -532,72 +285,9 @@ class EmailNotificationModel {
   }
 
   finishedContract(contract: any, contractId: string) {
+    const emailStyle = this.getStyle();
     const emailHtml = `
-            <html>
-                <head>
-                    <style>
-                        body {
-                            font-family: Arial, sans-serif;
-                            background-color: #f4f4f4;
-                            margin: 0;
-                            padding: 0;
-                        }
-                    
-                        h1 {
-                            color: #FFA500;
-                        }
-                    
-                        p {
-                            font-size: 16px;
-                            line-height: 1.6;
-                            color: #666;
-                        }
-                    
-                        ul {
-                            list-style: none;
-                            padding: 0;
-                        }
-                    
-                        ul li {
-                            margin-bottom: 10px;
-                        }
-                    
-                        a {
-                            color: #007bff;
-                            text-decoration: none;
-                        }
-                    
-                        .container {
-                            background: #fff;
-                            max-width: 600px;
-                            margin: 0 auto;
-                            padding: 20px;
-                            border: 2px solid #2C3E50;
-                            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-                        }
-                    
-                        .header {
-                            background: #2C3E50;
-                            color: #FFA500;
-                            text-align: center;
-                            padding: 10px 0;
-                        }
-                    
-                        .header h1 {
-                            margin: 0;
-                            font-size: 24px;
-                        }
-                    
-                        .content {
-                            padding: 20px 0;
-                        }
-                    
-                        .signature {
-                            text-align: center;
-                            margin-top: 20px;
-                        }
-                    </style>
-                </head>
+            ${emailStyle}
                 <body>
                     <div class="container">
                         <div class="header">
@@ -626,6 +316,370 @@ class EmailNotificationModel {
 
     return emailHtml;
   }
+
+  onAnalysisComplaint(complaint: any, complaintId: string, userName: string): string {
+    const emailStyle = this.getStyle();
+    const emailHtml = `
+            ${emailStyle}
+                <body>
+                    <div class="container">
+                        <div class="header">
+                            <h1>Denúncia em Análise</h1>
+                        </div>
+                        <div class="content">
+                            <p>Olá ${userName},</p>
+                            <p>A denúncia ${complaint.title} entrou em análise.</p>
+                            <p>Um administrador irá análisar os motivos da denúncia e deferir seu resultado em breve.</p>
+                            <p>Você receberá uma notificação por email informando quando o status da denúncia for alterado.</p>
+                            <p>ID da denúncia: ${complaintId}</p>
+                            <p>Detalhes do Contrato:</p>
+                            <ul>
+                                <li>ID do contrato: ${complaint.contract.id}</li>
+                                <li>Título do anúncio: ${complaint.advertisement.title}</li>
+                                <li>Cliente: ${complaint.client.name}</li>
+                                <li>Trabalhador: ${complaint.worker.name}</li>
+                            </ul>
+                            <p>Caso tenha ocorrido algum problema, você pode cancelar a denúncia no seu histórico de contratos.</p>
+                        </div>
+                        <div class="signature">
+                            <p>Atenciosamente,<br>SafeWorks!</p>
+                        </div>
+                    </div>
+                </body>
+            </html>
+        `;
+
+    return emailHtml;
+  }
+
+  acceptComplaintByClientToWorker(complaint: any, complaintId: string, workerName: string, resultDescription: string): string {
+    const emailStyle = this.getStyle();
+    const emailHtml = `
+            ${emailStyle}
+                <body>
+                    <div class="container">
+                        <div class="header">
+                            <h1>Denúncia Aceita</h1>
+                        </div>
+                        <div class="content">
+                            <p>Olá ${workerName},</p>
+                            <p>A denúncia ${complaint.title} feita pelo cliente foi aceita por um administrador.</p>
+                            <p>Desta maneira, o contrato em questão foi marcado como finalizado, e o valor de contratação será restituído para o cliente.</p>
+                            <p>Abaixo estão as informações do contrato e a descrição dos motivos que levaram a aceitação da denúncia pelo administrador.</p>
+                            <p>Detalhes da Denúncia:</p>
+                            <ul>
+                                <li>ID da denúncia: ${complaintId}</li>
+                                <li>Data da denúncia: ${complaint.created}</li>
+                                <li>Motivo de aceite da denúncia: ${resultDescription}</li>
+                            </ul>
+                            <p>Detalhes do Contrato:</p>
+                            <ul>
+                                <li>ID do contrato: ${complaint.contract.id}</li>
+                                <li>Data de criação do contrato: ${complaint.contract.created}</li>
+                                <li>Título do anúncio: ${complaint.advertisement.title}</li>
+                                <li>Cliente: ${complaint.client.name}</li>
+                                <li>Trabalhador: ${complaint.worker.name}</li>
+                            </ul>
+                            <p>Seu saldo será atualizado automaticamente, e pode ser consultado em seu perfil na plataforma.</p>
+                        </div>
+                        <div class="signature">
+                            <p>Atenciosamente,<br>SafeWorks!</p>
+                        </div>
+                    </div>
+                </body>
+            </html>
+        `;
+
+    return emailHtml;
+  }
+
+  acceptComplaintByClientToClient(complaint: any, complaintId: string, clientName: string, resultDescription: string): string {
+    const emailStyle = this.getStyle();
+    const emailHtml = `
+            ${emailStyle}
+                <body>
+                    <div class="container">
+                        <div class="header">
+                            <h1>Denúncia Aceita</h1>
+                        </div>
+                        <div class="content">
+                            <p>Olá ${clientName},</p>
+                            <p>A sua denúncia ${complaint.title} foi aceita por um administrador.</p>
+                            <p>Desta maneira, o contrato em questão foi marcado como finalizado, e o valor de contratação será restituído para o saldo da sua conta na plataforma.</p>
+                            <p>Abaixo estão as informações do contrato e a descrição dos motivos que levaram a aceitação da denúncia pelo administrador.</p>
+                            <p>Detalhes da Denúncia:</p>
+                            <ul>
+                                <li>ID da denúncia: ${complaintId}</li>
+                                <li>Data da denúncia: ${complaint.created}</li>
+                                <li>Motivo de aceite da denúncia: ${resultDescription}</li>
+                            </ul>
+                            <p>Detalhes do Contrato:</p>
+                            <ul>
+                                <li>ID do contrato: ${complaint.contract.id}</li>
+                                <li>Data de criação do contrato: ${complaint.contract.created}</li>
+                                <li>Título do anúncio: ${complaint.advertisement.title}</li>
+                                <li>Cliente: ${complaint.client.name}</li>
+                                <li>Trabalhador: ${complaint.worker.name}</li>
+                            </ul>
+                            <p>Seu saldo será atualizado automaticamente, e pode ser consultado em seu perfil na plataforma.</p>
+                        </div>
+                        <div class="signature">
+                            <p>Atenciosamente,<br>SafeWorks!</p>
+                        </div>
+                    </div>
+                </body>
+            </html>
+        `;
+
+    return emailHtml;
+  }
+
+  acceptComplaintByWorkerToClient(complaint: any, complaintId: string, clientName: string, resultDescription: string): string {
+    const emailStyle = this.getStyle();
+    const emailHtml = `
+            ${emailStyle}
+                <body>
+                    <div class="container">
+                        <div class="header">
+                            <h1>Denúncia Aceita</h1>
+                        </div>
+                        <div class="content">
+                            <p>Olá ${clientName},</p>
+                            <p>A denúncia ${complaint.title} feita pelo trabalhador foi aceita por um administrador.</p>
+                            <p>Desta maneira, o contrato em questão foi marcado como finalizado, e o valor de contratação será restituído para o trabalhador.</p>
+                            <p>Abaixo estão as informações do contrato e a descrição dos motivos que levaram a aceitação da denúncia pelo administrador.</p>
+                            <p>Detalhes da Denúncia:</p>
+                            <ul>
+                                <li>ID da denúncia: ${complaintId}</li>
+                                <li>Data da denúncia: ${complaint.created}</li>
+                                <li>Motivo de aceite da denúncia: ${resultDescription}</li>
+                            </ul>
+                            <p>Detalhes do Contrato:</p>
+                            <ul>
+                                <li>ID do contrato: ${complaint.contract.id}</li>
+                                <li>Data de criação do contrato: ${complaint.contract.created}</li>
+                                <li>Título do anúncio: ${complaint.advertisement.title}</li>
+                                <li>Cliente: ${complaint.client.name}</li>
+                                <li>Trabalhador: ${complaint.worker.name}</li>
+                            </ul>
+                            <p>Seu saldo será atualizado automaticamente, e pode ser consultado em seu perfil na plataforma.</p>
+                        </div>
+                        <div class="signature">
+                            <p>Atenciosamente,<br>SafeWorks!</p>
+                        </div>
+                    </div>
+                </body>
+            </html>
+        `;
+
+    return emailHtml;
+  }
+
+  acceptComplaintByWorkerToWorker(complaint: any, complaintId: string, workerName: string, resultDescription: string): string {
+    const emailStyle = this.getStyle();
+    const emailHtml = `
+            ${emailStyle}
+                <body>
+                    <div class="container">
+                        <div class="header">
+                            <h1>Denúncia Aceita</h1>
+                        </div>
+                        <div class="content">
+                            <p>Olá ${workerName},</p>
+                            <p>A sua denúncia ${complaint.title} foi aceita por um administrador.</p>
+                            <p>Desta maneira, o contrato em questão foi marcado como finalizado, e o valor de contratação será restituído para o saldo da sua conta na plataforma.</p>
+                            <p>Abaixo estão as informações do contrato e a descrição dos motivos que levaram a aceitação da denúncia pelo administrador.</p>
+                            <p>Detalhes da Denúncia:</p>
+                            <ul>
+                                <li>ID da denúncia: ${complaintId}</li>
+                                <li>Data da denúncia: ${complaint.created}</li>
+                                <li>Motivo de aceite da denúncia: ${resultDescription}</li>
+                            </ul>
+                            <p>Detalhes do Contrato:</p>
+                            <ul>
+                                <li>ID do contrato: ${complaint.contract.id}</li>
+                                <li>Data de criação do contrato: ${complaint.contract.created}</li>
+                                <li>Título do anúncio: ${complaint.advertisement.title}</li>
+                                <li>Cliente: ${complaint.client.name}</li>
+                                <li>Trabalhador: ${complaint.worker.name}</li>
+                            </ul>
+                            <p>Seu saldo será atualizado automaticamente, e pode ser consultado em seu perfil na plataforma.</p>
+                        </div>
+                        <div class="signature">
+                            <p>Atenciosamente,<br>SafeWorks!</p>
+                        </div>
+                    </div>
+                </body>
+            </html>
+        `;
+
+    return emailHtml;
+  }
+
+  rejectComplaintByClientToWorker(complaint: any, complaintId: string, workerName: string, resultDescription: string): string {
+    const emailStyle = this.getStyle();
+    const emailHtml = `
+            ${emailStyle}
+                <body>
+                    <div class="container">
+                        <div class="header">
+                            <h1>Denúncia Recusada</h1>
+                        </div>
+                        <div class="content">
+                            <p>Olá ${workerName},</p>
+                            <p>A denúncia ${complaint.title} feita pelo cliente foi recusada por um administrador.</p>
+                            <p>Desta maneira, o contrato em questão foi marcado como finalizado, e o valor de contratação será transferido normalmente para seu saldo na plataforma.</p>
+                            <p>Abaixo estão as informações do contrato e a descrição dos motivos que levaram a recusa da denúncia pelo administrador.</p>
+                            <p>Detalhes da Denúncia:</p>
+                            <ul>
+                                <li>ID da denúncia: ${complaintId}</li>
+                                <li>Data da denúncia: ${complaint.created}</li>
+                                <li>Motivo de recusa da denúncia: ${resultDescription}</li>
+                            </ul>
+                            <p>Detalhes do Contrato:</p>
+                            <ul>
+                                <li>ID do contrato: ${complaint.contract.id}</li>
+                                <li>Data de criação do contrato: ${complaint.contract.created}</li>
+                                <li>Título do anúncio: ${complaint.advertisement.title}</li>
+                                <li>Cliente: ${complaint.client.name}</li>
+                                <li>Trabalhador: ${complaint.worker.name}</li>
+                            </ul>
+                            <p>Seu saldo será atualizado automaticamente, e pode ser consultado em seu perfil na plataforma.</p>
+                        </div>
+                        <div class="signature">
+                            <p>Atenciosamente,<br>SafeWorks!</p>
+                        </div>
+                    </div>
+                </body>
+            </html>
+        `;
+
+    return emailHtml;
+  }
+
+  rejectComplaintByClientToClient(complaint: any, complaintId: string, clientName: string, resultDescription: string): string {
+    const emailStyle = this.getStyle();
+    const emailHtml = `
+            ${emailStyle}
+                <body>
+                    <div class="container">
+                        <div class="header">
+                            <h1>Denúncia Recusada</h1>
+                        </div>
+                        <div class="content">
+                            <p>Olá ${clientName},</p>
+                            <p>A sua denúncia ${complaint.title} foi recusada por um administrador.</p>
+                            <p>Desta maneira, o contrato em questão foi marcado como finalizado, e o valor de contratação será transferido normalmente para o trabalhador</p>
+                            <p>Abaixo estão as informações do contrato e a descrição dos motivos que levaram a recusa da denúncia pelo administrador.</p>
+                            <p>Detalhes da Denúncia:</p>
+                            <ul>
+                                <li>ID da denúncia: ${complaintId}</li>
+                                <li>Data da denúncia: ${complaint.created}</li>
+                                <li>Motivo de recusa da denúncia: ${resultDescription}</li>
+                            </ul>
+                            <p>Detalhes do Contrato:</p>
+                            <ul>
+                                <li>ID do contrato: ${complaint.contract.id}</li>
+                                <li>Data de criação do contrato: ${complaint.contract.created}</li>
+                                <li>Título do anúncio: ${complaint.advertisement.title}</li>
+                                <li>Cliente: ${complaint.client.name}</li>
+                                <li>Trabalhador: ${complaint.worker.name}</li>
+                            </ul>
+                            <p>Seu saldo será atualizado automaticamente, e pode ser consultado em seu perfil na plataforma.</p>
+                        </div>
+                        <div class="signature">
+                            <p>Atenciosamente,<br>SafeWorks!</p>
+                        </div>
+                    </div>
+                </body>
+            </html>
+        `;
+
+    return emailHtml;
+  }
+
+  rejectComplaintByWorkerToClient(complaint: any, complaintId: string, clientName: string, resultDescription: string): string {
+    const emailStyle = this.getStyle();
+    const emailHtml = `
+            ${emailStyle}
+                <body>
+                    <div class="container">
+                        <div class="header">
+                            <h1>Denúncia Recusada</h1>
+                        </div>
+                        <div class="content">
+                            <p>Olá ${clientName},</p>
+                            <p>A denúncia ${complaint.title} feita pelo trabalhador foi recusada por um administrador.</p>
+                            <p>Desta maneira, o contrato em questão foi marcado como finalizado, e o valor de contratação será restituído para o saldo da sua conta na plataforma.</p>
+                            <p>Abaixo estão as informações do contrato e a descrição dos motivos que levaram a recusa da denúncia pelo administrador.</p>
+                            <p>Detalhes da Denúncia:</p>
+                            <ul>
+                                <li>ID da denúncia: ${complaintId}</li>
+                                <li>Data da denúncia: ${complaint.created}</li>
+                                <li>Motivo de recusa da denúncia: ${resultDescription}</li>
+                            </ul>
+                            <p>Detalhes do Contrato:</p>
+                            <ul>
+                                <li>ID do contrato: ${complaint.contract.id}</li>
+                                <li>Data de criação do contrato: ${complaint.contract.created}</li>
+                                <li>Título do anúncio: ${complaint.advertisement.title}</li>
+                                <li>Cliente: ${complaint.client.name}</li>
+                                <li>Trabalhador: ${complaint.worker.name}</li>
+                            </ul>
+                            <p>Seu saldo será atualizado automaticamente, e pode ser consultado em seu perfil na plataforma.</p>
+                        </div>
+                        <div class="signature">
+                            <p>Atenciosamente,<br>SafeWorks!</p>
+                        </div>
+                    </div>
+                </body>
+            </html>
+        `;
+
+    return emailHtml;
+  }
+
+  rejectComplaintByWorkerToWorker(complaint: any, complaintId: string, workerName: string, resultDescription: string): string {
+    const emailStyle = this.getStyle();
+    const emailHtml = `
+            ${emailStyle}
+                <body>
+                    <div class="container">
+                        <div class="header">
+                            <h1>Denúncia Recusada</h1>
+                        </div>
+                        <div class="content">
+                            <p>Olá ${workerName},</p>
+                            <p>A sua denúncia ${complaint.title} foi recusada por um administrador.</p>
+                            <p>Desta maneira, o contrato em questão foi marcado como finalizado, e o valor de contratação será restituído para o cliente</p>
+                            <p>Abaixo estão as informações do contrato e a descrição dos motivos que levaram a recusa da denúncia pelo administrador.</p>
+                            <p>Detalhes da Denúncia:</p>
+                            <ul>
+                                <li>ID da denúncia: ${complaintId}</li>
+                                <li>Data da denúncia: ${complaint.created}</li>
+                                <li>Motivo de recusa da denúncia: ${resultDescription}</li>
+                            </ul>
+                            <p>Detalhes do Contrato:</p>
+                            <ul>
+                                <li>ID do contrato: ${complaint.contract.id}</li>
+                                <li>Data de criação do contrato: ${complaint.contract.created}</li>
+                                <li>Título do anúncio: ${complaint.advertisement.title}</li>
+                                <li>Cliente: ${complaint.client.name}</li>
+                                <li>Trabalhador: ${complaint.worker.name}</li>
+                            </ul>
+                            <p>Seu saldo será atualizado automaticamente, e pode ser consultado em seu perfil na plataforma.</p>
+                        </div>
+                        <div class="signature">
+                            <p>Atenciosamente,<br>SafeWorks!</p>
+                        </div>
+                    </div>
+                </body>
+            </html>
+        `;
+
+    return emailHtml;
+  }
+  
 }
 
 export default EmailNotificationModel;
