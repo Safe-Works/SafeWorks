@@ -61,7 +61,10 @@ class JobContractRepository extends AppRepository {
         await advertisementRef.update({ Contracts: contractsArray });
       }
       if (!external_payment) {
-        await this.updateUserBalance(newJobContract.client.id, -newJobContract.price);
+        await this.updateUserBalance(
+          newJobContract.client.id,
+          -newJobContract.price
+        );
         const clientContact = await this.updateUserContractedServices(
           newJobContract.client.id,
           uid,
