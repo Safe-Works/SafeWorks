@@ -58,7 +58,6 @@ export class ContractsComponent {
         step: '1',
       }
     }).then(async (result) => {
-      await this.evaluateJob(contractUid, result);
 
       try {
         if (result.isConfirmed) {
@@ -67,8 +66,8 @@ export class ContractsComponent {
           if (response?.statusCode === 200) {
             this.isLoading = false;
             this.contracts = response;
-            this.openSnackBar("Contrato finalizado com sucesso!", "OK", "snackbar-success");
-          } else {
+          }
+          else {
             this.isLoading = false;
             this.openSnackBar("Ocorreu um erro ao finalizar o contrato!", "OK", "snackbar-error");
           }
@@ -78,6 +77,8 @@ export class ContractsComponent {
         this.isLoading = false;
         this.openSnackBar("Ocorreu um erro ao finalizar o contrato!", "OK", "snackbar-error");
       }
+      await this.evaluateJob(contractUid, result);
+
     });
   }
 
@@ -159,7 +160,12 @@ export class ContractsComponent {
         await this.contractService.evaluateJob(result.value, contractUid);
 
         if (result.value) {
-          Swal.fire("Avaliação salva com sucesso");
+          Swal.fire({
+            title: 'Avaliação salva com sucesso',
+            icon: 'success',
+            showConfirmButton: false,
+            timer: 1500,
+          });
         }
       } catch (error: any) {
         console.error('evaluateJob error: ', error);
