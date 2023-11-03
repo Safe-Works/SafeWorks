@@ -168,4 +168,67 @@ export class ContractsComponent {
     }
 
   }
+
+  async report(contractUid: string){
+
+    const { value: title } = await Swal.fire({
+      title: 'Adicione um título para sua denúncia',
+      input: 'text',
+      inputPlaceholder: 'Título...',
+      showCancelButton: true,
+      confirmButtonText: 'próximo',
+      confirmButtonColor: '#3085d6',
+      cancelButtonColor: '#d33',
+      inputAttributes: {
+        maxlength: '80',
+        minlength: '10'
+      },
+      inputValidator: (value) => {
+        if (!value) {
+          return 'Esse campo é obrigatório!';
+        } else {
+          return '';
+        }
+      }
+    });
+
+    if (title) {
+      const { value: description } = await Swal.fire({
+        input: 'textarea',
+        title: 'Adicione uma descrição detalhada',
+        inputPlaceholder: 'Descrição...',
+        showCancelButton: true,
+        confirmButtonText: 'enviar',
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#d33',
+        inputAttributes: {
+          maxlength: '300',
+        },
+        inputValidator: (value) => {
+          if (!value) {
+            return 'Esse campo é obrigatório!';
+          } else {
+            return '';
+          }
+        }
+      })
+
+      if (description && title) {
+        try {
+          await this.contractService.saveComplaints(description, title, contractUid, this.getUserType());
+
+          Swal.fire({
+            title: 'Denúncia enviada com sucesso!',
+            icon: 'success',
+            showConfirmButton: false,
+            timer: 1500,
+          })
+
+        } catch (error: any) {
+          console.error('evaluateJob error: ', error);
+          this.openSnackBar("Ocorreu um erro ao salvar a avaliação!", "OK", "snackbar-error");
+        }
+      }
+    }
+  }
 }

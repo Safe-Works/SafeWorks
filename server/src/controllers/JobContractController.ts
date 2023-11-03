@@ -316,6 +316,20 @@ class JobContractController {
             }
         }
     }
+
+  async saveComplaints(req: Request, res: Response): Promise<void> {
+    try {
+      const complaint = req.body;
+      const result = await jobContractRepository.saveComplaints(complaint);
+
+      res.status(201).json({ statusCode: 201, evaluation: result });
+    } catch (error) {
+      if (error instanceof Error) {
+        console.error("Error to report Job: ", error.message);
+        res.status(500).json({ statusCode: 500, error: 'complaint/failed-add', message: error.message });
+      }
+    }
+  }
 }
 
 export default JobContractController;

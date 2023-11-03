@@ -513,6 +513,59 @@ class JobContractRepository extends AppRepository {
         }
     }
 
+    async saveComplaints(complaint: any): Promise<any> {
+        try {
+            const jobContract = await this.getById(complaint.contractUid);
+            const dateTime = this.getDateTime()
+
+            let applicantClient = false;
+            let applicantWorker = false;
+
+            if (complaint.userType === 'client'){
+                applicantClient = true;
+            }
+
+            if (complaint.userType === 'worker'){
+                applicantWorker = true;
+            }
+
+            const complaintData = {
+                advertisement: {
+                    created: jobContract.created,
+                    id: jobContract.advertisement.id,
+                    title: jobContract.advertisement.title,
+                },
+                client: {
+                    applicant: applicantClient,
+                    id: complaint.clientName,
+                    name: complaint.clientUid,
+                },
+                contract: {
+                    id: complaint.contractUid,
+                },
+                created: dateTime,
+                deleted: null,
+                description: complaint.description,
+                modified: dateTime,
+                result_description: 'motivo',
+                status: 'open',
+                title: complaint.title,
+                worker: {
+                    applicant: applicantWorker,
+                    id: jobContract.worker.id,
+                    name: jobContract.worker.name,
+                },
+            }
+
+            const complaintRef = db.collection("TesteDenuncia");
+
+            await complaintRef.add(complaintData);
+
+        } catch (error) {
+            console.error("Error adding new complaint: ", error);
+            throw error;
+        }
+    }
 }
 
 export default JobContractRepository;

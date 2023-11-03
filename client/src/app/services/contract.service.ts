@@ -84,4 +84,24 @@ export class ContractService {
             throw error;
         }
     }
+
+    public saveComplaints(description: string, title: string, contractUid: string, userType: string): Promise<any> {
+        const body = {
+            description: description,
+            title: title,
+            contractUid: contractUid,
+            userType: userType,
+            clientUid: this.user.currentUser?.uid || "",
+            clientName: this.user.currentUser?.displayName || "",
+        };
+
+
+        try {
+            return firstValueFrom(this.http.post<string>(this.api + "Complaints", body));
+        }
+        catch (error) {
+            console.error(error);
+            throw error;
+        }
+    }
 }
