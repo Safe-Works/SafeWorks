@@ -121,6 +121,7 @@ class EmailNotificationModel {
                                   clientContact.telephone_number
                                 }</li>
                                 <li>Valor: R$${contract.price}</li>
+                                <li>Quantidade: ${contract.quantity}</li>
                                 <li>Pagamento: ${
                                   contract.status === "open"
                                     ? "Aprovado"
@@ -327,6 +328,7 @@ class EmailNotificationModel {
                                 <li>E-mail: ${workerContact.email}</li>
                                 <li>Telefone: ${workerContact.telephone_number}</li>
                                 <li>Valor: R$${contract.price}</li>
+                                <li>Quantidade: ${contract.quantity}</li>
                             </ul>
                             <p>Entre em contato com o trabalhador para discutir os detalhes.</p>
                         </div>
@@ -421,6 +423,7 @@ class EmailNotificationModel {
                             <ul>
                                 <li>Trabalhador: ${contract.worker.name}</li>
                                 <li>Valor: R$${contract.price}</li>
+                                <li>Quantidade: ${contract.quantity}</li>
                             </ul>
                             <p>Entre no seu histórico de contratos e também marque o contrato como finalizado.</p>
                             <p>Caso tenha ocorrido algum problema com o contrato, você pode fazer uma denuncia no seu histórico de contratos.</p>
@@ -516,6 +519,7 @@ class EmailNotificationModel {
                             <ul>
                                 <li>Cliente: ${contract.client.name}</li>
                                 <li>Valor: R$${contract.price}</li>
+                                <li>Quantidade: ${contract.quantity}</li>
                             </ul>
                             <p>Entre no seu histórico de contratos e também marque o contrato como finalizado.</p>
                             <p>Caso tenha ocorrido algum problema com o contrato, você pode fazer uma denuncia no seu histórico de contratos.</p>

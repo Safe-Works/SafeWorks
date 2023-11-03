@@ -29,10 +29,12 @@ class JobContractRepository extends AppRepository {
         worker_finished: false,
         finished: null,
       };
+      if (newJobContract?.quantity && newJobContract.quantity > 0) {
+        newJobContract.price = newJobContract.price * newJobContract.quantity;
+      }
       const docRef = await db.collection("JobContracts").add(newJobContract);
       const uid = docRef.id;
-
-      const advertisementId = jobContract.advertisement.id;
+      const advertisementId = newJobContract.advertisement.id;
       const advertisementRef = db
         .collection("JobAdvertisements")
         .doc(advertisementId);
@@ -42,14 +44,14 @@ class JobContractRepository extends AppRepository {
         const contractInfo = {
           id: uid,
           worker: {
-            name: jobContract.worker.name,
-            id: jobContract.worker.id,
+            name: newJobContract.worker.name,
+            id: newJobContract.worker.id,
           },
           client: {
-            name: jobContract.client.name,
-            id: jobContract.client.id,
+            name: newJobContract.client.name,
+            id: newJobContract.client.id,
           },
-          value: jobContract.price,
+          value: newJobContract.price,
         };
 
         const advertisementData = advertisementDoc.data();
@@ -59,27 +61,27 @@ class JobContractRepository extends AppRepository {
         await advertisementRef.update({ Contracts: contractsArray });
       }
       if (!external_payment) {
-        await this.updateUserBalance(jobContract.client.id, -jobContract.price);
+        await this.updateUserBalance(newJobContract.client.id, -newJobContract.price);
         const clientContact = await this.updateUserContractedServices(
-          jobContract.client.id,
+          newJobContract.client.id,
           uid,
-          jobContract.advertisement.title,
-          jobContract.price
+          newJobContract.advertisement.title,
+          newJobContract.price
         );
         const workerContact = await this.updateWorkerSelledServices(
-          jobContract.worker.id,
+          newJobContract.worker.id,
           uid,
-          jobContract.advertisement.title,
-          jobContract.price
+          newJobContract.advertisement.title,
+          newJobContract.price
         );
         const emailModel = new EmailNotificationModel();
         const clientEmailContent = emailModel.createEmailClientNotification(
-          jobContract,
+          newJobContract,
           uid,
           workerContact
         );
         const workerEmailContent = emailModel.createEmailWorkerNotification(
-          jobContract,
+          newJobContract,
           uid,
           clientContact
         );
@@ -386,25 +388,29 @@ class JobContractRepository extends AppRepository {
     }
   }
 
-    async getAllJobsFromWorker(workerUid: string): Promise<any> {
-        try {
-            let jobs;
+  async getAllJobsFromWorker(workerUid: string): Promise<any> {
+    try {
+      let jobs;
 
-            await db.collection("JobContracts")
-                .where('worker.id', '==', workerUid)
-                .where('deleted', '==', null)
-                .orderBy('created', 'asc')
-                .get()
-                .then((querySnapshot) => {
-                    jobs = querySnapshot.docs.map((doc) => {
-                        const data = doc.data();
-                        return { ...data, uid: doc.id };
-                    })
-                })
-                .catch((error) => {
-                    console.error("Error getting all Worker Jobs from Firestore. ", error);
-                    throw error;
-                });
+      await db
+        .collection("JobContracts")
+        .where("worker.id", "==", workerUid)
+        .where("deleted", "==", null)
+        .orderBy("created", "asc")
+        .get()
+        .then((querySnapshot) => {
+          jobs = querySnapshot.docs.map((doc) => {
+            const data = doc.data();
+            return { ...data, uid: doc.id };
+          });
+        })
+        .catch((error) => {
+          console.error(
+            "Error getting all Worker Jobs from Firestore. ",
+            error
+          );
+          throw error;
+        });
 
       return jobs;
     } catch (error) {
@@ -420,35 +426,39 @@ class JobContractRepository extends AppRepository {
       const jobData = jobDoc.data();
       let userUid;
 
-            if (jobDoc.exists && jobDoc.data()?.expired === false) {
-                if (userType === 'client') {
-                    userUid = jobData?.client.id;
-                    await jobRef.update({ client_finished: true });
-                }
-                if (userType === 'worker') {
-                    userUid = jobData?.worker.id;
-                    await jobRef.update({ worker_finished: true });
-                }
-                const finishedJob = (await jobRef.get()).data();
-                await this.sendEmailFinishedContract(jobUid, finishedJob, userType);
-                if (finishedJob?.client_finished && finishedJob?.worker_finished) {
-                    await jobRef.update({ status: 'finished', paid: true, finished: this.getDateTime() });
-                    await this.transferPaymentToWorker(jobDoc.data());
-                }
-                if (userType === 'client') {
-                    return this.getAllJobsFromClient(userUid);
-                }
-                if (userType === 'worker') {
-                    return this.getAllJobsFromWorker(userUid);
-                }
-            } else {
-                return 'expired';
-            }
-        } catch (error) {
-            console.error('Error finishing contract: ', error);
-            throw error;
+      if (jobDoc.exists && jobDoc.data()?.expired === false) {
+        if (userType === "client") {
+          userUid = jobData?.client.id;
+          await jobRef.update({ client_finished: true });
         }
+        if (userType === "worker") {
+          userUid = jobData?.worker.id;
+          await jobRef.update({ worker_finished: true });
+        }
+        const finishedJob = (await jobRef.get()).data();
+        await this.sendEmailFinishedContract(jobUid, finishedJob, userType);
+        if (finishedJob?.client_finished && finishedJob?.worker_finished) {
+          await jobRef.update({
+            status: "finished",
+            paid: true,
+            finished: this.getDateTime(),
+          });
+          await this.transferPaymentToWorker(jobDoc.data());
+        }
+        if (userType === "client") {
+          return this.getAllJobsFromClient(userUid);
+        }
+        if (userType === "worker") {
+          return this.getAllJobsFromWorker(userUid);
+        }
+      } else {
+        return "expired";
+      }
+    } catch (error) {
+      console.error("Error finishing contract: ", error);
+      throw error;
     }
+  }
 
   async transferPaymentToWorker(job: any): Promise<any> {
     try {
@@ -469,50 +479,73 @@ class JobContractRepository extends AppRepository {
     }
   }
 
-    async sendEmailFinishedContract(jobUid: string, jobData: any, userType: string): Promise<any> {
-        try {
-            const emailModel = new EmailNotificationModel();
-            const userRepository = new UserRepository();
-            const workerData = await userRepository.getById(jobData.worker.id);
-            const clientData = await userRepository.getById(jobData.client.id);
+  async sendEmailFinishedContract(
+    jobUid: string,
+    jobData: any,
+    userType: string
+  ): Promise<any> {
+    try {
+      const emailModel = new EmailNotificationModel();
+      const userRepository = new UserRepository();
+      const workerData = await userRepository.getById(jobData.worker.id);
+      const clientData = await userRepository.getById(jobData.client.id);
 
-            if (userType === 'client') {
-                const clientEmailContent = emailModel.clientFinishedContractToWorker(jobData, jobUid);
-                await emailModel.sendCustomEmail(workerData?.email, "Cliente finalizou o contrato.", clientEmailContent);
-            }
-            if (userType === 'worker') {
-                const workerEmailContent = emailModel.workerFinishedContractToClient(jobData, jobUid);
-                await emailModel.sendCustomEmail(clientData?.email, "Trabalhador finalizou o contrato.", workerEmailContent);
-                if (jobData?.client_finished && jobData?.worker_finished) {
-                    const finishedEmailContent = emailModel.finishedContract(jobData, jobUid);
-                    await emailModel.sendCustomEmail(workerData?.email, "Contrato finalizado!", finishedEmailContent);
-                }
-            }
-        } catch (error) {
-            console.error("Error to send finished contract email: ", error);
-            throw error;
+      if (userType === "client") {
+        const clientEmailContent = emailModel.clientFinishedContractToWorker(
+          jobData,
+          jobUid
+        );
+        await emailModel.sendCustomEmail(
+          workerData?.email,
+          "Cliente finalizou o contrato.",
+          clientEmailContent
+        );
+      }
+      if (userType === "worker") {
+        const workerEmailContent = emailModel.workerFinishedContractToClient(
+          jobData,
+          jobUid
+        );
+        await emailModel.sendCustomEmail(
+          clientData?.email,
+          "Trabalhador finalizou o contrato.",
+          workerEmailContent
+        );
+        if (jobData?.client_finished && jobData?.worker_finished) {
+          const finishedEmailContent = emailModel.finishedContract(
+            jobData,
+            jobUid
+          );
+          await emailModel.sendCustomEmail(
+            workerData?.email,
+            "Contrato finalizado!",
+            finishedEmailContent
+          );
         }
+      }
+    } catch (error) {
+      console.error("Error to send finished contract email: ", error);
+      throw error;
     }
+  }
 
-    async evaluateJob(evaluation: any): Promise<any> {
-        try {
-            const evaluationNumber = evaluation.evaluation;
-            const contractUid = evaluation.contractUid;
+  async evaluateJob(evaluation: any): Promise<any> {
+    try {
+      const evaluationNumber = evaluation.evaluation;
+      const contractUid = evaluation.contractUid;
 
-            const evaluationData = {
-                evaluation: evaluationNumber
-            };
+      const evaluationData = {
+        evaluation: evaluationNumber,
+      };
 
-            const contractRef = db.collection("JobContracts").doc(contractUid);
+      const contractRef = db.collection("JobContracts").doc(contractUid);
 
-            await contractRef.update(evaluationData);
-
-        } catch (error) {
-            console.error("Error adding new evaluation: ", error);
-            throw error;
-        }
+      await contractRef.update(evaluationData);
+    } catch (error) {
+      console.error("Error adding new evaluation: ", error);
+      throw error;
     }
-
+  }
 }
 
 export default JobContractRepository;
