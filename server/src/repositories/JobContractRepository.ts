@@ -547,7 +547,7 @@ class JobContractRepository extends AppRepository {
                 deleted: null,
                 description: complaint.description,
                 modified: dateTime,
-                result_description: 'motivo',
+                result_description: '',
                 status: 'open',
                 title: complaint.title,
                 worker: {
