@@ -28,6 +28,7 @@ class JobContractRepository extends AppRepository {
         client_finished: false,
         worker_finished: false,
         finished: null,
+        reported: false,
       };
       if (newJobContract?.quantity && newJobContract.quantity > 0) {
         newJobContract.price = newJobContract.price * newJobContract.quantity;
@@ -594,7 +595,7 @@ class JobContractRepository extends AppRepository {
                 },
             }
 
-            const complaintRef = db.collection("TesteDenuncia");
+            const complaintRef = db.collection("Complaints");
 
             await complaintRef.add(complaintData);
 
@@ -602,6 +603,24 @@ class JobContractRepository extends AppRepository {
             console.error("Error adding new complaint: ", error);
             throw error;
         }
+
+      try {
+        const jobContractRef = db.collection("JobContracts").doc(complaint.contractUid);
+        const jobContractDoc = await jobContractRef.get();
+        if (jobContractDoc.exists) {
+          // Crie um objeto com o campo "report" que você deseja adicionar
+          const updatedContract = {
+            reported: true
+          };
+
+          // Atualize o documento no Firestore com o novo campo
+          await jobContractRef.update(updatedContract);
+        }
+      } catch (error) {
+        console.error("Erro ao adicionar o campo 'report': ", error);
+        throw error;
+      }
+
     }
 }
 
