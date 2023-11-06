@@ -599,6 +599,10 @@ class JobContractRepository extends AppRepository {
 
             await complaintRef.add(complaintData);
 
+            // busca o id da denuncia
+            const complaintUid = await this.getComplaint(complaint.contractUid)
+            await this.sendEmailNewComplaint(complaintUid)
+
         } catch (error) {
             console.error("Error adding new complaint: ", error);
             throw error;
@@ -607,6 +611,29 @@ class JobContractRepository extends AppRepository {
         await this.atualizarReported(true, complaint.contractUid)
 
     }
+
+    async sendEmailNewComplaint(complaintUid: any): Promise<any> {
+      try {
+        const complaintRef = db.collection("Complaints").doc(complaintUid);
+        const complaintDoc = await complaintRef.get();
+        const complaintData = complaintDoc.data();
+
+        const emailModel = new EmailNotificationModel();
+        const userRepository = new UserRepository();
+        const workerData = await userRepository.getById(complaintData?.worker.id);
+        const clientData = await userRepository.getById(complaintData?.client.id);
+
+        const clientEmailContent = emailModel.sendEmailNewComplaint(complaintData, complaintUid, clientData?.name);
+        await emailModel.sendCustomEmail(clientData?.email, `Denúncia ${complaintUid} foi aberta.`, clientEmailContent);
+        const workerEmailContent = emailModel.sendEmailNewComplaint(complaintData, complaintUid, workerData?.name);
+        await emailModel.sendCustomEmail(workerData?.email, `Denúncia ${complaintUid} foi aberta.`, workerEmailContent);
+
+      }
+      catch (error) {
+        console.error("Error to send finished contract email: ", error);
+        throw error;
+      }
+  }
 
     async atualizarReported(status: boolean, contractUid: any) {
       try {
@@ -625,6 +652,27 @@ class JobContractRepository extends AppRepository {
         throw error;
       }
     }
+
+  async getComplaint(contractUid: string): Promise<string | undefined> {
+    const complaintRef = db.collection("Complaints");
+
+    // Executa uma consulta para encontrar documentos onde "contract.id" é igual a "contractUid"
+    const query = complaintRef.where("contract.id", "==", contractUid);
+
+    try {
+      const querySnapshot = await query.get();
+
+      if (querySnapshot.empty) {
+        return undefined;
+      } else {
+        return querySnapshot.docs[0].id;
+      }
+    } catch (error) {
+      console.error("Erro ao buscar a denúncia: ", error);
+      return undefined;
+    }
+  }
+
 
   async deleteComplaints(contractUid: string) {
     const complaintRef = db.collection("Complaints");
