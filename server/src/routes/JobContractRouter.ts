@@ -57,6 +57,11 @@ jobContractRouter.post(
     jobContractController.saveComplaints as RequestHandler
 );
 
+jobContractRouter.delete(
+    "/jobs/Complaints/:uid",
+    jobContractController.deleteComplaints as RequestHandler
+);
+
 jobContractRouter.post(
   "/jobs/checkout",
   celebrate({

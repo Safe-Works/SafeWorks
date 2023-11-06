@@ -246,20 +246,30 @@ export class ContractsComponent {
 
   cancelReport(contractUid: string) {
     Swal.fire({
-      title: 'Are you sure?',
-      text: "You won't be able to revert this!",
+      title: 'Você tem certeza?',
+      text: "A denúncia será removida",
       icon: 'warning',
       showCancelButton: true,
       confirmButtonColor: '#3085d6',
       cancelButtonColor: '#d33',
-      confirmButtonText: 'Yes, delete it!'
-    }).then((result) => {
-      if (result.isConfirmed) {
-        Swal.fire(
-            'Deleted!',
-            'Your file has been deleted.',
-            'success'
-        )
+      confirmButtonText: 'Sim, remover!',
+      cancelButtonText: 'Cancelar'
+    }).then(async (result) => {
+      try {
+        await this.contractService.DeleteComplaints(contractUid);
+
+        if (result.isConfirmed){
+          Swal.fire({
+            title: 'Denúncia removida com sucesso!',
+            icon: 'success',
+            showConfirmButton: false,
+            timer: 1500,
+          })
+        }
+
+      } catch (error: any) {
+        console.error('evaluateJob error: ', error);
+        this.openSnackBar("Ocorreu um erro ao salvar a avaliação!", "OK", "snackbar-error");
       }
     })
   }

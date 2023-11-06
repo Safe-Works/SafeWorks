@@ -105,4 +105,14 @@ export class ContractService {
             throw error;
         }
     }
+
+    async DeleteComplaints(contractUid: string) {
+        try {
+            return firstValueFrom(this.http.delete<string>(this.api + "Complaints/" + contractUid));
+        }
+        catch (error) {
+            console.error(error);
+            throw error;
+        }
+    }
 }

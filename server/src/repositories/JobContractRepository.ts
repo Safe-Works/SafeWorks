@@ -604,24 +604,53 @@ class JobContractRepository extends AppRepository {
             throw error;
         }
 
+        await this.atualizarReported(true, complaint.contractUid)
+
+    }
+
+    async atualizarReported(status: boolean, contractUid: any) {
       try {
-        const jobContractRef = db.collection("JobContracts").doc(complaint.contractUid);
+        const jobContractRef = db.collection("JobContracts").doc(contractUid);
         const jobContractDoc = await jobContractRef.get();
         if (jobContractDoc.exists) {
-          // Crie um objeto com o campo "report" que você deseja adicionar
+
           const updatedContract = {
-            reported: true
+            reported: status
           };
 
-          // Atualize o documento no Firestore com o novo campo
           await jobContractRef.update(updatedContract);
         }
       } catch (error) {
-        console.error("Erro ao adicionar o campo 'report': ", error);
+        console.error("Erro ao atualizar o campo 'report': ", error);
         throw error;
       }
-
     }
+
+  async deleteComplaints(contractUid: string) {
+    const complaintRef = db.collection("Complaints");
+
+    // Executa uma consulta para encontrar documentos onde "contract.id" é igual a "idAProcurar"
+    const query = complaintRef.where("contract.id", "==", contractUid);
+
+    query.get()
+        .then((querySnapshot) => {
+          if (querySnapshot.empty) {
+          } else {
+            // Exclue os documentos encontrados na consulta
+            querySnapshot.forEach((doc) => {
+              doc.ref.delete().then(() => {
+              }).catch((error) => {
+                console.error("Erro ao excluir denuncia: ", error);
+              });
+            });
+          }
+        })
+        .catch((error) => {
+          console.error("Erro ao buscar a denuncia: ", error);
+        });
+
+      this.atualizarReported(false, contractUid)
+  }
 }
 
 export default JobContractRepository;
