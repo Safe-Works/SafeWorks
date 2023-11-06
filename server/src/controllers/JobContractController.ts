@@ -2,7 +2,7 @@ import { Request, Response } from "express";
 import JobContractRepository from "../repositories/JobContractRepository";
 import * as admin from "firebase-admin";
 import CheckoutModel from "../models/CheckoutModel";
-import { MercadoPagoConfig, Preference, Payment } from "MercadoPago";import Favorites from "../models/Favorites";
+import { MercadoPagoConfig, Preference, Payment } from "mercadopago";
 
 const jobContractRepository = new JobContractRepository();
 
@@ -38,7 +38,7 @@ class JobContractController {
         jobContract.paid === true
           ? await jobContractRepository.verifyUserBalance(
               jobContract.client.id,
-              jobContract.price
+              jobContract.price * jobContract.quantity || 1
             )
           : true;
       if (!hasSufficientBalance) {
@@ -84,7 +84,7 @@ class JobContractController {
             {
               id: checkout.id,
               title: checkout.title,
-              quantity: 1,
+              quantity: checkout.quantity,
               unit_price: checkout.price,
               picture_url: checkout.picture_url,
             },

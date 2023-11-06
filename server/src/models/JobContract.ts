@@ -18,4 +18,5 @@ type JobContract = {
     status?: string,
     payment_status?: string,
     external_payment?: boolean,
+    quantity: number,
 }
