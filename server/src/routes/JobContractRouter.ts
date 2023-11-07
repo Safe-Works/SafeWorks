@@ -31,14 +31,14 @@ jobContractRouter.post(
 );
 
 jobContractRouter.post(
-    '/jobs/evaluateJob',
-    celebrate({
-        body: Joi.object({
-            contractUid: Joi.any().required(),
-            evaluation: Joi.number().required(),
-        })
-    }),
-    jobContractController.evaluateJob as RequestHandler
+  '/jobs/evaluateJob',
+  celebrate({
+    body: Joi.object({
+      contractUid: Joi.any().required(),
+      evaluation: Joi.number().required(),
+    })
+  }),
+  jobContractController.evaluateJob as RequestHandler
 );
 jobContractRouter.post(
   "/jobs/checkout",

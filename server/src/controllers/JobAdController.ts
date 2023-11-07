@@ -212,7 +212,7 @@ class JobAdController {
         // #swagger.end
     }
 
-    async getByWorker (req: Request, res: Response): Promise<void> {
+    async getByWorker(req: Request, res: Response): Promise<void> {
         /*
             #swagger.start
             #swagger.path = '/jobs/worker/{uid}'
