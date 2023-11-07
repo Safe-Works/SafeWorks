@@ -344,6 +344,20 @@ class JobContractController {
       }
     }
   }
+
+  async getComplaints(req: Request, res: Response): Promise<void> {
+    try {
+      const contractUid = req.params.uid;
+      const result = await jobContractRepository.getComplaints(contractUid);
+
+      res.status(201).json({ statusCode: 201, evaluation: result });
+    } catch (error) {
+      if (error instanceof Error) {
+        console.error("Error to get Complaint: ", error.message);
+        res.status(500).json({ statusCode: 500, error: 'complaint/failed-get', message: error.message });
+      }
+    }
+  }
 }
 
 export default JobContractController;

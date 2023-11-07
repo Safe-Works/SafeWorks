@@ -5,6 +5,7 @@ import { UserAuth } from 'src/app/auth/User.Auth';
 import { ContractService } from 'src/app/services/contract.service';
 import Swal from 'sweetalert2';
 import {JobService} from "../../services/job.service";
+import {ComplaintService} from "../../services/complaint.service";
 
 @Component({
   selector: 'app-contracts',
@@ -18,8 +19,14 @@ export class ContractsComponent {
   isLoading: boolean = false;
   firstFinished: string = 'Aguardando conclusão';
   lastFinished: string = 'Finalizado';
+  open: string = 'Aguardando análise'
+  onAnalysis: string = 'Em análise'
+  accepted: string = 'Aprovada'
+  refused: string = 'Rejeitada'
   isWorker: boolean = false;
   selectOption: string = 'worker_contracts';
+  complaints: any = null;
+  complaintsList: any[] = []; // Declare uma nova propriedade para armazenar as queixas
 
   constructor(
     private contractService: ContractService,
@@ -27,6 +34,7 @@ export class ContractsComponent {
     public router: Router,
     private _snackBar: MatSnackBar,
     private jobService: JobService,
+    private complaintService: ComplaintService,
   ) {}
 
   async ngOnInit() {
@@ -37,6 +45,14 @@ export class ContractsComponent {
     } else {
       this.contracts = await this.contractService.GetAllFromClient(this.userAuth.currentUser?.uid ?? '');
     }
+    this.complaints = await this.complaintService.GetAll();
+    this.complaintsList = this.complaints.complaints;
+
+    // console.log('denuncia')
+    // this.complaints.complaints.forEach((complaint: any) => {
+    //   console.log(complaint.status);
+    // });
+
   }
 
   finishContract(contractUid: string) {
@@ -110,7 +126,43 @@ export class ContractsComponent {
     return false;
   }
 
+  setProgressBarStatusComplaint(){
+    this.complaints.complaints.forEach((complaint: any) => {
+      console.log(complaint.uid);
+      this.complaintsList.concat(complaint)
+    });
+
+    this.complaints.complaints.forEach((complaint: any) => {
+        if (complaint.status === 'open') {
+          // console.log(complaint.uid)
+          // console.log(complaint.status)
+          const element1 = document.getElementById('step1 ' + complaint.uid);
+          element1?.classList.remove('active');
+          const element2 = document.getElementById('step2 ' + complaint.uid);
+          element2?.classList.remove('active');
+          const element3 = document.getElementById('step3 ' + complaint.uid);
+          element3?.classList.remove('active');
+        }
+        if (complaint.status === 'onAnalysis') {
+          // console.log(complaint.uid)
+          // console.log(complaint.status)
+          const element1 = document.getElementById('step1 ' + complaint.uid);
+          element1?.classList.add('active');
+          const element2 = document.getElementById('step2 ' + complaint.uid);
+          element2?.classList.remove('active');
+          const element3 = document.getElementById('step3 ' + complaint.uid);
+          element3?.classList.remove('active');
+        }
+    });
+
+  }
+
   setProgressBarStatus(contract: any): void {
+    //const id = this.contractService.GetComplaints(contract.uid)
+    //const complaints = this.complaintService.GetAll()
+   // console.log("chamando progress bar")
+
+
     if (contract.paid) {
       const element = document.getElementById('step1 ' + contract.uid);
       element?.classList.add('active');
@@ -123,6 +175,10 @@ export class ContractsComponent {
       const element = document.getElementById('step2 ' + contract.uid);
       element?.classList.add('active');
     }
+
+    this.setProgressBarStatusComplaint();
+
+
   }
 
   viewAdvertisement(uid: any): void {
@@ -157,7 +213,7 @@ export class ContractsComponent {
   async evaluateJob(contractUid: string, result: any) {
     if (result.isConfirmed) {
       try {
-        await this.contractService.evaluateJob(result.value, contractUid);
+        await this.contractService.EvaluateJob(result.value, contractUid);
 
         if (result.value) {
           Swal.fire({
@@ -221,7 +277,10 @@ export class ContractsComponent {
 
       if (description && title) {
         try {
-          await this.contractService.saveComplaints(description, title, contractUid, this.getUserType());
+          this.isLoading = true;
+          await this.contractService.SaveComplaints(description, title, contractUid, this.getUserType());
+          await this.ngOnInit()
+          this.isLoading = false;
 
           Swal.fire({
             title: 'Denúncia enviada com sucesso!',
@@ -231,8 +290,8 @@ export class ContractsComponent {
           })
 
         } catch (error: any) {
-          console.error('evaluateJob error: ', error);
-          this.openSnackBar("Ocorreu um erro ao salvar a avaliação!", "OK", "snackbar-error");
+          console.error('report error: ', error);
+          this.openSnackBar("Ocorreu um erro ao denunciar o serviço!", "OK", "snackbar-error");
         }
       }
     }
@@ -256,7 +315,11 @@ export class ContractsComponent {
       cancelButtonText: 'Cancelar'
     }).then(async (result) => {
       try {
+        this.isLoading = true;
         await this.contractService.DeleteComplaints(contractUid);
+        await this.ngOnInit()
+        this.contracts = await this.contractService.GetContracts();
+        this.isLoading = false;
 
         if (result.isConfirmed){
           Swal.fire({
@@ -268,8 +331,8 @@ export class ContractsComponent {
         }
 
       } catch (error: any) {
-        console.error('evaluateJob error: ', error);
-        this.openSnackBar("Ocorreu um erro ao salvar a avaliação!", "OK", "snackbar-error");
+        console.error('report error: ', error);
+        this.openSnackBar("Ocorreu um erro ao remover a denúncia!", "OK", "snackbar-error");
       }
     })
   }

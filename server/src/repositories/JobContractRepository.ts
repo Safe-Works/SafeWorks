@@ -699,6 +699,10 @@ class JobContractRepository extends AppRepository {
 
       this.atualizarReported(false, contractUid)
   }
+
+  async getComplaints(contractUid: string) {
+      return await this.getComplaint(contractUid);
+  }
 }
 
 export default JobContractRepository;
