@@ -576,8 +576,8 @@ class JobContractRepository extends AppRepository {
                 },
                 client: {
                     applicant: applicantClient,
-                    id: complaint.clientName,
-                    name: complaint.clientUid,
+                    id: complaint.clientUid,
+                    name: complaint.clientName,
                 },
                 contract: {
                     id: complaint.contractUid,
