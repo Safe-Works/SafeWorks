@@ -1,5 +1,5 @@
 import express, { RequestHandler } from 'express';
-import {celebrate, Joi} from 'celebrate';
+import { celebrate, Joi } from 'celebrate';
 import EvaluationController from '../controllers/EvaluationController';
 
 const evaluationRouter = express.Router();

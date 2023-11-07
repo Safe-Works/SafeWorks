@@ -38,7 +38,7 @@ class JobContractController {
         jobContract.paid === true
           ? await jobContractRepository.verifyUserBalance(
               jobContract.client.id,
-              jobContract.price
+              jobContract.price * jobContract.quantity || 1
             )
           : true;
       if (!hasSufficientBalance) {
@@ -84,7 +84,7 @@ class JobContractController {
             {
               id: checkout.id,
               title: checkout.title,
-              quantity: 1,
+              quantity: checkout.quantity,
               unit_price: checkout.price,
               picture_url: checkout.picture_url,
             },
@@ -285,37 +285,37 @@ class JobContractController {
     }
   }
 
-    async finishContract(req: Request, res: Response): Promise<void> {
-        try {
-            const jobUid = req.params.uid;
-            const userType = req.params.user_type;
-            const jobs = await jobContractRepository.finishContract(jobUid, userType);
-            if (jobs) {
-                res.status(200).json({ statusCode: 200, jobs: jobs });
-            } else {
-                res.status(404).json({ statusCode: 404, error: 'jobContract/not-found' });
-            }
-        } catch (error) {
-            if (error instanceof Error) {
-                console.error('Error to finish the contract: ', error.message);
-                res.status(500).json({ statusCode: 500, error: 'jobContract/failed-finishContract', message: error.message })
-            }
-        }
+  async finishContract(req: Request, res: Response): Promise<void> {
+    try {
+      const jobUid = req.params.uid;
+      const userType = req.params.user_type;
+      const jobs = await jobContractRepository.finishContract(jobUid, userType);
+      if (jobs) {
+        res.status(200).json({ statusCode: 200, jobs: jobs });
+      } else {
+        res.status(404).json({ statusCode: 404, error: 'jobContract/not-found' });
+      }
+    } catch (error) {
+      if (error instanceof Error) {
+        console.error('Error to finish the contract: ', error.message);
+        res.status(500).json({ statusCode: 500, error: 'jobContract/failed-finishContract', message: error.message })
+      }
     }
+  }
 
-    async evaluateJob(req: Request, res: Response): Promise<void> {
-        try {
-            const evaluation = req.body;
-            const result = await jobContractRepository.evaluateJob(evaluation);
+  async evaluateJob(req: Request, res: Response): Promise<void> {
+    try {
+      const evaluation = req.body;
+      const result = await jobContractRepository.evaluateJob(evaluation);
 
-            res.status(201).json({ statusCode: 201, evaluation: result });
-        } catch (error) {
-            if (error instanceof Error) {
-                console.error("Error to evaluate Job: ", error.message);
-                res.status(500).json({ statusCode: 500, error: 'evalateJob/failed-add', message: error.message });
-            }
-        }
+      res.status(201).json({ statusCode: 201, evaluation: result });
+    } catch (error) {
+      if (error instanceof Error) {
+        console.error("Error to evaluate Job: ", error.message);
+        res.status(500).json({ statusCode: 500, error: 'evalateJob/failed-add', message: error.message });
+      }
     }
+  }
 }
 
 export default JobContractController;

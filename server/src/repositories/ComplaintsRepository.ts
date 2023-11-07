@@ -2,6 +2,7 @@ import AppRepository from "./AppRepository";
 import { db } from "../../util/admin";
 import EmailNotificationModel from "../models/EmailNotificationModel";
 import UserRepository from "./UserRepository";
+import JobContractRepository from "./JobContractRepository";
 
 class ComplaintsRepository extends AppRepository {
 
@@ -40,14 +41,20 @@ class ComplaintsRepository extends AppRepository {
           modified: this.getDateTime()
         });
 
+        const userRepository = new UserRepository();
+        const workerData = await userRepository.getById(complaintData?.worker.id);
+        const clientData = await userRepository.getById(complaintData?.client.id);
+
         if (body.status === 'onAnalysis') {
-          this.sendEmailStartAnalysis(complaintUid, complaintData);
+          await this.sendEmailStartAnalysis(complaintUid, complaintData, workerData, clientData);
         }
         if (body.status === 'accepted') {
-          this.sendEmailAcceptedComplaint(complaintUid, complaintData, body.result_description);
+          await this.sendEmailAcceptedComplaint(complaintUid, complaintData, body.result_description, workerData, clientData);
+          await this.refundAcceptedComplaint(complaintUid);
         }
         if (body.status === 'refused') {
-          this.sendEmailRefusedComplaint(complaintUid, complaintData, body.result_description);
+          await this.sendEmailRefusedComplaint(complaintUid, complaintData, body.result_description, workerData, clientData);
+          await this.refundRefusedComplaint(complaintUid);
         }
 
         return this.getAll();
@@ -60,13 +67,9 @@ class ComplaintsRepository extends AppRepository {
     }
   }
 
-  async sendEmailStartAnalysis(complaintUid: string, complaintData: any): Promise<any> {
+  async sendEmailStartAnalysis(complaintUid: string, complaintData: any, workerData: any, clientData: any): Promise<any> {
     try {
       const emailModel = new EmailNotificationModel();
-      const userRepository = new UserRepository();
-      const workerData = await userRepository.getById(complaintData.worker.id);
-      const clientData = await userRepository.getById(complaintData.client.id);
-
       const clientEmailContent = emailModel.onAnalysisComplaint(complaintData, complaintUid, clientData?.name);
       await emailModel.sendCustomEmail(clientData?.email, `Denúncia ${complaintUid} Entrou em Análise.`, clientEmailContent);
       const workerEmailContent = emailModel.onAnalysisComplaint(complaintData, complaintUid, workerData?.name);
@@ -77,12 +80,9 @@ class ComplaintsRepository extends AppRepository {
     }
   }
 
-  async sendEmailAcceptedComplaint(complaintUid: string, complaintData: any, resultDescription: string): Promise<any> {
+  async sendEmailAcceptedComplaint(complaintUid: string, complaintData: any, resultDescription: string, workerData: any, clientData: any): Promise<any> {
     try {
       const emailModel = new EmailNotificationModel();
-      const userRepository = new UserRepository();
-      const workerData = await userRepository.getById(complaintData.worker.id);
-      const clientData = await userRepository.getById(complaintData.client.id);
 
       // Se o cliente foi quem denunciou
       if (complaintData.client.applicant) {
@@ -104,12 +104,9 @@ class ComplaintsRepository extends AppRepository {
     }
   }
 
-  async sendEmailRefusedComplaint(complaintUid: string, complaintData: any, resultDescription: string): Promise<any> {
+  async sendEmailRefusedComplaint(complaintUid: string, complaintData: any, resultDescription: string, workerData: any, clientData: any): Promise<any> {
     try {
       const emailModel = new EmailNotificationModel();
-      const userRepository = new UserRepository();
-      const workerData = await userRepository.getById(complaintData.worker.id);
-      const clientData = await userRepository.getById(complaintData.client.id);
 
       // Se o cliente foi quem denunciou
       if (complaintData.client.applicant) {
@@ -127,6 +124,40 @@ class ComplaintsRepository extends AppRepository {
       }
     } catch (error) {
       console.error("Error to send refused complaint email: ", error);
+      throw error;
+    }
+  }
+
+  async refundAcceptedComplaint(complaintData: any): Promise<any> {
+    try {
+      const contractRepository = new JobContractRepository();
+      const contractData = await contractRepository.getById(complaintData.contract.id);
+      if (complaintData.client.applicant) {
+        await contractRepository.updateUserBalance(complaintData.client.id, contractData.price);
+      }
+      if (complaintData.worker.applicant) {
+        await contractRepository.updateUserBalance(complaintData.worker.id, contractData.price);
+      }
+      await contractRepository.finishContractWithComplaint(complaintData.contract.id);
+    } catch (error) {
+      console.error('Error to refund the contract of accepted complaint: ', error);
+      throw error;
+    }
+  }
+
+  async refundRefusedComplaint(complaintData: any): Promise<any> {
+    try {
+      const contractRepository = new JobContractRepository();
+      const contractData = await contractRepository.getById(complaintData.contract.id);
+      if (complaintData.client.applicant) {
+        await contractRepository.updateUserBalance(complaintData.worker.id, contractData.price);
+      }
+      if (complaintData.worker.applicant) {
+        await contractRepository.updateUserBalance(complaintData.client.id, contractData.price);
+      }
+      await contractRepository.finishContractWithComplaint(complaintData.contract.id);
+    } catch (error) {
+      console.error('Error to refund the contract of refused complaint: ', error);
       throw error;
     }
   }

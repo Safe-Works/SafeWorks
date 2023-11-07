@@ -24,21 +24,22 @@ jobContractRouter.post(
       }).required(),
       price: Joi.number().required(),
       paid: Joi.boolean(),
-      external_payment: Joi.boolean()
+      external_payment: Joi.boolean(),
+      quantity: Joi.number().required(),
     }),
   }),
   jobContractController.add as RequestHandler
 );
 
 jobContractRouter.post(
-    '/jobs/evaluateJob',
-    celebrate({
-        body: Joi.object({
-            contractUid: Joi.any().required(),
-            evaluation: Joi.number().required(),
-        })
-    }),
-    jobContractController.evaluateJob as RequestHandler
+  '/jobs/evaluateJob',
+  celebrate({
+    body: Joi.object({
+      contractUid: Joi.any().required(),
+      evaluation: Joi.number().required(),
+    })
+  }),
+  jobContractController.evaluateJob as RequestHandler
 );
 jobContractRouter.post(
   "/jobs/checkout",
@@ -48,7 +49,8 @@ jobContractRouter.post(
       title: Joi.string().required(),
       price: Joi.number().required(),
       description: Joi.string().required(),
-      picture_url: Joi.string()
+      picture_url: Joi.string(),
+      quantity: Joi.number().required(),
     }),
   }),
   jobContractController.checkout as RequestHandler

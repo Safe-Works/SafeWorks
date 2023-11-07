@@ -1,7 +1,5 @@
-import {Request, Response} from "express";
-import Favorites from "../models/Favorites";
+import { Request, Response } from "express";
 import EvaluationRepository from "../repositories/EvaluationRepository";
-import {Console} from "inspector";
 
 const evaluationRepository = new EvaluationRepository();
 
@@ -11,7 +9,6 @@ class EvaluationController {
 
             const evaluation = req.body;
             console.log(evaluation)
-            //const result = await evaluationRepository.add(evaluation);
             const result = "oi";
 
             res.status(201).json({ statusCode: 201, favorite: result });

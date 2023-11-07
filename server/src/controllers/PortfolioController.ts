@@ -84,7 +84,7 @@ class PortfolioController {
             } else {
                 res.status(404).json({ statusCode: 404, error: "portfolio/not-found" });
             }
-            
+
         } catch (error) {
             if (error instanceof Error) {
                 console.error("Error to add certification on portfolio: ", error.message);
@@ -217,7 +217,7 @@ class PortfolioController {
                     res.status(200).json({ statusCode: 200, portfolio: result, message: 'Certification deleted successfully from Portfolio.' });
                 } else {
                     res.status(404).json({ statusCode: 404, error: 'certification/not-found' });
-                } 
+                }
             } else {
                 res.status(404).json({ statusCode: 404, error: 'portfolio/not-found' });
             }

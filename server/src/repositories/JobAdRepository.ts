@@ -38,7 +38,7 @@ class JobAdRepository extends AppRepository {
             return uid;
         } catch (error) {
             console.error("Error adding job advertisement to Firestore: ", error);
-            throw error; 
+            throw error;
         }
     }
 
@@ -311,7 +311,7 @@ class JobAdRepository extends AppRepository {
                         return { ...data, uid: doc.id };
                     })
                 });
-            
+
             return jobs;
         } catch (error) {
             console.error(error);
@@ -324,7 +324,7 @@ class JobAdRepository extends AppRepository {
         let query = db.collection("JobAdvertisements")
             .orderBy('created')
             .limit(ITEMS_PER_PAGE);
-    
+
         query = query.where('deleted', '==', null);
         if (lastDocument) {
             query = query.startAfter(lastDocument);
