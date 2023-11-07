@@ -28,6 +28,7 @@ class JobContractRepository extends AppRepository {
         client_finished: false,
         worker_finished: false,
         finished: null,
+        reported: false,
       };
       if (newJobContract?.quantity && newJobContract.quantity > 0) {
         newJobContract.price = newJobContract.price * newJobContract.quantity;
@@ -395,19 +396,23 @@ class JobContractRepository extends AppRepository {
     try {
       let jobs;
 
-      await db.collection("JobContracts")
-        .where('worker.id', '==', workerUid)
-        .where('deleted', '==', null)
-        .orderBy('created', 'asc')
+      await db
+        .collection("JobContracts")
+        .where("worker.id", "==", workerUid)
+        .where("deleted", "==", null)
+        .orderBy("created", "asc")
         .get()
         .then((querySnapshot) => {
           jobs = querySnapshot.docs.map((doc) => {
             const data = doc.data();
             return { ...data, uid: doc.id };
-          })
+          });
         })
         .catch((error) => {
-          console.error("Error getting all Worker Jobs from Firestore. ", error);
+          console.error(
+            "Error getting all Worker Jobs from Firestore. ",
+            error
+          );
           throw error;
         });
 
@@ -426,45 +431,35 @@ class JobContractRepository extends AppRepository {
       let userUid;
 
       if (jobDoc.exists && jobDoc.data()?.expired === false) {
-        if (userType === 'client') {
+        if (userType === "client") {
           userUid = jobData?.client.id;
           await jobRef.update({ client_finished: true });
         }
-        if (userType === 'worker') {
+        if (userType === "worker") {
           userUid = jobData?.worker.id;
           await jobRef.update({ worker_finished: true });
         }
         const finishedJob = (await jobRef.get()).data();
         await this.sendEmailFinishedContract(jobUid, finishedJob, userType);
         if (finishedJob?.client_finished && finishedJob?.worker_finished) {
-          await jobRef.update({ status: 'finished', paid: true, finished: this.getDateTime() });
+          await jobRef.update({
+            status: "finished",
+            paid: true,
+            finished: this.getDateTime(),
+          });
           await this.transferPaymentToWorker(jobDoc.data());
         }
-        if (userType === 'client') {
+        if (userType === "client") {
           return this.getAllJobsFromClient(userUid);
         }
-        if (userType === 'worker') {
+        if (userType === "worker") {
           return this.getAllJobsFromWorker(userUid);
         }
       } else {
-        return 'expired';
+        return "expired";
       }
     } catch (error) {
-      console.error('Error finishing contract: ', error);
-      throw error;
-    }
-  }
-
-  async finishContractWithComplaint(jobUid: string): Promise<any> {
-    try {
-      const jobRef = db.collection("JobContracts").doc(jobUid);
-      const jobDoc = await jobRef.get();
-
-      if (jobDoc.exists && jobDoc.data()?.expired === false) {
-        await jobRef.update({ status: 'finished', paid: true, client_finished: true, worker_finished: true, finished: this.getDateTime() });
-      }
-    } catch (error) {
-      console.error('Error finishing contract with complaint: ', error);
+      console.error("Error finishing contract: ", error);
       throw error;
     }
   }
@@ -557,6 +552,158 @@ class JobContractRepository extends AppRepository {
     }
   }
 
+    async saveComplaints(complaint: any): Promise<any> {
+        try {
+            const jobContract = await this.getById(complaint.contractUid);
+            const dateTime = this.getDateTime()
+
+            let applicantClient = false;
+            let applicantWorker = false;
+
+            if (complaint.userType === 'client'){
+                applicantClient = true;
+            }
+
+            if (complaint.userType === 'worker'){
+                applicantWorker = true;
+            }
+
+            const complaintData = {
+                advertisement: {
+                    created: jobContract.created,
+                    id: jobContract.advertisement.id,
+                    title: jobContract.advertisement.title,
+                },
+                client: {
+                    applicant: applicantClient,
+                    id: complaint.clientName,
+                    name: complaint.clientUid,
+                },
+                contract: {
+                    id: complaint.contractUid,
+                },
+                created: dateTime,
+                deleted: null,
+                description: complaint.description,
+                modified: dateTime,
+                result_description: '',
+                status: 'open',
+                title: complaint.title,
+                worker: {
+                    applicant: applicantWorker,
+                    id: jobContract.worker.id,
+                    name: jobContract.worker.name,
+                },
+            }
+
+            const complaintRef = db.collection("Complaints");
+
+            await complaintRef.add(complaintData);
+
+            // busca o id da denuncia
+            const complaintUid = await this.getComplaint(complaint.contractUid)
+            await this.sendEmailNewComplaint(complaintUid)
+
+        } catch (error) {
+            console.error("Error adding new complaint: ", error);
+            throw error;
+        }
+
+        await this.atualizarReported(true, complaint.contractUid)
+
+    }
+
+    async sendEmailNewComplaint(complaintUid: any): Promise<any> {
+      try {
+        const complaintRef = db.collection("Complaints").doc(complaintUid);
+        const complaintDoc = await complaintRef.get();
+        const complaintData = complaintDoc.data();
+
+        const emailModel = new EmailNotificationModel();
+        const userRepository = new UserRepository();
+        const workerData = await userRepository.getById(complaintData?.worker.id);
+        const clientData = await userRepository.getById(complaintData?.client.id);
+
+        const clientEmailContent = emailModel.sendEmailNewComplaint(complaintData, complaintUid, clientData?.name);
+        await emailModel.sendCustomEmail(clientData?.email, `Denúncia ${complaintUid} foi aberta.`, clientEmailContent);
+        const workerEmailContent = emailModel.sendEmailNewComplaint(complaintData, complaintUid, workerData?.name);
+        await emailModel.sendCustomEmail(workerData?.email, `Denúncia ${complaintUid} foi aberta.`, workerEmailContent);
+
+      }
+      catch (error) {
+        console.error("Error to send finished contract email: ", error);
+        throw error;
+      }
+  }
+
+    async atualizarReported(status: boolean, contractUid: any) {
+      try {
+        const jobContractRef = db.collection("JobContracts").doc(contractUid);
+        const jobContractDoc = await jobContractRef.get();
+        if (jobContractDoc.exists) {
+
+          const updatedContract = {
+            reported: status
+          };
+
+          await jobContractRef.update(updatedContract);
+        }
+      } catch (error) {
+        console.error("Erro ao atualizar o campo 'report': ", error);
+        throw error;
+      }
+    }
+
+  async getComplaint(contractUid: string): Promise<string | undefined> {
+    const complaintRef = db.collection("Complaints");
+
+    // Executa uma consulta para encontrar documentos onde "contract.id" é igual a "contractUid"
+    const query = complaintRef.where("contract.id", "==", contractUid);
+
+    try {
+      const querySnapshot = await query.get();
+
+      if (querySnapshot.empty) {
+        return undefined;
+      } else {
+        return querySnapshot.docs[0].id;
+      }
+    } catch (error) {
+      console.error("Erro ao buscar a denúncia: ", error);
+      return undefined;
+    }
+  }
+
+
+  async deleteComplaints(contractUid: string) {
+    const complaintRef = db.collection("Complaints");
+
+    // Executa uma consulta para encontrar documentos onde "contract.id" é igual a "idAProcurar"
+    const query = complaintRef.where("contract.id", "==", contractUid);
+
+    query.get()
+        .then((querySnapshot) => {
+          if (querySnapshot.empty) {
+          } else {
+            // Exclue os documentos encontrados na consulta
+            querySnapshot.forEach((doc) => {
+              doc.ref.delete().then(() => {
+              }).catch((error) => {
+                console.error("Erro ao excluir denuncia: ", error);
+              });
+            });
+          }
+        })
+        .catch((error) => {
+          console.error("Erro ao buscar a denuncia: ", error);
+        });
+
+      this.atualizarReported(false, contractUid)
+  }
+
+  async getComplaints(contractUid: string) {
+      return await this.getComplaint(contractUid);
+  }
 }
 
 export default JobContractRepository;

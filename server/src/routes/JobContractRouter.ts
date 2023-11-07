@@ -41,6 +41,32 @@ jobContractRouter.post(
   }),
   jobContractController.evaluateJob as RequestHandler
 );
+
+jobContractRouter.post(
+    '/jobs/Complaints',
+    celebrate({
+        body: Joi.object({
+            description: Joi.string().required(),
+            title: Joi.string().required(),
+            contractUid: Joi.string().required(),
+            userType: Joi.string().required(),
+            clientUid: Joi.string().required(),
+            clientName: Joi.string().required()
+        })
+    }),
+    jobContractController.saveComplaints as RequestHandler
+);
+
+jobContractRouter.delete(
+    "/jobs/Complaints/:uid",
+    jobContractController.deleteComplaints as RequestHandler
+);
+
+jobContractRouter.get(
+    "/jobs/Complaints/:uid",
+    jobContractController.getComplaints as RequestHandler
+);
+
 jobContractRouter.post(
   "/jobs/checkout",
   celebrate({

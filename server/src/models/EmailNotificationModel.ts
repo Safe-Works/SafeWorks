@@ -356,6 +356,41 @@ class EmailNotificationModel {
     return emailHtml;
   }
 
+    sendEmailNewComplaint(complaint: any, complaintId: string, userName: string): string {
+        const emailStyle = this.getStyle();
+        const emailHtml = `
+            ${emailStyle}
+                <body>
+                  <div class="container">
+                    <div class="header">
+                      <h1>Denúncia aberta</h1>
+                    </div>
+                    <div class="content">
+                      <p>Olá ${userName},</p>
+                      <p>A denúncia ${complaint.title} foi aberta.</p>
+                      <p>Um administrador irá analisar os motivos da denúncia e deferir seu resultado em breve.</p>
+                      <p>Você receberá uma notificação por email informando quando o status da denúncia for alterado.</p>
+                      <p>ID da denúncia: ${complaintId}</p>
+                      <p>Detalhes do Contrato:</p>
+                      <ul>
+                        <li>ID do contrato: ${complaint.contract.id}</li>
+                        <li>Título do anúncio: ${complaint.advertisement.title}</li>
+                        <li>Cliente: ${complaint.client.name}</li>
+                        <li>Trabalhador: ${complaint.worker.name}</li>
+                      </ul>
+                      <p>Caso tenha ocorrido algum problema, você pode cancelar a denúncia no seu histórico de contratos.</p>
+                    </div>
+                    <div class="signature">
+                      <p>Atenciosamente,<br>SafeWorks!</p>
+                    </div>
+                  </div>
+                </body>
+              </html>
+        `;
+
+        return emailHtml;
+    }
+
   acceptComplaintByClientToWorker(complaint: any, complaintId: string, workerName: string, resultDescription: string): string {
     const emailStyle = this.getStyle();
     const emailHtml = `

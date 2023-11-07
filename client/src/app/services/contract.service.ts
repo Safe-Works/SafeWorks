@@ -71,7 +71,7 @@ export class ContractService {
         }
     }
 
-    public evaluateJob(evaluation: number, contractUid: any): Promise<any> {
+    public EvaluateJob(evaluation: number, contractUid: any): Promise<any> {
         const body = {
             contractUid: contractUid,
             evaluation: evaluation
@@ -79,6 +79,56 @@ export class ContractService {
 
         try {
             return firstValueFrom(this.http.post<string>(this.api + "evaluateJob", body));
+        }
+        catch (error) {
+            console.error(error);
+            throw error;
+        }
+    }
+
+    public SaveComplaints(description: string, title: string, contractUid: string, userType: string): Promise<any> {
+        const body = {
+            description: description,
+            title: title,
+            contractUid: contractUid,
+            userType: userType,
+            clientUid: this.user.currentUser?.uid || "",
+            clientName: this.user.currentUser?.displayName || "",
+        };
+
+
+        try {
+            return firstValueFrom(this.http.post<string>(this.api + "Complaints", body));
+        }
+        catch (error) {
+            console.error(error);
+            throw error;
+        }
+    }
+
+    async DeleteComplaints(contractUid: string) {
+        try {
+            return firstValueFrom(this.http.delete<string>(this.api + "Complaints/" + contractUid));
+        }
+        catch (error) {
+            console.error(error);
+            throw error;
+        }
+    }
+
+    async GetComplaints(contractUid: string) {
+        try {
+            return firstValueFrom(this.http.get<string>(this.api + "Complaints/" + contractUid));
+        }
+        catch (error) {
+            console.error(error);
+            throw error;
+        }
+    }
+
+    async GetContracts() {
+        try {
+            return firstValueFrom(this.http.get<string>(this.api));
         }
         catch (error) {
             console.error(error);
