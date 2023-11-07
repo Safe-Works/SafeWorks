@@ -539,12 +539,13 @@ class JobContractRepository extends AppRepository {
       const contractUid = evaluation.contractUid;
 
       const evaluationData = {
-        evaluation: evaluationNumber,
+        evaluation: evaluationNumber
       };
 
       const contractRef = db.collection("JobContracts").doc(contractUid);
 
       await contractRef.update(evaluationData);
+
     } catch (error) {
       console.error("Error adding new evaluation: ", error);
       throw error;

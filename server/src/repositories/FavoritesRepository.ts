@@ -1,4 +1,4 @@
-import {db} from "../../util/admin";
+import { db } from "../../util/admin";
 import Favorites from "../models/Favorites";
 
 class FavoritesRepository {
@@ -25,7 +25,7 @@ class FavoritesRepository {
     }
 
     async getById(uid: string): Promise<any> {
-            let result = null;
+        let result = null;
         try {
             const userDoc = await db.collection("Users").doc(uid).get();
 
