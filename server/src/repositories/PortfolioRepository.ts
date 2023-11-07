@@ -25,8 +25,8 @@ class PortfolioRepository extends AppRepository {
                         ...await userDoc.data()?.worker,
                         portfolio: docRef.id
                     }
-                    await userRef.update({worker: worker});
-                    
+                    await userRef.update({ worker: worker });
+
                     result = newPortfolio;
                 })
                 .catch((error) => {
@@ -59,7 +59,7 @@ class PortfolioRepository extends AppRepository {
             const updatedCertifications = [...certifications, newCertification];
 
             await portfolioRef.update({
-                "certifications": updatedCertifications, 
+                "certifications": updatedCertifications,
                 "modified": modified
             });
 
@@ -85,7 +85,7 @@ class PortfolioRepository extends AppRepository {
             console.error("Error updating Portfolio: ", error);
             throw error;
         }
-    } 
+    }
 
     async getById(uid: string): Promise<any> {
         try {
@@ -106,7 +106,7 @@ class PortfolioRepository extends AppRepository {
                     throw error;
                 });
 
-                return result;
+            return result;
         } catch (error) {
             console.error("Error retrieving Portfolio by ID: ", error);
             throw error;
@@ -132,7 +132,7 @@ class PortfolioRepository extends AppRepository {
             certifications.splice(certificationIndex, 1);
 
             await portfolioRef.update({
-                "certifications": certifications, 
+                "certifications": certifications,
                 "modified": modified
             });
 

@@ -1,5 +1,5 @@
 import express, { RequestHandler } from 'express';
-import {celebrate, Joi} from 'celebrate';
+import { celebrate, Joi } from 'celebrate';
 import FavoritesController from '../controllers/FavoritesController';
 
 const favoritesRouter = express.Router();

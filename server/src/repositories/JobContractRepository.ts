@@ -395,23 +395,19 @@ class JobContractRepository extends AppRepository {
     try {
       let jobs;
 
-      await db
-        .collection("JobContracts")
-        .where("worker.id", "==", workerUid)
-        .where("deleted", "==", null)
-        .orderBy("created", "asc")
+      await db.collection("JobContracts")
+        .where('worker.id', '==', workerUid)
+        .where('deleted', '==', null)
+        .orderBy('created', 'asc')
         .get()
         .then((querySnapshot) => {
           jobs = querySnapshot.docs.map((doc) => {
             const data = doc.data();
             return { ...data, uid: doc.id };
-          });
+          })
         })
         .catch((error) => {
-          console.error(
-            "Error getting all Worker Jobs from Firestore. ",
-            error
-          );
+          console.error("Error getting all Worker Jobs from Firestore. ", error);
           throw error;
         });
 
@@ -430,35 +426,45 @@ class JobContractRepository extends AppRepository {
       let userUid;
 
       if (jobDoc.exists && jobDoc.data()?.expired === false) {
-        if (userType === "client") {
+        if (userType === 'client') {
           userUid = jobData?.client.id;
           await jobRef.update({ client_finished: true });
         }
-        if (userType === "worker") {
+        if (userType === 'worker') {
           userUid = jobData?.worker.id;
           await jobRef.update({ worker_finished: true });
         }
         const finishedJob = (await jobRef.get()).data();
         await this.sendEmailFinishedContract(jobUid, finishedJob, userType);
         if (finishedJob?.client_finished && finishedJob?.worker_finished) {
-          await jobRef.update({
-            status: "finished",
-            paid: true,
-            finished: this.getDateTime(),
-          });
+          await jobRef.update({ status: 'finished', paid: true, finished: this.getDateTime() });
           await this.transferPaymentToWorker(jobDoc.data());
         }
-        if (userType === "client") {
+        if (userType === 'client') {
           return this.getAllJobsFromClient(userUid);
         }
-        if (userType === "worker") {
+        if (userType === 'worker') {
           return this.getAllJobsFromWorker(userUid);
         }
       } else {
-        return "expired";
+        return 'expired';
       }
     } catch (error) {
-      console.error("Error finishing contract: ", error);
+      console.error('Error finishing contract: ', error);
+      throw error;
+    }
+  }
+
+  async finishContractWithComplaint(jobUid: string): Promise<any> {
+    try {
+      const jobRef = db.collection("JobContracts").doc(jobUid);
+      const jobDoc = await jobRef.get();
+
+      if (jobDoc.exists && jobDoc.data()?.expired === false) {
+        await jobRef.update({ status: 'finished', paid: true, client_finished: true, worker_finished: true, finished: this.getDateTime() });
+      }
+    } catch (error) {
+      console.error('Error finishing contract with complaint: ', error);
       throw error;
     }
   }
@@ -538,17 +544,19 @@ class JobContractRepository extends AppRepository {
       const contractUid = evaluation.contractUid;
 
       const evaluationData = {
-        evaluation: evaluationNumber,
+        evaluation: evaluationNumber
       };
 
       const contractRef = db.collection("JobContracts").doc(contractUid);
 
       await contractRef.update(evaluationData);
+
     } catch (error) {
       console.error("Error adding new evaluation: ", error);
       throw error;
     }
   }
+
 }
 
 export default JobContractRepository;

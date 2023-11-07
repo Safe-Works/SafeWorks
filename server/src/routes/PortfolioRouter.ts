@@ -1,5 +1,5 @@
 import express, { RequestHandler } from 'express';
-import {celebrate, Joi} from 'celebrate';
+import { celebrate, Joi } from 'celebrate';
 import PortfolioController from '../controllers/PortfolioController';
 
 const portfolioRouter = express.Router();
