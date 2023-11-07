@@ -29,10 +29,12 @@ class JobContractRepository extends AppRepository {
         worker_finished: false,
         finished: null,
       };
+      if (newJobContract?.quantity && newJobContract.quantity > 0) {
+        newJobContract.price = newJobContract.price * newJobContract.quantity;
+      }
       const docRef = await db.collection("JobContracts").add(newJobContract);
       const uid = docRef.id;
-
-      const advertisementId = jobContract.advertisement.id;
+      const advertisementId = newJobContract.advertisement.id;
       const advertisementRef = db
         .collection("JobAdvertisements")
         .doc(advertisementId);
@@ -42,14 +44,14 @@ class JobContractRepository extends AppRepository {
         const contractInfo = {
           id: uid,
           worker: {
-            name: jobContract.worker.name,
-            id: jobContract.worker.id,
+            name: newJobContract.worker.name,
+            id: newJobContract.worker.id,
           },
           client: {
-            name: jobContract.client.name,
-            id: jobContract.client.id,
+            name: newJobContract.client.name,
+            id: newJobContract.client.id,
           },
-          value: jobContract.price,
+          value: newJobContract.price,
         };
 
         const advertisementData = advertisementDoc.data();
@@ -59,27 +61,30 @@ class JobContractRepository extends AppRepository {
         await advertisementRef.update({ Contracts: contractsArray });
       }
       if (!external_payment) {
-        await this.updateUserBalance(jobContract.client.id, -jobContract.price);
+        await this.updateUserBalance(
+          newJobContract.client.id,
+          -newJobContract.price
+        );
         const clientContact = await this.updateUserContractedServices(
-          jobContract.client.id,
+          newJobContract.client.id,
           uid,
-          jobContract.advertisement.title,
-          jobContract.price
+          newJobContract.advertisement.title,
+          newJobContract.price
         );
         const workerContact = await this.updateWorkerSelledServices(
-          jobContract.worker.id,
+          newJobContract.worker.id,
           uid,
-          jobContract.advertisement.title,
-          jobContract.price
+          newJobContract.advertisement.title,
+          newJobContract.price
         );
         const emailModel = new EmailNotificationModel();
         const clientEmailContent = emailModel.createEmailClientNotification(
-          jobContract,
+          newJobContract,
           uid,
           workerContact
         );
         const workerEmailContent = emailModel.createEmailWorkerNotification(
-          jobContract,
+          newJobContract,
           uid,
           clientContact
         );
@@ -483,23 +488,48 @@ class JobContractRepository extends AppRepository {
     }
   }
 
-  async sendEmailFinishedContract(jobUid: string, jobData: any, userType: string): Promise<any> {
+  async sendEmailFinishedContract(
+    jobUid: string,
+    jobData: any,
+    userType: string
+  ): Promise<any> {
     try {
       const emailModel = new EmailNotificationModel();
       const userRepository = new UserRepository();
       const workerData = await userRepository.getById(jobData.worker.id);
       const clientData = await userRepository.getById(jobData.client.id);
 
-      if (userType === 'client') {
-        const clientEmailContent = emailModel.clientFinishedContractToWorker(jobData, jobUid);
-        await emailModel.sendCustomEmail(workerData?.email, "Cliente finalizou o contrato.", clientEmailContent);
+      if (userType === "client") {
+        const clientEmailContent = emailModel.clientFinishedContractToWorker(
+          jobData,
+          jobUid
+        );
+        await emailModel.sendCustomEmail(
+          workerData?.email,
+          "Cliente finalizou o contrato.",
+          clientEmailContent
+        );
       }
-      if (userType === 'worker') {
-        const workerEmailContent = emailModel.workerFinishedContractToClient(jobData, jobUid);
-        await emailModel.sendCustomEmail(clientData?.email, "Trabalhador finalizou o contrato.", workerEmailContent);
+      if (userType === "worker") {
+        const workerEmailContent = emailModel.workerFinishedContractToClient(
+          jobData,
+          jobUid
+        );
+        await emailModel.sendCustomEmail(
+          clientData?.email,
+          "Trabalhador finalizou o contrato.",
+          workerEmailContent
+        );
         if (jobData?.client_finished && jobData?.worker_finished) {
-          const finishedEmailContent = emailModel.finishedContract(jobData, jobUid);
-          await emailModel.sendCustomEmail(workerData?.email, "Contrato finalizado!", finishedEmailContent);
+          const finishedEmailContent = emailModel.finishedContract(
+            jobData,
+            jobUid
+          );
+          await emailModel.sendCustomEmail(
+            workerData?.email,
+            "Contrato finalizado!",
+            finishedEmailContent
+          );
         }
       }
     } catch (error) {

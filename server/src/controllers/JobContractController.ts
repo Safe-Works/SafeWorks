@@ -37,9 +37,9 @@ class JobContractController {
       const hasSufficientBalance =
         jobContract.paid === true
           ? await jobContractRepository.verifyUserBalance(
-            jobContract.client.id,
-            jobContract.price
-          )
+              jobContract.client.id,
+              jobContract.price * jobContract.quantity || 1
+            )
           : true;
       if (!hasSufficientBalance) {
         res.status(402).json({
@@ -84,7 +84,7 @@ class JobContractController {
             {
               id: checkout.id,
               title: checkout.title,
-              quantity: 1,
+              quantity: checkout.quantity,
               unit_price: checkout.price,
               picture_url: checkout.picture_url,
             },

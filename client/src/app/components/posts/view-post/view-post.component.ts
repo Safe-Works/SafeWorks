@@ -9,6 +9,8 @@ import { Router } from "@angular/router";
 import Swal from "sweetalert2/dist/sweetalert2.js";
 import { Location } from "@angular/common";
 import { ContractCheckout } from "../../../utils/interfaces/contract-checkout.interface";
+import { Observable, Subject } from "rxjs";
+
 interface Notification {
   isOpen: boolean;
   type: "approved" | "failure" | null;
@@ -22,9 +24,13 @@ interface Notification {
 export class ViewPostComponent {
   jobId = "";
   isMyAdvertisement = true;
+  quantity = 1; // Inicialize a quantidade
+  private quantitySource = new Subject<number>();
+  quantity$ = this.quantitySource.asObservable();
   isLoading = false;
   isError = false;
   defaultPicUrl = "../../assets/default-pic.png";
+  jobInfoPriceView = 0;
   jobInfo = {} as JobAdvertisement;
   slides: any[] = new Array(3).fill({
     id: -1,
@@ -60,8 +66,20 @@ export class ViewPostComponent {
         this.showNotification("Pagamento recusado", "failure");
       }
     });
+
+    this.quantity$.subscribe((newQuantity) => {
+      this.quantity = Math.max(newQuantity, 1);
+      this.jobInfoPriceView = this.calculatePrice(this.quantity);
+    });
+  }
+  private calculatePrice(quantity: number): number {
+    return this.jobInfo.price * quantity;
   }
 
+  // Função para atualizar a quantidade
+  updateQuantity() {
+    this.quantitySource.next(this.quantity);
+  }
   showNotification(content: string, type: "approved" | "failure") {
     if (type === "approved") {
       this.openSnackBar(content, "OK", "snackbar-success");
@@ -84,7 +102,7 @@ export class ViewPostComponent {
         if (result.isConfirmed) {
           this.isLoading = true;
           let response = await this.contractService.CreateJobContract(
-            this.jobInfo
+            this.jobInfo, false, this.quantity
           );
           if (response?.statusCode === 201) {
             this.isLoading = false;
@@ -93,6 +111,7 @@ export class ViewPostComponent {
               "OK",
               "snackbar-success"
             );
+            this.router.navigate(["/contracts"]);
           } else {
             this.isLoading = false;
             this.openSnackBar(
@@ -122,23 +141,35 @@ export class ViewPostComponent {
                 let responseContract =
                   await this.contractService.CreateJobContract(
                     this.jobInfo,
-                    true
+                    true,
+                    this.quantity
                   );
                 if (responseContract.statusCode === 201) {
                   const checkoutContract: ContractCheckout = {
                     id: responseContract.jobAd,
                     title: this.jobInfo.title,
+                    quantity: this.quantity || 1,
                     price: this.jobInfo.price,
                     description: this.jobInfo.description,
                   };
                   if (!this.jobInfo.media[0].includes(".png"))
                     checkoutContract.picture_url = this.jobInfo.media[0];
-                  const responsePromise =
-                    this.contractService.CreatePreference(checkoutContract);
-                  const response = await responsePromise;
-                  if (response.init_point) {
-                    window.location.href = response.init_point;
+                  try {
+                    const responsePromise =
+                      this.contractService.CreatePreference(checkoutContract);
+                    const response = await responsePromise;
+                    if (response.init_point) {
+                      window.location.href = response.init_point;
+                      this.isLoading = false;
+                    }
+                  } catch (err) {
+                    console.log(err);
                     this.isLoading = false;
+                    this.openSnackBar(
+                      "Ocorreu um erro ao contratar o serviço!",
+                      "OK",
+                      "snackbar-error"
+                    );
                   }
                 } else {
                   this.isLoading = false;
@@ -178,6 +209,7 @@ export class ViewPostComponent {
       this.jobService.GetById(this.jobId).subscribe(
         (response) => {
           this.jobInfo = response.job;
+          this.jobInfoPriceView = this.jobInfo.price;
           this.jobInfo.uid = this.jobId;
           if (!this.jobInfo.media || this.jobInfo.media?.length < 1) {
             this.jobInfo.media = [];
