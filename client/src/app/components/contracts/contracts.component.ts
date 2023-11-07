@@ -4,8 +4,8 @@ import { Router } from '@angular/router';
 import { UserAuth } from 'src/app/auth/User.Auth';
 import { ContractService } from 'src/app/services/contract.service';
 import Swal from 'sweetalert2';
-import {JobService} from "../../services/job.service";
-import {ComplaintService} from "../../services/complaint.service";
+import { JobService } from "../../services/job.service";
+import { ComplaintService } from "../../services/complaint.service";
 
 @Component({
   selector: 'app-contracts',
@@ -17,12 +17,9 @@ export class ContractsComponent {
   userInfo: any = null;
   contracts: any = null;
   isLoading: boolean = false;
-  firstFinished: string = 'Aguardando conclusão';
+  firstFinished: string = 'Aguardando Conclusão';
   lastFinished: string = 'Finalizado';
-  open: string = 'Aguardando análise'
-  onAnalysis: string = 'Em análise'
-  accepted: string = 'Aprovada'
-  refused: string = 'Rejeitada'
+  complaintResult: string = 'Aguardando Resultado';
   isWorker: boolean = false;
   selectOption: string = 'worker_contracts';
   complaints: any = null;
@@ -35,7 +32,7 @@ export class ContractsComponent {
     private _snackBar: MatSnackBar,
     private jobService: JobService,
     private complaintService: ComplaintService,
-  ) {}
+  ) { }
 
   async ngOnInit() {
     this.userInfo = this.userAuth.currentUser?.infos;
@@ -47,12 +44,6 @@ export class ContractsComponent {
     }
     this.complaints = await this.complaintService.GetAll();
     this.complaintsList = this.complaints.complaints;
-
-    // console.log('denuncia')
-    // this.complaints.complaints.forEach((complaint: any) => {
-    //   console.log(complaint.status);
-    // });
-
   }
 
   finishContract(contractUid: string) {
@@ -126,43 +117,7 @@ export class ContractsComponent {
     return false;
   }
 
-  setProgressBarStatusComplaint(){
-    this.complaints.complaints.forEach((complaint: any) => {
-      console.log(complaint.uid);
-      this.complaintsList.concat(complaint)
-    });
-
-    this.complaints.complaints.forEach((complaint: any) => {
-        if (complaint.status === 'open') {
-          // console.log(complaint.uid)
-          // console.log(complaint.status)
-          const element1 = document.getElementById('step1 ' + complaint.uid);
-          element1?.classList.remove('active');
-          const element2 = document.getElementById('step2 ' + complaint.uid);
-          element2?.classList.remove('active');
-          const element3 = document.getElementById('step3 ' + complaint.uid);
-          element3?.classList.remove('active');
-        }
-        if (complaint.status === 'onAnalysis') {
-          // console.log(complaint.uid)
-          // console.log(complaint.status)
-          const element1 = document.getElementById('step1 ' + complaint.uid);
-          element1?.classList.add('active');
-          const element2 = document.getElementById('step2 ' + complaint.uid);
-          element2?.classList.remove('active');
-          const element3 = document.getElementById('step3 ' + complaint.uid);
-          element3?.classList.remove('active');
-        }
-    });
-
-  }
-
   setProgressBarStatus(contract: any): void {
-    //const id = this.contractService.GetComplaints(contract.uid)
-    //const complaints = this.complaintService.GetAll()
-   // console.log("chamando progress bar")
-
-
     if (contract.paid) {
       const element = document.getElementById('step1 ' + contract.uid);
       element?.classList.add('active');
@@ -175,10 +130,28 @@ export class ContractsComponent {
       const element = document.getElementById('step2 ' + contract.uid);
       element?.classList.add('active');
     }
+    if (contract.complaint) {
+      this.setComplaintProgressBarStatus(contract);
+    }
+  }
 
-    this.setProgressBarStatusComplaint();
-
-
+  setComplaintProgressBarStatus(contract: any): void {
+    const complaint = contract.complaint;
+    console.log(contract);
+    if (complaint.status !== 'open') {
+      const element = document.getElementById('complaint-step2 ' + complaint.uid);
+      element?.classList.add('active');
+    }
+    if (complaint.status === 'accepted') {
+      const element = document.getElementById('complaint-step3 ' + complaint.uid);
+      element?.classList.add('active');
+      this.complaintResult = 'Aceito';
+    }
+    if (complaint.status === 'refused') {
+      const element = document.getElementById('complaint-step3 ' + complaint.uid);
+      element?.classList.add('active');
+      this.complaintResult = 'Recusado';
+    }
   }
 
   viewAdvertisement(uid: any): void {
@@ -231,15 +204,14 @@ export class ContractsComponent {
 
   }
 
-  async report(contractUid: string){
-
+  async report(contractUid: string) {
     const { value: title } = await Swal.fire({
       title: 'Adicione um título para sua denúncia',
       input: 'text',
       inputPlaceholder: 'Título...',
       showCancelButton: true,
-      confirmButtonText: 'próximo',
-      confirmButtonColor: '#3085d6',
+      confirmButtonText: 'Próximo',
+      confirmButtonColor: 'var(--interaction-blue)',
       cancelButtonColor: '#d33',
       inputAttributes: {
         maxlength: '80',
@@ -260,8 +232,8 @@ export class ContractsComponent {
         title: 'Adicione uma descrição detalhada',
         inputPlaceholder: 'Descrição...',
         showCancelButton: true,
-        confirmButtonText: 'enviar',
-        confirmButtonColor: '#3085d6',
+        confirmButtonText: 'Enviar',
+        confirmButtonColor: 'var(--interaction-blue)',
         cancelButtonColor: '#d33',
         inputAttributes: {
           maxlength: '300',
@@ -278,8 +250,14 @@ export class ContractsComponent {
       if (description && title) {
         try {
           this.isLoading = true;
-          await this.contractService.SaveComplaints(description, title, contractUid, this.getUserType());
-          await this.ngOnInit()
+          await this.complaintService.Add(description, title, contractUid, this.getUserType()).then((result) => {
+            if (this.selectOption === 'worker_contracts') {
+              this.fetchWorkerContracts();
+            }
+            if (this.selectOption === 'client_contracts') {
+              this.fetchClientContracts();
+            }
+          });
           this.isLoading = false;
 
           Swal.fire({
@@ -290,6 +268,7 @@ export class ContractsComponent {
           })
 
         } catch (error: any) {
+          this.isLoading = false;
           console.error('report error: ', error);
           this.openSnackBar("Ocorreu um erro ao denunciar o serviço!", "OK", "snackbar-error");
         }
@@ -297,13 +276,43 @@ export class ContractsComponent {
     }
   }
 
-  isReported(contract: any) {
-    if (contract.reported) {
+  isReported(contract: any): boolean {
+    if (contract.status === 'reported') {
       return true;
     }
-    return false;  }
+    return false;
+  }
 
-  cancelReport(contractUid: string) {
+  userCanReport(contract: any): boolean {
+    const complaint = contract.complaint;
+    const userUid = this.userAuth.currentUser?.uid;
+    if (!contract.complaint) {
+      return true;
+    }
+    if (complaint.status === 'open' || complaint.status === 'onAnalysis') {
+      if (complaint.client.applicant && userUid === complaint.client.id) {
+        return true;
+      }
+      if (complaint.worker.applicant && userUid === complaint.worker.id) {
+        return true;
+      }
+    }
+
+    return false;
+  }
+
+  userCanCancel(contract: any): boolean {
+    if (contract.status === 'finished') {
+      return false;
+    }
+    if (contract.complaint) {
+      return false;
+    }
+
+    return true;
+  }
+
+  cancelReport(complaintUid: string) {
     Swal.fire({
       title: 'Você tem certeza?',
       text: "A denúncia será removida",
@@ -316,12 +325,17 @@ export class ContractsComponent {
     }).then(async (result) => {
       try {
         this.isLoading = true;
-        await this.contractService.DeleteComplaints(contractUid);
-        await this.ngOnInit()
-        this.contracts = await this.contractService.GetContracts();
+        await this.complaintService.Delete(complaintUid).then((result) => {
+          if (this.selectOption === 'worker_contracts') {
+            this.fetchWorkerContracts();
+          }
+          if (this.selectOption === 'client_contracts') {
+            this.fetchClientContracts();
+          }
+        });
         this.isLoading = false;
 
-        if (result.isConfirmed){
+        if (result.isConfirmed) {
           Swal.fire({
             title: 'Denúncia removida com sucesso!',
             icon: 'success',
@@ -331,6 +345,7 @@ export class ContractsComponent {
         }
 
       } catch (error: any) {
+        this.isLoading = false;
         console.error('report error: ', error);
         this.openSnackBar("Ocorreu um erro ao remover a denúncia!", "OK", "snackbar-error");
       }

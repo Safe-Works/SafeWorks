@@ -37,9 +37,9 @@ class JobContractController {
       const hasSufficientBalance =
         jobContract.paid === true
           ? await jobContractRepository.verifyUserBalance(
-              jobContract.client.id,
-              jobContract.price * jobContract.quantity || 1
-            )
+            jobContract.client.id,
+            jobContract.price * jobContract.quantity || 1
+          )
           : true;
       if (!hasSufficientBalance) {
         res.status(402).json({
@@ -313,48 +313,6 @@ class JobContractController {
       if (error instanceof Error) {
         console.error("Error to evaluate Job: ", error.message);
         res.status(500).json({ statusCode: 500, error: 'evalateJob/failed-add', message: error.message });
-      }
-    }
-  }
-
-  async saveComplaints(req: Request, res: Response): Promise<void> {
-    try {
-      const complaint = req.body;
-      const result = await jobContractRepository.saveComplaints(complaint);
-
-      res.status(201).json({ statusCode: 201, evaluation: result });
-    } catch (error) {
-      if (error instanceof Error) {
-        console.error("Error to report Job: ", error.message);
-        res.status(500).json({ statusCode: 500, error: 'complaint/failed-add', message: error.message });
-      }
-    }
-  }
-
-  async deleteComplaints(req: Request, res: Response): Promise<void> {
-    try {
-      const contractUid = req.params.uid;
-      const result = await jobContractRepository.deleteComplaints(contractUid);
-
-      res.status(201).json({ statusCode: 201, evaluation: result });
-    } catch (error) {
-      if (error instanceof Error) {
-        console.error("Error to delete Complaint: ", error.message);
-        res.status(500).json({ statusCode: 500, error: 'complaint/failed-delete', message: error.message });
-      }
-    }
-  }
-
-  async getComplaints(req: Request, res: Response): Promise<void> {
-    try {
-      const contractUid = req.params.uid;
-      const result = await jobContractRepository.getComplaints(contractUid);
-
-      res.status(201).json({ statusCode: 201, evaluation: result });
-    } catch (error) {
-      if (error instanceof Error) {
-        console.error("Error to get Complaint: ", error.message);
-        res.status(500).json({ statusCode: 500, error: 'complaint/failed-get', message: error.message });
       }
     }
   }

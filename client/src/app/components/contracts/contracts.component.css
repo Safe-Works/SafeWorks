@@ -82,47 +82,41 @@
     background: var(--interaction-blue);
 }
 
-#progressbar-2 {
+#complaint-progressbar {
     color: var(--safeworks-blue);
 }
 
-#progressbar-2 li {
+#complaint-progressbar li {
     list-style-type: none;
     font-size: 13px;
-    width: 25%;
+    width: 33.33%;
     float: left;
     position: relative;
 }
-#progressbar-2 .step0:before {
+
+#complaint-progressbar .step1:before {
     content: "1";
     color: var(--white);
     width: 1.8rem;
     margin-left: 1.5rem;
     padding-left: 0.7rem;
 }
-#progressbar-2 .step1:before {
+
+#complaint-progressbar .step2:before {
     content: "2";
     color: var(--white);
     width: 1.8rem;
-    margin-left: 1.5rem;
-    padding-left: 0.7rem;
 }
 
-#progressbar-2 .step2:before {
+#complaint-progressbar .step3:before {
     content: "3";
-    color: var(--white);
-    width: 1.8rem;
-}
-
-#progressbar-2 .step3:before {
-    content: "4";
     color: var(--white);
     width: 1.8rem;
     margin-right: 1.5rem;
     text-align: center;
 }
 
-#progressbar-2 li:before {
+#complaint-progressbar li:before {
     line-height: 1.8rem;
     display: block;
     font-size: 0.75rem;
@@ -131,7 +125,7 @@
     margin: auto;
 }
 
-#progressbar-2 li:after {
+#complaint-progressbar li:after {
     content: '';
     width: 121%;
     height: 2px;
@@ -143,25 +137,22 @@
     z-index: -1;
 }
 
-#progressbar-2 li:nth-child(1):after {
-    left: 25%;
-    width: 121%;
-}
-#progressbar-2 li:nth-child(2):after {
-    left: 25%;
-    width: 121%;
+#complaint-progressbar li:nth-child(2):after {
+    left: 50%
 }
 
-#progressbar-2 li:nth-child(3):after {
+#complaint-progressbar li:nth-child(1):after {
     left: 25%;
-    width: 130%;
+    width: 121%
 }
-#progressbar-2 li:nth-child(4):after {
+
+#complaint-progressbar li:nth-child(3):after {
     left: 25%;
-    width: 0%;
+    width: 50%;
 }
-#progressbar-2 li.active:before,
-#progressbar-2 li.active:after {
+
+#complaint-progressbar li.active:before,
+#complaint-progressbar li.active:after {
     background: var(--interaction-blue);
 }
 
