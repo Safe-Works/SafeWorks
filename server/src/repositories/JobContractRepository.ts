@@ -28,7 +28,6 @@ class JobContractRepository extends AppRepository {
         client_finished: false,
         worker_finished: false,
         finished: null,
-        reported: false,
       };
       if (newJobContract?.quantity && newJobContract.quantity > 0) {
         newJobContract.price = newJobContract.price * newJobContract.quantity;
@@ -107,6 +106,7 @@ class JobContractRepository extends AppRepository {
       throw error;
     }
   }
+
   async update(
     jobContractId: string,
     updatedData: Partial<JobContract>
