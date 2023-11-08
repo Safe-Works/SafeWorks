@@ -1,99 +1,184 @@
 <div class="loading-spinner" *ngIf="isLoading">
-    <mat-spinner [diameter]="85"></mat-spinner>
+  <mat-spinner [diameter]="85"></mat-spinner>
 </div>
-<div class="container" *ngIf="contracts">
-
-    <h4 class="mb-4 text-muted">Meus Contratos</h4>
-
-    <div class="d-flex justify-content-center align-items-center flex-column min-width-div" *ngIf="userInfo.isWorker">
-        <div class="col-md-5 col-lg-5 col-xl-5 min-width-div">
-            <select class="form-select mt-3" (change)="selectListener($event)" [(ngModel)]="selectOption">
-                <option value="worker_contracts">Serviços prestados</option>
-                <option value="client_contracts">Serviços contratados</option>
-            </select>
-        </div>
+<div class="container">
+  <h4 class="mb-4 text-muted">Meus Contratos</h4>
+  <div
+    class="row col-md-12"
+    style="
+      padding: 40px 5.6%;
+      background-color: white;
+      border: 1px solid #ced0d4;
+    "
+  >
+    <div
+      class="d-flex justify-content-center align-items-center flex-column min-width-div"
+      *ngIf="userInfo.isWorker"
+    >
+      <div class="col-md-5 col-lg-5 col-xl-5 min-width-div">
+        <select
+          class="form-select mt-3"
+          (change)="selectListener($event)"
+          [(ngModel)]="selectOption"
+        >
+          <option value="worker_contracts">Serviços prestados</option>
+          <option value="client_contracts">Serviços contratados</option>
+        </select>
+      </div>
     </div>
-
-    <div class="row" *ngFor="let contract of contracts.jobs">
-        <div class="py-1 h-1">
-            <div class="row d-flex justify-content-center align-items-center h-1">
-                <div class="col-md-5 col-lg-5 col-xl-5 min-width-div">
-                    <div class="card card-stepper" style="border-radius: 16px;">
-                        <div class="card-header p-4">
-                            <div class="d-flex flex-wrap justify-content-between align-items-center">
-                                <div>
-                                    <p class="text mb-1"> 
-                                        ID do Contrato <span class="fw-bold text-body">{{ contract.uid }}</span>
-                                    </p>
-                                    <p class="text mb-1"> 
-                                        Criado em: <span class="fw-bold text-body">{{ contract.created }}</span> 
-                                    </p>
-                                </div>
-                                <div>
-                                    <h6 class="mb-0 action-button" (click)="viewAdvertisement(contract.advertisement.id)">Ver Detalhes</h6>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="card-body p-4">
-                            <div class="d-flex flex-row mb-4 pb-2">
-                                <div class="flex-fill">
-                                    <h4 class="bold">{{ contract.advertisement.title }}</h4>
-                                    <h5 class="mb-3"> R$ {{ contract.price }}</h5>
-                                    <p class="text mb-1" *ngIf="!isWorker">
-                                        Nome do trabalhador: <span class="fw-bold action-button" (click)="viewProfile(contract.worker.id)">{{ contract.worker.name }}</span>
-                                    </p>
-                                    <p class="text mb-1" *ngIf="isWorker">
-                                        Nome do cliente: <span class="fw-bold action-button" (click)="viewProfile(contract.client.id)">{{ contract.client.name }}</span>
-                                    </p>
-                                </div>
-                                <div>
-                                    <img class="align-self-center img-fluid"
-                                        [src]="contract.advertisement.photo_url ? contract.advertisement.photo_url[0] : '../../assets/default-pic.png'"
-                                        width="200">
-                                </div>
-                            </div>
-
-                            <ul *ngIf="!isReported(contract)" id="progressbar-1" class="mx-0 mt-0 mb-5 px-0 pt-0 pb-4">
-                                <li class="step0 active" id="step0 {{ contract.uid }}">
-                                    <span>Aguardando pagamento</span>
-                                </li>
-                                <li class="step1" id="step1 {{ contract.uid }}">
-                                    <span style="margin-left: 5px; margin-top: 12px;">Contratado</span>
-                                </li>
-                                <li class="step2 text-center" id="step2 {{ contract.uid }}">
-                                    <span>{{ firstFinished }}</span>
-                                </li>
-                                <li class="step3 text-end" id="step3 {{ contract.uid }}">
-                                    <span style="margin-right: 22px;">{{ lastFinished }}</span>
-                                </li>
-                            </ul>
-
-                            <ul *ngIf="isReported(contract)" id="complaint-progressbar" class="mx-0 mt-0 mb-5 px-0 pt-0 pb-4">
-                                <li class="step1 active" id="complaint-step1 {{ contract.complaint_uid }}">
-                                    <span style="margin-left: 22px; margin-top: 12px;">Denunciado</span>
-                                </li>
-                                <li class="step2 text-center" id="complaint-step2 {{ contract.complaint_uid }}">
-                                    <span>Em Análise</span>
-                                </li>
-                                <li class="step3 text-end" id="complaint-step3 {{ contract.complaint_uid }}">
-                                    <span style="margin-right: 22px;">{{ complaintResult }}</span>
-                                </li>
-                            </ul>
-                        </div>
-
-                        <div class="card-footer p-4" *ngIf="(contract.paid)">
-                            <div class="d-flex flex-wrap justify-content-between">
-                                <h6 *ngIf="!isContractFinalized(contract)" class="action-button" (click)="finishContract(contract.uid)">Finalizar</h6>
-                                <h6 *ngIf="userCanCancel(contract)" class="action-button"><a href="#!">Cancelar</a></h6>
-                                <h6 *ngIf="isReported(contract) && userCanReport(contract)" class="action-button"><a (click)="cancelReport(contract.complaint_uid)">Remover Denúncia</a></h6>
-                                <h6 *ngIf="!isReported(contract) && userCanReport(contract)" class="action-button"><a (click)="report(contract.uid)">Denunciar</a></h6>
-                            </div>
-                        </div>
-                    </div>
+    <div class="row" *ngFor="let contract of contracts?.jobs">
+      <div class="py-1 h-1">
+        <div class="row d-flex justify-content-center align-items-center h-1">
+          <div class="col-md-5 col-lg-5 col-xl-5 min-width-div">
+            <div class="card card-stepper" style="border-radius: 16px">
+              <div class="card-header p-4">
+                <div
+                  class="d-flex flex-wrap justify-content-between align-items-center"
+                >
+                  <div>
+                    <p class="text mb-1">
+                      ID do Contrato
+                      <span class="fw-bold text-body">{{ contract.uid }}</span>
+                    </p>
+                    <p class="text mb-1">
+                      Criado em:
+                      <span class="fw-bold text-body">{{
+                        contract.created
+                      }}</span>
+                    </p>
+                  </div>
+                  <div>
+                    <h6
+                      class="mb-0 action-button"
+                      (click)="viewAdvertisement(contract.advertisement.id)"
+                    >
+                      Ver Detalhes
+                    </h6>
+                  </div>
+                </div>
+              </div>
+              <div class="card-body p-4">
+                <div class="d-flex flex-row mb-4 pb-2">
+                  <div class="flex-fill">
+                    <h4 class="bold">{{ contract.advertisement.title }}</h4>
+                    <h5 class="mb-3">R$ {{ contract.price }}</h5>
+                    <p class="text mb-1" *ngIf="!isWorker">
+                      Nome do trabalhador:
+                      <span
+                        class="fw-bold action-button"
+                        (click)="viewProfile(contract.worker.id)"
+                        >{{ contract.worker.name }}</span
+                      >
+                    </p>
+                    <p class="text mb-1" *ngIf="isWorker">
+                      Nome do cliente:
+                      <span
+                        class="fw-bold action-button"
+                        (click)="viewProfile(contract.client.id)"
+                        >{{ contract.client.name }}</span
+                      >
+                    </p>
+                  </div>
+                  <div>
+                    <img
+                      class="align-self-center img-fluid"
+                      [src]="
+                        contract.advertisement.photo_url
+                          ? contract.advertisement.photo_url[0]
+                          : '../../assets/default-pic.png'
+                      "
+                      width="200"
+                    />
+                  </div>
                 </div>
 
+                <ul
+                  *ngIf="!isReported(contract)"
+                  id="progressbar-1"
+                  class="mx-0 mt-0 mb-5 px-0 pt-0 pb-4"
+                >
+                  <li class="step0 active" id="step0 {{ contract.uid }}">
+                    <span>Aguardando pagamento</span>
+                  </li>
+                  <li class="step1" id="step1 {{ contract.uid }}">
+                    <span style="margin-left: 5px; margin-top: 12px"
+                      >Contratado</span
+                    >
+                  </li>
+                  <li class="step2 text-center" id="step2 {{ contract.uid }}">
+                    <span>{{ firstFinished }}</span>
+                  </li>
+                  <li class="step3 text-end" id="step3 {{ contract.uid }}">
+                    <span style="margin-right: 22px">{{ lastFinished }}</span>
+                  </li>
+                </ul>
+
+                <ul
+                  *ngIf="isReported(contract)"
+                  id="complaint-progressbar"
+                  class="mx-0 mt-0 mb-5 px-0 pt-0 pb-4"
+                >
+                  <li
+                    class="step1 active"
+                    id="complaint-step1 {{ contract.complaint_uid }}"
+                  >
+                    <span style="margin-left: 22px; margin-top: 12px"
+                      >Denunciado</span
+                    >
+                  </li>
+                  <li
+                    class="step2 text-center"
+                    id="complaint-step2 {{ contract.complaint_uid }}"
+                  >
+                    <span>Em Análise</span>
+                  </li>
+                  <li
+                    class="step3 text-end"
+                    id="complaint-step3 {{ contract.complaint_uid }}"
+                  >
+                    <span style="margin-right: 22px">{{
+                      complaintResult
+                    }}</span>
+                  </li>
+                </ul>
+              </div>
+
+              <div class="card-footer p-4" *ngIf="contract.paid">
+                <div class="d-flex flex-wrap justify-content-between">
+                  <h6
+                    *ngIf="!isContractFinalized(contract)"
+                    class="action-button"
+                    (click)="finishContract(contract.uid)"
+                  >
+                    Finalizar
+                  </h6>
+                  <h6 *ngIf="userCanCancel(contract)" class="action-button">
+                    <a href="#!">Cancelar</a>
+                  </h6>
+                  <h6
+                    *ngIf="isReported(contract) && userCanReport(contract)"
+                    class="action-button"
+                  >
+                    <a (click)="cancelReport(contract.complaint_uid)"
+                      >Remover Denúncia</a
+                    >
+                  </h6>
+                  <h6
+                    *ngIf="!isReported(contract) && userCanReport(contract)"
+                    class="action-button"
+                  >
+                    <a (click)="report(contract.uid)">Denunciar</a>
+                  </h6>
+                </div>
+              </div>
             </div>
+          </div>
         </div>
+      </div>
     </div>
 
+    <div class="no-contracts-message" *ngIf="!contracts?.jobs">
+      <p>Você não posssui contratos</p>
+    </div>
+  </div>
 </div>
