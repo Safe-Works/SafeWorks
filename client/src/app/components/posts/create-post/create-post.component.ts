@@ -157,7 +157,7 @@ export class CreatePostComponent {
       },
       (error) => {
         this.isLoading = false;
-        console.log(error);
+        console.error(error);
         this.openSnackBar("Ocorreu um erro ao anunciar o serviço!", "OK", "snackbar-error");
       }
     );

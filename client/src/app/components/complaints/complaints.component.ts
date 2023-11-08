@@ -41,7 +41,6 @@ export class ComplaintsComponent {
   }
 
   setProgressBarStatus(complaint: any): boolean {
-    console.log('progressBar')
     if (complaint.status !== 'onAnalysis') {
       const element = document.getElementById('step2 ' + complaint.uid);
       element?.classList.add('active');    
@@ -70,8 +69,8 @@ export class ComplaintsComponent {
       text: 'Você terá um prazo de 1h para aceitar ou recusar a denúncia!',
       icon: 'warning',
       showCancelButton: true,
-      confirmButtonColor: '#3085d6',
-      cancelButtonColor: '#d33',
+      confirmButtonColor: 'var(--interaction-blue)',
+      cancelButtonColor: 'var(--interaction-red)',
       confirmButtonText: 'Sim, iniciar!',
       cancelButtonText: 'Cancelar',
     }).then(async (result) => {
@@ -106,7 +105,9 @@ export class ComplaintsComponent {
       inputValue: '',
       showCancelButton: true,
       confirmButtonText: 'Aceitar',
-      confirmButtonColor: '#1A73E8',
+      cancelButtonText: 'Cancelar',
+      confirmButtonColor: 'var(--interaction-blue)',
+      cancelButtonColor: 'var(--interaction-red)',
       inputAttributes: {
         maxlength: '500',
       },
@@ -149,7 +150,8 @@ export class ComplaintsComponent {
       inputValue: '',
       showCancelButton: true,
       confirmButtonText: 'Recusar',
-      confirmButtonColor: '#1A73E8',
+      confirmButtonColor: 'var(--interaction-blue)',
+      cancelButtonColor: 'var(--interaction-red)',
       inputAttributes: {
         maxlength: '500',
       },

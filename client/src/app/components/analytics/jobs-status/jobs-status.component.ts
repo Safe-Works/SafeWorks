@@ -33,15 +33,20 @@ export class JobsStatusComponent implements OnInit {
   }
 
   setJobStatus(job: any): string {
-    console.log(job);
     if (job.expired) {
       return 'Cancelado';
     }
-    if (job.paid) {
-      return 'Finalizado/Pago'
-    }
     if (job.deleted) {
       return 'Excluído';
+    }
+    if (job.status === 'finished') {
+      return 'Finalizado/Pago'
+    }
+    if (job.status === 'pending') {
+      return 'Aguardando Pagamento';
+    }
+    if (job.status === 'reported') {
+      return 'Denunciado';
     }
 
     return 'Em Andamento';
@@ -51,10 +56,16 @@ export class JobsStatusComponent implements OnInit {
     if (job.expired) {
       return 'text-danger';
     }
-    if (job.paid) {
+    if (job.deleted) {
+      return 'text-danger';
+    }
+    if (job.status === 'finished') {
       return 'text-success'
     }
-    if (job.deleted) {
+    if (job.status === 'pending') {
+      return 'text-warning';
+    }
+    if (job.status === 'reported') {
       return 'text-danger';
     }
 

@@ -3,7 +3,11 @@
 </div>
 <div class="container" *ngIf="complaints">
 
-    <h4 class="mb-4 text-muted">Gerir Denúncias</h4>
+    <h4 class="mb-4 text-muted" *ngIf="complaints.complaints.length > 0">Gerir Denúncias</h4>
+
+    <div class="row" *ngIf="complaints.complaints.length === 0">
+        <h4 class="mb-4 text-muted">Não há nenhuma denúncia ativa para ser gerida.</h4>
+    </div>
 
     <div class="row" *ngFor="let complaint of complaints.complaints">
         <div class="py-1 h-1">

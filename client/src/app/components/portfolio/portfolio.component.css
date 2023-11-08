@@ -16,7 +16,7 @@
     margin-top: 20px;
     padding: 10px;
     background-color: #f7f7f7;
-    border: 1px solid #ddd;
+    border: 1px solid var(--gray-border);
 }
 
 .certification-field {

@@ -18,12 +18,13 @@ export class PortfolioService {
 
     public async CreatePorfolio(portfolio: Portfolio): Promise<any> {
         try {
-            const formData = new FormData();
-            formData.append('description', portfolio.description ?? '');
-            formData.append('user_uid', portfolio.user_uid ?? '');
-            formData.append('years_experience', portfolio.years_experience?.toString() ?? '');
+            const body = {
+                description: portfolio.description ?? '',
+                user_uid: portfolio.user_uid ?? '',
+                years_experience: portfolio.years_experience?.toString() ?? ''
+            };
 
-            return await firstValueFrom(this.http.post<any>(this.api, formData));
+            return await firstValueFrom(this.http.post<any>(this.api, body));
         } catch (error) {
             console.error(error);
             throw error;

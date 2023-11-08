@@ -72,7 +72,7 @@ export class HelpComponent {
         );
         this.router.navigate(["/"]);
       } else {
-        console.log(response.error);
+        console.error(response.error);
         this.isLoading = false;
         Swal.fire(
           "Erro!",

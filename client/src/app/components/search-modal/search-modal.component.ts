@@ -65,7 +65,7 @@ export class SearchModalComponent {
           if (this.jobs.length === 0) {
             alert("Não foi encontrado nenhum serviço.")
           }
-          console.log(response);
+          console.error(response);
         }
       );
     } else {

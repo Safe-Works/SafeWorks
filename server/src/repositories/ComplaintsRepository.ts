@@ -6,6 +6,58 @@ import JobContractRepository from "./JobContractRepository";
 
 class ComplaintsRepository extends AppRepository {
 
+  async add(complaint: any): Promise<any> {
+    try {
+      const jobContractRepository = new JobContractRepository();
+      const jobContract = await jobContractRepository.getById(complaint.contract_uid);
+      const dateTime = this.getDateTime()
+      let applicantClient = false;
+      let applicantWorker = false;
+
+      if (complaint.applicant === 'client') {
+        applicantClient = true;
+      }
+      if (complaint.applicant === 'worker') {
+        applicantWorker = true;
+      }
+
+      const complaintData = {
+        advertisement: {
+          created: jobContract.created,
+          id: jobContract.advertisement.id,
+          title: jobContract.advertisement.title,
+        },
+        client: {
+          applicant: applicantClient,
+          id: jobContract.client.id,
+          name: jobContract.client.name,
+        },
+        contract: {
+          id: complaint.contract_uid,
+        },
+        created: dateTime,
+        deleted: null,
+        description: complaint.description,
+        modified: dateTime,
+        result_description: '',
+        status: 'open',
+        title: complaint.title,
+        worker: {
+          applicant: applicantWorker,
+          id: jobContract.worker.id,
+          name: jobContract.worker.name,
+        },
+      }
+      const complaintRef = await db.collection("Complaints").add(complaintData);
+
+      await this.sendEmailNewComplaint(complaintRef.id);
+      await jobContractRepository.updateStatus(complaint.contract_uid, 'reported', complaintRef.id);
+    } catch (error) {
+      console.error("Error adding new complaint: ", error);
+      throw error;
+    }
+  }
+
   async getAll(): Promise<any> {
     try {
       let complaints;
@@ -59,10 +111,60 @@ class ComplaintsRepository extends AppRepository {
 
         return this.getAll();
       } else {
-        return 'expired';
+        return false;
       }
     } catch (error) {
-      console.error('Error finishing contract: ', error);
+      console.error('Error finishing complaint: ', error);
+      throw error;
+    }
+  }
+
+  async delete(complaintUid: string): Promise<any> {
+    try {
+      const jobContractRepository = new JobContractRepository();
+      const complaintRef = db.collection("Complaints").doc(complaintUid);
+      const complaintDoc = await complaintRef.get();
+      const complaintData = complaintDoc.data();
+      let complaints = false;
+
+      if (complaintDoc.exists && !complaintData?.deleted) {
+        await complaintRef.update({
+          status: 'deleted',
+          deleted: this.getDateTime()
+        }).then(async (result) => {
+          await jobContractRepository.updateStatus(complaintData?.contract.id, 'open', '');
+          complaints = await this.getAll();
+        }).catch((error) => {
+          console.error('Error deleting complaint: ', error);
+          throw error;
+        });
+      }
+
+      return complaints;
+    } catch (error) {
+      console.error('Error deleting complaint: ', error);
+      throw error;
+    }
+  }
+
+  async sendEmailNewComplaint(complaintUid: any): Promise<any> {
+    try {
+      const complaintRef = db.collection("Complaints").doc(complaintUid);
+      const complaintDoc = await complaintRef.get();
+      const complaintData = complaintDoc.data();
+
+      const emailModel = new EmailNotificationModel();
+      const userRepository = new UserRepository();
+      const workerData = await userRepository.getById(complaintData?.worker.id);
+      const clientData = await userRepository.getById(complaintData?.client.id);
+
+      const clientEmailContent = emailModel.sendEmailNewComplaint(complaintData, complaintUid, clientData?.name);
+      await emailModel.sendCustomEmail(clientData?.email, `Denúncia ${complaintUid} foi aberta.`, clientEmailContent);
+      const workerEmailContent = emailModel.sendEmailNewComplaint(complaintData, complaintUid, workerData?.name);
+      await emailModel.sendCustomEmail(workerData?.email, `Denúncia ${complaintUid} foi aberta.`, workerEmailContent);
+    }
+    catch (error) {
+      console.error("Error to send new complaint email: ", error);
       throw error;
     }
   }

@@ -106,6 +106,7 @@ class JobContractRepository extends AppRepository {
       throw error;
     }
   }
+
   async update(
     jobContractId: string,
     updatedData: Partial<JobContract>
@@ -329,6 +330,7 @@ class JobContractRepository extends AppRepository {
       throw error;
     }
   }
+
   async getTotalJobs(): Promise<number> {
     try {
       const querySnapshot = await db
@@ -362,27 +364,42 @@ class JobContractRepository extends AppRepository {
 
   async getAllJobsFromClient(clientUid: string): Promise<any> {
     try {
-      let jobs;
-
-      await db
-        .collection("JobContracts")
+      const jobs = [];
+      const jobContracts = db.collection("JobContracts");
+      const complaints = db.collection("Complaints");
+      const query = jobContracts
         .where("client.id", "==", clientUid)
         .where("deleted", "==", null)
         .orderBy("created", "asc")
-        .get()
-        .then((querySnapshot) => {
-          jobs = querySnapshot.docs.map((doc) => {
-            const data = doc.data();
-            return { ...data, uid: doc.id };
-          });
-        })
-        .catch((error) => {
-          console.error(
-            "Error getting all Client Jobs from Firestore. ",
-            error
-          );
-          throw error;
-        });
+        .get();
+      const querySnapshot = await query;
+
+      for (const doc of querySnapshot.docs) {
+        const jobContractData = doc.data();
+
+        if (jobContractData.complaint_uid) {
+          const complaintRef = complaints.doc(jobContractData.complaint_uid);
+          const complaintSnapshot = await complaintRef.get();
+          const complaintData = complaintSnapshot.data();
+
+          // Create a new Job object with the JobContract and Complaint data
+          const job = {
+            ...jobContractData,
+            complaint: {
+              uid: jobContractData.complaint_uid,
+              ...complaintData
+            },
+            uid: doc.id,
+          };
+          jobs.push(job);
+        } else {
+          const job = {
+            ...jobContractData,
+            uid: doc.id,
+          };
+          jobs.push(job);
+        }
+      }
 
       return jobs;
     } catch (error) {
@@ -393,23 +410,50 @@ class JobContractRepository extends AppRepository {
 
   async getAllJobsFromWorker(workerUid: string): Promise<any> {
     try {
-      let jobs;
+      const jobs = [];
+      const jobContracts = db.collection("JobContracts");
+      const complaints = db.collection("Complaints");
+      const query = jobContracts
+        .where("worker.id", "==", workerUid)
+        .where("deleted", "==", null)
+        .orderBy("created", "asc")
+        .get();
+      const querySnapshot = await query;
 
-      await db.collection("JobContracts")
-        .where('worker.id', '==', workerUid)
-        .where('deleted', '==', null)
-        .orderBy('created', 'asc')
-        .get()
-        .then((querySnapshot) => {
-          jobs = querySnapshot.docs.map((doc) => {
-            const data = doc.data();
-            return { ...data, uid: doc.id };
-          })
-        })
-        .catch((error) => {
-          console.error("Error getting all Worker Jobs from Firestore. ", error);
-          throw error;
-        });
+      for (const doc of querySnapshot.docs) {
+        const jobContractData = doc.data();
+
+        if (jobContractData.complaint_uid) {
+          const complaintRef = complaints.doc(jobContractData.complaint_uid);
+          const complaintSnapshot = await complaintRef.get();
+          const complaintData = complaintSnapshot.data();
+
+          if (complaintData?.deleted) {
+            const job = {
+              ...jobContractData,
+              uid: doc.id,
+            };
+            jobs.push(job);
+          } else {
+            // Create a new Job object with the JobContract and Complaint data
+            const job = {
+              ...jobContractData,
+              complaint: {
+                uid: jobContractData.complaint_uid,
+                ...complaintData
+              },
+              uid: doc.id,
+            };
+            jobs.push(job);
+          }
+        } else {
+          const job = {
+            ...jobContractData,
+            uid: doc.id,
+          };
+          jobs.push(job);
+        }
+      }
 
       return jobs;
     } catch (error) {
@@ -426,31 +470,35 @@ class JobContractRepository extends AppRepository {
       let userUid;
 
       if (jobDoc.exists && jobDoc.data()?.expired === false) {
-        if (userType === 'client') {
+        if (userType === "client") {
           userUid = jobData?.client.id;
           await jobRef.update({ client_finished: true });
         }
-        if (userType === 'worker') {
+        if (userType === "worker") {
           userUid = jobData?.worker.id;
           await jobRef.update({ worker_finished: true });
         }
         const finishedJob = (await jobRef.get()).data();
         await this.sendEmailFinishedContract(jobUid, finishedJob, userType);
         if (finishedJob?.client_finished && finishedJob?.worker_finished) {
-          await jobRef.update({ status: 'finished', paid: true, finished: this.getDateTime() });
+          await jobRef.update({
+            status: "finished",
+            paid: true,
+            finished: this.getDateTime(),
+          });
           await this.transferPaymentToWorker(jobDoc.data());
         }
-        if (userType === 'client') {
+        if (userType === "client") {
           return this.getAllJobsFromClient(userUid);
         }
-        if (userType === 'worker') {
+        if (userType === "worker") {
           return this.getAllJobsFromWorker(userUid);
         }
       } else {
-        return 'expired';
+        return "expired";
       }
     } catch (error) {
-      console.error('Error finishing contract: ', error);
+      console.error("Error finishing contract: ", error);
       throw error;
     }
   }
@@ -557,6 +605,18 @@ class JobContractRepository extends AppRepository {
     }
   }
 
+  async updateStatus(contractUid: any, status: string, complaintUid: string) {
+    try {
+      const jobContractRef = db.collection("JobContracts").doc(contractUid);
+      const jobContractDoc = await jobContractRef.get();
+      if (jobContractDoc.exists) {
+        await jobContractRef.update({ status: status, complaint_uid: complaintUid });
+      }
+    } catch (error) {
+      console.error("Error on update reported contract': ", error);
+      throw error;
+    }
+  }
 }
 
 export default JobContractRepository;

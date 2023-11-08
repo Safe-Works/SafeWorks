@@ -68,8 +68,8 @@ export class MyPostsComponent implements OnInit {
       text: "Você não poderá reverter isso!",
       icon: 'warning',
       showCancelButton: true,
-      confirmButtonColor: '#3085d6',
-      cancelButtonColor: '#d33',
+      confirmButtonColor: 'var(--interaction-blue)',
+      cancelButtonColor: 'var(--interaction-red)',
       confirmButtonText: 'Sim, deletar!',
       cancelButtonText: 'Cancelar'
     }).then((result) => {

@@ -37,9 +37,9 @@ class JobContractController {
       const hasSufficientBalance =
         jobContract.paid === true
           ? await jobContractRepository.verifyUserBalance(
-              jobContract.client.id,
-              jobContract.price * jobContract.quantity || 1
-            )
+            jobContract.client.id,
+            jobContract.price * jobContract.quantity || 1
+          )
           : true;
       if (!hasSufficientBalance) {
         res.status(402).json({

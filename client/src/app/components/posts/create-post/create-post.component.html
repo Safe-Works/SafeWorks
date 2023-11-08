@@ -9,7 +9,7 @@
             <form [formGroup]="postFormControl" #formDir="ngForm" (ngSubmit)="createPost()">
                 <div class="card-body" style="margin-bottom: 40px">
                     <div class="row col-md-12"
-                        style="padding: 40px 5.6%; background-color: white; border: 1px solid #ced0d4;">
+                        style="padding: 40px 5.6%; background-color: white; border: 1px solid var(--gray-border);">
                         <mat-form-field class="col-md-6">
                             <mat-label>Título</mat-label>
                             <input matInput [formControl]="titleFormControl" placeholder="Ex. Aula de natação"
@@ -113,7 +113,7 @@
                         </div>
                     </div>
                     <div class="row col-md-12 justify-content-end"
-                        style="padding: 40px 5.6%; background-color: white; border: 1px solid #ced0d4; border-top: 0">
+                        style="padding: 40px 5.6%; background-color: white; border: 1px solid var(--gray-border); border-top: 0">
                         <button class="btn btn-primary btn-autentication"
                             style="width: 100%; border-radius: 30.4px; margin-top: 32px; margin-bottom: 5px;">
                             Publicar anúncio

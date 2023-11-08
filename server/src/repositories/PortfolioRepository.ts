@@ -12,6 +12,7 @@ class PortfolioRepository extends AppRepository {
             const userUid = portfolio.user_uid;
             const newPortfolio = {
                 ...portfolio,
+                certifications: [],
                 created: created,
                 modified: null,
                 deleted: null

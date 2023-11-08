@@ -35,7 +35,7 @@ class UserController {
             res.status(201).json({ statusCode: 201, token: result });
         } catch (error) {
             if (error instanceof Error) {
-                console.log('Error to add user:', error.message);
+                console.error('Error to add user:', error.message);
                 if (error.message.includes('The email address is already in use by another account.')) {
                     /* 
                         #swagger.responses[409] = { 
@@ -65,7 +65,7 @@ class UserController {
             res.status(201).json({ statusCode: 201, token: result });
         } catch (error) {
             if (error instanceof Error) {
-                console.log('Error to send help request:', error.message);
+                console.error('Error to send help request:', error.message);
 
                 res.status(500).json({ statusCode: 500, error: 'user/failed-help-request', message: error.message });
             }

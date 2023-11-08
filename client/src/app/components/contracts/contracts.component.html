@@ -52,7 +52,8 @@
                                         width="200">
                                 </div>
                             </div>
-                            <ul id="progressbar-1" class="mx-0 mt-0 mb-5 px-0 pt-0 pb-4">
+
+                            <ul *ngIf="!isReported(contract)" id="progressbar-1" class="mx-0 mt-0 mb-5 px-0 pt-0 pb-4">
                                 <li class="step0 active" id="step0 {{ contract.uid }}">
                                     <span>Aguardando pagamento</span>
                                 </li>
@@ -66,13 +67,26 @@
                                     <span style="margin-right: 22px;">{{ lastFinished }}</span>
                                 </li>
                             </ul>
+
+                            <ul *ngIf="isReported(contract)" id="complaint-progressbar" class="mx-0 mt-0 mb-5 px-0 pt-0 pb-4">
+                                <li class="step1 active" id="complaint-step1 {{ contract.complaint_uid }}">
+                                    <span style="margin-left: 22px; margin-top: 12px;">Denunciado</span>
+                                </li>
+                                <li class="step2 text-center" id="complaint-step2 {{ contract.complaint_uid }}">
+                                    <span>Em Análise</span>
+                                </li>
+                                <li class="step3 text-end" id="complaint-step3 {{ contract.complaint_uid }}">
+                                    <span style="margin-right: 22px;">{{ complaintResult }}</span>
+                                </li>
+                            </ul>
                         </div>
 
                         <div class="card-footer p-4" *ngIf="(contract.paid)">
                             <div class="d-flex flex-wrap justify-content-between">
                                 <h6 *ngIf="!isContractFinalized(contract)" class="action-button" (click)="finishContract(contract.uid)">Finalizar</h6>
-                                <h6 class="action-button"><a href="#!">Cancelar</a></h6>
-                                <h6 class="action-button"><a href="#!">Denunciar</a></h6>
+                                <h6 *ngIf="userCanCancel(contract)" class="action-button"><a href="#!">Cancelar</a></h6>
+                                <h6 *ngIf="isReported(contract) && userCanReport(contract)" class="action-button"><a (click)="cancelReport(contract.complaint_uid)">Remover Denúncia</a></h6>
+                                <h6 *ngIf="!isReported(contract) && userCanReport(contract)" class="action-button"><a (click)="report(contract.uid)">Denunciar</a></h6>
                             </div>
                         </div>
                     </div>

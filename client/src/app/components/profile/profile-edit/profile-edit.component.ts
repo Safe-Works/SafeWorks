@@ -49,15 +49,18 @@ export class ProfileEditComponent {
       imageControl: this.imageControl
     });
   }
+  
   openSnackBar(message: string, action: string, className: string) {
     this._snackBar.open(message, action, {
       duration: 20000,
       panelClass: [className],
     });
   }
+
   async ngOnInit() {
     await this.loadUserInfo();
   }
+
   onFileSelected(event: any) {
     const file = event.target.files[0];
     if (file) {
@@ -119,7 +122,7 @@ export class ProfileEditComponent {
         }
       },
       (error) => {
-        console.log(error);
+        console.error(error);
         this.openSnackBar("Ocorreu um erro ao atualizar o perfil!", "OK", "snackbar-error");
         this.isLoading = false;
       }

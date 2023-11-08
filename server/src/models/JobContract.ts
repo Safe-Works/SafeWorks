@@ -19,4 +19,5 @@ type JobContract = {
     payment_status?: string,
     external_payment?: boolean,
     quantity: number,
+    reported: boolean, // se o contrado foi denunciado
 }

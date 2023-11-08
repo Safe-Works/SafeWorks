@@ -71,7 +71,7 @@ export class ContractService {
         }
     }
 
-    public evaluateJob(evaluation: number, contractUid: any): Promise<any> {
+    public EvaluateJob(evaluation: number, contractUid: any): Promise<any> {
         const body = {
             contractUid: contractUid,
             evaluation: evaluation

@@ -67,8 +67,8 @@ export class CardPostsComponent<T> {
       text: "Você não poderá reverter isso!",
       icon: 'warning',
       showCancelButton: true,
-      confirmButtonColor: '#3085d6',
-      cancelButtonColor: '#d33',
+      confirmButtonColor: 'var(--interaction-blue)',
+      cancelButtonColor: '#var(--interaction-red)d33',
       confirmButtonText: 'Sim, deletar!',
       cancelButtonText: 'Cancelar'
     }).then((result) => {

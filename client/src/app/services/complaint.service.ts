@@ -1,6 +1,5 @@
 import { HttpClient } from "@angular/common/http";
 import { firstValueFrom } from "rxjs";
-import Complaint from "../models/complaint.model";
 import { Injectable } from "@angular/core";
 import { environment } from "../environments/environment";
 
@@ -12,6 +11,22 @@ export class ComplaintService {
     private api: string = environment.apiEndpoint + '/api/complaints';
     constructor(private http: HttpClient) { }
 
+    public async Add(description: string, title: string, contractUid: string, applicant: string): Promise<any> {
+        try {
+            const body = {
+                description: description,
+                title: title,
+                contract_uid: contractUid,
+                applicant: applicant,
+            };
+
+            return firstValueFrom(this.http.post<any>(this.api, body));
+        } catch (error) {
+            console.error(error);
+            throw error;
+        }
+    }
+
     public async GetAll(): Promise<any> {
         try {
             return await firstValueFrom(this.http.get<any>(this.api));
@@ -21,10 +36,19 @@ export class ComplaintService {
         }
     };
 
+    public async Delete(complaintUid: string): Promise<any> {
+        try {
+            return firstValueFrom(this.http.delete<any>(this.api + `/${complaintUid}`))
+        } catch (error) {
+            console.error(error);
+            throw error;
+        }
+    }
+
     public async StartAnalysis(complaintUid: string): Promise<any> {
         try {
             const body = {
-                status: 'accepted',
+                status: 'onAnalysis',
                 result_description: ''
             };
 

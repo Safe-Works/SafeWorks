@@ -1,7 +1,6 @@
 import express, { RequestHandler } from "express";
 import JobContractController from "../controllers/JobContractController";
 import { Joi, celebrate } from 'celebrate';
-import favoritesRouter from "./FavoritesRouter";
 
 const jobContractRouter = express.Router();
 const jobContractController = new JobContractController();
@@ -41,6 +40,7 @@ jobContractRouter.post(
   }),
   jobContractController.evaluateJob as RequestHandler
 );
+
 jobContractRouter.post(
   "/jobs/checkout",
   celebrate({
