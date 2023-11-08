@@ -108,7 +108,7 @@ export class JobService {
     };
 
     public DeleteById(id: string): Observable<any> {
-        return this.http.delete<string>(this.api + '/delete?id=' + id).pipe(
+        return this.http.delete<string>(this.api + '/' + id).pipe(
             tap((response: any) => {
                 return response;
             }),
