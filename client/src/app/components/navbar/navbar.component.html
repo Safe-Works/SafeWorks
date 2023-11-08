@@ -1,6 +1,6 @@
 <nav class="navbar navbar-expand-md fixed-top navbar-dark flex-fill">
   <div class="navbar-header pl-2 pr-2 ml-3 text-center">
-    <a class="navbar-brand m-0 w-100" href="#">
+    <a class="navbar-brand m-0 w-100" href="/#/jobs">
       <img src="../../../assets/safeworks-logo.png" alt="safeworks logo" width="35px">
       <span class="ml-1">SafeWorks</span>
     </a>
@@ -11,7 +11,7 @@
   <div class="nav-toggler-right mr-4 d-md-none" *ngIf="userAuth.currentUser">
     <button class="" type="button" (click)="isCollapsed = !isCollapsed" [attr.aria-expanded]="!isCollapsed"
       aria-controls="collapseBasic">
-      <img src="{{userAuth.currentUser.infos.photo_url}}" class="img-fluid" alt="">
+      <img src={{profilePhoto}} class="img-fluid" alt="">
     </button>
     <span class="user-profile nav-alert bg-danger"></span>
   </div>

@@ -112,7 +112,7 @@ export class ProfileEditComponent {
   
     this.userService.UpdateUser(this.userAuth.currentUser?.uid ?? "", updatedUser, photo).subscribe(
       (response) => {
-        if (response.status === 200) {
+        if (response.statusCode === 201) {
           this.cookieService.set('token', response.token, undefined, '/', undefined, true, 'Strict');
           this.userAuth.authUserFromToken();
           this.openSnackBar("Perfil atualizado com sucesso!", "OK", "snackbar-success");

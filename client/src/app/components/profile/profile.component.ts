@@ -51,7 +51,7 @@ export class ProfileComponent implements OnInit {
         if (this.userInfo.name === this.userAuth.currentUser?.displayName) {
           this.isMyProfile = true;
         }
-        if (this.userInfo.worker.portfolio) {
+        if (this.userInfo?.worker?.portfolio) {
           await this.portfolioService.GetPortfolio(this.userInfo.worker.portfolio)
             .then((response) => {
               this.portfolio = response.portfolio;

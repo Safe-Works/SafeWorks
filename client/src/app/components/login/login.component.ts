@@ -52,7 +52,7 @@ export class LoginComponent implements OnInit {
         if (response.customTokenJwt) {
           this.userAuth.setUser(response.userAuth);
           this.cookieService.set('token', response.customTokenJwt, undefined, '/', undefined, true, 'Strict');
-          this.router.navigate(['/']);
+          this.router.navigate(['/#/jobs']);
           this.wrongCredentials = false;
         } else {
           this.wrongCredentials = true;
