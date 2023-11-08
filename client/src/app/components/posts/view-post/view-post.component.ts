@@ -93,8 +93,8 @@ export class ViewPostComponent {
       text: "O serviço será contratado!",
       icon: "warning",
       showCancelButton: true,
-      confirmButtonColor: "#3085d6",
-      cancelButtonColor: "#d33",
+      confirmButtonColor: "var(--interaction-blue)",
+      cancelButtonColor: "var(--interaction-red)",
       confirmButtonText: "Sim, contratar!",
       cancelButtonText: "Cancelar",
     }).then(async (result) => {
@@ -130,8 +130,8 @@ export class ViewPostComponent {
             text: "Deseja pagar por outro meio de pagamento?",
             icon: "warning",
             showCancelButton: true,
-            confirmButtonColor: "#3085d6",
-            cancelButtonColor: "#d33",
+            confirmButtonColor: "var(--interaction-blue)",
+            cancelButtonColor: "var(--interaction-red)",
             confirmButtonText: "Sim",
             cancelButtonText: "Não",
           }).then(async (result) => {

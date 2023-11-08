@@ -172,7 +172,7 @@ class UserController {
                     description: 'Updated user JWT token' 
                 } 
                 */
-                res.status(201).json({ statusCode: 201, token: result })
+                res.status(200).json({ statusCode: 201, token: result })
             } else {
                 res.status(404).json({ statusCode: 404, error: 'user/not-found' }) // #swagger.responses[404]
             }

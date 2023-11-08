@@ -4,7 +4,6 @@ import { Router } from '@angular/router';
 import { UserAuth } from 'src/app/auth/User.Auth';
 import { ContractService } from 'src/app/services/contract.service';
 import Swal from 'sweetalert2';
-import { JobService } from "../../services/job.service";
 import { ComplaintService } from "../../services/complaint.service";
 
 @Component({
@@ -22,15 +21,12 @@ export class ContractsComponent {
   complaintResult: string = 'Aguardando Resultado';
   isWorker: boolean = false;
   selectOption: string = 'worker_contracts';
-  complaints: any = null;
-  complaintsList: any[] = []; // Declare uma nova propriedade para armazenar as queixas
 
   constructor(
     private contractService: ContractService,
     private userAuth: UserAuth,
     public router: Router,
     private _snackBar: MatSnackBar,
-    private jobService: JobService,
     private complaintService: ComplaintService,
   ) { }
 
@@ -42,8 +38,6 @@ export class ContractsComponent {
     } else {
       this.contracts = await this.contractService.GetAllFromClient(this.userAuth.currentUser?.uid ?? '');
     }
-    this.complaints = await this.complaintService.GetAll();
-    this.complaintsList = this.complaints.complaints;
   }
 
   finishContract(contractUid: string) {
@@ -52,8 +46,8 @@ export class ContractsComponent {
       text: "O contrato será finalizado!",
       icon: 'warning',
       showCancelButton: true,
-      confirmButtonColor: '#3085d6',
-      cancelButtonColor: '#d33',
+      confirmButtonColor: 'var(--interaction-blue)',
+      cancelButtonColor: 'var(--interaction-red)',
       confirmButtonText: 'Sim, finalizar!',
       cancelButtonText: 'Cancelar',
       input: 'range',
@@ -211,8 +205,9 @@ export class ContractsComponent {
       inputPlaceholder: 'Título...',
       showCancelButton: true,
       confirmButtonText: 'Próximo',
+      cancelButtonText: 'Cancelar',
       confirmButtonColor: 'var(--interaction-blue)',
-      cancelButtonColor: '#d33',
+      cancelButtonColor: 'var(--interaction-red)',
       inputAttributes: {
         maxlength: '80',
         minlength: '10'
@@ -233,8 +228,9 @@ export class ContractsComponent {
         inputPlaceholder: 'Descrição...',
         showCancelButton: true,
         confirmButtonText: 'Enviar',
+        cancelButtonText: 'Cancelar',
         confirmButtonColor: 'var(--interaction-blue)',
-        cancelButtonColor: '#d33',
+        cancelButtonColor: 'var(--interaction-red)',
         inputAttributes: {
           maxlength: '300',
         },
@@ -318,8 +314,8 @@ export class ContractsComponent {
       text: "A denúncia será removida",
       icon: 'warning',
       showCancelButton: true,
-      confirmButtonColor: '#3085d6',
-      cancelButtonColor: '#d33',
+      confirmButtonColor: 'var(--interaction-blue)',
+      cancelButtonColor: 'var(--interaction-red)',
       confirmButtonText: 'Sim, remover!',
       cancelButtonText: 'Cancelar'
     }).then(async (result) => {

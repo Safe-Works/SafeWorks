@@ -48,7 +48,7 @@ export class ComplaintService {
     public async StartAnalysis(complaintUid: string): Promise<any> {
         try {
             const body = {
-                status: 'accepted',
+                status: 'onAnalysis',
                 result_description: ''
             };
 
