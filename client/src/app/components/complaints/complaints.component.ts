@@ -41,7 +41,6 @@ export class ComplaintsComponent {
   }
 
   setProgressBarStatus(complaint: any): boolean {
-    console.log('progressBar')
     if (complaint.status !== 'onAnalysis') {
       const element = document.getElementById('step2 ' + complaint.uid);
       element?.classList.add('active');    

@@ -103,7 +103,7 @@ export class EditPostComponent {
         this.isLoading = false;
       },
       (error) => {
-        console.log(error);
+        console.error(error);
         this.isLoading = false;
       }
     );
@@ -227,7 +227,7 @@ export class EditPostComponent {
       },
       (error) => {
         this.isLoading = false;
-        console.log(error);
+        console.error(error);
         this.openSnackBar("Ocorreu um erro ao editar o serviço!", "OK", "snackbar-error");
       }
     );

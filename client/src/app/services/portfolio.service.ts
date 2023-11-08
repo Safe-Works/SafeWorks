@@ -56,7 +56,6 @@ export class PortfolioService {
                     'Content-Type': 'application/json'
                 })
             };
-            console.log(certification);
 
             return await firstValueFrom(this.http.post<any>(url, certification, httpOptions));
         } catch (error) {

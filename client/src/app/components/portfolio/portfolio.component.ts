@@ -166,7 +166,6 @@ export class PortfolioComponent implements OnInit {
     public async deleteCertification(certification: Certification) {
         this.isLoading = true;
         const certificationId = certification.id ?? '';
-        console.log(certificationId);
         try {
             await this.portfolioService.DeleteCertification(certificationId.slice(0, 20), certificationId)
             .then((response) => {

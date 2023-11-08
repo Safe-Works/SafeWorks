@@ -101,7 +101,7 @@ export class RegisterComponent implements OnInit {
           this.emailAlreadyExist = true;
           this.emailInvalidLabel = "O e-mail já está em uso."
         }
-        console.log(error);
+        console.error(error);
         this.isLoading = false;
       }
     );

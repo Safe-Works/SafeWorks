@@ -37,6 +37,7 @@ export class ContractsComponent {
       this.contracts = await this.contractService.GetAllFromWorker(this.userAuth.currentUser?.uid ?? '');
     } else {
       this.contracts = await this.contractService.GetAllFromClient(this.userAuth.currentUser?.uid ?? '');
+      this.selectOption = 'client_contracts';
     }
   }
 
@@ -131,7 +132,6 @@ export class ContractsComponent {
 
   setComplaintProgressBarStatus(contract: any): void {
     const complaint = contract.complaint;
-    console.log(contract);
     if (complaint.status !== 'open') {
       const element = document.getElementById('complaint-step2 ' + complaint.uid);
       element?.classList.add('active');
@@ -246,12 +246,12 @@ export class ContractsComponent {
       if (description && title) {
         try {
           this.isLoading = true;
-          await this.complaintService.Add(description, title, contractUid, this.getUserType()).then((result) => {
+          await this.complaintService.Add(description, title, contractUid, this.getUserType()).then(async (result) => {
             if (this.selectOption === 'worker_contracts') {
-              this.fetchWorkerContracts();
+              await this.fetchWorkerContracts();
             }
             if (this.selectOption === 'client_contracts') {
-              this.fetchClientContracts();
+              await this.fetchClientContracts();
             }
           });
           this.isLoading = false;
@@ -321,12 +321,12 @@ export class ContractsComponent {
     }).then(async (result) => {
       try {
         this.isLoading = true;
-        await this.complaintService.Delete(complaintUid).then((result) => {
+        await this.complaintService.Delete(complaintUid).then(async (result) => {
           if (this.selectOption === 'worker_contracts') {
-            this.fetchWorkerContracts();
+            await this.fetchWorkerContracts();
           }
           if (this.selectOption === 'client_contracts') {
-            this.fetchClientContracts();
+            await this.fetchClientContracts();
           }
         });
         this.isLoading = false;

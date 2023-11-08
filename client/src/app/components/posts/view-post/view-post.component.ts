@@ -163,7 +163,7 @@ export class ViewPostComponent {
                       this.isLoading = false;
                     }
                   } catch (err) {
-                    console.log(err);
+                    console.error(err);
                     this.isLoading = false;
                     this.openSnackBar(
                       "Ocorreu um erro ao contratar o serviço!",
@@ -228,7 +228,7 @@ export class ViewPostComponent {
     }
   }
   onItemChange($event: any): void {
-    console.log("Carousel onItemChange", $event);
+    console.warn("Carousel onItemChange", $event);
   }
 
   back() {

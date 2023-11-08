@@ -33,7 +33,6 @@ export class JobsStatusComponent implements OnInit {
   }
 
   setJobStatus(job: any): string {
-    console.log(job);
     if (job.expired) {
       return 'Cancelado';
     }

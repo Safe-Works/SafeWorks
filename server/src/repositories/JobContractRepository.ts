@@ -610,11 +610,7 @@ class JobContractRepository extends AppRepository {
       const jobContractRef = db.collection("JobContracts").doc(contractUid);
       const jobContractDoc = await jobContractRef.get();
       if (jobContractDoc.exists) {
-        if (complaintUid.length > 0) {
-          await jobContractRef.update({ status: status, complaint_uid: complaintUid });
-        } else {
-          await jobContractRef.update({ status: status });
-        }
+        await jobContractRef.update({ status: status, complaint_uid: complaintUid });
       }
     } catch (error) {
       console.error("Error on update reported contract': ", error);

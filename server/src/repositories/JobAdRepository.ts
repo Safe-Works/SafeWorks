@@ -187,7 +187,7 @@ class JobAdRepository extends AppRepository {
             });
 
             if (results.length === 0) {
-                console.log('No matching JobAdvertisement documents.');
+                console.error('No matching JobAdvertisement documents.');
             }
 
             return results;

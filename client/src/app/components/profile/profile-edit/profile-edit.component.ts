@@ -122,7 +122,7 @@ export class ProfileEditComponent {
         }
       },
       (error) => {
-        console.log(error);
+        console.error(error);
         this.openSnackBar("Ocorreu um erro ao atualizar o perfil!", "OK", "snackbar-error");
         this.isLoading = false;
       }
