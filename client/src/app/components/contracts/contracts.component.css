@@ -61,7 +61,7 @@
 }
 
 #progressbar-1 li:nth-child(1):after {
-    left: 25%;
+    left: 50%;
     width: 121%;
 }
 #progressbar-1 li:nth-child(2):after {
@@ -193,11 +193,4 @@ span {
 
 .bi{
     color: gold;
-}
-.no-contracts-message {
-    text-align: center;
-    font-size: 20px;
-    color: #888;
-    margin-top: 20px;
-    margin: 0 auto;
 }
