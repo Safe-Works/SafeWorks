@@ -34,9 +34,13 @@ export class ContractsComponent {
     this.userInfo = this.userAuth.currentUser?.infos;
     this.isWorker = this.userInfo.isWorker;
     if (this.isWorker) {
-      this.contracts = await this.contractService.GetAllFromWorker(this.userAuth.currentUser?.uid ?? '');
+      let response = await this.contractService.GetAllFromWorker(this.userAuth.currentUser?.uid ?? '');
+      if (response?.jobs.length > 0)
+        this.contracts = response;
     } else {
-      this.contracts = await this.contractService.GetAllFromClient(this.userAuth.currentUser?.uid ?? '');
+      let response = await this.contractService.GetAllFromClient(this.userAuth.currentUser?.uid ?? '');
+      if (response?.jobs.length > 0)
+        this.contracts = response;
       this.selectOption = 'client_contracts';
     }
   }

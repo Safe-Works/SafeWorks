@@ -19,9 +19,19 @@ import { ContractsComponent } from './components/contracts/contracts.component';
 import { ComplaintsComponent } from './components/complaints/complaints.component';
 
 const routes: Routes = [
-  { path: '', component: IndexComponent },
-  { path: 'login', component: LoginComponent },
-  { path: 'register', component: RegisterComponent },
+  { path: '', component: AllPostsComponent},
+  {
+    path: 'login',
+    component: LoginComponent,
+    canActivate: [AuthGuard],
+    data: { canActivateLogin: true }
+  },
+  {
+    path: 'register',
+    component: RegisterComponent,
+    canActivate: [AuthGuard],
+    data: { canActivateLogin: true }
+  },
   { path: 'profile', component: ProfileComponent, canActivate: [AuthGuard] },
   { path: 'profile/:id', component: ProfileComponent },
   { path: 'profile/edit/:id', component: ProfileEditComponent, canActivate: [AuthGuard] },

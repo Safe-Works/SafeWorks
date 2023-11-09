@@ -194,3 +194,10 @@ span {
 .bi{
     color: gold;
 }
+.no-contracts-message {
+    text-align: center;
+    font-size: 20px;
+    color: #888;
+    margin-top: 20px;
+    margin: 0 auto;
+}

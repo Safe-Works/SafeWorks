@@ -44,7 +44,7 @@
                 <div class="card mb-4 mb-lg-0">
                     <div class="card-body" style="text-align: center;">
                         <h5 class="title">Áreas de atuação</h5>
-                        <ul *ngFor="let area of userInfo.worker.area" class="list-group list-group-flush rounded-3">
+                        <ul *ngFor="let area of userInfo?.worker?.area" class="list-group list-group-flush rounded-3">
                             <li class="list-group-item d-flex justify-content-center align-items-center p-3">
                                 <i class="fas fa-globe fa-lg text-warning"></i>
                                 <p class="mb-0">&nbsp; {{ area }}</p>
