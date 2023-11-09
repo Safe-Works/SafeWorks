@@ -102,11 +102,11 @@ class ComplaintsRepository extends AppRepository {
         }
         if (body.status === 'accepted') {
           await this.sendEmailAcceptedComplaint(complaintUid, complaintData, body.result_description, workerData, clientData);
-          await this.refundAcceptedComplaint(complaintUid);
+          await this.refundAcceptedComplaint(complaintData);
         }
         if (body.status === 'refused') {
           await this.sendEmailRefusedComplaint(complaintUid, complaintData, body.result_description, workerData, clientData);
-          await this.refundRefusedComplaint(complaintUid);
+          await this.refundRefusedComplaint(complaintData);
         }
 
         return this.getAll();
