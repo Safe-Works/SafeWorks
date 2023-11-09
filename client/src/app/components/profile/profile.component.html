@@ -1,106 +1,150 @@
 <div class="loading-spinner" *ngIf="isLoading">
-    <mat-spinner [diameter]="85"></mat-spinner>
+  <mat-spinner [diameter]="85"></mat-spinner>
 </div>
-<section style="background-color: var(--white-background); border-radius: 1rem; border: 1px solid var(--gray-border);">
-    <div class="container py-5">
-        <div class="row">
-            <div class="col">
-                <nav aria-label="breadcrumb" class="rounded-3 p-3 mb-4" style="background-color: var(--white);">
-                    <ol class="breadcrumb mb-0">
-                        <li class="breadcrumb-item"><a href="#">Inicio</a></li>
-                        <li class="breadcrumb-item active" aria-current="page">Perfil de Usuário</li>
-                    </ol>
-                </nav>
-            </div>
-        </div>
-
-        <div class="row">
-            <div class="col-lg-4">
-                <div class="card mb-4">
-                    <div class="card-body text-center">
-                        <img [src]="photoUrl" alt="avatar" class="rounded-circle img-fluid">
-                        <h5 *ngIf="userInfo" class="name">{{ userInfo.name }}</h5>
-                        <p *ngIf="userInfo?.username" class="username">{{ userInfo.username }}</p>
-                        <p *ngIf="portfolio" style="padding-top: 0.5rem">{{ portfolio.description }}</p>
-                        <div class="d-flex justify-content-center mb-2">
-
-                            <a *ngIf="deleted && !isMyProfile" (click)="deleteFavorite(userUid)">
-                                <i class="bi bi-heart-fill btn btn-primary btn-autentication"></i>
-                            </a>
-
-                            <a *ngIf="!deleted && !isMyProfile" (click)="addFavorite(userUid)">
-                                <i class="bi bi-heart btn btn-primary btn-autentication"></i>
-                            </a>
-
-                            <button *ngIf="!isMyProfile" type="button" class="btn btn-outline-primary ms-1">
-                                Message
-                            </button>
-                            <button *ngIf="userAuth.currentUser && isMyProfile" class="btn edit-button" (click)="redirectToEdit()">
-                                Editar
-                            </button>
-                        </div>
-                    </div>
-                </div>
-                <div class="card mb-4 mb-lg-0">
-                    <div class="card-body" style="text-align: center;">
-                        <h5 class="title">Áreas de atuação</h5>
-                        <ul *ngFor="let area of userInfo?.worker?.area" class="list-group list-group-flush rounded-3">
-                            <li class="list-group-item d-flex justify-content-center align-items-center p-3">
-                                <i class="fas fa-globe fa-lg text-warning"></i>
-                                <p class="mb-0">&nbsp; {{ area }}</p>
-                            </li>
-                        </ul>
-                    </div>
-                </div>
-            </div>
-            <div class="col-lg-8">
-                <div class="card mb-4">
-                    <div class="card-body">
-                        <div class="row">
-                            <div class="col-sm-3">
-                                <p class="mb-0">Nome</p>
-                            </div>
-                            <div class="col-sm-9">
-                                <p *ngIf="userInfo" class="text-muted mb-0">{{ userInfo.name }}</p>
-                            </div>
-                        </div>
-                        <hr>
-                        <div class="row">
-                            <div class="col-sm-3">
-                                <p class="mb-0">Telefone</p>
-                            </div>
-                            <div class="col-sm-9">
-                                <p *ngIf="userInfo" class="text-muted mb-0">{{ userInfo.telephone_number }}</p>
-                            </div>
-                        </div>
-                        <hr>
-                        <div class="row">
-                            <div class="col-sm-3">
-                                <p class="mb-0">Bairro</p>
-                            </div>
-                            <div class="col-sm-9">
-                                <p *ngIf="userInfo" class="text-muted mb-0">{{ userInfo.district }}</p>
-                            </div>
-                        </div>
-                        <hr>
-                        <div class="row">
-                            <div class="col-sm-3">
-                                <p class="mb-0">Saldo</p>
-                            </div>
-                            <div class="col-sm-9">
-                                <p *ngIf="userInfo" class="text-muted mb-0">R${{ userInfo.balance }}</p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="col-md-12">
-                        <app-card-certification 
-                            [certifications] = "certifications"
-                        ></app-card-certification>
-                    </div>
-                </div>
-            </div>
-        </div>
+<section
+  style="
+    background-color: var(--white-background);
+    border-radius: 1rem;
+    border: 1px solid var(--gray-border);
+  "
+>
+  <div class="container py-5">
+    <div class="row">
+      <div class="col">
+        <nav
+          aria-label="breadcrumb"
+          class="rounded-3 p-3 mb-4"
+          style="background-color: var(--white)"
+        >
+          <ol class="breadcrumb mb-0">
+            <li class="breadcrumb-item"><a href="#">Inicio</a></li>
+            <li class="breadcrumb-item active" aria-current="page">
+              Perfil de Usuário
+            </li>
+          </ol>
+        </nav>
+      </div>
     </div>
+
+    <div class="row">
+      <div class="col-lg-4">
+        <div class="card mb-4">
+          <div class="card-body text-center">
+            <img
+              [src]="photoUrl"
+              alt="avatar"
+              class="rounded-circle img-fluid"
+            />
+            <h5 *ngIf="userInfo" class="name">{{ userInfo.name }}</h5>
+            <p *ngIf="userInfo?.username" class="username">
+              {{ userInfo.username }}
+            </p>
+            <p *ngIf="portfolio" style="padding-top: 0.5rem">
+              {{ portfolio.description }}
+            </p>
+            <div class="d-flex justify-content-center mb-2">
+              <a
+                *ngIf="deleted && !isMyProfile"
+                (click)="deleteFavorite(userUid)"
+              >
+                <i
+                  class="bi bi-heart-fill btn btn-primary btn-autentication"
+                ></i>
+              </a>
+
+              <a
+                *ngIf="!deleted && !isMyProfile"
+                (click)="addFavorite(userUid)"
+              >
+                <i class="bi bi-heart btn btn-primary btn-autentication"></i>
+              </a>
+              <button
+                *ngIf="userAuth.currentUser && isMyProfile"
+                class="btn edit-button"
+                (click)="redirectToEdit()"
+              >
+                Editar
+              </button>
+            </div>
+          </div>
+        </div>
+        <div class="card mb-4 mb-lg-0">
+          <div class="card-body" style="text-align: center">
+            <h5 class="title">Áreas de atuação</h5>
+            <ul
+              *ngFor="let area of userInfo?.worker?.area"
+              class="list-group list-group-flush rounded-3"
+            >
+              <li
+                class="list-group-item d-flex justify-content-center align-items-center p-3"
+              >
+                <i class="fas fa-globe fa-lg text-warning"></i>
+                <p class="mb-0">&nbsp; {{ area }}</p>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+      <div class="col-lg-8">
+        <div class="card mb-4">
+          <div class="card-body">
+            <div class="row">
+              <div class="col-sm-3">
+                <p class="mb-0">Nome</p>
+              </div>
+              <div class="col-sm-9">
+                <p *ngIf="userInfo" class="text-muted mb-0">
+                  {{ userInfo.name }}
+                </p>
+              </div>
+            </div>
+            <hr />
+            <div class="row">
+              <div class="col-sm-3">
+                <p class="mb-0">Telefone</p>
+              </div>
+              <div class="col-sm-9">
+                <p *ngIf="userInfo" class="text-muted mb-0">
+                  {{ userInfo.telephone_number }}
+                </p>
+              </div>
+            </div>
+            <div *ngIf="userInfo.district">
+              <hr />
+              <div class="row">
+                <div class="col-sm-3">
+                  <p class="mb-0">Bairro</p>
+                </div>
+                <div class="col-sm-9">
+                  <p *ngIf="userInfo" class="text-muted mb-0">
+                    {{ userInfo.district }}
+                  </p>
+                </div>
+              </div>
+            </div>
+            <div *ngIf="isMyProfile">
+              <hr />
+              <div class="row">
+                <div class="col-sm-3">
+                  <p class="mb-0">Saldo</p>
+                </div>
+                <div class="col-sm-9">
+                  <p *ngIf="userInfo" class="text-muted mb-0">
+                    R${{ userInfo.balance }}
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-md-12">
+            <app-card-certification
+              [certifications]="certifications"
+            ></app-card-certification>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
 </section>
