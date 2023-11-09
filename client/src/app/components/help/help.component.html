@@ -59,7 +59,7 @@
                       Selecione um contrato
                     </option>
                     <option
-                      *ngFor="let contract of contracts.jobs"
+                      *ngFor="let contract of contracts?.jobs"
                       [value]="contract.uid"
                     >
                       {{ contract.advertisement.title }}
