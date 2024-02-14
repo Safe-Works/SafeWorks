@@ -116,20 +116,54 @@ If you have questions about how to install, please follow the official guide pro
     <a href="https://docs.npmjs.com/downloading-and-installing-node-js-and-npm">https://docs.npmjs.com/downloading-and-installing-node-js-and-npm</a>
   </pre>
 
+To run the Angular frontend, you must have installed the Angular CLI. </br>
+If you have questions about how to install and use Angular CLI, please follow the official guide bellow:
+
+* Angular CLI
+  <pre>
+    <a href="https://angular.io/cli">https://angular.io/cli</a>
+  </pre>
+
 ### Installation
 
-1. Get a free API Key at [https://example.com](https://example.com)
-2. Clone the repo
+1. Clone the repo
    ```sh
-   git clone https://github.com/your_username_/Project-Name.git
+   git clone https://github.com/Safe-Works/SafeWorks.git
    ```
-3. Install NPM packages
+2. Install NPM packages on client
+
    ```sh
+   cd client
    npm install
    ```
-4. Enter your API in `config.js`
-   ```js
-   const API_KEY = 'ENTER YOUR API';
+
+3. Install NPM packages on server
+   ```sh
+   cd server
+   npm install
+   ```
+
+4. Create a .env file inside server root. Inside the .env, you must configure the connection with your Firebase and SMTP email provider. Follow these example:
+   ```sh
+   PORT = 3001
+   FIREBASE_API_KEY = ""
+   FIREBASE_ADMIN_KEY = {""}
+   FIREBASE_STORAGE_BUCKET = ""
+   EMAIL_SERVICE=""
+   EMAIL_USER=""
+   EMAIL_PASSWORD=""
+   ```
+
+5. Run client
+   ```sh
+   cd client
+   ng serve
+   ```
+
+6. Run server
+   ```sh
+   cd server
+   npm run dev
    ```
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
@@ -139,8 +173,6 @@ If you have questions about how to install, please follow the official guide pro
 ## Usage
 
 Use this space to show useful examples of how a project can be used. Additional screenshots, code examples and demos work well in this space. You may also link to more resources.
-
-_For more examples, please refer to the [Documentation](https://example.com)_
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
@@ -156,9 +188,15 @@ Distributed under the MIT License. See `LICENSE.txt` for more information.
 <!-- CONTACT -->
 ## Contact
 
-Your Name - [@your_twitter](https://twitter.com/your_username) - email@example.com
+Lucas Kusman Leal - [@lucaskleal222](https://www.linkedin.com/in/lucaskleal222/) - lucaskleal222@outlook.com
+</br>
 
-Project Link: [https://github.com/your_username/repo_name](https://github.com/your_username/repo_name)
+Tiago Felipe Muller - [@tiagofelipemuller](https://www.linkedin.com/in/tiago-muller-b685711a7/) - tiagofelipemuller@gmail.com
+</br>
+
+Vitor Felix de Araujo - [@vitorfelixaraujo](https://www.linkedin.com/in/vitor-felix-de-araujo/) - vitorfelix37@gmail.com
+
+Project Link: [https://github.com/Safe-Works/SafeWorks](https://github.com/Safe-Works/SafeWorks)
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
@@ -167,20 +205,12 @@ Project Link: [https://github.com/your_username/repo_name](https://github.com/yo
 <!-- ACKNOWLEDGMENTS -->
 ## Acknowledgments
 
-Use this space to list resources you find helpful and would like to give credit to. I've included a few of my favorites to kick things off!
-
-* [Choose an Open Source License](https://choosealicense.com)
-* [GitHub Emoji Cheat Sheet](https://www.webpagefx.com/tools/emoji-cheat-sheet)
-* [Malven's Flexbox Cheatsheet](https://flexbox.malven.co/)
-* [Malven's Grid Cheatsheet](https://grid.malven.co/)
-* [Img Shields](https://shields.io)
-* [GitHub Pages](https://pages.github.com)
-* [Font Awesome](https://fontawesome.com)
-* [React Icons](https://react-icons.github.io/react-icons/search)
+* [View Project Demo Website](https://safe-works.azurewebsites.net/)
+* [Project Public Docs and Images](https://github.com/Safe-Works/SafeWorks/tree/main/public)
+* [Pontifical Catholic University of Paraná Website](https://www.pucpr.br/)
+* [Information Systems Bachelor's](https://www.pucpr.br/cursos-graduacao/sistemas-de-informacao/)
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
-
-
 
 <!-- MARKDOWN LINKS & IMAGES -->
 <!-- https://www.markdownguide.org/basic-syntax/#reference-style-links -->
