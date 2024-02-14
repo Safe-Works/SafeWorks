@@ -19,8 +19,6 @@
   </p>
 </div>
 
-
-
 <!-- TABLE OF CONTENTS -->
 <details>
   <summary>Table of Contents</summary>
@@ -38,42 +36,38 @@
         <li><a href="#installation">Installation</a></li>
       </ul>
     </li>
-    <li><a href="#usage">Usage</a></li>
+    <li><a href="#usage">Usage Demonstration</a></li>
     <li><a href="#license">License</a></li>
     <li><a href="#contact">Contact</a></li>
     <li><a href="#acknowledgments">Acknowledgments</a></li>
   </ol>
 </details>
 
-
-
 <!-- ABOUT THE PROJECT -->
 ## About The Project
 
-[![Product Name Screen Shot][product-screenshot]](https://example.com)
+[![SafeWorks Screen Shot][analytics-screenshot]](https://safe-works.azurewebsites.net/)
 
-SafeWorks is a project designed and developed by three Bachelors degree students in Information Systems from the Pontifical Catholic University of Paraná. </br>
-The idea for the platform was thought of during the Requirements Engineering discipline, and the development of the web application was later refined and put into practice in course final paper. </br>
-SafeWorks is a platform that seeks to connect informal self-employed workers and clients. It has several features aiming to at facility the advertisement, contracting and payment of services provided by self-employed workers.
+SafeWorks is a project designed and developed by three bachelor's degree students in Information Systems from the Pontifical Catholic University of Paraná. </br>
+The idea for the platform was thought of during the Requirements Engineering discipline, and the development of the web application was later refined and put into practice in the course final paper. </br>
+SafeWorks is a platform that seeks to connect informal self-employed workers and clients. It has several features aimed at facilitating the advertisement, contracting and payment of services provided by self-employed workers.
 
 Some key features:
-* Service announcement in the platform
-* Service search by categorys and address
+* Service announcement on the platform
+* Service search by categories and address
 * Workers reputations
 * Service contract generation
 * Workers and clients contract's history
 * Integrated payment system
 * Payment refund
-* Complaints management by plataform admin
+* Complaints management by the platform admin
 * Data analytics dashboard
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
-
-
 ### Built With
 
-This is the main technologies used on SafeWorks web application.
+This is the main technologies used in the development of the SafeWorks web application:
 
 Backend
 * [![Typescript][Typescript.org]][Typescript-url]
@@ -98,13 +92,13 @@ Devops
 <!-- GETTING STARTED -->
 ## Getting Started
 
-The repository is divided into two directories, `client` contains the entire frontend and `server` contains the entire backend. </br>
-The following instructions detail in a step-by-step how you can run the complete project locally.
+The repository is divided into two directories: `client` contains the entire frontend, and `server` contains the entire backend. </br>
+The following instructions detail, step-by-step, how you can run the complete project locally.
 
 ### Prerequisites
 
-To run the project you must have installed and configured Node.Js and NPM. </br>
-If you have questions about how to install, please follow the official guide provided by the Node.Js and NPM documentation:
+To run the project, you must have installed and configured Node.Js and NPM. </br>
+If you have questions about how to install, please follow the official guide provided by Node.Js and NPM documentation:
 
 * Node.Js
   <pre>
@@ -117,7 +111,7 @@ If you have questions about how to install, please follow the official guide pro
   </pre>
 
 To run the Angular frontend, you must have installed the Angular CLI. </br>
-If you have questions about how to install and use Angular CLI, please follow the official guide bellow:
+If you have questions about how to install and use Angular CLI, please follow the official guide below:
 
 * Angular CLI
   <pre>
@@ -143,7 +137,7 @@ If you have questions about how to install and use Angular CLI, please follow th
    npm install
    ```
 
-4. Create a .env file inside server root. Inside the .env, you must configure the connection with your Firebase and SMTP email provider. Follow these example:
+4. Create a .env file inside the server root. Inside the .env, you must configure the connection with your Firebase and SMTP email provider. Follow this example:
    ```sh
    PORT = 3001
    FIREBASE_API_KEY = ""
@@ -170,9 +164,37 @@ If you have questions about how to install and use Angular CLI, please follow th
 
 
 <!-- USAGE EXAMPLES -->
-## Usage
+## Usage Demonstration
 
-Use this space to show useful examples of how a project can be used. Additional screenshots, code examples and demos work well in this space. You may also link to more resources.
+SafeWorks main goal is to provide a low-cost and reliable platform for self-employed workers. Here, you can view some of the implemented features. </br>
+All the following images are print screens of the running application.
+
+### SignUp
+![SafeWorks SignUp Screen Shot][signup-screenshot]
+
+### Login
+![SafeWorks Login Screen Shot][login-screenshot]
+
+### Jobs Advertsements Dashboard
+![SafeWorks Job Ads Screen Shot][jobAds-screenshot]
+
+### History of Jobs Contracts
+![SafeWorks Jobs Contracts Screen Shot][contracts-screenshot]
+
+### Data Analytics Dashboard
+![SafeWorks Analytics Screen Shot][analytics-screenshot]
+
+### User Profile
+![SafeWorks User Profile Screen Shot][profile-screenshot]
+
+### Favorites Workers
+![SafeWorks Favorites Workers Screen Shot][favorites-screenshot]
+
+### Create Job Advertisement
+![SafeWorks Create Job Ad Screen Shot][addJobAd-screenshot]
+
+### Create Help Request
+![SafeWorks Create Help Request Screen Shot][help-screenshot]
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
@@ -182,8 +204,6 @@ Use this space to show useful examples of how a project can be used. Additional 
 Distributed under the MIT License. See `LICENSE.txt` for more information.
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
-
-
 
 <!-- CONTACT -->
 ## Contact
@@ -199,8 +219,6 @@ Vitor Felix de Araujo - [@vitorfelixaraujo](https://www.linkedin.com/in/vitor-fe
 Project Link: [https://github.com/Safe-Works/SafeWorks](https://github.com/Safe-Works/SafeWorks)
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
-
-
 
 <!-- ACKNOWLEDGMENTS -->
 ## Acknowledgments
@@ -249,3 +267,21 @@ Project Link: [https://github.com/Safe-Works/SafeWorks](https://github.com/Safe-
 
 [Vercel.com]: https://img.shields.io/badge/vercel-%23000000.svg?style=for-the-badge&logo=vercel&logoColor=white
 [Vercel-url]: https://vercel.com/
+
+[signup-screenshot]: https://raw.githubusercontent.com/Safe-Works/SafeWorks/Readme/public/demo/Desktop/SafeWorks%20Signup%20Screen.png
+
+[login-screenshot]: https://raw.githubusercontent.com/Safe-Works/SafeWorks/Readme/public/demo/Desktop/SafeWorks%20Desktop%20Login%20Screen.png
+
+[addJobAd-screenshot]: https://raw.githubusercontent.com/Safe-Works/SafeWorks/Readme/public/demo/Desktop/SafeWorks%20Add%20JobAd%20Screen.png
+
+[contracts-screenshot]: https://raw.githubusercontent.com/Safe-Works/SafeWorks/Readme/public/demo/Desktop/SafeWorks%20Desktop%20Contracts%20Screen.png
+
+[analytics-screenshot]: https://raw.githubusercontent.com/Safe-Works/SafeWorks/Readme/public/demo/Desktop/SafeWorks%20Desktop%20Analytics%20Screen.png
+
+[favorites-screenshot]: https://raw.githubusercontent.com/Safe-Works/SafeWorks/Readme/public/demo/Desktop/SafeWorks%20Desktop%20Favorites%20Screen.png
+
+[jobAds-screenshot]: https://raw.githubusercontent.com/Safe-Works/SafeWorks/Readme/public/demo/Desktop/SafeWorks%20Desktop%20JobAds%20Screen.png
+
+[profile-screenshot]: https://raw.githubusercontent.com/Safe-Works/SafeWorks/Readme/public/demo/Desktop/SafeWorks%20Desktop%20Profile%20Screen.png
+
+[help-screenshot]: https://raw.githubusercontent.com/Safe-Works/SafeWorks/Readme/public/demo/Desktop/SafeWorks%20Help%20Screen.png
