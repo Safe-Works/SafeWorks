@@ -235,7 +235,7 @@ Project Link: [https://github.com/Safe-Works/SafeWorks](https://github.com/Safe-
 [contributors-shield]: https://img.shields.io/github/contributors/Safe-Works/SafeWorks.svg?style=for-the-badge
 [contributors-url]: https://github.com/Safe-Works/SafeWorks/graphs/contributors
 
-[license-shield]: https://img.shields.io/github/license/Safe-Works/SafeWorks.svg?style=for-the-badge
+[license-shield]: https://img.shields.io/github/license/Safe-Works/SafeWorks?style=for-the-badge
 [license-url]: https://github.com/Safe-Works/SafeWorks/blob/main/LICENSE.txt
 
 [Typescript.org]: https://img.shields.io/badge/typescript-%23007ACC.svg?style=for-the-badge&logo=typescript&logoColor=white
